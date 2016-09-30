@@ -5,7 +5,7 @@
  * Date: 21.01.2016
  * Time: 21:08
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin;
@@ -16,7 +16,7 @@ class TestOptions extends Options
 {
 	/**
 	 * @return array
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getConfig()
 	{
@@ -138,7 +138,7 @@ class TestOptions extends Options
 	/**
 	 * @param bool|false $reload
 	 * @return mixed|null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getTextareaValueS1($reload = false)
 	{
@@ -149,7 +149,7 @@ class TestOptions extends Options
 	 * @param            $presetId
 	 * @param bool|false $reload
 	 * @return mixed|null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getS1PresetColor($presetId, $reload = false)
 	{

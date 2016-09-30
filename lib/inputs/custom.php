@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 18:24
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -15,7 +15,7 @@ class Custom extends Input
 	public static $type = self::TYPE__CUSTOM;
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -26,7 +26,7 @@ class Custom extends Input
 
 	/**
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveValue()
 	{

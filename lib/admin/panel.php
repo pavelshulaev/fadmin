@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 18:43
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Admin;
@@ -37,7 +37,7 @@ class Panel
 
 	/**
 	 * @return \CAdminTabControl
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function getTabControl()
 	{
@@ -50,7 +50,7 @@ class Panel
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function show()
 	{

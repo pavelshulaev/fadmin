@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 18:24
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -17,7 +17,7 @@ class Checkbox extends Input
 	public static $type = self::TYPE__CHECKBOX;
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -34,7 +34,7 @@ class Checkbox extends Input
 	/**
 	 * @param $value
 	 * @return string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveRequest($value)
 	{
@@ -45,7 +45,7 @@ class Checkbox extends Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function afterLoadValue()
 	{
@@ -54,7 +54,7 @@ class Checkbox extends Input
 
 	/**
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeGetValue()
 	{

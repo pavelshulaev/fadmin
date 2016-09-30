@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 17:38
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -29,7 +29,7 @@ class Header extends Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -38,7 +38,7 @@ class Header extends Input
 
 	/**
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveValue()
 	{

@@ -5,7 +5,7 @@
  * Date: 15.01.2016
  * Time: 23:03
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -19,7 +19,7 @@ class Addpreset extends Submit
 	public static $type = self::TYPE__ADD_PRESET;
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -67,7 +67,7 @@ class Addpreset extends Submit
 	/**
 	 *  not save
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveValue()
 	{
@@ -76,7 +76,7 @@ class Addpreset extends Submit
 
 	/**
 	 * value = default value
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function afterLoadValue()
 	{

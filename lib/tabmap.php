@@ -5,7 +5,7 @@
  * Date: 21.01.2016
  * Time: 20:18
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin;
@@ -37,7 +37,7 @@ class TabMap
 	/**
 	 * adding tab to map
 	 * @param Tab $tab
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function addTab(Tab $tab)
 	{
@@ -58,7 +58,7 @@ class TabMap
 	 * @param string $siteId
 	 * @return null
 	 * @throws \Bitrix\Main\ArgumentNullException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getTabByPresetId($presetId, $siteId = '')
 	{
@@ -77,7 +77,7 @@ class TabMap
 
 	/**
 	 * @return array
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getAllTabsInfo()
 	{
@@ -98,7 +98,7 @@ class TabMap
 	 * @param     $presetId
 	 * @return Tab
 	 * @throws ArgumentNullException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function createPresetTab(Tab $tab, $presetId)
 	{
@@ -124,7 +124,7 @@ class TabMap
 
 	/**
 	 * @return array
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getTabs()
 	{
@@ -158,7 +158,7 @@ class TabMap
 	/**
 	 * @param $valueName
 	 * @return null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getInputByValueName($valueName)
 	{

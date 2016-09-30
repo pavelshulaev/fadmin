@@ -5,7 +5,7 @@
  * Date: 22.01.2016
  * Time: 20:17
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Admin;
@@ -57,7 +57,7 @@ class Request
 	/**
 	 * @throws \Bitrix\Main\ArgumentNullException
 	 * @throws \Bitrix\Main\SystemException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function get()
 	{
@@ -65,11 +65,11 @@ class Request
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function redirect()
 	{
-		$this->options->runEvent(Options::EVENT__AFTER_REQUEST);
+		$this->options->runEvent(Options::EVENT__AFTER_GET_REQUEST);
 
 		if(strlen($this->update)>0
 			&& strlen($_REQUEST["back_url_settings"])>0)
@@ -85,12 +85,12 @@ class Request
 	 * @return \Bitrix\Main\HttpRequest|void
 	 * @throws \Bitrix\Main\ArgumentNullException
 	 * @throws \Bitrix\Main\SystemException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function getRequest()
 	{
 		// action before
-		if(false === $this->options->runEvent(Options::EVENT__BEFORE_REQUEST))
+		if(false === $this->options->runEvent(Options::EVENT__BEFORE_GET_REQUEST))
 			return;
 
 		$request = Application::getInstance()
@@ -123,7 +123,7 @@ class Request
 
 	/**
 	 * @param BxRequest $request
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function addPreset(BxRequest $request)
 	{
@@ -154,7 +154,7 @@ class Request
 	 * @param BxRequest $request
 	 * @throws \Bitrix\Main\ArgumentNullException
 	 * @throws \Bitrix\Main\SystemException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function removePreset(BxRequest $request)
 	{
@@ -188,7 +188,7 @@ class Request
 
 	/**
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function check()
 	{
@@ -199,7 +199,7 @@ class Request
 
 	/**
 	 * @throws \Bitrix\Main\ArgumentNullException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function restoreDefaults()
 	{
@@ -208,11 +208,11 @@ class Request
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function addRequest()
 	{
-		if(false === $this->options->runEvent(Options::EVENT__BEFORE_ADD_REQUEST))
+		if(false === $this->options->runEvent(Options::EVENT__BEFORE_ADD_VALUES_FROM_REQUEST))
 			return;
 
 		$tabs = $this->options->getTabs();
@@ -223,7 +223,7 @@ class Request
 			 */
 			$tab->setValuesFromRequest();
 
-		$this->options->runEvent(Options::EVENT__AFTER_ADD_REQUEST);
+		$this->options->runEvent(Options::EVENT__AFTER_ADD_VALUES_FROM_REQUEST);
 
 		$this->redirect();
 	}

@@ -40,7 +40,7 @@ class rover_fadmin extends CModule
 	}
 
     /**
-     * @author Shulaev (pavel.shulaev@gmail.com)
+     * @author Pavel Shulaev (http://rover-it.me)
      */
     public function DoInstall()
     {
@@ -52,7 +52,7 @@ class rover_fadmin extends CModule
 	}
 
     /**
-     * @author Shulaev (pavel.shulaev@gmail.com)
+     * @author Pavel Shulaev (http://rover-it.me)
      */
     public function DoUninstall()
     {
@@ -65,7 +65,7 @@ class rover_fadmin extends CModule
 
     /**
      * @return array
-     * @author Shulaev (pavel.shulaev@gmail.com)
+     * @author Pavel Shulaev (http://rover-it.me)
      */
     public function GetModuleRightsList()
     {
@@ -80,8 +80,8 @@ class rover_fadmin extends CModule
     }
 
 	/**
-	 * РРЅСЃС‚Р°Р»Р»СЏС†РёСЏ С„Р°Р№Р»РѕРІ Рё Р·Р°РІРёСЃРёРјРѕС‚РµР№, СЂРµРіРёСЃС‚СЂР°С†РёСЏ РјРѕРґСѓР»СЏ
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * Инсталляция файлов и зависимотей, регистрация модуля
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	private function ProcessInstall()
     {
@@ -95,8 +95,8 @@ class rover_fadmin extends CModule
     }
 
 	/**
-	 * РЈРґР°Р»РµРЅРёРµ С„Р°Р№Р»РѕРІ Рё Р·Р°РІРёСЃРёРјРѕСЃС‚РµР№. РЎРЅСЏС‚РёРµ РјРѕРґСѓР»СЏ СЃ СЂРµРіРёСЃС‚СЂР°С†РёРё
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * Удаление файлов и зависимостей. Снятие модуля с регистрации
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	private function ProcessUninstall()
 	{

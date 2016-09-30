@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 17:41
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -46,7 +46,7 @@ class Textarea extends Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -65,7 +65,7 @@ class Textarea extends Input
 
 	/**
 	 * @param $valueId
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function showLabel($valueId)
 	{

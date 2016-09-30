@@ -1,11 +1,12 @@
 <?php
 namespace Rover\Fadmin;
+
 use \Bitrix\Main\Config\Option;
 /**
- * ÐšÐ»Ð°ÑÑ Ð´Ð»Ñ Ð¼Ð°Ð½Ð¸Ð¿ÑƒÐ»ÑÑ†Ð¸Ð¸ Ñ Ð¿Ñ€ÐµÑÐµÑ‚Ð°Ð¼Ð¸
+ * Êëàññ äëÿ ìàíèïóëÿöèè ñ ïðåñåòàìè
  * Class Presets
  * @package Fadmin
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 class Presets
 {
@@ -17,7 +18,7 @@ class Presets
 	 * @param string $siteId
 	 * @return mixed
 	 * @throws \Bitrix\Main\ArgumentNullException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function get($moduleId, $siteId = '')
 	{
@@ -28,7 +29,7 @@ class Presets
 	 * @param        $moduleId
 	 * @param string $siteId
 	 * @return array
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function getIds($moduleId, $siteId = '')
 	{
@@ -40,7 +41,7 @@ class Presets
 	 * @param string $siteId
 	 * @param        $id
 	 * @return null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function getById($id, $moduleId, $siteId = '')
 	{
@@ -52,11 +53,11 @@ class Presets
 		return null;
 	}
 	/**
-	 * Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¿Ñ€ÐµÑÐµÑ‚Ð¾Ð²
+	 * âîçâðàùàåò êîëè÷åñòâî ïðåñåòîâ
 	 * @param        $moduleId
 	 * @param string $siteId
 	 * @return int
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function getCount($moduleId, $siteId = '')
 	{
@@ -68,7 +69,7 @@ class Presets
 	 * @param        $name
 	 * @param string $siteId
 	 * @return int|mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function add($moduleId, $name, $siteId = '')
 	{
@@ -95,7 +96,7 @@ class Presets
 	 * @param        $moduleId
 	 * @param        $presetId
 	 * @param string $siteId
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function remove($moduleId, $presetId, $siteId = '')
 	{
@@ -114,7 +115,7 @@ class Presets
 	 * @param        $moduleId
 	 * @param        $presets
 	 * @param string $siteId
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected static function update($moduleId, $presets, $siteId = '')
 	{
@@ -126,7 +127,7 @@ class Presets
 	 * @param        $moduleId
 	 * @param        $sortFunc
 	 * @param string $siteId
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function sort($moduleId, $sortFunc, $siteId = '')
 	{

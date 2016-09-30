@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 18:26
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -43,7 +43,7 @@ class Number extends Text
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -69,7 +69,7 @@ class Number extends Text
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function printCss()
 	{
@@ -99,7 +99,7 @@ class Number extends Text
 	/**
 	 * @param $value
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveRequest($value)
 	{

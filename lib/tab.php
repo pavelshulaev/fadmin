@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 18:34
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin;
@@ -67,7 +67,7 @@ class Tab
 
 	/**
 	 * @return Options
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getOptions()
 	{
@@ -79,7 +79,7 @@ class Tab
 	 * @param Options $options
 	 * @return Tab
 	 * @throws Main\SystemException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function factory(array $params, Options $options)
 	{
@@ -94,7 +94,7 @@ class Tab
 
 	/**
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getLabel()
 	{
@@ -103,7 +103,7 @@ class Tab
 
 	/**
 	 * @param $label
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setLabel($label)
 	{
@@ -112,7 +112,7 @@ class Tab
 
 	/**
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getDescription()
 	{
@@ -121,7 +121,7 @@ class Tab
 
 	/**
 	 * @param $description
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setDescription($description = '')
 	{
@@ -130,7 +130,7 @@ class Tab
 
 	/**
 	 * @return string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getPresetId()
 	{
@@ -139,7 +139,7 @@ class Tab
 
 	/**
 	 * @param $presetId
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setPresetId($presetId = '')
 	{
@@ -148,7 +148,7 @@ class Tab
 
 	/**
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function isPreset()
 	{
@@ -158,7 +158,7 @@ class Tab
 	/**
 	 *
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getSiteId()
 	{
@@ -167,7 +167,7 @@ class Tab
 
 	/**
 	 * @param $siteId
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setSiteId($siteId = '')
 	{
@@ -176,7 +176,7 @@ class Tab
 
 	/**
 	 * @return string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getModuleId()
 	{
@@ -186,7 +186,7 @@ class Tab
 	/**
 	 * @param $filter
 	 * @return Input|null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function search(array $filter)
 	{
@@ -207,7 +207,7 @@ class Tab
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function __clone()
 	{
@@ -227,7 +227,7 @@ class Tab
 	/**
 	 * @param $inputName
 	 * @return Input|null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getValue($inputName)
 	{
@@ -242,7 +242,7 @@ class Tab
 	/**
 	 * @param $name
 	 * @return null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function searchByName($name)
 	{
@@ -254,7 +254,7 @@ class Tab
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function clear()
 	{
@@ -266,7 +266,7 @@ class Tab
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getName()
 	{
@@ -275,7 +275,7 @@ class Tab
 
 	/**
 	 * @param Input $input
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function addInput(Input $input)
 	{
@@ -284,7 +284,7 @@ class Tab
 
 	/**
 	 * @param array $input
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function addInputArray(array $input)
 	{
@@ -292,7 +292,7 @@ class Tab
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function show()
 	{
@@ -304,7 +304,7 @@ class Tab
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setValuesFromRequest()
 	{
@@ -317,7 +317,7 @@ class Tab
 
 	/**
 	 * @return array
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getInfo()
 	{
@@ -345,7 +345,7 @@ class Tab
 
 	/**
 	 * @return null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getPresetName()
 	{
@@ -366,7 +366,7 @@ class Tab
 	 * @param            $name
 	 * @param            $value
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setInputValue($name, $value)
 	{

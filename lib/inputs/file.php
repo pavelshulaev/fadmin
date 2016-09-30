@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 18:06
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -52,7 +52,7 @@ class File extends Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -78,7 +78,7 @@ class File extends Input
 	 * @param $value
 	 * @return bool|int|null|string
 	 * @throws \Bitrix\Main\ArgumentException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveRequest($value)
 	{
@@ -111,7 +111,7 @@ class File extends Input
 	/**
 	 * @param array $params
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveValue(array $params)
 	{

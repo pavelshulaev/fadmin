@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 18:02
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -15,7 +15,7 @@ class Color extends Input
 	public static $type = self::TYPE__COLOR;
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{

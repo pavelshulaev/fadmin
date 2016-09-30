@@ -5,7 +5,7 @@
  * Date: 15.01.2016
  * Time: 23:03
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -19,7 +19,7 @@ class Removepreset extends Submit
 	public static $type = self::TYPE__REMOVE_PRESET;
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -47,7 +47,7 @@ class Removepreset extends Submit
 	/**
 	 * not save
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveValue()
 	{
@@ -56,7 +56,7 @@ class Removepreset extends Submit
 
 	/**
 	 * value = default value
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function afterLoadValue()
 	{

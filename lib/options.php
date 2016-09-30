@@ -5,7 +5,7 @@
  * Date: 08.01.2016
  * Time: 18:35
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin;
@@ -19,8 +19,8 @@ use Rover\Fadmin\Inputs\Input;
 Loc::LoadMessages(__FILE__);
 /**
  * Interface template
- * РђР±СЃС‚СЂР°РєС‚РЅС‹Р№ РєР»Р°СЃСЃ С€Р°Р±Р»РѕРЅР° РѕРїС†РёР№.
- * Р”РѕР»Р¶РµРЅ Р±С‹С‚СЊ СѓРЅР°СЃР»РµРґРѕРІР°РЅ РєР»Р°СЃСЃРѕРј, РєРѕС‚РѕСЂС‹Р№ Р·Р°РЅРёРјР°РµС‚СЃСЏ СЂР°Р±РѕС‚РѕР№ СЃ РѕРїС†РёСЏРјРё Рё СЂРёСЃРѕРІР°РЅРёРµРј РёРЅС‚РµСЂС„РµР№СЃР°
+ * Абстрактный класс шаблона опций.
+ * Должен быть унаследован классом, который занимается работой с опциями и рисованием интерфейса
  *
  *@package Rover\Fadmin
  * @author  Shulaev (pavel.shulaev@gmail.com)
@@ -30,10 +30,10 @@ abstract class Options
 	/**
 	 * events
 	 */
-	const EVENT__BEFORE_REQUEST         = 'beforeRequest';
-	const EVENT__AFTER_REQUEST          = 'afterRequest';
-	const EVENT__BEFORE_ADD_REQUEST     = 'beforeAddRequest';
-	const EVENT__AFTER_ADD_REQUEST      = 'afterAddRequest';
+	const EVENT__BEFORE_GET_REQUEST     = 'beforeGetRequest';
+	const EVENT__AFTER_GET_REQUEST      = 'afterGetRequest';
+	const EVENT__BEFORE_ADD_VALUES_FROM_REQUEST = 'beforeAddValuesFromRequest';
+	const EVENT__AFTER_ADD_VALUES_FROM_REQUEST  = 'afterAddValuesFromRequest';
 	const EVENT__BEFORE_ADD_PRESET      = 'beforeAddPreset';
 	const EVENT__AFTER_ADD_PRESET       = 'afterAddPreset';
 	const EVENT__BEFORE_REMOVE_PRESET   = 'beforeRemovePreset';
@@ -113,7 +113,7 @@ abstract class Options
 
 	/**
 	 * @return array
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getSettings()
 	{
@@ -124,7 +124,7 @@ abstract class Options
 	 * for singleton
 	 * @param $moduleId
 	 * @return static
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function getInstance($moduleId)
 	{
@@ -137,7 +137,7 @@ abstract class Options
 
 	/**
 	 * @return array
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getAllTabsInfo()
 	{
@@ -148,7 +148,7 @@ abstract class Options
 	 * @param $name
 	 * @param $params
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function runEvent($name, &$params = [])
 	{
@@ -166,13 +166,13 @@ abstract class Options
 	/**
 	 * returns config array. Now it's contained only 'tabs' section
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	abstract public function getConfig();
 
 	/**
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getModuleId()
 	{
@@ -185,7 +185,7 @@ abstract class Options
 	 * @param string $presetId
 	 * @param string $siteId
 	 * @return string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function getParam($param, $presetId = '', $siteId = '')
 	{
@@ -201,7 +201,7 @@ abstract class Options
 	/**
 	 * @param        $message
 	 * @param string $type
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function addMessage($message, $type = 'OK')
 	{
@@ -212,7 +212,7 @@ abstract class Options
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function showMessages()
 	{
@@ -223,7 +223,7 @@ abstract class Options
 	/**
 	 * Generate tabs by tabs config array
 	 * @param $tabsParams
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function addTabs($tabsParams)
 	{
@@ -240,7 +240,7 @@ abstract class Options
 	 * adding tab
 	 * clone preset tab for all presets
 	 * @param Tab $tab
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function addTab(Tab $tab)
 	{
@@ -249,7 +249,7 @@ abstract class Options
 
 	/**
 	 * @return array
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getTabs()
 	{
@@ -266,7 +266,7 @@ abstract class Options
 	 * @param string     $siteId
 	 * @param bool|false $reload
 	 * @return mixed|null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getPresetValue($inputName, $presetId, $siteId = '', $reload = false)
 	{
@@ -279,7 +279,7 @@ abstract class Options
 	 * @param string     $siteId
 	 * @param bool|false $reload
 	 * @return mixed|null
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getNormalValue($inputName, $siteId = '', $reload = false)
 	{
@@ -292,7 +292,7 @@ abstract class Options
 	 * @param string $presetId
 	 * @param string $siteId
 	 * @return null|Input
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function getInputByName($inputName, $presetId = '', $siteId = '')
 	{
@@ -322,7 +322,7 @@ abstract class Options
 	 * @param bool|false $reload
 	 * @return mixed
 	 * @throws Main\SystemException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getValue($inputName, $presetId = '', $siteId = '', $reload = false)
 	{
@@ -347,7 +347,7 @@ abstract class Options
 	 * @param string $siteId
 	 * @return mixed
 	 * @throws Main\SystemException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getDefaultValue($inputName, $presetId = '', $siteId = '')
 	{
@@ -364,7 +364,7 @@ abstract class Options
 	 * @param string $siteId
 	 * @return mixed
 	 * @throws Main\SystemException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getTabByPresetId($presetId, $siteId = '')
 	{
@@ -377,7 +377,7 @@ abstract class Options
 	/**
 	 * @param string $siteId
 	 * @return array
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getPresetsIds($siteId = '')
 	{

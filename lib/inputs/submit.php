@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 18:30
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -37,7 +37,7 @@ class Submit extends Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -59,7 +59,7 @@ class Submit extends Input
 	 * @param $name
 	 * @param $value
 	 * @param $label
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function drawSubmit($id, $name, $value, $label)
 	{
@@ -72,7 +72,7 @@ class Submit extends Input
 	/**
 	 * @param $id
 	 * @param $popup
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function drawConfirm($id, $popup)
 	{
@@ -89,7 +89,7 @@ class Submit extends Input
 
 	/**
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveValue()
 	{
@@ -97,7 +97,7 @@ class Submit extends Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function afterLoadValue()
 	{

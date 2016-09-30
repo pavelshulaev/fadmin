@@ -8,7 +8,7 @@ use Rover\Fadmin\Tab;
  * Date: 11.01.2016
  * Time: 17:33
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 class Selectbox extends Input
 {
@@ -30,7 +30,7 @@ class Selectbox extends Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -76,7 +76,7 @@ class Selectbox extends Input
 	/**
 	 * @param $value
 	 * @return string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveRequest($value)
 	{
@@ -87,7 +87,7 @@ class Selectbox extends Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function afterLoadValue()
 	{

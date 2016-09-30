@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 17:37
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -18,7 +18,7 @@ class Hidden extends Text
 	public static $type = self::TYPE__HIDDEN;
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{

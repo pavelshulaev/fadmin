@@ -5,7 +5,7 @@
  * Date: 22.01.2016
  * Time: 20:10
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Admin;
@@ -38,7 +38,7 @@ class Form
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function show()
 	{
@@ -58,7 +58,7 @@ class Form
 
 	/**
 	 * @param Tab $tab
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function showTab(Tab $tab)
 	{
@@ -73,7 +73,7 @@ class Form
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function showFormBegin()
 	{
@@ -83,7 +83,7 @@ class Form
 
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function showFormEnd()
 	{

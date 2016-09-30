@@ -5,7 +5,7 @@
  * Date: 11.01.2016
  * Time: 17:50
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 
 namespace Rover\Fadmin\Inputs;
@@ -18,7 +18,7 @@ class Clock extends Input
 	public static $type = self::TYPE__CLOCK;
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function draw()
 	{
@@ -45,7 +45,7 @@ class Clock extends Input
 	/**
 	 * @param $value
 	 * @return string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function beforeSaveRequest($value)
 	{
@@ -56,7 +56,7 @@ class Clock extends Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function afterLoadValue()
 	{
@@ -80,7 +80,7 @@ class Clock extends Input
 	 * @param string     $strAddType
 	 * @param string     $strAddIBlock
 	 * @return string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected static function getIBlockDropDownListMultiple(array $iblockIds, $strTypeName, $strIBlockName, $arFilter = false, $onChangeType = '', $onChangeIBlock = '', $strAddType = '', $strAddIBlock = '')
 	{

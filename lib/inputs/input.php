@@ -6,7 +6,7 @@ namespace Rover\Fadmin\Inputs;
  * Date: 11.01.2016
  * Time: 16:58
  *
- * @author Shulaev (pavel.shulaev@gmail.com)
+ * @author Pavel Shulaev (http://rover-it.me)
  */
 use Bitrix\Main;
 use Bitrix\Main\Application;
@@ -98,7 +98,7 @@ abstract class Input
 
 	/**
 	 * @param Tab $tab
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setTab(Tab $tab)
 	{
@@ -107,7 +107,7 @@ abstract class Input
 
 	/**
 	 * @return Tab
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getTab()
 	{
@@ -116,7 +116,7 @@ abstract class Input
 
 	/**
 	 * loading value before showing input
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function show()
 	{
@@ -126,7 +126,7 @@ abstract class Input
 
 	/**
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	abstract public function draw();
 
@@ -135,7 +135,7 @@ abstract class Input
 	 * @param Tab   $tab
 	 * @return mixed
 	 * @throws Main\SystemException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function factory(array $params, Tab $tab)
 	{
@@ -157,7 +157,7 @@ abstract class Input
 
 	/**
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getLabel()
 	{
@@ -166,7 +166,7 @@ abstract class Input
 
 	/**
 	 * @param $label
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setLabel($label)
 	{
@@ -175,7 +175,7 @@ abstract class Input
 
 	/**
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getDefault()
 	{
@@ -184,7 +184,7 @@ abstract class Input
 
 	/**
 	 * @param $default
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setDefault($default)
 	{
@@ -193,7 +193,7 @@ abstract class Input
 
 	/**
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function isMultiple()
 	{
@@ -202,7 +202,7 @@ abstract class Input
 
 	/**
 	 * @param $value
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setValue($value)
 	{
@@ -215,7 +215,7 @@ abstract class Input
 	/**
 	 * @param $value
 	 * @return bool
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function saveValue($value)
 	{
@@ -230,7 +230,7 @@ abstract class Input
 
 	/**
 	 * @throws Main\ArgumentNullException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function removeValue()
 	{
@@ -245,7 +245,7 @@ abstract class Input
 
 	/**
 	 * @throws Main\ArgumentNullException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function loadValue()
 	{
@@ -262,7 +262,7 @@ abstract class Input
 	 * @param string $siteId
 	 * @return string
 	 * @throws Main\ArgumentNullException
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public static function getValueStatic(array $params, $moduleId, $presetId = '', $siteId = '')
 	{
@@ -280,7 +280,7 @@ abstract class Input
 	/**
 	 * @param bool|false $refresh
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getValue($refresh = false)
 	{
@@ -295,7 +295,7 @@ abstract class Input
 
 	/**
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getType()
 	{
@@ -304,7 +304,7 @@ abstract class Input
 
 	/**
 	 * @return string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getValueId()
 	{
@@ -315,7 +315,7 @@ abstract class Input
 
 	/**
 	 * @return string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getValueName()
 	{
@@ -325,7 +325,7 @@ abstract class Input
 
 	/**
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getName()
 	{
@@ -334,7 +334,7 @@ abstract class Input
 
 	/**
 	 * can be redefined in children
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setValueFromRequest()
 	{
@@ -354,7 +354,7 @@ abstract class Input
 	 * @param $name
 	 * @param $params
 	 * @return mixed
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function runEvent($name, &$params = [])
 	{
@@ -366,7 +366,7 @@ abstract class Input
 
 	/**
 	 * @return null|string
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function getValueFromRequest()
 	{
@@ -380,7 +380,7 @@ abstract class Input
 	/**
 	 * @param            $valueId
 	 * @param bool|false $empty
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function showLabel($valueId, $empty = false)
 	{
@@ -401,7 +401,7 @@ abstract class Input
 	}
 
 	/**
-	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function showHelp()
 	{
