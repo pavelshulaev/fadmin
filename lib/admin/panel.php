@@ -1,0 +1,61 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lenovo
+ * Date: 11.01.2016
+ * Time: 18:43
+ *
+ * @author Shulaev (pavel.shulaev@gmail.com)
+ */
+
+namespace Rover\Fadmin\Admin;
+
+use \Rover\Fadmin\Options;
+
+class Panel
+{
+	protected $options;
+	protected $request;
+	protected $form;
+	protected $tabControl;
+
+	/**
+	 * @param Options $options
+	 * @param null    $formName
+	 */
+	public function __construct(Options $options, $formName = null)
+	{
+		$this->options = $options;
+
+		$tabControl = $this->getTabControl();
+
+		global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
+
+		$this->request  = new Request($tabControl, $options, $REQUEST_METHOD, $Update, $Apply, $RestoreDefaults);
+		$this->form     = new Form($tabControl, $options, $formName);
+	}
+
+	/**
+	 * @return \CAdminTabControl
+	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 */
+	protected function getTabControl()
+	{
+		if (is_null($this->tabControl))
+			$this->tabControl
+				= new \CAdminTabControl("tabControl",
+				$this->options->getAllTabsInfo());
+
+		return $this->tabControl;
+	}
+
+	/**
+	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 */
+	public function show()
+	{
+		$this->request->get();
+		$this->options->showMessages();
+		$this->form->show();
+	}
+}
