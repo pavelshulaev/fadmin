@@ -20,6 +20,7 @@ abstract class Input
 	const EVENT__BEFORE_SAVE_VALUE      = 'beforeSaveValue';
 	const EVENT__BEFORE_GET_VALUE       = 'beforeGetValue';
 	const EVENT__AFTER_LOAD_VALUE       = 'afterLoadValue';
+	const EVENT__BEFORE_CREATE          = 'beforeCreate';
 
 	const TYPE__HIDDEN          = 'hidden';
 	const TYPE__LABEL           = 'label';
