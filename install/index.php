@@ -6,14 +6,14 @@ Loc::loadMessages(__FILE__);
 
 class rover_fadmin extends CModule
 {
-    public $MODULE_ID	= "rover.fadmin";
-    public $MODULE_VERSION;
-    public $MODULE_VERSION_DATE;
-    public $MODULE_NAME;
-    public $MODULE_DESCRIPTION;
-    public $MODULE_GROUP_RIGHTS = "Y";
-    public $PARTNER_NAME;
-    public $PARTNER_URI;
+    var $MODULE_ID	= "rover.fadmin";
+    var $MODULE_VERSION;
+    var $MODULE_VERSION_DATE;
+    var $MODULE_NAME;
+    var $MODULE_DESCRIPTION;
+    var $MODULE_GROUP_RIGHTS = "Y";
+    var $PARTNER_NAME;
+    var $PARTNER_URI;
 
     protected $errors = [];
 
