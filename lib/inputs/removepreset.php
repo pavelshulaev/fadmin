@@ -14,6 +14,12 @@ use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
 
+/**
+ * Class Removepreset
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Removepreset extends Submit
 {
 	public static $type = self::TYPE__REMOVE_PRESET;

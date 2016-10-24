@@ -10,6 +10,12 @@
 
 namespace Rover\Fadmin\Inputs;
 
+/**
+ * Class Hidden
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Hidden extends Text
 {
 	/**

@@ -12,8 +12,17 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Options;
 
+/**
+ * Class Checkbox
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Checkbox extends Input
 {
+	/**
+	 * @var string
+	 */
 	public static $type = self::TYPE__CHECKBOX;
 
 	/**

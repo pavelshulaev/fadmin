@@ -9,8 +9,15 @@
  */
 
 namespace Rover\Fadmin\Inputs;
+
 use Rover\Fadmin\Tab;
 
+/**
+ * Class Label
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Label extends Input
 {
 	/**

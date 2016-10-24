@@ -15,6 +15,12 @@ use Bitrix\Main\Application;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
 
+/**
+ * Class Form
+ *
+ * @package Rover\Fadmin\Admin
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Form
 {
 	protected $moduleId;

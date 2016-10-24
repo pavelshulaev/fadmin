@@ -12,6 +12,12 @@ namespace Rover\Fadmin;
 
 use Rover\Fadmin\Inputs\Input;
 
+/**
+ * Class TestOptions
+ *
+ * @package Rover\Fadmin
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class TestOptions extends Options
 {
 	/**
@@ -34,18 +40,74 @@ class TestOptions extends Options
 							'label'     => 'First tab header',
 						],
 						[
+							'type'      => Input::TYPE__TEXT,
+							'name'      => 'text',
+							'label'     => 'text input (maxlength 50)',
+							'default'   => 'default text',
+							'maxLength' => 50
+						],
+						[
+							'type'      => Input::TYPE__NUMBER,
+							'name'      => 'number',
+							'label'     => 'number input (min 0, max 100)',
+							'default'   => 50,
+							'max'       => 100,
+							'min'       => 0
+						],
+						[
 							'type'      => Input::TYPE__TEXTAREA,
 							'name'      => 'input_textarea',
-							'label'     => 'input textarea 3 rows 20 cols',
+							'label'     => 'input textarea (3 rows 20 cols)',
 							'default'   => 'default text',
 							'rows'      => 3,
 							'cols'      => 20,
 							'help'      => 'textarea help',
 						],
 						[
+							'type'      => Input::TYPE__CLOCK,
+							'name'      => 'clock',
+							'label'     => 'This is a clock',
+							'default'   => '15:15',
+						],
+						[
+							'type'      => Input::TYPE__COLOR,
+							'name'      => 'color',
+							'label'     => 'This is a color',
+							'default'   => '15:15',
+							'help'      => 'Please, select a color'
+						],
+						[
+							'type'      => Input::TYPE__CHECKBOX,
+							'name'      => 'checkbox',
+							'label'     => 'This is a checkbox',
+							'default'   => '#FFFF00',
+							'help'      => 'Please, check me!'
+						],
+						[
+							'type'      => Input::TYPE__FILE,
+							'name'      => 'file',
+							'label'     => 'This is a file',
+							'default'   => '15:15',
+							'help'      => 'You may load an image here (max size 1 M)',
+							'maxSize'   => 1024 * 1024,
+							'isImage'   => true
+						],
+						[
+							'type'      => Input::TYPE__IBLOCK,
+							'name'      => 'iblock',
+							'label'     => 'This is a single iblock',
+						],
+						[
+							'type'      => Input::TYPE__IBLOCK,
+							'name'      => 'multiple iblock',
+							'multiple'  => true,
+							'label'     => 'This is a multiple iblock',
+						],
+
+						[
 							'type'      => Input::TYPE__ADD_PRESET,
 							'name'      => 'add_preset',
-							'label'     => 'add preset',
+							'label'     => 'add preset s1',
 							'default'   => 'new preset default name',
 							'popup'     => 'add preset popup' // false - not show
 						]
@@ -87,12 +149,22 @@ class TestOptions extends Options
 						[
 							'type'      => Input::TYPE__SELECTBOX,
 							'name'      => 'selectbox',
+							'label'     => 'single selectbox',
+							'options'   => [
+								'0' => 'option 0',
+								'1' => 'option 1',
+								'2' => 'option 2'
+							]
+						],
+						[
+							'type'      => Input::TYPE__SELECTBOX,
+							'name'      => 'selectbox',
 							'label'     => 'Multiple selectbox',
 							'multiple'  => true,
 							'options'   => [
-								'0' => '123',
-								'1' => '456',
-								'2' => '789'
+								'0' => 'option 0',
+								'1' => 'option 1',
+								'2' => 'option 2'
 							]
 						],
 						[

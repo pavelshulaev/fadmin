@@ -21,6 +21,12 @@ use Rover\Fadmin\Tab;
 use \Bitrix\Main\Config\Option;
 use \Bitrix\Main\ArgumentNullException;
 
+/**
+ * Class Request
+ *
+ * @package Rover\Fadmin\Admin
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Request
 {
 	protected $moduleId;

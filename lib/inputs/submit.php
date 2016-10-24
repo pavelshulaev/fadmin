@@ -12,6 +12,12 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
 
+/**
+ * Class Submit
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Submit extends Input
 {
 	public static $type = self::TYPE__SUBMIT;

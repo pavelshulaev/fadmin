@@ -12,6 +12,12 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
 
+/**
+ * Class Textarea
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Textarea extends Input
 {
 	/**

@@ -10,8 +10,17 @@
 
 namespace Rover\Fadmin\Inputs;
 
+/**
+ * Class Custom
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Custom extends Input
 {
+	/**
+	 * @var string
+	 */
 	public static $type = self::TYPE__CUSTOM;
 
 	/**

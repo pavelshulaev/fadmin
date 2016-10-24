@@ -12,6 +12,12 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
 
+/**
+ * Class Text
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Text extends Input
 {
 	/**
@@ -22,7 +28,8 @@ class Text extends Input
 	/**
 	 * @var int
 	 */
-	protected $maxLength = 255;
+	protected $maxLength    = 255;
+	protected $size         = 20;
 
 	/**
 	 * @param array $params
@@ -33,9 +40,11 @@ class Text extends Input
 	{
 		parent::__construct($params, $tab);
 
-		$this->maxLength = isset($params['maxLength'])
-			? htmlspecialcharsbx($params['maxLength'])
-			: null;
+		if (isset($params['maxLength']) && intval($params['maxLength']))
+			$this->maxLength = intval($params['maxLength']);
+
+		if (isset($params['size']) && intval($params['size']))
+			$this->size = intval(htmlspecialcharsbx($params['size']));
 	}
 
 	/**
@@ -49,11 +58,11 @@ class Text extends Input
 		$this->showLabel($valueId);
 
 		?><input type="text"
-		         id="<?php echo $valueId?>"
-		         size="<?php echo $this->size?>"
-		         maxlength="<?php $this->maxLength?>"
-		         value="<?php echo $this->value?>"
-		         name="<?php echo $valueName?>"><?php
+		         id="<?=$valueId?>"
+		         size="<?=$this->size?>"
+		         maxlength="<?=$this->maxLength?>"
+		         value="<?=$this->value?>"
+		         name="<?=$valueName?>"><?php
 
 		$this->showHelp();
 	}

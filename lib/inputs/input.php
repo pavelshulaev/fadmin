@@ -14,6 +14,12 @@ use \Bitrix\Main\Config\Option;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
 
+/**
+ * Class Input
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 abstract class Input
 {
 	const EVENT__BEFORE_SAVE_REQUEST    = 'beforeSaveRequest';
@@ -44,7 +50,6 @@ abstract class Input
 	protected $label;                // input label
 	protected $value;               // input value
 	protected $default;             // default input value
-	protected $size = 20;
 	protected $multiple = false;    // multiple value for selectbox and iblock
 	protected $help;
 
@@ -86,9 +91,6 @@ abstract class Input
 
 		$this->setLabel($params['label']);
 		$this->setDefault($params['default']);
-
-		if (isset($params['size']))
-			$this->size = htmlspecialcharsbx($params['size']);
 
 		if (isset($params['multiple']))
 			$this->multiple = (bool)$params['multiple'];

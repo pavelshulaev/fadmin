@@ -1,7 +1,4 @@
 <?php
-namespace Rover\Fadmin\Inputs;
-use Rover\Fadmin\Tab;
-
 /**
  * Created by PhpStorm.
  * User: lenovo
@@ -9,6 +6,16 @@ use Rover\Fadmin\Tab;
  * Time: 17:33
  *
  * @author Pavel Shulaev (http://rover-it.me)
+ */
+
+namespace Rover\Fadmin\Inputs;
+
+use Rover\Fadmin\Tab;
+/**
+ * Class Selectbox
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
  */
 class Selectbox extends Input
 {
@@ -39,20 +46,18 @@ class Selectbox extends Input
 
 		$this->showLabel($valueId);
 
-		if ($this->multiple) {
-			$size = count($this->options) > self::MAX_SIZE
+		$selectSize = $this->multiple
+			? (count($this->options) > self::MAX_SIZE
 				? self::MAX_SIZE
-				: count($this->options);
-		} else {
-			$size = 1;
-		}
+				: count($this->options))
+			: 1;
 
 
 		?><select
 			name="<?php echo $valueName . ($this->multiple ? '[]' : '')?>"
 			id="<?php echo $valueId?>"
 			<?php echo $this->multiple
-				? ' multiple="multiple" size="' . $size . '" '
+				? ' multiple="multiple" size="' . $selectSize . '" '
 				: ''
 			?>>
 				<?php

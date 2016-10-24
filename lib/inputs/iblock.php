@@ -10,6 +10,14 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\Loader;
+
+/**
+ * Class Iblock
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Iblock extends Input
 {
 	/**
@@ -22,6 +30,11 @@ class Iblock extends Input
 	 */
 	public function draw()
 	{
+		if (!Loader::includeModule('iblock')){
+			ShowError('Iblock module not found');
+			return;
+		}
+
 		$valueId    = $this->getValueId();
 		$valueName  = $this->getValueName();
 

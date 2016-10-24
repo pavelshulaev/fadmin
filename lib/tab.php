@@ -14,6 +14,12 @@ use \Rover\Fadmin\Inputs\Input;
 use Bitrix\Main;
 use Bitrix\Main\ArgumentNullException;
 
+/**
+ * Class Tab
+ *
+ * @package Rover\Fadmin
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Tab
 {
 	/**

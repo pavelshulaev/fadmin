@@ -12,6 +12,12 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
 
+/**
+ * Class Number
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Number extends Text
 {
 	/**
@@ -24,7 +30,14 @@ class Number extends Text
 	 */
 	public static $cssPrinted = false;
 
+	/**
+	 * @var int
+	 */
 	protected $min;
+
+	/**
+	 * @var int
+	 */
 	protected $max;
 
 	/**
@@ -59,11 +72,13 @@ class Number extends Text
 
 		?><input
 			type="number"
-			id="<?php echo $valueId?>"
-			size="<?php echo $this->size?>"
-			maxlength="<?php $this->maxLength?>"
-			value="<?php echo $this->value?>"
-			name="<?php echo $valueName?>"
+			id="<?=$valueId?>"
+			size="<?=$this->size?>"
+			maxlength="<?=$this->maxLength?>"
+			value="<?=$this->value?>"
+			name="<?=$valueName?>"
+			max="<?=$this->max?>"
+			min="<?=$this->min?>"
 		><?php
 		$this->showHelp();
 	}

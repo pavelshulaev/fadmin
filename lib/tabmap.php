@@ -12,6 +12,12 @@ namespace Rover\Fadmin;
 
 use \Bitrix\Main\ArgumentNullException;;
 
+/**
+ * Class TabMap
+ *
+ * @package Rover\Fadmin
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class TabMap
 {
 	/**

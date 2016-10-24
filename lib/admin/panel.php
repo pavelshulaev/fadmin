@@ -12,6 +12,12 @@ namespace Rover\Fadmin\Admin;
 
 use \Rover\Fadmin\Options;
 
+/**
+ * Class Panel
+ *
+ * @package Rover\Fadmin\Admin
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Panel
 {
 	protected $options;

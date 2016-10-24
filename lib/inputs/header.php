@@ -11,6 +11,12 @@
 namespace Rover\Fadmin\Inputs;
 use Rover\Fadmin\Tab;
 
+/**
+ * Class Header
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Header extends Input
 {
 	public static $type = self::TYPE__HEADER;

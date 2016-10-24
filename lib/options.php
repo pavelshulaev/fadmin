@@ -17,13 +17,14 @@ use \Bitrix\Main\ArgumentNullException;
 use Rover\Fadmin\Inputs\Input;
 
 Loc::LoadMessages(__FILE__);
+
 /**
- * Interface template
+ * Class Options
  * Абстрактный класс шаблона опций.
  * Должен быть унаследован классом, который занимается работой с опциями и рисованием интерфейса
  *
- *@package Rover\Fadmin
- * @author  Shulaev (pavel.shulaev@gmail.com)
+ * @package Rover\Fadmin
+ * @author  Pavel Shulaev (http://rover-it.me)
  */
 abstract class Options
 {

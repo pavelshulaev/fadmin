@@ -14,8 +14,17 @@ use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
 
+/**
+ * Class Addpreset
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Addpreset extends Submit
 {
+	/**
+	 * @var string
+	 */
 	public static $type = self::TYPE__ADD_PRESET;
 
 	/**

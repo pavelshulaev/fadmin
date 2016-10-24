@@ -13,8 +13,17 @@ namespace Rover\Fadmin\Inputs;
 use Bitrix\Main\Application;
 use Rover\Fadmin\Tab;
 
+/**
+ * Class File
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class File extends Input
 {
+	/**
+	 * @var string
+	 */
 	public static $type = self::TYPE__FILE;
 
 	/**
@@ -33,6 +42,11 @@ class File extends Input
 	protected $maxSize = 0;
 
 	/**
+	 * @var int
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected $size = 20;
+	/**
 	 * @param array $params
 	 * @param Tab   $tab
 	 * @throws \Bitrix\Main\ArgumentNullException
@@ -49,6 +63,9 @@ class File extends Input
 
 		if (isset($params['mimeType']))
 			$this->mimeType = htmlspecialcharsbx($params['mimeType']);
+
+		if (isset($params['size']) && intval($params['size']))
+			$this->size = intval(htmlspecialcharsbx($params['size']));
 	}
 
 	/**
@@ -103,7 +120,6 @@ class File extends Input
 			\CFile::Delete($this->getValue(true));
 			$value = false;
 		}
-
 
 		return $value;
 	}
