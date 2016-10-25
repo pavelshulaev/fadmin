@@ -136,4 +136,16 @@ class Presets
 		usort($presets, $sortFunc);
 		self::update($moduleId, $presets, $siteId);
 	}
+
+	/**
+	 * @param        $id
+	 * @param        $moduleId
+	 * @param string $siteId
+	 * @return bool
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function isExists($id, $moduleId, $siteId = '')
+	{
+		return in_array($id, self::getIds($moduleId, $siteId));
+	}
 } 

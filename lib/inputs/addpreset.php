@@ -11,6 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Localization\Loc;
+use Rover\Fadmin\Tab;
 
 Loc::loadMessages(__FILE__);
 
@@ -26,6 +27,18 @@ class Addpreset extends Submit
 	 * @var string
 	 */
 	public static $type = self::TYPE__ADD_PRESET;
+
+	/**
+	 * @param array $params
+	 * @param Tab   $tab
+	 * @throws \Bitrix\Main\ArgumentNullException
+	 */
+	public function __construct(array $params, Tab $tab)
+	{
+		$params['name'] = self::$type;
+
+		parent::__construct($params, $tab);
+	}
 
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)

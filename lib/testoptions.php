@@ -36,7 +36,6 @@ class TestOptions extends Options
 					'inputs'        => [
 						[
 							'type'      => Input::TYPE__HEADER,
-							'name'      => 'input_header',
 							'label'     => 'First tab header',
 						],
 						[
@@ -106,7 +105,6 @@ class TestOptions extends Options
 
 						[
 							'type'      => Input::TYPE__ADD_PRESET,
-							'name'      => 'add_preset',
 							'label'     => 'add preset s1',
 							'default'   => 'new preset default name',
 							'popup'     => 'add preset popup' // false - not show
@@ -122,7 +120,6 @@ class TestOptions extends Options
 					'inputs'        => [
 						[
 							'type'      => Input::TYPE__HEADER,
-							'name'      => 'preset_header',
 							'label'     => 'Preset header',
 						],
 						[
@@ -134,7 +131,6 @@ class TestOptions extends Options
 						],
 						[
 							'type'      => Input::TYPE__REMOVE_PRESET,
-							'name'      => 'remove_preset',
 							'label'     => 'remove_preset',
 							'popup'     => 'Are you sure?',
 						]
@@ -169,7 +165,6 @@ class TestOptions extends Options
 						],
 						[
 							'type'      => Input::TYPE__ADD_PRESET,
-							'name'      => 'add_preset',
 							'label'     => 'add preset',
 							'default'   => 'new preset default name',
 							'popup'     => 'add preset popup 2' // false - not show
@@ -185,7 +180,6 @@ class TestOptions extends Options
 					'inputs'        => [
 						[
 							'type'      => Input::TYPE__HEADER,
-							'name'      => 'preset_header',
 							'label'     => 'Preset header',
 						],
 						[
@@ -197,7 +191,6 @@ class TestOptions extends Options
 						],
 						[
 							'type'      => Input::TYPE__REMOVE_PRESET,
-							'name'      => 'remove_preset',
 							'label'     => 'remove_preset',
 							'popup'     => 'Are you sure?',
 						]

@@ -92,10 +92,8 @@ class Tab
 		$tab = new Tab($params, $options);
 
 		if (isset($params['inputs']) && is_array($params['inputs']))
-			foreach ($params['inputs'] as $inputParams) {
+			foreach ($params['inputs'] as $inputParams)
 				$tab->addInput(Input::factory($inputParams, $tab));
-			}
-
 
 		return $tab;
 	}

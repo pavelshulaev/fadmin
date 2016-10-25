@@ -113,6 +113,16 @@ abstract class Options
 	}
 
 	/**
+	 * @param string $siteId
+	 * @return int
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getPresetsCount($siteId = '')
+	{
+		return Presets::getCount($this->moduleId, $siteId);
+	}
+
+	/**
 	 * @return array
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
@@ -266,11 +276,16 @@ abstract class Options
 	 * @param            $presetId
 	 * @param string     $siteId
 	 * @param bool|false $reload
-	 * @return mixed|null
+	 * @return mixed
+	 * @throws ArgumentNullException
+	 * @throws Main\SystemException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getPresetValue($inputName, $presetId, $siteId = '', $reload = false)
 	{
+		if (is_null($presetId))
+			throw new ArgumentNullException('presetId');
+
 		return $this->getValue($inputName, $presetId, $siteId, $reload);
 	}
 
@@ -327,6 +342,9 @@ abstract class Options
 	 */
 	public function getValue($inputName, $presetId = '', $siteId = '', $reload = false)
 	{
+		if (is_null($inputName))
+			throw new ArgumentNullException('inputName');
+
 		$key = md5($inputName . $presetId . $siteId);
 
 		if (!isset($this->cache[$key]) || $reload) {
@@ -383,5 +401,15 @@ abstract class Options
 	public function getPresetsIds($siteId = '')
 	{
 		return Presets::getIds($this->moduleId, $siteId);
+	}
+
+	/**
+	 * @param $presetId
+	 * @return bool
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function isPresetExists($presetId)
+	{
+		return Presets::isExists($presetId, $this->moduleId);
 	}
 }
