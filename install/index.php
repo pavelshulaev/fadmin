@@ -35,8 +35,8 @@ class rover_fadmin extends CModule
 
         $this->MODULE_NAME			= Loc::getMessage("rover_fa__name");
         $this->MODULE_DESCRIPTION	= Loc::getMessage("rover_fa__descr");
-        $this->PARTNER_NAME         = Loc::getMessage("PARTNER_NAME");
-        $this->PARTNER_URI          = Loc::getMessage("PARTNER_URI");
+        $this->PARTNER_NAME         = GetMessage("rover_fa__partner_name");
+        $this->PARTNER_URI          = GetMessage("rover_fa__partner_uri");
 	}
 
     /**

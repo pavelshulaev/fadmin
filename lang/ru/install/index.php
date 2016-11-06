@@ -11,5 +11,5 @@ $MESS['rover_fa__install_title']		= "Установка модуля \"Быст�
 $MESS['rover_fa__uninstall_title']	    = "Удаление модуля \"Быстрая админка\"";
 
 $MESS['rover_fa__version_info_error']	= "Не найдена информация о версии";
-$MESS["PARTNER_NAME"]                   = 'Павел Шулаев';
-$MESS["PARTNER_URI"]                    = 'http://rover-it.me';
+$MESS["rover_fa__partner_name"]         = 'Павел Шулаев';
+$MESS["rover_fa__partner_uri"]          = 'http://rover-it.me';
