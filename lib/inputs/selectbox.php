@@ -103,4 +103,22 @@ class Selectbox extends Input
 				$this->value = [];
 		}
 	}
+
+	/**
+	 * @param array $options
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function setOptions(array $options)
+	{
+		$this->options = $options;
+	}
+
+	/**
+	 * @return array
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getOptions()
+	{
+		return $this->options;
+	}
 }
