@@ -56,11 +56,11 @@ class Addpreset extends Submit
 
 		$text = $this->popup
 			? $this->popup
-			: Loc::getMessage('ROVER_OP_ADDPRESET_TEXT');
+			: Loc::getMessage('rover-fa__ADDPRESET_TEXT');
 
 		$default = $this->default
 			? $this->default
-			: Loc::getMessage('ROVER_OP_ADDPRESET_DEFAULT');
+			: Loc::getMessage('rover-fa__ADDPRESET_DEFAULT');
 
 		?>
 		<script>
@@ -74,7 +74,7 @@ class Addpreset extends Submit
 						return false;
 
 					if (!presetName.length) {
-						alert('<?php echo Loc::getMessage('ROVER_OP_ADDPRESET_ALERT')?>');
+						alert('<?php echo Loc::getMessage('rover-fa__ADDPRESET_ALERT')?>');
 						return false;
 					}
 

@@ -1,2 +1,2 @@
 <?php
-$MESS ['rover_fa__icon_hint'] = "Быстрая админка";
+$MESS ['rover_fa__icon_hint'] = "Конструктор административной части";

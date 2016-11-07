@@ -7,6 +7,6 @@
  *
  * @author Pavel Shulaev (http://rover-it.me)
  */
-$MESS['ROVER_OP_ADDPRESET_TEXT']    = 'Введите имя пресета';
-$MESS['ROVER_OP_ADDPRESET_DEFAULT'] = 'Новый пресет';
-$MESS['ROVER_OP_ADDPRESET_ALERT']   = 'У пресета должно быть имя!';
+$MESS['rover-fa__ADDPRESET_TEXT']    = 'Введите имя пресета';
+$MESS['rover-fa__ADDPRESET_DEFAULT'] = 'Новый пресет';
+$MESS['rover-fa__ADDPRESET_ALERT']   = 'У пресета должно быть имя!';

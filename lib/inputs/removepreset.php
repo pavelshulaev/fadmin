@@ -61,7 +61,7 @@ class Removepreset extends Submit
 
 		$confirm = $this->popup
 			? $this->popup
-			: Loc::getMessage('ROVER_OP_REMOVEPRESET_CONFIRM');
+			: Loc::getMessage('rover-fa__REMOVEPRESET_CONFIRM');
 
 		$this->drawConfirm($valueId, $confirm);
 	}

@@ -7,4 +7,4 @@
  *
  * @author Pavel Shulaev (http://rover-it.me)
  */
-$MESS['ROVER_OP_REMOVEPRESET_CONFIRM'] = 'Вы уверены, что хотите удалить этот пресет?';
+$MESS['rover-fa__REMOVEPRESET_CONFIRM'] = 'Вы уверены, что хотите удалить этот пресет?';
