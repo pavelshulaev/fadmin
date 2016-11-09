@@ -139,13 +139,13 @@
 	
 	public function getTextareaValueS1($reload = false)
 	{
-	   return $this->getNormalValue('input_textarea', 's1', $reload);
+	    return $this->getNormalValue('input_textarea', 's1', $reload);
 	}
 Для получения значения опции из пресета:
 
 	public function getS1PresetColor($presetId, $reload = false)
 	{
-	   return $this->getPresetValue('preset_color', $presetId, 's1', $reload);
+	    return $this->getPresetValue('preset_color', $presetId, 's1', $reload);
 	}
 ##Работа с пресетами
 Для создания пресета необходимо указать параметры его вкладки в конфигурации. В параметрах вкладки ключ `'preset'` должен быть равен `true`. Рассмотрим пример конфигурации кладки пресета из демо-класса для сайта `s1`:
