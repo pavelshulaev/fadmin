@@ -21,12 +21,21 @@ class Selectbox extends Input
 {
 	public static $type = self::TYPE__SELECTBOX;
 
+	/**
+	 * @var array
+	 */
 	protected $options = [];
 
-	const MAX_SIZE = 8;
+	/**
+	 * multiple selectbox size
+	 * @var int
+	 */
+	protected $size = 7;
 
 	/**
 	 * @param array $params
+	 * @param Tab   $tab
+	 * @throws \Bitrix\Main\ArgumentNullException
 	 */
 	public function __construct(array $params, Tab $tab)
 	{
@@ -34,6 +43,15 @@ class Selectbox extends Input
 
 		if (isset($params['options']))
 			$this->options = $params['options'];
+
+		if (isset($params['size']) && intval($params['size']))
+			$this->size = intval($params['size']);
+		elseif ($params['multiple'])
+			$this->size = count($this->options) > $this->size
+				? $this->size
+				: count($this->options);
+		else
+			$this->size = 1;
 	}
 
 	/**
@@ -46,20 +64,12 @@ class Selectbox extends Input
 
 		$this->showLabel($valueId);
 
-		$selectSize = $this->multiple
-			? (count($this->options) > self::MAX_SIZE
-				? self::MAX_SIZE
-				: count($this->options))
-			: 1;
-
-
 		?><select
-			name="<?php echo $valueName . ($this->multiple ? '[]' : '')?>"
-			id="<?php echo $valueId?>"
-			<?php echo $this->multiple
-				? ' multiple="multiple" size="' . $selectSize . '" '
-				: ''
-			?>>
+			name="<?=$valueName . ($this->multiple ? '[]' : '')?>"
+			id="<?=$valueId?>"
+			size="<?=$this->size?>"
+			<?=$this->multiple ? ' multiple="multiple" ' : ''?>
+			>
 				<?php
 				foreach($this->options as $v => $k){
 					if ($this->multiple) {

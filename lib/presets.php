@@ -1,6 +1,7 @@
 <?php
 namespace Rover\Fadmin;
 
+use Bitrix\Main\ArgumentNullException;
 use \Bitrix\Main\Config\Option;
 
 /**
@@ -147,5 +148,36 @@ class Presets
 	public static function isExists($id, $moduleId, $siteId = '')
 	{
 		return in_array($id, self::getIds($moduleId, $siteId));
+	}
+
+	/**
+	 * @param        $id
+	 * @param        $name
+	 * @param        $moduleId
+	 * @param string $siteId
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function updateName($id, $name, $moduleId, $siteId = '')
+	{
+		if (!$id)
+			throw new ArgumentNullException('id');
+
+		if (!$name)
+			throw new ArgumentNullException('name');
+
+		if (!$moduleId)
+			throw new ArgumentNullException('moduleId');
+
+		$presets = self::get($moduleId, $siteId);
+
+		foreach ($presets as $num => &$preset){
+			if ($preset['id'] != $id)
+				continue;
+
+			$preset['name'] = $name;
+		}
+
+		self::update($moduleId, $presets, $siteId);
 	}
 } 

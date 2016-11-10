@@ -69,10 +69,52 @@ class Submit extends Input
 	 */
 	protected function drawSubmit($id, $name, $value, $label)
 	{
-		?><button type='submit'
-                  id="<?php echo $id?>"
-                  name="<?php echo $name?>"
-                  value="<?php echo urlencode($value)?>"><?php echo $label?></button><?php
+		?>
+		<style>
+			button[name=<?=$name?>]{
+			    -webkit-border-radius: 4px;
+			    border-radius: 4px;
+			    border: none;
+			    /* border-top: 1px solid #fff; */
+			    -webkit-box-shadow: 0 0 1px rgba(0,0,0,.11), 0 1px 1px rgba(0,0,0,.3), inset 0 1px #fff, inset 0 0 1px rgba(255,255,255,.5);
+			    box-shadow: 0 0 1px rgba(0,0,0,.3), 0 1px 1px rgba(0,0,0,.3), inset 0 1px 0 #fff, inset 0 0 1px rgba(255,255,255,.5);
+			    background-color: #e0e9ec;
+			    background-image: -webkit-linear-gradient(bottom, #d7e3e7, #fff)!important;
+			    background-image: -moz-linear-gradient(bottom, #d7e3e7, #fff)!important;
+			    background-image: -ms-linear-gradient(bottom, #d7e3e7, #fff)!important;
+			    background-image: -o-linear-gradient(bottom, #d7e3e7, #fff)!important;
+			    background-image: linear-gradient(bottom, #d7e3e7, #fff)!important;
+			    color: #3f4b54;
+			    cursor: pointer;
+			    display: inline-block;
+			    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+			    font-weight: bold;
+			    font-size: 13px;
+			    /* line-height: 18px; */
+			    height: 29px;
+			    text-shadow: 0 1px rgba(255,255,255,0.7);
+			    text-decoration: none;
+			    position: relative;
+			    vertical-align: middle;
+			    -webkit-font-smoothing: antialiased;
+			    padding: 1px 13px 3px;
+			}
+
+			button[name=<?=$name?>]:hover{
+				text-decoration: none;
+				background: #f3f6f7!important;
+				background-image: -webkit-linear-gradient(top, #f8f8f9, #f2f6f8)!important;
+				background-image: -moz-linear-gradient(top, #f8f8f9, #f2f6f8)!important;
+				background-image: -ms-linear-gradient(top, #f8f8f9, #f2f6f8)!important;
+				background-image: -o-linear-gradient(top, #f8f8f9, #f2f6f8)!important;
+				background-image: linear-gradient(top, #f8f8f9, #f2f6f8)!important;
+			}
+		</style>
+
+		<button type='submit'
+                  id="<?=$id?>"
+                  name="<?=$name?>"
+                  value="<?=urlencode($value)?>"><?php echo $label?></button><?php
 	}
 
 	/**

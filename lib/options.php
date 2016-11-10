@@ -404,12 +404,41 @@ abstract class Options
 	}
 
 	/**
-	 * @param $presetId
+	 * @param        $presetId
+	 * @param string $siteId
 	 * @return bool
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function isPresetExists($presetId)
+	public function isPresetExists($presetId, $siteId = '')
 	{
-		return Presets::isExists($presetId, $this->moduleId);
+		return Presets::isExists($presetId, $this->moduleId, $siteId);
+	}
+
+	/**
+	 * @param        $presetId
+	 * @param string $siteId
+	 * @return mixed
+	 * @throws Main\ArgumentOutOfRangeException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getPresetNameById($presetId, $siteId = '')
+	{
+		$preset = Presets::getById($presetId, $this->moduleId, $siteId);
+		if (!$preset)
+			throw new Main\ArgumentOutOfRangeException('presetId');
+
+		return $preset['name'];
+	}
+
+	/**
+	 * @param        $presetId
+	 * @param        $presetName
+	 * @param string $siteId
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function setPresetName($presetId, $presetName, $siteId = '')
+	{
+		Presets::updateName($presetId, $presetName, $this->moduleId, $siteId);
 	}
 }
