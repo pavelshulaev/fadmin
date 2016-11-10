@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Admin;
 
 use Bitrix\Main\Application;
-use Bitrix\Main\DB\Exception;
 use Bitrix\Main\Request as BxRequest;
 use Rover\Fadmin\Inputs\Addpreset;
 use Rover\Fadmin\Inputs\Removepreset;
@@ -19,7 +18,6 @@ use Rover\Fadmin\Options;
 use Rover\Fadmin\Presets;
 use Rover\Fadmin\Tab;
 use \Bitrix\Main\Config\Option;
-use \Bitrix\Main\ArgumentNullException;
 
 /**
  * Class Request
