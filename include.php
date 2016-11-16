@@ -7,4 +7,6 @@
  *
  * @author Pavel Shulaev (http://rover-it.me)
  */
+if (PHP_VERSION_ID < 50400)
+	return false;
 ?>
