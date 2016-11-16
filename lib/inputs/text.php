@@ -29,7 +29,7 @@ class Text extends Input
 	 * @var int
 	 */
 	protected $maxLength    = 255;
-	protected $size         = 20;
+	protected $size         = 50;
 
 	/**
 	 * @param array $params
