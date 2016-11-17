@@ -1,49 +1,49 @@
 #Описание класса \Rover\Fadmin\Options
 ##Константы
 Константы класса содержат названия методов событий, которые могут быть определены в унаследованном пользовательском классе.
-###const EVENT__BEFORE_GET_REQUEST     = 'beforeGetRequest';
-Вызывается перед обработкой реквеста. Не принимает параметров. Если возвращает `false` то реквест не обрабатывается.
-###const EVENT__BEFORE_REDIRECT_AFTER_REQUEST  = 'beforeRedirectAfterRequest';
-Вызывается перед редиректом после реквеста. Не принимает параметров. Если возвращает `false` редирект не производится.
-###const EVENT__BEFORE_ADD_VALUES_FROM_REQUEST = 'beforeAddValuesFromRequest';
+###`const EVENT__BEFORE_GET_REQUEST = 'beforeGetRequest'`
+Вызывается перед обработкой реквеста. Не принимает параметров. Если возвращает `false`, то реквест не обрабатывается.
+###`const EVENT__BEFORE_REDIRECT_AFTER_REQUEST = 'beforeRedirectAfterRequest'`
+Вызывается перед редиректом после реквеста. Не принимает параметров. Если возвращает `false`, редирект не производится.
+###`const EVENT__BEFORE_ADD_VALUES_FROM_REQUEST = 'beforeAddValuesFromRequest'`
 Вызывается перед сохранением данных из реквеста. Не принимает параметров. Если возвращает `false` данные не сохраняются.
-###const EVENT__AFTER_ADD_VALUES_FROM_REQUEST  = 'afterAddValuesFromRequest';
+###`const EVENT__AFTER_ADD_VALUES_FROM_REQUEST = 'afterAddValuesFromRequest'`
 Ввызывается после сохранением данных из реквеста. Не принимает параметров.
-###const EVENT__BEFORE_ADD_PRESET      = 'beforeAddPreset';
+###`const EVENT__BEFORE_ADD_PRESET = 'beforeAddPreset'`
 Вызывается перед добавлением нового пресета. Принимает и позволяет менять параметры:
 
 	`siteId` - id сайта, для которого добавляется пресет
 	`value` - имя пресета, полученное из реквета
 Если вы хотите задать другое имя пресета, то сохраните его в ключе `name`. Если возвращает `false`, то пресет не добавляется.
-###const EVENT__AFTER_ADD_PRESET       = 'afterAddPreset';
+###`const EVENT__AFTER_ADD_PRESET = 'afterAddPreset'`
 Вызывается после добавления нового пресета. Принимает и позволяет менять параметры:
 	
 	`siteId` - id сайта, для которого добавляется пресет
 	`value` - имя пресета, полученное из реквета
 	`name`  - итоговое имя, которое могло быть задано в `EVENT__BEFORE_ADD_PRESET`   
 	`id`    - id пресета
-###const EVENT__BEFORE_REMOVE_PRESET   = 'beforeRemovePreset';
+###`const EVENT__BEFORE_REMOVE_PRESET = 'beforeRemovePreset'`
 Вызывается перед удалением пресета. Принимает и позволяет менять параметры:
                                     	
     `siteId` - id сайта, для которого добавляется пресет
     `id`    - id пресета
 Если возвращает `false`, то пресет не удаляется. 
-###const EVENT__AFTER_REMOVE_PRESET    = 'afterRemovePreset';
+###`const EVENT__AFTER_REMOVE_PRESET    = 'afterRemovePreset'`
 Вызывается после удаления пресета. Получает параметр `siteId` удаленного пресета.
-###const EVENT__BEFORE_MAKE_PRESET_TAB = 'beforeMakePresetTab';
+###`const EVENT__BEFORE_MAKE_PRESET_TAB = 'beforeMakePresetTab'`
 Вызывается перед созданием таба пресета. Принимает и позволяет менять параметры:
                                                                              	
      `tab` - Объект \Rover\Fadmin\Tab таба-шаблона пресета
      `presetId`    - id пресета
 Позволяет изменить параметры таба-шаблона перед созданием таба для пресета. Если возвращает `false`, то таб не создается.  
-###const EVENT__AFTER_MAKE_PRESET_TAB  = 'afterMakePresetTab';
+###`const EVENT__AFTER_MAKE_PRESET_TAB = 'afterMakePresetTab'`
 Вызывается после создания таба пресета. Принимает и позволяет менять параметры:
     `newTab` - Объект \Rover\Fadmin\Tab данного пресета
-###const EVENT__BEFORE_SHOW_TAB        = 'beforeShowTab';
+###`const EVENT__BEFORE_SHOW_TAB = 'beforeShowTab'`
 Вызывается перед выводом таба в административной части. Получает пармаметр `tab`, содержащий объект \Rover\Fadmin\Tab выводимого таба. Если возвращает `false`, то таб не отображается.  
-###const EVENT__AFTER_GET_TABS         = 'afterGetTabs';
+###`const EVENT__AFTER_GET_TABS = 'afterGetTabs'`
 Вызывается после получения массива всех существующих табов. Получает пармаметр `tabs`, содержащий массив объектов \Rover\Fadmin\Tab существующих табов.  
-###const EVENT__BEFORE_GET_TAB_INFO    = 'beforeGetTabInfo';
+###`const EVENT__BEFORE_GET_TAB_INFO = 'beforeGetTabInfo'`
 Вызывается перед заданием параметров для каждого таба. Принимает и позволяет менять параметры:
                                                                                                                                     	
     `name` - имя таба в системе
