@@ -409,7 +409,7 @@ abstract class Input
 	protected function showHelp()
 	{
 		if (strlen($this->help)){
-			echo '<br>' . $this->help;
+			echo '<br><small>' . $this->help . '</small>';
 		}
 		?></td>
 		</tr>

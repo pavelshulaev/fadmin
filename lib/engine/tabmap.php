@@ -8,10 +8,13 @@
  * @author Pavel Shulaev (http://rover-it.me)
  */
 
-namespace Rover\Fadmin;
+namespace Rover\Fadmin\Engine;
 
 use \Bitrix\Main\ArgumentNullException;;
-
+use \Rover\Fadmin\Options;
+use \Rover\Fadmin\Tab;
+use \Rover\Fadmin\Presets;
+use \Rover\Fadmin\Inputs\Input;
 /**
  * Class TabMap
  *
@@ -177,7 +180,7 @@ class TabMap
 			 * @var Tab $tab
 			 */
 			$input = $tab->search($filter);
-			if ($input instanceof Inputs\Input)
+			if ($input instanceof Input)
 				return $input;
 		}
 

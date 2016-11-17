@@ -67,10 +67,9 @@ class Checkbox extends Input
 	 */
 	protected function beforeGetValue()
 	{
-		$settings = $this->tab->getOptions()->getSettings();
+		$settings = $this->tab->getOptions()->settings;
 
-		if (isset($settings[Options::SETTINGS__CHECKBOX_BOOLEAN])
-			&& $settings[Options::SETTINGS__CHECKBOX_BOOLEAN])
+		if ($settings->getBoolCheckbox())
 			return $this->value == 'Y';
 
 		return $this->value;

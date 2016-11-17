@@ -23,9 +23,24 @@ use Rover\Fadmin\Tab;
  */
 class Form
 {
+	/**
+	 * @var string
+	 */
 	protected $moduleId;
+
+	/**
+	 * @var Options
+	 */
 	protected $options;
+
+	/**
+	 * @var \CAdminTabControl
+	 */
 	protected $tabControl;
+
+	/**
+	 * @var null|string
+	 */
 	protected $name;
 
 	/**

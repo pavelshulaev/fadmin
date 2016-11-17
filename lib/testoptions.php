@@ -20,6 +20,17 @@ use Rover\Fadmin\Inputs\Input;
  */
 class TestOptions extends Options
 {
+	const MODULE_ID = 'rover.fadmin';
+
+	/**
+	 * @return static
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getInstance()
+	{
+		return parent::getInstance(self::MODULE_ID);
+	}
+
 	/**
 	 * @return array
 	 * @author Pavel Shulaev (http://rover-it.me)

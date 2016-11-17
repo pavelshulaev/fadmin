@@ -10,11 +10,14 @@
 
 namespace Rover\Fadmin;
 
-use Bitrix\Main\Localization\Loc;
-
+use \Bitrix\Main\Localization\Loc;
 use \Bitrix\Main;
 use \Bitrix\Main\ArgumentNullException;
-use Rover\Fadmin\Inputs\Input;
+use \Rover\Fadmin\Inputs\Input;
+use \Bitrix\Main\Application;
+use \Rover\Fadmin\Engine\Message;
+use \Rover\Fadmin\Engine\Settings;
+use \Rover\Fadmin\Engine\TabMap;
 
 Loc::LoadMessages(__FILE__);
 
@@ -47,7 +50,7 @@ abstract class Options
 
 	const SEPARATOR = '__';
 
-	const SETTINGS__CHECKBOX_BOOLEAN = 'checkbox_boolean';
+
 	/**
 	 * current module id
 	 * @var string
@@ -61,10 +64,10 @@ abstract class Options
 	protected $tabMap;
 
 	/**
-	 * service messages
-	 * @var array
+	 * message driver
+	 * @var Message
 	 */
-	protected $messages = [];
+	public $message;
 
 	/**
 	 * options values cache
@@ -73,12 +76,10 @@ abstract class Options
 	protected $cache = [];
 
 	/**
-	 * default settings
-	 * @var array
+	 * settings driver
+	 * @var Settings
 	 */
-	protected $settings = [
-		self::SETTINGS__CHECKBOX_BOOLEAN => false,
-	];
+	public $settings;
 
 	/**
 	 * unique instance for each module
@@ -96,18 +97,17 @@ abstract class Options
 			throw new ArgumentNullException('moduleId');
 
 		$this->moduleId = $moduleId;
-		$this->tabMap   = new TabMap($this);
 
+		$this->tabMap   = new TabMap($this);
+		$this->message  = new Message();
 		// method must be in child
 		$config = $this->getConfig();
-
-		/// adding settings
-		if (isset($config['settings']))
-			$this->settings = array_merge($this->settings, $config['settings']);
 
 		// tabs
 		if (!isset($config['tabs']))
 			throw new ArgumentNullException('tabs');
+
+		$this->settings = new Settings(isset($config['settings']) ? $config['settings'] : []);
 
 		$this->addTabs($config['tabs']);
 	}
@@ -120,15 +120,6 @@ abstract class Options
 	public function getPresetsCount($siteId = '')
 	{
 		return Presets::getCount($this->moduleId, $siteId);
-	}
-
-	/**
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getSettings()
-	{
-		return $this->settings;
 	}
 
 	/**
@@ -169,7 +160,11 @@ abstract class Options
 		try{
 			return $this->$name($params);
 		} catch (\Exception $e) {
-			$this->addMessage($e->getMessage(), 'ERROR');
+			$this->message->addError($e->getMessage());
+
+			if ($this->settings->getLogErrors())
+				$this->writeException2Log($e);
+
 			return false;
 		}
 	}
@@ -214,21 +209,9 @@ abstract class Options
 	 * @param string $type
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function addMessage($message, $type = 'OK')
+	public function addMessage($message, $type = Message::TYPE__OK)
 	{
-		$this->messages[] = [
-			'MESSAGE'   => htmlspecialcharsbx($message),
-			'TYPE'      => htmlspecialcharsbx($type),
-		];
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function showMessages()
-	{
-		foreach ($this->messages as $message)
-			\CAdminMessage::ShowMessage($message);
+		$this->message->add($message, $type);
 	}
 
 	/**
@@ -440,5 +423,16 @@ abstract class Options
 	public function setPresetName($presetId, $presetName, $siteId = '')
 	{
 		Presets::updateName($presetId, $presetName, $this->moduleId, $siteId);
+	}
+
+	/**
+	 * @param \Exception $e
+	 * @author Shulaev (pavel.shulaev@gmail.com)
+	 */
+	public static function writeException2Log(\Exception $e)
+	{
+		Application::getInstance()
+			->getExceptionHandler()
+			->writeToLog($e);
 	}
 }

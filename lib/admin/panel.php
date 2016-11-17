@@ -61,7 +61,7 @@ class Panel
 	public function show()
 	{
 		$this->request->get();
-		$this->options->showMessages();
+		$this->options->message->show();
 		$this->form->show();
 	}
 }

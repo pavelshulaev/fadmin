@@ -18,4 +18,4 @@ if (!Loader::includeModule($mid)
 Loc::loadMessages(__FILE__);
 Loc::loadMessages($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/options.php");
 
-(new Panel(TestOptions::getInstance($mid)))->show();
+(new Panel(TestOptions::getInstance()))->show();

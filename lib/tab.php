@@ -385,4 +385,13 @@ class Tab
 
 		return true;
 	}
+
+	/**
+	 * @return array
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getInputs()
+	{
+		return $this->inputs;
+	}
 }

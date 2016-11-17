@@ -82,11 +82,21 @@ class File extends Input
 			? 'IMAGE'
 			: '';
 
-		echo \CFile::InputFile($valueName, $this->size, $this->value, false, $this->maxSize, $fileType, "class=typefile", 0, "class=typeinput", '', false, false, false);
 
-		if (strlen($this->value) > 0 && $this->isImage):
-			?><br><br><?echo \CFile::ShowImage($this->value, 200, 200, "border=0", "", true);
+		if (strlen($this->value) > 0):
+
+			$file = \CFile::GetFileArray($this->value);
+
+			echo '<code>' . $file['ORIGINAL_NAME'] . '</code><br>';
+
+			if ($this->isImage)
+				echo \CFile::ShowImage($this->value, 200, 200, "border=0", "", true) . '<br>';
+
 		endif;
+
+		echo \CFile::InputFile($valueName, $this->size, $this->value, false, $this->maxSize,
+				$fileType, "class=typefile", 0, "class=typeinput", '', false, false, false)
+			. '<br>';
 
 		$this->showHelp();
 	}
