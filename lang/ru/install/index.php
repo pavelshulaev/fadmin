@@ -11,5 +11,6 @@ $MESS['rover_fa__install_title']		= "Установка модуля \"Конс�
 $MESS['rover_fa__uninstall_title']	    = "Удаление модуля \"Конструктор административной части\"";
 
 $MESS['rover_fa__version_info_error']	= "Не найдена информация о версии";
+$MESS['rover_fa__php_version_error']	= "Требуется php версии 5.4 и выше";
 $MESS["rover_fa__partner_name"]         = 'Павел Шулаев';
 $MESS["rover_fa__partner_uri"]          = 'http://rover-it.me';

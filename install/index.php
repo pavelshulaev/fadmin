@@ -15,14 +15,11 @@ class rover_fadmin extends CModule
     var $PARTNER_NAME;
     var $PARTNER_URI;
 
-    protected $errors = [];
+    protected $errors = array();
 
-    /**
-     *
-     */
     function __construct()
     {
-		$arModuleVersion = [];
+		$arModuleVersion = array();
 
         require(__DIR__ . "/version.php");
 
@@ -70,12 +67,12 @@ class rover_fadmin extends CModule
     public function GetModuleRightsList()
     {
         return array(
-            "reference_id" => ["D", "R", "W"],
-            "reference" => [
+            "reference_id" => array("D", "R", "W"),
+            "reference" => array(
                 Loc::getMessage('rover_fa__reference_deny'),
                 Loc::getMessage('rover_fa__reference_read'),
                 Loc::getMessage('rover_fa__reference_write')
-            ]
+            )
         );
     }
 
@@ -86,6 +83,9 @@ class rover_fadmin extends CModule
 	private function ProcessInstall()
     {
         global $APPLICATION, $errors;
+
+        if (PHP_VERSION_ID < 50400)
+            $this->errors[] = Loc::getMessage('rover_fa__php_version_error');
 
         if (empty($this->errors))
             ModuleManager::registerModule($this->MODULE_ID);

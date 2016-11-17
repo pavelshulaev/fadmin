@@ -73,7 +73,8 @@ class Request
 	 */
 	protected function redirect()
 	{
-		$this->options->runEvent(Options::EVENT__AFTER_GET_REQUEST);
+		if (false === $this->options->runEvent(Options::EVENT__BEFORE_REDIRECT_AFTER_REQUEST))
+			return;
 
 		if(strlen($this->update)>0
 			&& strlen($_REQUEST["back_url_settings"])>0)

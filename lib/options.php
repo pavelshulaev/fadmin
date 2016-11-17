@@ -32,7 +32,7 @@ abstract class Options
 	 * events
 	 */
 	const EVENT__BEFORE_GET_REQUEST     = 'beforeGetRequest';
-	const EVENT__AFTER_GET_REQUEST      = 'afterGetRequest';
+	const EVENT__BEFORE_REDIRECT_AFTER_REQUEST  = 'beforeRedirectAfterRequest';
 	const EVENT__BEFORE_ADD_VALUES_FROM_REQUEST = 'beforeAddValuesFromRequest';
 	const EVENT__AFTER_ADD_VALUES_FROM_REQUEST  = 'afterAddValuesFromRequest';
 	const EVENT__BEFORE_ADD_PRESET      = 'beforeAddPreset';
@@ -41,9 +41,9 @@ abstract class Options
 	const EVENT__AFTER_REMOVE_PRESET    = 'afterRemovePreset';
 	const EVENT__BEFORE_MAKE_PRESET_TAB = 'beforeMakePresetTab';
 	const EVENT__AFTER_MAKE_PRESET_TAB  = 'afterMakePresetTab';
-	const EVENT__BEFORE_SHOW_TAB        = 'beforeShowTab';
-	const EVENT__AFTER_GET_TABS         = 'afterGetTabs';
 	const EVENT__BEFORE_GET_TAB_INFO    = 'beforeGetTabInfo';
+	const EVENT__AFTER_GET_TABS         = 'afterGetTabs';
+	const EVENT__BEFORE_SHOW_TAB        = 'beforeShowTab';
 
 	const SEPARATOR = '__';
 
