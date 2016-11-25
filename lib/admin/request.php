@@ -222,11 +222,17 @@ class Request
 
 		$tabs = $this->options->getTabs();
 
-		foreach ($tabs as $tab)
+		foreach ($tabs as $tab) {
 			/**
 			 * @var Tab $tab
 			 */
+			if(false === $this->options->runEvent(
+					Options::EVENT__BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST,
+					compact('tab')))
+				return;
+
 			$tab->setValuesFromRequest();
+		}
 
 		$this->options->runEvent(Options::EVENT__AFTER_ADD_VALUES_FROM_REQUEST);
 

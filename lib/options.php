@@ -37,6 +37,7 @@ abstract class Options
 	const EVENT__BEFORE_GET_REQUEST     = 'beforeGetRequest';
 	const EVENT__BEFORE_REDIRECT_AFTER_REQUEST  = 'beforeRedirectAfterRequest';
 	const EVENT__BEFORE_ADD_VALUES_FROM_REQUEST = 'beforeAddValuesFromRequest';
+	const EVENT__BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST = 'beforeAddValuesToTabFromRequest';
 	const EVENT__AFTER_ADD_VALUES_FROM_REQUEST  = 'afterAddValuesFromRequest';
 	const EVENT__BEFORE_ADD_PRESET      = 'beforeAddPreset';
 	const EVENT__AFTER_ADD_PRESET       = 'afterAddPreset';
