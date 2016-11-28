@@ -71,7 +71,7 @@ class Submit extends Input
 	{
 		?>
 		<style>
-			button[name=<?=$name?>]{
+			button[name="<?=$name?>"]{
 			    -webkit-border-radius: 4px;
 			    border-radius: 4px;
 			    border: none;
