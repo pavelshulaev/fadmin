@@ -259,6 +259,24 @@ abstract class Input
 	}
 
 	/**
+	 * @param        $name
+	 * @param string $presetId
+	 * @param string $siteId
+	 * @return mixed
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getFullName($name, $presetId = '', $siteId = '')
+	{
+		if (strlen($presetId))
+			$param = htmlspecialcharsbx($presetId) . Options::SEPARATOR . $name;
+
+		if (strlen($siteId))
+			$param = htmlspecialcharsbx($siteId) . Options::SEPARATOR . $name;
+
+		return $name;
+	}
+
+	/**
 	 * @param array  $params
 	 * @param        $moduleId
 	 * @param string $presetId
@@ -276,7 +294,7 @@ abstract class Input
 			$params['default'] = null;
 
 		return Option::get($moduleId,
-			Options::getParam($params['name'], $presetId, $siteId),
+			Options::getFullName($params['name'], $presetId, $siteId),
 			$params['default'], $siteId);
 	}
 
@@ -311,7 +329,7 @@ abstract class Input
 	 */
 	public function getValueId()
 	{
-		return Options::getParam($this->id,
+		return Options::getFullName($this->id,
 			$this->tab->getPresetId(), $this->tab->getSiteId());
 	}
 
@@ -322,7 +340,7 @@ abstract class Input
 	 */
 	public function getValueName()
 	{
-		return Options::getParam($this->name,
+		return Options::getFullName($this->name,
 			$this->tab->getPresetId(), $this->tab->getSiteId());
 	}
 

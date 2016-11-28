@@ -89,10 +89,24 @@ abstract class Options
 	protected static $instances = [];
 
 	/**
+	 * for singleton
+	 * @param $moduleId
+	 * @return static
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getInstance($moduleId)
+	{
+		if (!isset(self::$instances[$moduleId]))
+			self::$instances[$moduleId] = new static($moduleId);
+
+		return self::$instances[$moduleId];
+	}
+
+	/**
 	 * @param $moduleId
 	 * @throws Main\ArgumentNullException
 	 */
-	public function __construct($moduleId)
+	protected function __construct($moduleId)
 	{
 		if (!strlen($moduleId))
 			throw new ArgumentNullException('moduleId');
@@ -111,40 +125,6 @@ abstract class Options
 		$this->settings = new Settings(isset($config['settings']) ? $config['settings'] : []);
 
 		$this->addTabs($config['tabs']);
-	}
-
-	/**
-	 * @param string $siteId
-	 * @return int
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getPresetsCount($siteId = '')
-	{
-		return Presets::getCount($this->moduleId, $siteId);
-	}
-
-	/**
-	 * for singleton
-	 * @param $moduleId
-	 * @return static
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getInstance($moduleId)
-	{
-		if (!isset(self::$instances[$moduleId]))
-			self::$instances[$moduleId] = new static($moduleId);
-
-		return self::$instances[$moduleId];
-	}
-
-
-	/**
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getAllTabsInfo()
-	{
-		return $this->tabMap->getAllTabsInfo();
 	}
 
 	/**
@@ -178,6 +158,25 @@ abstract class Options
 	abstract public function getConfig();
 
 	/**
+	 * @param string $siteId
+	 * @return int
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getPresetsCount($siteId = '')
+	{
+		return Presets::getCount($this->moduleId, $siteId);
+	}
+
+	/**
+	 * @return array
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getAllTabsInfo()
+	{
+		return $this->tabMap->getAllTabsInfo();
+	}
+
+	/**
 	 * @return mixed
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
@@ -188,26 +187,27 @@ abstract class Options
 
 	/**
 	 * generate param string
-	 * @param        $param
+	 * @param        $name
 	 * @param string $presetId
 	 * @param string $siteId
 	 * @return string
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getParam($param, $presetId = '', $siteId = '')
+	public static function getFullName($name, $presetId = '', $siteId = '')
 	{
 		if (strlen($presetId))
-			$param = htmlspecialcharsbx($presetId) . self::SEPARATOR . $param;
+			$name = htmlspecialcharsbx($presetId) . self::SEPARATOR . $name;
 
 		if (strlen($siteId))
-			$param = htmlspecialcharsbx($siteId) . self::SEPARATOR . $param;
+			$name = htmlspecialcharsbx($siteId) . self::SEPARATOR . $name;
 
-		return $param;
+		return $name;
 	}
 
 	/**
 	 * @param        $message
 	 * @param string $type
+	 * @deprecated
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function addMessage($message, $type = Message::TYPE__OK)

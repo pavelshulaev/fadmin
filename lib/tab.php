@@ -253,7 +253,7 @@ class Tab
 	public function searchByName($name)
 	{
 		$filter = [
-			'name' => Options::getParam($name, $this->getPresetId(), $this->getSiteId())
+			'name' => Options::getFullName($name, $this->getPresetId(), $this->getSiteId())
 		];
 
 		return $this->search($filter);
@@ -276,7 +276,7 @@ class Tab
 	 */
 	public function getName()
 	{
-		return Options::getParam($this->name, $this->presetId, $this->siteId);
+		return Options::getFullName($this->name, $this->presetId, $this->siteId);
 	}
 
 	/**
