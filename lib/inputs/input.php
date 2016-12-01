@@ -29,6 +29,8 @@ abstract class Input
 	const EVENT__BEFORE_CREATE          = 'beforeCreate';
 
 	const TYPE__HIDDEN          = 'hidden';
+	const TYPE__DATE            = 'date';
+	const TYPE__DATETIME        = 'datetime';
 	const TYPE__LABEL           = 'label';
 	const TYPE__HEADER          = 'header';
 	const TYPE__CHECKBOX        = 'checkbox';
@@ -128,7 +130,6 @@ abstract class Input
 	}
 
 	/**
-	 * @return mixed
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	abstract public function draw();
