@@ -192,6 +192,9 @@ abstract class Input
 	 */
 	public function setDefault($default)
 	{
+		if (is_array($default))
+			$default = serialize($default);
+
 		$this->default = trim($default);
 	}
 
@@ -260,24 +263,6 @@ abstract class Input
 	}
 
 	/**
-	 * @param        $name
-	 * @param string $presetId
-	 * @param string $siteId
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getFullName($name, $presetId = '', $siteId = '')
-	{
-		if (strlen($presetId))
-			$param = htmlspecialcharsbx($presetId) . Options::SEPARATOR . $name;
-
-		if (strlen($siteId))
-			$param = htmlspecialcharsbx($siteId) . Options::SEPARATOR . $name;
-
-		return $name;
-	}
-
-	/**
 	 * @param array  $params
 	 * @param        $moduleId
 	 * @param string $presetId
@@ -333,7 +318,6 @@ abstract class Input
 		return Options::getFullName($this->id,
 			$this->tab->getPresetId(), $this->tab->getSiteId());
 	}
-
 
 	/**
 	 * @return string

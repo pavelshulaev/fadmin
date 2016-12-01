@@ -247,7 +247,7 @@ class Tab
 
 	/**
 	 * @param $name
-	 * @return null
+	 * @return Input|null
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function searchByName($name)
