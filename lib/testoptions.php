@@ -134,6 +134,11 @@ class TestOptions extends Options
 							'label'     => 'Preset header',
 						],
 						[
+							'type'      => Input::TYPE__PRESET_NAME,
+							'name'      => 'presetName',
+							'label'     => 'preset name',
+						],
+						[
 							'type'      => Input::TYPE__COLOR,
 							'name'      => 'preset_color',
 							'label'     => 'preset color',

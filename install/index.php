@@ -15,10 +15,10 @@ class rover_fadmin extends CModule
     var $PARTNER_NAME;
     var $PARTNER_URI;
 
-    protected $errors = array();
-
     function __construct()
     {
+        global $errors;
+        
 		$arModuleVersion = array();
 
         require(__DIR__ . "/version.php");
@@ -27,7 +27,7 @@ class rover_fadmin extends CModule
 			$this->MODULE_VERSION		= $arModuleVersion["VERSION"];
 			$this->MODULE_VERSION_DATE	= $arModuleVersion["VERSION_DATE"];
         } else {
-            $this->errors[] = Loc::getMessage('rover_fa__version_info_error');
+            $errors[] = Loc::getMessage('rover_fa__version_info_error');
 		}
 
         $this->MODULE_NAME			= Loc::getMessage("rover_fa__name");
@@ -77,7 +77,6 @@ class rover_fadmin extends CModule
     }
 
 	/**
-	 * »нсталл€ци€ файлов и зависимотей, регистраци€ модул€
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	private function ProcessInstall()
@@ -85,27 +84,24 @@ class rover_fadmin extends CModule
         global $APPLICATION, $errors;
 
         if (PHP_VERSION_ID < 50400)
-            $this->errors[] = Loc::getMessage('rover_fa__php_version_error');
+            $errors[] = Loc::getMessage('rover_fa__php_version_error');
 
-        if (empty($this->errors))
+        if (empty($errors))
             ModuleManager::registerModule($this->MODULE_ID);
 
-        $errors = $this->errors;
 	    $APPLICATION->IncludeAdminFile(Loc::getMessage("rover_fa__install_title"), $_SERVER['DOCUMENT_ROOT'] . getLocalPath("modules/". $this->MODULE_ID ."/install/message.php"));
     }
 
 	/**
-	 * ”даление файлов и зависимостей. —н€тие модул€ с регистрации
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	private function ProcessUninstall()
 	{
         global $APPLICATION, $errors;
 
-        if (empty($this->errors))
+        if (empty($errors))
             ModuleManager::unRegisterModule($this->MODULE_ID);
 
-        $errors = $this->errors;
         $APPLICATION->IncludeAdminFile(Loc::getMessage("rover_fa__uninstall_title"), $_SERVER['DOCUMENT_ROOT'] . getLocalPath("modules/". $this->MODULE_ID ."/install/unMessage.php"));
 	}
 }

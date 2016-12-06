@@ -10,7 +10,6 @@
 
 namespace Rover\Fadmin;
 
-use \Rover\Fadmin\Inputs\Input;
 use Bitrix\Main;
 use Bitrix\Main\ArgumentNullException;
 
@@ -48,9 +47,7 @@ class Tab
 	 */
 	public function __construct(array $params, Options $options)
 	{
-		//if (is_null($params['moduleId']))
-		//	throw new ArgumentNullException('moduleId');
-
+		pr($params);
 		if (is_null($params['name']))
 			throw new ArgumentNullException('name');
 
@@ -58,7 +55,6 @@ class Tab
 			throw new ArgumentNullException('label');
 
 		$this->options      = $options;
-		//$this->moduleId     = htmlspecialcharsbx($params['moduleId']);
 		$this->name         = htmlspecialcharsbx($params['name']);
 		$this->setLabel($params['label']);
 
