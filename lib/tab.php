@@ -12,7 +12,7 @@ namespace Rover\Fadmin;
 
 use Bitrix\Main;
 use Bitrix\Main\ArgumentNullException;
-
+use Rover\Fadmin\Inputs\Input;
 /**
  * Class Tab
  *
@@ -38,7 +38,7 @@ class Tab
 	/**
 	 * @var Options
 	 */
-	protected $options;
+	public $options;
 
 	/**
 	 * @param array   $params
@@ -47,7 +47,6 @@ class Tab
 	 */
 	public function __construct(array $params, Options $options)
 	{
-		pr($params);
 		if (is_null($params['name']))
 			throw new ArgumentNullException('name');
 
@@ -65,15 +64,6 @@ class Tab
 		$this->setPresetId($params['presetId']);
 		$this->setDescription($params['description']);
 		$this->setSiteId($params['siteId']);
-	}
-
-	/**
-	 * @return Options
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getOptions()
-	{
-		return $this->options;
 	}
 
 	/**

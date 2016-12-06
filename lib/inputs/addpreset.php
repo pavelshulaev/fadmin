@@ -43,6 +43,16 @@ class Addpreset extends Submit
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
+	protected function addEventsHandlers()
+	{
+		$event = $this->getEvent();
+
+		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+	}
+
+	/**
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
 	public function draw()
 	{
 		$valueId    = $this->getValueId();
@@ -100,7 +110,7 @@ class Addpreset extends Submit
 	 * value = default value
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function afterLoadValue()
+	public function afterLoadValue()
 	{
 		$this->value = $this->default;
 	}

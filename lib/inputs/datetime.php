@@ -9,6 +9,8 @@
  */
 
 namespace Rover\Fadmin\Inputs;
+
+use Rover\Fadmin\Tab;
 /**
  * Class Clock
  *
@@ -22,6 +24,15 @@ class DateTime extends Input
 	 */
 	public static $type = self::TYPE__DATE;
 
+	/**
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function addEventsHandlers()
+	{
+		$event = $this->getEvent();
+
+		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+	}
 
 	/**
 	 * @param bool|true $time
@@ -67,7 +78,7 @@ class DateTime extends Input
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function afterLoadValue()
+	public function afterLoadValue()
 	{
 		if ($this->multiple) {
 			$this->value = unserialize($this->value);

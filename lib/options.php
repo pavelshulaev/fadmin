@@ -17,6 +17,7 @@ use \Rover\Fadmin\Inputs\Input;
 use \Bitrix\Main\Application;
 use \Rover\Fadmin\Engine\Message;
 use \Rover\Fadmin\Engine\Settings;
+use \Rover\Fadmin\Engine\Event;
 use \Rover\Fadmin\Engine\TabMap;
 
 Loc::LoadMessages(__FILE__);
@@ -89,6 +90,11 @@ abstract class Options
 	protected static $instances = [];
 
 	/**
+	 * @var Event
+	 */
+	public $event;
+
+	/**
 	 * for singleton
 	 * @param $moduleId
 	 * @return static
@@ -115,6 +121,7 @@ abstract class Options
 
 		$this->tabMap   = new TabMap($this);
 		$this->message  = new Message();
+		$this->event    = new Event($this->moduleId);
 		// method must be in child
 		$config = $this->getConfig();
 

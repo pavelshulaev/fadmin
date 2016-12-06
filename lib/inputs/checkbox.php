@@ -10,8 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Tab;
-use Bitrix\Main\EventManager;
+use \Bitrix\Main\Event;
 /**
  * Class Checkbox
  *
@@ -25,13 +24,14 @@ class Checkbox extends Input
 	 */
 	public static $type = self::TYPE__CHECKBOX;
 
-	public function __construct(array $params, Tab $tab)
+	/**
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function addEventsHandlers()
 	{
-		parent::__construct($params, $tab);
+		$event = $this->getEvent();
 
-		//fix value
-		$eventManager = EventManager::getInstance();
-		$eventManager->addEventHandler($this->getModuleId(), self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
 	}
 
 	/**
@@ -63,10 +63,14 @@ class Checkbox extends Input
 	}
 
 	/**
+	 * @param Event $event
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function afterLoadValue()
+	public function afterLoadValue(Event $event)
 	{
+		if ($event->getSender() !== $this)
+			return;
+
 		$this->value = $this->value == 'Y' ? 'Y' : 'N';
 	}
 
@@ -76,7 +80,7 @@ class Checkbox extends Input
 	 */
 	protected function beforeGetValue()
 	{
-		$settings = $this->tab->getOptions()->settings;
+		$settings = $this->tab->options->settings;
 
 		if ($settings->getBoolCheckbox())
 			return $this->value == 'Y';
