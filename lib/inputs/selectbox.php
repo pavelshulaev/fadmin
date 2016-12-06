@@ -107,7 +107,9 @@ class Selectbox extends Input
 	protected function afterLoadValue()
 	{
 		if ($this->multiple){
-			$this->value = unserialize($this->value);
+
+			if (!is_array($this->value))
+				$this->value = unserialize($this->value);
 
 			if (is_null($this->value))
 				$this->value = [];

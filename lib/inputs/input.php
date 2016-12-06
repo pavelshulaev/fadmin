@@ -12,6 +12,7 @@ use Bitrix\Main;
 use \Rover\Fadmin\Input as FadminInput;
 
 /**
+ * for copability
  * Class Input
  *
  * @package Rover\Fadmin\Inputs
