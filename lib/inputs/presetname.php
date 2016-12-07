@@ -12,6 +12,7 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Presets;
 use Rover\Fadmin\Tab;
+use Bitrix\Main\Event;
 
 class PresetName extends Text
 {
@@ -30,8 +31,7 @@ class PresetName extends Text
 			return;
 
 		$presetId = $this->tab->getPresetId();
-	//	var_dump($presetId);
-		//die();
+
 		if (!$presetId)
 			return;
 
@@ -40,13 +40,27 @@ class PresetName extends Text
 	}
 
 	/**
-	 * @param $value
-	 * @return bool
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function addEventsHandlers()
+	{
+		$event = $this->getEvent();
+
+		$event->addHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+	}
+
+	/**
+	 * @param Event $event
+	 * @return \Bitrix\Main\EventResult|bool
 	 * @throws \Bitrix\Main\ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function beforeSaveRequest($value)
+	public function beforeSaveRequest(Event $event)
 	{
+		if ($event->getSender() !== $this)
+			return $this->getEvent()->getErrorResult($this);
+
+
 		if (!$this->tab->isPreset())
 			return true;
 
@@ -55,9 +69,11 @@ class PresetName extends Text
 		if (!$presetId)
 			return true;
 
+		$value = $event->getParameter('value');
+
 		Presets::updateName($presetId, $value,
 			$this->tab->getModuleId(), $this->tab->getSiteId());
 
-		return true;
+		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
 }

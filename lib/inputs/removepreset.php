@@ -12,6 +12,8 @@ namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Localization\Loc;
 use Rover\Fadmin\Tab;
+use Bitrix\Main\Event;
+use Bitrix\Main\EventResult;
 
 Loc::loadMessages(__FILE__);
 
@@ -48,6 +50,7 @@ class Removepreset extends Submit
 		$event = $this->getEvent();
 
 		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+		$event->addHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
 	}
 
 	/**
@@ -78,20 +81,26 @@ class Removepreset extends Submit
 
 	/**
 	 * not save
-	 * @return bool
+	 * @param Event $event
+	 * @return EventResult
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function beforeSaveValue()
+	public function beforeSaveValue(Event $event)
 	{
-		return false;
+		return $this->getEvent()->getErrorResult($this);
 	}
 
 	/**
 	 * value = default value
+	 * @param Event $event
+	 * @return EventResult
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function afterLoadValue()
+	public function afterLoadValue(Event $event)
 	{
+		if ($event->getSender() !== $this)
+			return;
+
 		$this->value = $this->default;
 	}
 }

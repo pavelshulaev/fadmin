@@ -11,7 +11,8 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
-
+use Bitrix\Main\Event;
+use Bitrix\Main\EventResult;
 /**
  * Class Submit
  *
@@ -50,6 +51,7 @@ class Submit extends Input
 		$event = $this->getEvent();
 
 		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+		$event->addHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
 	}
 
 	/**
@@ -146,19 +148,25 @@ class Submit extends Input
 	}
 
 	/**
-	 * @return bool
+	 * not save
+	 * @param Event $event
+	 * @return EventResult
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function beforeSaveValue()
+	public function beforeSaveValue(Event $event)
 	{
-		return false;
+		return $this->getEvent()->getErrorResult($this);
 	}
 
 	/**
+	 * @param Event $event
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function afterLoadValue()
+	public function afterLoadValue(Event $event)
 	{
+		if ($event->getSender() !== $this)
+			return;
+
 		$this->value = $this->default;
 	}
 }

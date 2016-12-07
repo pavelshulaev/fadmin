@@ -11,7 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Loader;
-use Rover\Fadmin\Tab;
+use Bitrix\Main\Event;
 /**
  * Class Iblock
  *
@@ -24,16 +24,6 @@ class Iblock extends Input
 	 * @var string
 	 */
 	public static $type = self::TYPE__IBLOCK;
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addEventsHandlers()
-	{
-		$event = $this->getEvent();
-
-		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
-	}
 
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
@@ -57,39 +47,6 @@ class Iblock extends Input
 
 		$this->showHelp();
 	}
-
-
-	/**
-	 * @param $value
-	 * @return string
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function beforeSaveRequest($value)
-	{
-		if ($this->multiple)
-			$value = serialize($value);
-
-		return $value;
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function afterLoadValue()
-	{
-		if ($this->multiple) {
-
-			if (!is_array($this->value))
-				$this->value = unserialize($this->value);
-
-			if (!$this->value)
-				$this->value = [];
-
-		} elseif (!$this->value) {
-			$this->value = 0;
-		}
-	}
-
 
 	/**
 	 * @param array      $iblockIds

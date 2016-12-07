@@ -14,10 +14,10 @@ use \Rover\Fadmin\Options;
  */
 abstract class Input
 {
-	const EVENT__BEFORE_SAVE_REQUEST = 'beforeSaveRequest';
-	const EVENT__BEFORE_SAVE_VALUE = 'beforeSaveValue';
-	const EVENT__BEFORE_GET_VALUE = 'beforeGetValue';
-	const EVENT__AFTER_LOAD_VALUE = 'afterLoadValue';
+	const EVENT__BEFORE_SAVE_REQUEST    = 'beforeSaveRequest';
+	const EVENT__BEFORE_SAVE_VALUE      = 'beforeSaveValue';
+	const EVENT__BEFORE_GET_VALUE       = 'beforeGetValue';
+	const EVENT__AFTER_LOAD_VALUE       = 'afterLoadValue';
 
 	const TYPE__HIDDEN = 'hidden';
 	const TYPE__DATE = 'date';
@@ -237,8 +237,14 @@ abstract class Input
 	 */
 	protected function saveValue($value)
 	{
-		if (!$this->runEvent(self::EVENT__BEFORE_SAVE_VALUE, compact('value')))
+		$result = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_VALUE,
+			compact('value'), $this);
+
+		if ($result === false)
 			return false;
+
+		if (is_array($result) && array_key_exists('value', $result))
+			$value = $result['value'];
 
 		Option::set($this->tab->getModuleId(), $this->getValueName(), $value, $this->tab->getSiteId());
 
@@ -285,6 +291,14 @@ abstract class Input
 			$this->getValueName(), $this->default, $this->tab->getSiteId());
 
 		$this->getEvent()->send(self::EVENT__AFTER_LOAD_VALUE, [], $this);
+
+		if ($this->multiple) {
+			if (!is_array($this->value))
+				$this->value = unserialize($this->value);
+
+			if (!$this->value)
+				$this->value = [];
+		}
 	}
 
 	/**
@@ -310,17 +324,16 @@ abstract class Input
 	}
 
 	/**
-	 * @param bool|false $refresh
+	 * @param bool|false $reload
 	 * @return mixed
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function getValue($refresh = false)
+	public function getValue($reload = false)
 	{
-		if (empty($this->value) || $refresh)
+		if (empty($this->value) || $reload)
 			$this->loadValue();
 
-		if (method_exists($this, self::EVENT__BEFORE_GET_VALUE))
-			return $this->runEvent(self::EVENT__BEFORE_GET_VALUE);
+		$this->getEvent()->send(self::EVENT__BEFORE_GET_VALUE, [], $this);
 
 		return $this->value;
 	}
@@ -370,15 +383,16 @@ abstract class Input
 	 */
 	public function setValueFromRequest()
 	{
-		/**
-		 * value_id can be like
-		 * #input_id# or #site_id#_#input_id# or #site_id#_#preset_id#_#input_id# or #preset_id#_#input_id#
-		 */
 		$value = $this->getValueFromRequest();
 
-		//$this->getEvent()->send(self::)
-		if (method_exists($this, self::EVENT__BEFORE_SAVE_REQUEST))
-			$value = $this->runEvent(self::EVENT__BEFORE_SAVE_REQUEST, $value);
+		// EVENT__BEFORE_SAVE_REQUEST
+		$params = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_REQUEST, compact('value'), $this);
+		if (isset($params['value']))
+			$value = $params['value'];
+
+		//serialize multiple value
+		if ($this->multiple && is_array($value))
+			$value = serialize($value);
 
 		$this->setValue($value);
 	}

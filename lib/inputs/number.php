@@ -11,7 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
-
+use Bitrix\Main\Event;
 /**
  * Class Number
  *
@@ -53,6 +53,16 @@ class Number extends Text
 
 		if (isset($params['max']))
 			$this->max = (int)$params['max'];
+	}
+
+	/**
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function addEventsHandlers()
+	{
+		$event = $this->getEvent();
+
+		$event->addHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
 	/**
@@ -112,12 +122,17 @@ class Number extends Text
 	}
 
 	/**
-	 * @param $value
-	 * @return mixed
+	 * @param Event $event
+	 * @return \Bitrix\Main\EventResult
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function beforeSaveRequest($value)
+	protected function beforeSaveRequest(Event $event)
 	{
+		if ($event->getSender() !== $this)
+			return $this->getEvent()->getErrorResult($this);
+
+		$value = $event->getParameter('value');
+
 		// not integer
 		if ($value != intval($value))
 			$value = $this->default;
@@ -130,6 +145,6 @@ class Number extends Text
 		if (!is_null($this->max) && $value > $this->max)
 			$value = $this->default;
 
-		return $value;
+		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
 }

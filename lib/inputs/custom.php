@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\Event;
+use Bitrix\Main\EventResult;
 /**
  * Class Custom
  *
@@ -26,6 +28,16 @@ class Custom extends Input
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
+	protected function addEventsHandlers()
+	{
+		$event = $this->getEvent();
+
+		$event->addHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
+	}
+
+	/**
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
 	public function draw()
 	{
 		?><tr>
@@ -34,11 +46,13 @@ class Custom extends Input
 	}
 
 	/**
-	 * @return bool
+	 * not save
+	 * @param Event $event
+	 * @return EventResult
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function beforeSaveValue()
+	public function beforeSaveValue(Event $event)
 	{
-		return false;
+		return $this->getEvent()->getErrorResult($this);
 	}
 }

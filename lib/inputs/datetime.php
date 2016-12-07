@@ -1,16 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lenovo
- * Date: 11.01.2016
- * Time: 17:50
- *
- * @author Pavel Shulaev (http://rover-it.me)
- */
-
 namespace Rover\Fadmin\Inputs;
-
-use Rover\Fadmin\Tab;
 /**
  * Class Clock
  *
@@ -23,16 +12,6 @@ class DateTime extends Input
 	 * @var string
 	 */
 	public static $type = self::TYPE__DATE;
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addEventsHandlers()
-	{
-		$event = $this->getEvent();
-
-		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
-	}
 
 	/**
 	 * @param bool|true $time
@@ -60,32 +39,5 @@ class DateTime extends Input
 		);
 
 		$this->showHelp();
-	}
-
-	/**
-	 * @param $value
-	 * @return string
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function beforeSaveRequest($value)
-	{
-		if ($this->multiple)
-			$value = serialize($value);
-
-		return $value;
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function afterLoadValue()
-	{
-		if ($this->multiple) {
-			$this->value = unserialize($this->value);
-			if (!$this->value)
-				$this->value = [];
-		} elseif (!$this->value) {
-			$this->value = 0;
-		}
 	}
 }

@@ -32,6 +32,8 @@ class Checkbox extends Input
 		$event = $this->getEvent();
 
 		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+		$event->addHandler(self::EVENT__BEFORE_GET_VALUE, [$this, 'beforeGetValue']);
+		$event->addHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
 	/**
@@ -50,16 +52,21 @@ class Checkbox extends Input
 	}
 
 	/**
-	 * @param $value
-	 * @return string
+	 * @param Event $event
+	 * @return \Bitrix\Main\EventResult
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function beforeSaveRequest($value)
+	protected function beforeSaveRequest(Event $event)
 	{
+		if ($event->getSender() !== $this)
+			return $this->getEvent()->getErrorResult($this);
+
+		$value = $event->getParameter('value');
+
 		if ($value !== "Y")
 			$value = "N";
 
-		return $value;
+		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
 
 	/**
@@ -75,16 +82,20 @@ class Checkbox extends Input
 	}
 
 	/**
-	 * @return bool
+	 * @param Event $event
+	 * @return bool|void
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function beforeGetValue()
+	public function beforeGetValue(Event $event)
 	{
+		if ($event->getSender() !== $this)
+			return;
+
 		$settings = $this->tab->options->settings;
 
-		if ($settings->getBoolCheckbox())
-			return $this->value == 'Y';
+		if (!$settings->getBoolCheckbox())
+			return;
 
-		return $this->value;
+		$this->value = $this->value == 'Y';
 	}
 }

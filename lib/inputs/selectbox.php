@@ -11,6 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
+use Bitrix\Main\Event;
 /**
  * Class Selectbox
  *
@@ -96,34 +97,6 @@ class Selectbox extends Input
 			</select>
 		<?php
 		$this->showHelp();
-	}
-
-	/**
-	 * @param $value
-	 * @return string
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function beforeSaveRequest($value)
-	{
-		if ($this->multiple)
-			$value = serialize($value);
-
-		return $value;
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function afterLoadValue()
-	{
-		if ($this->multiple){
-
-			if (!is_array($this->value))
-				$this->value = unserialize($this->value);
-
-			if (is_null($this->value))
-				$this->value = [];
-		}
 	}
 
 	/**

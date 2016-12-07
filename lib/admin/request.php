@@ -121,7 +121,7 @@ class Request
 				try {
 					$this->addRequest();
 				} catch (\Exception $e) {
-					$this->options->addMessage($e->getMessage(), 'ERROR');
+					$this->options->message->addError($e->getMessage());
 				}
 		}
 	}

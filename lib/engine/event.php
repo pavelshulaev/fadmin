@@ -13,6 +13,7 @@ namespace Rover\Fadmin\Engine;
 use Bitrix\Main\ArgumentNullException;
 use \Bitrix\Main\Event as BxEvent;
 use \Bitrix\Main\EventManager;
+use Bitrix\Main\EventResult;
 
 class Event
 {
@@ -36,12 +37,16 @@ class Event
 	/**
 	 * @param       $name
 	 * @param array $params
-	 * @param       $sender
+	 * @param null  $sender
+	 * @return BxEvent
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function send($name, array $params = [], $sender = null)
 	{
-		(new BxEvent($this->moduleId, $name, $params))->send($sender);
+		$event = new BxEvent($this->moduleId, $name, $params);
+		$event->send($sender);
+
+		return $event;
 	}
 
 	/**
@@ -53,5 +58,57 @@ class Event
 	{
 		$eventManager = EventManager::getInstance();
 		$eventManager->addEventHandler($this->moduleId, $name, $callback);
+	}
+
+	/**
+	 * @param       $name
+	 * @param array $params
+	 * @param null  $sender
+	 * @return bool|null
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getResult($name, array $params = [], $sender = null)
+	{
+		$event = $this->send($name, $params, $sender);
+
+		foreach ($event->getResults() as $eventResult)
+		{
+			//check by sender
+			$parameters = $eventResult->getParameters();
+			if (!isset($parameters['handler'])
+				|| ($parameters['handler'] !== $sender))
+			continue;
+
+			$resultType = $eventResult->getType();
+			if ($resultType == EventResult::ERROR)
+				return false;
+
+			return $eventResult->getParameters();
+		}
+	}
+
+	/**
+	 * @param $handler
+	 * @return EventResult
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getErrorResult($handler)
+	{
+		return new EventResult(EventResult::ERROR,
+			['handler' => $handler], $this->moduleId);
+	}
+
+	/**
+	 * @param       $handler
+	 * @param array $params
+	 * @return EventResult
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getSuccessResult($handler, array $params = [])
+	{
+		$params['handler'] = $handler;
+
+		return new EventResult(EventResult::SUCCESS,
+			$params, $this->moduleId);
 	}
 }

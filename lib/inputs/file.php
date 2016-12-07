@@ -12,7 +12,8 @@ namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Application;
 use Rover\Fadmin\Tab;
-
+use Bitrix\Main\Event;
+use Bitrix\Main\EventResult;
 /**
  * Class File
  *
@@ -71,6 +72,17 @@ class File extends Input
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
+	protected function addEventsHandlers()
+	{
+		$event = $this->getEvent();
+
+		$event->addHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
+		$event->addHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+	}
+
+	/**
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
 	public function draw()
 	{
 		$valueId    = $this->getValueId();
@@ -101,14 +113,18 @@ class File extends Input
 		$this->showHelp();
 	}
 
+
 	/**
-	 * @param $value
-	 * @return bool|int|null|string
+	 * @param Event $event
+	 * @return EventResult|bool|int|null|string
 	 * @throws \Bitrix\Main\ArgumentException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function beforeSaveRequest($value)
+	protected function beforeSaveRequest(Event $event)
 	{
+		if ($event->getSender() !== $this)
+			return $this->getEvent()->getErrorResult($this);
+
 		$request = Application::getInstance()
 			->getContext()
 			->getRequest();
@@ -131,26 +147,31 @@ class File extends Input
 			$value = false;
 		}
 
-		return $value;
+		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
 
 	/**
-	 * @param array $params
-	 * @return bool
+	 * not save
+	 * @param Event $event
+	 * @return EventResult
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function beforeSaveValue(array $params)
+	public function beforeSaveValue(Event $event)
 	{
-		$value = $params['value'];
+		if ($event->getSender() !== $this)
+			return $this->getEvent()->getErrorResult($this);
 
+		$value = $event->getParameter('value');
+
+		// file is the same, do not save
 		if ($value === null)
-			return false;
+			return $this->getEvent()->getErrorResult($this);
 
 		$oldValue = $this->getValue(true);
 
 		if ($value != $oldValue)
 			\CFile::Delete($oldValue);
 
-		return $value;
+		return $this->getEvent()->getSuccessResult($this, ['value' => $value]);
 	}
 }
