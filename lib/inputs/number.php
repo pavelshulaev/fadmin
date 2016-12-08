@@ -53,16 +53,8 @@ class Number extends Text
 
 		if (isset($params['max']))
 			$this->max = (int)$params['max'];
-	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addEventsHandlers()
-	{
-		$event = $this->getEvent();
-
-		$event->addHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
 	/**

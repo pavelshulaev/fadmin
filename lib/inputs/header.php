@@ -21,6 +21,9 @@ use Bitrix\Main\EventResult;
  */
 class Header extends Input
 {
+	/**
+	 * @var string
+	 */
 	public static $type = self::TYPE__HEADER;
 
 	/**
@@ -31,19 +34,11 @@ class Header extends Input
 	public function __construct(array $params, Tab $tab)
 	{
 		if (!isset($params['name']))
-			$params['name'] = 'header_default';
+			$params['name'] = self::$type;
 
 		parent::__construct($params, $tab);
-	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addEventsHandlers()
-	{
-		$event = $this->getEvent();
-
-		$event->addHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
 	}
 
 	/**
@@ -51,7 +46,9 @@ class Header extends Input
 	 */
 	public function draw()
 	{
-		?><tr class="heading"><td colspan="2"><?=$this->label?></td></tr><?php
+		?><tr class="heading">
+			<td colspan="2"><?=$this->label?></td>
+		</tr><?php
 	}
 
 	/**

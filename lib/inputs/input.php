@@ -19,51 +19,76 @@ abstract class Input
 	const EVENT__BEFORE_GET_VALUE       = 'beforeGetValue';
 	const EVENT__AFTER_LOAD_VALUE       = 'afterLoadValue';
 
-	const TYPE__HIDDEN = 'hidden';
-	const TYPE__DATE = 'date';
-	const TYPE__DATETIME = 'datetime';
-	const TYPE__LABEL = 'label';
-	const TYPE__HEADER = 'header';
-	const TYPE__CHECKBOX = 'checkbox';
-	const TYPE__TEXT = 'text';
-	const TYPE__NUMBER = 'number';
-	const TYPE__FILE = 'file';
-	const TYPE__COLOR = 'color';
-	const TYPE__IBLOCK = 'iblock';
-	const TYPE__TEXTAREA = 'textarea';
-	const TYPE__SELECTBOX = 'selectbox';
-	const TYPE__SUBMIT = 'submit';
-	const TYPE__ADD_PRESET = 'addpreset';
-	const TYPE__REMOVE_PRESET = 'removepreset';
-	const TYPE__CUSTOM = 'custom';
-	const TYPE__CLOCK = 'clock';
-	const TYPE__PRESET_NAME = 'presetname';
-
-	protected $id;                  // input id
-	protected $name;                // input name (required)
-	protected $label;               // input label
-	protected $value;               // input value
-	protected $default;             // default input value
-	protected $multiple = false;    // multiple value for selectbox and iblock
-	protected $help;                // help
+	const TYPE__HIDDEN          = 'hidden';
+	const TYPE__DATE            = 'date';
+	const TYPE__DATETIME        = 'datetime';
+	const TYPE__LABEL           = 'label';
+	const TYPE__HEADER          = 'header';
+	const TYPE__CHECKBOX        = 'checkbox';
+	const TYPE__TEXT            = 'text';
+	const TYPE__NUMBER          = 'number';
+	const TYPE__FILE            = 'file';
+	const TYPE__COLOR           = 'color';
+	const TYPE__IBLOCK          = 'iblock';
+	const TYPE__TEXTAREA        = 'textarea';
+	const TYPE__SELECTBOX       = 'selectbox';
+	const TYPE__SUBMIT          = 'submit';
+	const TYPE__ADD_PRESET      = 'addpreset';
+	const TYPE__REMOVE_PRESET   = 'removepreset';
+	const TYPE__CUSTOM          = 'custom';
+	const TYPE__CLOCK           = 'clock';
+	const TYPE__PRESET_NAME     = 'presetname';
 
 	/**
+	 * input id
+	 * @var string
+	 */
+	protected $id;
+
+	/**
+	 * input name (required)
+	 * @var string
+	 */
+	protected $name;
+
+	/**
+	 * input label (required)
+	 * @var string
+	 */
+	protected $label;
+
+	/**
+	 * input value
+	 * @var string|array
+	 */
+	protected $value;
+
+	/**
+	 * default input value
+	 * @var string|array
+	 */
+	protected $default;
+
+	/**
+	 * multiple value falg
+	 * @var bool
+	 */
+	protected $multiple = false;
+
+	/**
+	 * help block
+	 * @var string
+	 */
+	protected $help;
+
+	/**
+	 * input's tab
 	 * @var Tab
 	 */
 	protected $tab;
 
 	/**
-	 *  $params = [
-	 *      'id'        => input id (required)
-	 *      'name'      =>
-	 *      'default'   =>
-	 *      'multiple'  =>
-	 *      'size'      => input/file input size
-	 *      'siteId'    => siteId,
-	 *      'help'      => help info
-	 * ]
-	 *
-	 * @param array $params
+	 * @param array $params = ['id', 'name', 'label', 'default', 'multiple', 'help']
 	 * @param Tab   $tab
 	 * @throws Main\ArgumentNullException
 	 */
@@ -91,20 +116,16 @@ abstract class Input
 
 		if (isset($params['help']))
 			$this->help = $params['help'];
-
-		if (method_exists($this, 'addEventsHandlers'))
-			$this->addEventsHandlers();
 	}
 
 	/**
 	 * @param $name
-	 * @param $method
-	 * @return int|mixed
+	 * @param $callback
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function addEventHandler($name, $method)
+	protected function addEventHandler($name, $callback)
 	{
-		return \Bitrix\Main\EventManager::getInstance()->addEventHandler($this->getModuleId(), $name, [$this, $method]);
+		$this->getEvent()->addHandler($name, $callback);
 	}
 
 	/**
@@ -393,20 +414,6 @@ abstract class Input
 	}
 
 	/**
-	 * @param $name
-	 * @param $params
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function runEvent($name, &$params = [])
-	{
-		if (method_exists($this, $name))
-			return $this->$name($params);
-
-		return true;
-	}
-
-	/**
 	 * @return null|string
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
@@ -428,18 +435,18 @@ abstract class Input
 	{
 		?>
 		<tr>
-		<td
+			<td
+				width="50%"
+				class="adm-detail-content-cell-l"
+				style="vertical-align: top; padding-top: 7px;">
+				<?php if (!$empty) : ?>
+					<label for="<?php echo $valueId?>"><?php echo $this->label?>:</label>
+				<?php endif; ?>
+			</td>
+			<td
 			width="50%"
-			class="adm-detail-content-cell-l"
-			style="vertical-align: top; padding-top: 7px;">
-			<?php if (!$empty) : ?>
-				<label for="<?php echo $valueId?>"><?php echo $this->label?>:</label>
-			<?php endif; ?>
-		</td>
-		<td
-		width="50%"
-		class="adm-detail-content-cell-r"
-		><?php
+			class="adm-detail-content-cell-r"
+			><?php
 	}
 
 	/**
@@ -447,9 +454,8 @@ abstract class Input
 	 */
 	protected function showHelp()
 	{
-		if (strlen($this->help)){
-			echo '<br><small>' . $this->help . '</small>';
-		}
+		if (strlen($this->help))
+			echo '<br><small style="color: #777;">' . $this->help . '</small>';
 		?></td>
 		</tr>
 		<?php

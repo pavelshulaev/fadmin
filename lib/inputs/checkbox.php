@@ -11,6 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use \Bitrix\Main\Event;
+use Rover\Fadmin\Tab;
 /**
  * Class Checkbox
  *
@@ -24,16 +25,20 @@ class Checkbox extends Input
 	 */
 	public static $type = self::TYPE__CHECKBOX;
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addEventsHandlers()
-	{
-		$event = $this->getEvent();
 
-		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
-		$event->addHandler(self::EVENT__BEFORE_GET_VALUE, [$this, 'beforeGetValue']);
-		$event->addHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+	/**
+	 * @param array $params
+	 * @param Tab   $tab
+	 * @throws \Bitrix\Main\ArgumentNullException
+	 */
+	public function __construct(array $params, Tab $tab)
+	{
+		parent::__construct($params, $tab);
+
+		// add events
+		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+		$this->addEventHandler(self::EVENT__BEFORE_GET_VALUE, [$this, 'beforeGetValue']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
 	/**

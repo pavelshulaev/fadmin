@@ -40,17 +40,9 @@ class Removepreset extends Submit
 		$params['name'] = self::$type;
 
 		parent::__construct($params, $tab);
-	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addEventsHandlers()
-	{
-		$event = $this->getEvent();
-
-		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
-		$event->addHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
+		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
 	}
 
 	/**

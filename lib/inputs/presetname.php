@@ -37,16 +37,8 @@ class PresetName extends Text
 
 		$this->setValue($this->tab->options
 			->getPresetNameById($presetId, $this->tab->getSiteId()));
-	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addEventsHandlers()
-	{
-		$event = $this->getEvent();
-
-		$event->addHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
 	/**

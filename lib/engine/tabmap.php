@@ -179,4 +179,23 @@ class TabMap
 
 		return null;
 	}
+
+	/**
+	 * @param $name
+	 * @return null|Tab
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function searchTabByName($name)
+	{
+		$tabs = $this->getTabs();
+
+		foreach ($tabs as $tab)
+			/**
+			 * @var Tab $tab
+			 */
+			if ($tab->getName() == $name)
+				return $tab;
+
+		return null;
+	}
 }

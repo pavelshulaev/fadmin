@@ -67,17 +67,10 @@ class File extends Input
 
 		if (isset($params['size']) && intval($params['size']))
 			$this->size = intval(htmlspecialcharsbx($params['size']));
-	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addEventsHandlers()
-	{
-		$event = $this->getEvent();
-
-		$event->addHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
-		$event->addHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		// add events
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
 	/**

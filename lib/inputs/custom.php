@@ -12,6 +12,7 @@ namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
+use Rover\Fadmin\Tab;
 /**
  * Class Custom
  *
@@ -26,13 +27,16 @@ class Custom extends Input
 	public static $type = self::TYPE__CUSTOM;
 
 	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
+	 * @param array $params
+	 * @param Tab   $tab
+	 * @throws \Bitrix\Main\ArgumentNullException
 	 */
-	protected function addEventsHandlers()
+	public function __construct(array $params, Tab $tab)
 	{
-		$event = $this->getEvent();
+		parent::__construct($params, $tab);
 
-		$event->addHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
+		// add events
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
 	}
 
 	/**

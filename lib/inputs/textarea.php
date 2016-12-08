@@ -33,7 +33,7 @@ class Textarea extends Input
 	/**
 	 * @var int
 	 */
-	protected $cols = 40;
+	protected $cols = 50;
 
 	/**
 	 * @param array $params
@@ -61,10 +61,10 @@ class Textarea extends Input
 
 		$this->showLabel($valueId);
 
-		?><textarea id="<?php echo $valueId?>"
-		            rows="<?php $this->rows?>"
-		            cols="<?php echo $this->cols?>"
-		            name="<?php echo $valueName?>"><?php echo $this->value?></textarea><?php
+		?><textarea id="<?=$valueId?>"
+		            rows="<?=$this->rows?>"
+		            cols="<?=$this->cols?>"
+		            name="<?=$valueName?>"><?=$this->value?></textarea><?php
 
 		$this->showHelp();
 	}
