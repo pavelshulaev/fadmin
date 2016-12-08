@@ -63,7 +63,7 @@ abstract class Options
 	 * tabs helper
 	 * @var TabMap
 	 */
-	protected $tabMap;
+	public $tabMap;
 
 	/**
 	 * message driver
@@ -119,7 +119,6 @@ abstract class Options
 
 		$this->moduleId = $moduleId;
 
-		$this->tabMap   = new TabMap($this);
 		$this->message  = new Message();
 		$this->event    = new Event($this->moduleId);
 		// method must be in child
@@ -129,9 +128,9 @@ abstract class Options
 		if (!isset($config['tabs']))
 			throw new ArgumentNullException('tabs');
 
-		$this->settings = new Settings(isset($config['settings']) ? $config['settings'] : []);
+		$this->tabMap   = new TabMap($this, $config['tabs']);
 
-		$this->addTabs($config['tabs']);
+		$this->settings = new Settings(isset($config['settings']) ? $config['settings'] : []);
 	}
 
 	/**
@@ -223,45 +222,6 @@ abstract class Options
 	}
 
 	/**
-	 * Generate tabs by tabs config array
-	 * @param $tabsParams
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addTabs($tabsParams)
-	{
-		foreach ($tabsParams as $tabParams){
-			if (empty($tabParams))
-				continue;
-
-			$tab = Tab::factory($tabParams, $this);
-			$this->addTab($tab);
-		}
-	}
-
-	/**
-	 * adding tab
-	 * clone preset tab for all presets
-	 * @param Tab $tab
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addTab(Tab $tab)
-	{
-		$this->tabMap->addTab($tab);
-	}
-
-	/**
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getTabs()
-	{
-		$tabs = $this->tabMap->getTabs();
-		$this->runEvent(self::EVENT__AFTER_GET_TABS, compact('tabs'));
-
-		return $tabs;
-	}
-
-	/**
 	 * returns value from preset
 	 * @param            $inputName
 	 * @param            $presetId
@@ -303,7 +263,7 @@ abstract class Options
 	 */
 	protected function getInputByName($inputName, $presetId = '', $siteId = '')
 	{
-		$tabs = $this->getTabs();
+		$tabs = $this->tabMap->getTabs();
 
 		foreach ($tabs as $tab) {
 			/**

@@ -76,13 +76,18 @@ class Request
 		if (false === $this->options->runEvent(Options::EVENT__BEFORE_REDIRECT_AFTER_REQUEST))
 			return;
 
-		if(strlen($this->update)>0
-			&& strlen($_REQUEST["back_url_settings"])>0)
+		$request = Application::getInstance()->getContext()->getRequest();
+
+		if (strlen($this->update) && strlen($request["back_url_settings"]))
 		{
-			LocalRedirect($_REQUEST["back_url_settings"]);
+			LocalRedirect($request["back_url_settings"]);
 		} else {
 			global $APPLICATION;
-			LocalRedirect($APPLICATION->GetCurPage()."?mid=".urlencode($this->moduleId)."&lang=".urlencode(LANGUAGE_ID)."&back_url_settings=".urlencode($_REQUEST["back_url_settings"])."&".$this->tabControl->ActiveTabParam());
+			LocalRedirect($APPLICATION->GetCurPage()
+				. "?mid=" . urlencode($this->moduleId)
+				. "&lang=" . urlencode(LANGUAGE_ID)
+				. "&back_url_settings=" . urlencode($request["back_url_settings"])
+				. "&" . $this->tabControl->ActiveTabParam());
 		}
 	}
 
@@ -220,7 +225,7 @@ class Request
 		if(false === $this->options->runEvent(Options::EVENT__BEFORE_ADD_VALUES_FROM_REQUEST))
 			return;
 
-		$tabs = $this->options->getTabs();
+		$tabs = $this->options->tabMap->getTabs();
 
 		foreach ($tabs as $tab) {
 			/**

@@ -53,11 +53,6 @@ abstract class Input
 	protected $tab;
 
 	/**
-	 * @var \Bitrix\Main\EventManager
-	 */
-	protected $eventManager;
-
-	/**
 	 *  $params = [
 	 *      'id'        => input id (required)
 	 *      'name'      =>
@@ -225,9 +220,9 @@ abstract class Input
 	 */
 	public function setValue($value)
 	{
-		if ($this->saveValue($value))
-			$this->value = $value; else
-			$this->value = null;
+		$this->value = $this->saveValue($value)
+		    ? $value
+			: null;
 	}
 
 	/**

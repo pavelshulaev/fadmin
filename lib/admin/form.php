@@ -66,8 +66,8 @@ class Form
 		$this->tabControl->Begin();
 		$this->showFormBegin();
 
-		// showing real tabs
-		$tabs = $this->options->getTabs();
+		// showing tabs
+		$tabs = $this->options->tabMap->getTabs(true);
 
 		foreach ($tabs as $tab)
 			$this->showTab($tab);

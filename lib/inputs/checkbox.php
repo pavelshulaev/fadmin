@@ -56,7 +56,7 @@ class Checkbox extends Input
 	 * @return \Bitrix\Main\EventResult
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function beforeSaveRequest(Event $event)
+	public function beforeSaveRequest(Event $event)
 	{
 		if ($event->getSender() !== $this)
 			return $this->getEvent()->getErrorResult($this);

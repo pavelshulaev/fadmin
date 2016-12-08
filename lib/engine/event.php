@@ -14,6 +14,7 @@ use Bitrix\Main\ArgumentNullException;
 use \Bitrix\Main\Event as BxEvent;
 use \Bitrix\Main\EventManager;
 use Bitrix\Main\EventResult;
+use Rover\Fadmin\Inputs\Input;
 
 class Event
 {
@@ -110,5 +111,25 @@ class Event
 
 		return new EventResult(EventResult::SUCCESS,
 			$params, $this->moduleId);
+	}
+
+	/**
+	 * @param BxEvent $event
+	 * @param Input   $handler
+	 * @return bool
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function checkInputHandler(\Bitrix\Main\Event $event, Input $handler)
+	{
+		$sender = $event->getSender();
+
+		if (false === $sender instanceof Input)
+			return false;
+
+		/**
+		 * @var Input $sender
+		 */
+		echo $sender->getValueName() . ' ' . $handler->getValueName() . '<br>';
+		return $sender->getValueName() === $handler->getValueName();
 	}
 }

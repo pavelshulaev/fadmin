@@ -58,16 +58,6 @@ class Selectbox extends Input
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function addEventsHandlers()
-	{
-		$event = $this->getEvent();
-
-		$event->addHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
 	public function draw()
 	{
 		$valueId    = $this->getValueId();

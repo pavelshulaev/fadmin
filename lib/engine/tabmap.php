@@ -35,31 +35,84 @@ class TabMap
 	 */
 	protected $presetMap = [];
 
+	protected $tabsParams = [];
+
 	/**
 	 * @param Options $options
 	 */
-	public function __construct(Options $options)
+	public function __construct(Options $options, array $tabsParams)
 	{
 		$this->options = $options; // for events
+		$this->tabsParams = $tabsParams;
 	}
 
 	/**
-	 * adding tab to map
-	 * @param Tab $tab
+	 * @param bool|false $reload
+	 * @return array
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function addTab(Tab $tab)
+	public function getTabs($reload = false)
 	{
-		if ($tab->isPreset()) {
+		if (!count($this->tabMap) || $reload)
+			$this->loadTabs();
 
-			// preset tab can be only one on current site
-			if (isset($this->presetMap[$tab->getSiteId()]))
-				return;
+		$tabs = $this->tabMap;
 
-			$this->presetMap[$tab->getSiteId()] = true;
+		$this->options->runEvent(Options::EVENT__AFTER_GET_TABS, compact('tabs'));
+
+		return $tabs;
+	}
+
+
+	/**
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function loadTabs()
+	{
+		$this->tabMap = [];
+		$this->presetMap = [];
+
+		foreach ($this->tabsParams as $tabParams){
+
+			if (empty($tabParams))
+				continue;
+		//	pr(count($this->tabMap));
+			if ($tabParams['preset']){
+				$siteId = $tabParams['siteId'] ?: '';
+				// preset tab can be only one on current site
+				if (isset($this->presetMap[$siteId]))
+					continue;
+
+				$this->presetMap[$siteId] = true;
+
+				$presets = Presets::get($this->options->getModuleId(), $siteId);
+
+				if (is_array($presets) && count($presets)){
+					foreach ($presets as $preset){
+
+						$tabParams['presetId']  = $preset['id'];
+						$tabParams['label']     = $preset['name'];
+
+						// event before create preset tab
+						if (false === $this->options->runEvent(
+								Options::EVENT__BEFORE_MAKE_PRESET_TAB,
+								compact('tabParams')))
+						return null;
+
+						$tab = Tab::factory($tabParams, $this->options);
+
+						// event after create preset tab
+						$this->options->runEvent(
+							Options::EVENT__AFTER_MAKE_PRESET_TAB,
+							compact('tab'));
+
+						$this->tabMap[] = $tab;
+					}
+				}
+			} else {
+				$this->tabMap[] = Tab::factory($tabParams, $this->options);
+			}
 		}
-
-		$this->tabMap[] = $tab;
 	}
 
 	/**
@@ -78,8 +131,10 @@ class TabMap
 			/**
 			 * @var Tab $tab
 			 */
-			if ($tab->isPreset() && $tab->getSiteId() == $siteId)
-				return $this->createPresetTab($tab, $presetId);
+			if ($tab->isPreset()
+				&& ($tab->getSiteId() == $siteId)
+				&& ($tab->getPresetId() == $presetId))
+				return $tab;
 
 		return null;
 	}
@@ -100,68 +155,6 @@ class TabMap
 			$allTabsInfo[] = $tab->getInfo();
 
 		return $allTabsInfo;
-	}
-
-	/**
-	 * @param Tab $tab
-	 * @param     $presetId
-	 * @return Tab
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function createPresetTab(Tab $tab, $presetId)
-	{
-		if (!$presetId)
-			throw new ArgumentNullException('presetId');
-
-		// event before create preset tab
-		if (false === $this->options->runEvent(
-			Options::EVENT__BEFORE_MAKE_PRESET_TAB,
-			compact('tab', 'presetId')))
-			return null;
-
-		$newTab = clone $tab;
-		$newTab->setPresetId($presetId);
-
-		// event after create preset tab
-		$this->options->runEvent(
-			Options::EVENT__AFTER_MAKE_PRESET_TAB,
-			compact('newTab'));
-
-		return $newTab;
-	}
-
-	/**
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getTabs()
-	{
-		$response = array();
-
-		foreach ($this->tabMap as $tab){
-			/**
-			 * @var Tab $tab
-			 */
-			if ($tab->isPreset()) {
-
-				$presets = Presets::get($this->options->getModuleId(), $tab->getSiteId());
-
-				if (is_array($presets) && count($presets)){
-					foreach ($presets as $preset){
-						$presetTab = $this->createPresetTab($tab, $preset['id']);
-						$presetTab->setLabel($preset['name']);
-
-						$response[] = $presetTab;
-					}
-				}
-
-			} else {
-				$response[] = $tab;
-			}
-		}
-
-		return $response;
 	}
 
 	/**

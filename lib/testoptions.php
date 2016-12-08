@@ -109,7 +109,7 @@ class TestOptions extends Options
 						],
 						[
 							'type'      => Input::TYPE__IBLOCK,
-							'name'      => 'multiple iblock',
+							'name'      => 'multiple_iblock',
 							'multiple'  => true,
 							'label'     => 'This is a multiple iblock',
 						],
@@ -170,7 +170,7 @@ class TestOptions extends Options
 						],
 						[
 							'type'      => Input::TYPE__SELECTBOX,
-							'name'      => 'selectbox',
+							'name'      => 'multiple_selectbox',
 							'label'     => 'Multiple selectbox',
 							'multiple'  => true,
 							'options'   => [

@@ -35,7 +35,7 @@ class PresetName extends Text
 		if (!$presetId)
 			return;
 
-		$this->setValue($this->tab->getOptions()
+		$this->setValue($this->tab->options
 			->getPresetNameById($presetId, $this->tab->getSiteId()));
 	}
 
@@ -59,7 +59,6 @@ class PresetName extends Text
 	{
 		if ($event->getSender() !== $this)
 			return $this->getEvent()->getErrorResult($this);
-
 
 		if (!$this->tab->isPreset())
 			return true;
