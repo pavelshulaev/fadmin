@@ -52,7 +52,6 @@ abstract class Options
 
 	const SEPARATOR = '__';
 
-
 	/**
 	 * current module id
 	 * @var string

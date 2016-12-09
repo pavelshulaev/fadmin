@@ -96,9 +96,7 @@ class Checkbox extends Input
 		if ($event->getSender() !== $this)
 			return;
 
-		$settings = $this->tab->options->settings;
-
-		if (!$settings->getBoolCheckbox())
+		if (!$this->tab->options->settings->getBoolCheckbox())
 			return;
 
 		$this->value = $this->value == 'Y';

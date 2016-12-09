@@ -65,40 +65,6 @@ class Request
 	 */
 	public function get()
 	{
-		$this->getRequest();
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function redirect()
-	{
-		if (false === $this->options->runEvent(Options::EVENT__BEFORE_REDIRECT_AFTER_REQUEST))
-			return;
-
-		$request = Application::getInstance()->getContext()->getRequest();
-
-		if (strlen($this->update) && strlen($request["back_url_settings"]))
-		{
-			LocalRedirect($request["back_url_settings"]);
-		} else {
-			global $APPLICATION;
-			LocalRedirect($APPLICATION->GetCurPage()
-				. "?mid=" . urlencode($this->moduleId)
-				. "&lang=" . urlencode(LANGUAGE_ID)
-				. "&back_url_settings=" . urlencode($request["back_url_settings"])
-				. "&" . $this->tabControl->ActiveTabParam());
-		}
-	}
-
-	/**
-	 * @return \Bitrix\Main\HttpRequest|void
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 * @throws \Bitrix\Main\SystemException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function getRequest()
-	{
 		// action before
 		if(false === $this->options->runEvent(Options::EVENT__BEFORE_GET_REQUEST))
 			return;
@@ -128,6 +94,29 @@ class Request
 				} catch (\Exception $e) {
 					$this->options->message->addError($e->getMessage());
 				}
+		}
+	}
+
+	/**
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function redirect()
+	{
+		if (false === $this->options->runEvent(Options::EVENT__BEFORE_REDIRECT_AFTER_REQUEST))
+			return;
+
+		$request = Application::getInstance()->getContext()->getRequest();
+
+		if (strlen($this->update) && strlen($request["back_url_settings"]))
+		{
+			LocalRedirect($request["back_url_settings"]);
+		} else {
+			global $APPLICATION;
+			LocalRedirect($APPLICATION->GetCurPage()
+				. "?mid=" . urlencode($this->moduleId)
+				. "&lang=" . urlencode(LANGUAGE_ID)
+				. "&back_url_settings=" . urlencode($request["back_url_settings"])
+				. "&" . $this->tabControl->ActiveTabParam());
 		}
 	}
 
@@ -234,7 +223,7 @@ class Request
 			if(false === $this->options->runEvent(
 					Options::EVENT__BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST,
 					compact('tab')))
-				return;
+				continue;
 
 			$tab->setValuesFromRequest();
 		}
