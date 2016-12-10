@@ -1,5 +1,5 @@
 <?php
-namespace Rover\Fadmin;
+namespace Rover\Fadmin\Engine;
 
 use Bitrix\Main\ArgumentNullException;
 use \Bitrix\Main\Config\Option;
@@ -10,72 +10,83 @@ use \Bitrix\Main\Config\Option;
  * @package Fadmin
  * @author Pavel Shulaev (http://rover-it.me)
  */
-class Presets
+class Preset
 {
 	const OPTION_ID = 'rover-op-presets';
 
 	/**
-	 * returns presets ids for current module and site
-	 * @param        $moduleId
-	 * @param string $siteId
-	 * @return mixed
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
+	 * @var string
 	 */
-	public static function get($moduleId, $siteId = '')
+	protected $moduleId;
+
+	/**
+	 * @param $moduleId
+	 * @throws ArgumentNullException
+	 */
+	public function __construct($moduleId)
 	{
-		return unserialize(Option::get($moduleId, self::OPTION_ID, '', $siteId));
+		if (is_null($moduleId))
+			throw new ArgumentNullException('moduleId');
+
+		$this->moduleId = $moduleId;
 	}
 
 	/**
-	 * @param        $moduleId
+	 * @param string $siteId
+	 * @return mixed
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getList($siteId = '')
+	{
+		return unserialize(Option::get($this->moduleId, self::OPTION_ID, '', $siteId));
+	}
+
+	/**
 	 * @param string $siteId
 	 * @return array
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getIds($moduleId, $siteId = '')
+	public function getIds($siteId = '')
 	{
-		return array_keys(self::get($moduleId, $siteId));
+		return array_keys($this->getList($siteId));
 	}
 
 	/**
-	 * @param        $moduleId
-	 * @param string $siteId
 	 * @param        $id
+	 * @param string $siteId
 	 * @return null
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getById($id, $moduleId, $siteId = '')
+	public function getById($id, $siteId = '')
 	{
-		$presets = self::get($moduleId, $siteId);
+		$presets = $this->getList($siteId);
 
 		if (isset($presets[$id]))
 			return $presets[$id];
 
 		return null;
 	}
+
 	/**
-	 * возвращает количество пресетов
-	 * @param        $moduleId
 	 * @param string $siteId
 	 * @return int
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getCount($moduleId, $siteId = '')
+	public function getCount($siteId = '')
 	{
-		return count(self::get($moduleId, $siteId));
+		return count($this->getList($siteId));
 	}
-	
+
 	/**
-	 * @param        $moduleId
 	 * @param        $name
 	 * @param string $siteId
 	 * @return int|mixed
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function add($moduleId, $name, $siteId = '')
+	public function add($name, $siteId = '')
 	{
-		$presets = self::get($moduleId, $siteId);
+		$presets = $this->getList($siteId);
 
 		if (!count($presets)){
 			$presets    = [];
@@ -88,77 +99,71 @@ class Presets
 			'name'  => htmlspecialcharsbx($name)
 		];
 
-		self::update($moduleId, $presets, $siteId);
+		$this->update($presets, $siteId);
 
 		return $presetId;
 	}
 
 	/**
-	 * removing preset id
-	 * @param        $moduleId
-	 * @param        $presetId
+	 * @param        $id
 	 * @param string $siteId
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function remove($moduleId, $presetId, $siteId = '')
+	public function remove($id, $siteId = '')
 	{
-		$presets = self::get($moduleId, $siteId);
+		$presets = $this->getList($siteId);
 
 		foreach ($presets as $num => $preset){
-			if ($presetId == $preset['id']) {
+			if ($id == $preset['id']) {
 				unset($presets[$num]);
-				self::update($moduleId, $presets, $siteId);
+				$this->update($presets, $siteId);
 				break;
 			}
 		}
 	}
 
 	/**
-	 * @param        $moduleId
 	 * @param        $presets
 	 * @param string $siteId
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected static function update($moduleId, $presets, $siteId = '')
+	protected function update($presets, $siteId = '')
 	{
-		Option::set($moduleId, self::OPTION_ID, serialize($presets), $siteId);
+		Option::set($this->moduleId, self::OPTION_ID, serialize($presets), $siteId);
 	}
 
 	/**
 	 * sort presets by external function
-	 * @param        $moduleId
 	 * @param        $sortFunc
 	 * @param string $siteId
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function sort($moduleId, $sortFunc, $siteId = '')
+	public function sort($sortFunc, $siteId = '')
 	{
-		$presets = self::get($moduleId, $siteId);
+		$presets = $this->getList($siteId);
 		usort($presets, $sortFunc);
-		self::update($moduleId, $presets, $siteId);
+		$this->update($presets, $siteId);
 	}
 
 	/**
 	 * @param        $id
-	 * @param        $moduleId
 	 * @param string $siteId
 	 * @return bool
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function isExists($id, $moduleId, $siteId = '')
+	public function isExists($id, $siteId = '')
 	{
-		return in_array($id, self::getIds($moduleId, $siteId));
+		return in_array($id, $this->getIds($siteId));
 	}
 
 	/**
 	 * @param        $id
 	 * @param        $name
-	 * @param        $moduleId
 	 * @param string $siteId
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function updateName($id, $name, $moduleId, $siteId = '')
+	public function updateName($id, $name, $siteId = '')
 	{
 		if (!$id)
 			throw new ArgumentNullException('id');
@@ -166,18 +171,31 @@ class Presets
 		if (!$name)
 			throw new ArgumentNullException('name');
 
-		if (!$moduleId)
-			throw new ArgumentNullException('moduleId');
-
-		$presets = self::get($moduleId, $siteId);
+		$presets = $this->getList($siteId);
 
 		foreach ($presets as $num => &$preset){
 			if ($preset['id'] != $id)
 				continue;
 
 			$preset['name'] = $name;
+			break;
 		}
 
-		self::update($moduleId, $presets, $siteId);
+		$this->update($presets, $siteId);
+	}
+
+	/**
+	 * @param        $id
+	 * @param string $siteId
+	 * @return null
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getNameById($id, $siteId = '')
+	{
+		$preset = $this->getById($id, $siteId);
+		if (isset($preset['name']))
+			return $preset['name'];
+
+		return null;
 	}
 } 

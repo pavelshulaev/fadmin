@@ -36,7 +36,7 @@ class PresetName extends Text
 			return;
 
 		$this->setValue($this->tab->options
-			->getPresetNameById($presetId, $this->tab->getSiteId()));
+			->preset->getNameById($presetId, $this->tab->getSiteId()));
 
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
@@ -62,8 +62,8 @@ class PresetName extends Text
 
 		$value = $event->getParameter('value');
 
-		Presets::updateName($presetId, $value,
-			$this->tab->getModuleId(), $this->tab->getSiteId());
+		$this->tab->options->preset->updateName($presetId, $value,
+			$this->tab->getSiteId());
 
 		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}

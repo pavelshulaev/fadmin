@@ -13,7 +13,7 @@ namespace Rover\Fadmin\Engine;
 use \Bitrix\Main\ArgumentNullException;;
 use \Rover\Fadmin\Options;
 use \Rover\Fadmin\Tab;
-use \Rover\Fadmin\Presets;
+use \Rover\Fadmin\Engine\Preset;
 use \Rover\Fadmin\Inputs\Input;
 /**
  * Class TabMap
@@ -39,6 +39,7 @@ class TabMap
 
 	/**
 	 * @param Options $options
+	 * @param array   $tabsParams
 	 */
 	public function __construct(Options $options, array $tabsParams)
 	{
@@ -85,7 +86,7 @@ class TabMap
 
 				$this->presetMap[$siteId] = true;
 
-				$presets = Presets::get($this->options->getModuleId(), $siteId);
+				$presets = $this->options->preset->getList($siteId);
 
 				if (is_array($presets) && count($presets)){
 					foreach ($presets as $preset){

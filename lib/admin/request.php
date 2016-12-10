@@ -15,7 +15,6 @@ use Bitrix\Main\Request as BxRequest;
 use Rover\Fadmin\Inputs\Addpreset;
 use Rover\Fadmin\Inputs\Removepreset;
 use Rover\Fadmin\Options;
-use Rover\Fadmin\Presets;
 use Rover\Fadmin\Tab;
 use \Bitrix\Main\Config\Option;
 
@@ -137,8 +136,7 @@ class Request
 		if (!isset($params['name']))
 			$params['name'] = $params['value'];
 
-		$params['id'] = Presets::add(
-			$this->moduleId,
+		$params['id'] = $this->options->preset->add(
 			$params['name'],
 			$params['siteId']
 		);
@@ -169,14 +167,17 @@ class Request
 			compact('siteId', 'id')))
 			return;
 
-		$presetTab = $this->options->getTabByPresetId($id, $siteId);
+		/**
+		 * @var Tab $presetTab
+		 */
+		$presetTab = $this->options->tabMap->getTabByPresetId($id, $siteId);
 
 		if ($presetTab instanceof Tab === false)
 			throw new \Bitrix\Main\SystemException('presetTab is not an Tab instance');
 
 		$presetTab->clear();
 
-		Presets::remove($this->moduleId, $id, $siteId);
+		$this->options->preset->remove($id, $siteId);
 
 		// action afterRemovePreset
 		$this->options->runEvent(Options::EVENT__AFTER_REMOVE_PRESET,

@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Loader;
-use Bitrix\Main\Event;
 /**
  * Class Iblock
  *

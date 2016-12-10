@@ -19,6 +19,7 @@ use \Rover\Fadmin\Engine\Message;
 use \Rover\Fadmin\Engine\Settings;
 use \Rover\Fadmin\Engine\Event;
 use \Rover\Fadmin\Engine\TabMap;
+use \Rover\Fadmin\Engine\Preset;
 
 Loc::LoadMessages(__FILE__);
 
@@ -94,6 +95,10 @@ abstract class Options
 	public $event;
 
 	/**
+	 * @var Preset
+	 */
+	public $preset;
+	/**
 	 * for singleton
 	 * @param $moduleId
 	 * @return static
@@ -120,6 +125,7 @@ abstract class Options
 
 		$this->message  = new Message();
 		$this->event    = new Event($this->moduleId);
+		$this->preset   = new Preset($this->moduleId);
 		// method must be in child
 		$config = $this->getConfig();
 
@@ -163,16 +169,6 @@ abstract class Options
 	abstract public function getConfig();
 
 	/**
-	 * @param string $siteId
-	 * @return int
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getPresetsCount($siteId = '')
-	{
-		return Presets::getCount($this->moduleId, $siteId);
-	}
-
-	/**
 	 * @return array
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
@@ -207,17 +203,6 @@ abstract class Options
 			$name = htmlspecialcharsbx($siteId) . self::SEPARATOR . $name;
 
 		return $name;
-	}
-
-	/**
-	 * @param        $message
-	 * @param string $type
-	 * @deprecated
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function addMessage($message, $type = Message::TYPE__OK)
-	{
-		$this->message->add($message, $type);
 	}
 
 	/**
@@ -326,70 +311,6 @@ abstract class Options
 			return $input->getDefault();
 
 		throw new Main\SystemException('input not found');
-	}
-
-	/**
-	 * @param        $presetId
-	 * @param string $siteId
-	 * @return mixed
-	 * @throws Main\SystemException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getTabByPresetId($presetId, $siteId = '')
-	{
-		if (!$presetId)
-			throw new Main\ArgumentNullException('presetId');
-
-		return $this->tabMap->getTabByPresetId($presetId, $siteId);
-	}
-
-	/**
-	 * @param string $siteId
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getPresetsIds($siteId = '')
-	{
-		return Presets::getIds($this->moduleId, $siteId);
-	}
-
-	/**
-	 * @param        $presetId
-	 * @param string $siteId
-	 * @return bool
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function isPresetExists($presetId, $siteId = '')
-	{
-		return Presets::isExists($presetId, $this->moduleId, $siteId);
-	}
-
-	/**
-	 * @param        $presetId
-	 * @param string $siteId
-	 * @return mixed
-	 * @throws Main\ArgumentOutOfRangeException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getPresetNameById($presetId, $siteId = '')
-	{
-		$preset = Presets::getById($presetId, $this->moduleId, $siteId);
-		if (!$preset)
-			throw new Main\ArgumentOutOfRangeException('presetId');
-
-		return $preset['name'];
-	}
-
-	/**
-	 * @param        $presetId
-	 * @param        $presetName
-	 * @param string $siteId
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function setPresetName($presetId, $presetName, $siteId = '')
-	{
-		Presets::updateName($presetId, $presetName, $this->moduleId, $siteId);
 	}
 
 	/**
