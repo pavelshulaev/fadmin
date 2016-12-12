@@ -84,12 +84,6 @@ abstract class Options
 	public $settings;
 
 	/**
-	 * unique instance for each module
-	 * @var array
-	 */
-	protected static $instances = [];
-
-	/**
 	 * @var Event
 	 */
 	public $event;
@@ -98,6 +92,13 @@ abstract class Options
 	 * @var Preset
 	 */
 	public $preset;
+
+	/**
+	 * unique instance for each module
+	 * @var array
+	 */
+	protected static $instances = [];
+
 	/**
 	 * for singleton
 	 * @param $moduleId
@@ -123,19 +124,11 @@ abstract class Options
 
 		$this->moduleId = $moduleId;
 
-		$this->message  = new Message();
-		$this->event    = new Event($this->moduleId);
-		$this->preset   = new Preset($this->moduleId);
-		// method must be in child
-		$config = $this->getConfig();
-
-		// tabs
-		if (!isset($config['tabs']))
-			throw new ArgumentNullException('tabs');
-
-		$this->tabMap   = new TabMap($this, $config['tabs']);
-
-		$this->settings = new Settings(isset($config['settings']) ? $config['settings'] : []);
+		$this->message  = new Message($this);
+		$this->event    = new Event($this);
+		$this->preset   = new Preset($this);
+		$this->tabMap   = new TabMap($this);
+		$this->settings = new Settings($this);
 	}
 
 	/**
@@ -289,7 +282,7 @@ abstract class Options
 			if ($input instanceof Input)
 				$this->cache[$key] = $input->getValue();
 			else
-				throw new Main\SystemException('input not found');
+				throw new Main\SystemException('input "' . $inputName . '" not found');
 		}
 
 		return $this->cache[$key];

@@ -35,8 +35,9 @@ class PresetName extends Text
 		if (!$presetId)
 			return;
 
-		$this->setValue($this->tab->options
-			->preset->getNameById($presetId, $this->tab->getSiteId()));
+		if (empty($this->getValue()))
+			$this->setValue($this->tab->options
+				->preset->getNameById($presetId, $this->tab->getSiteId()));
 
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}

@@ -35,16 +35,25 @@ class TabMap
 	 */
 	protected $presetMap = [];
 
+	/**
+	 * tabs params
+	 * @var array
+	 */
 	protected $tabsParams = [];
 
 	/**
 	 * @param Options $options
-	 * @param array   $tabsParams
+	 * @throws ArgumentNullException
 	 */
-	public function __construct(Options $options, array $tabsParams)
+	public function __construct(Options $options)
 	{
 		$this->options = $options; // for events
-		$this->tabsParams = $tabsParams;
+
+		$config = $options->getConfig();
+		if (!isset($config['tabs']))
+			throw new ArgumentNullException('tabs');
+
+		$this->tabsParams = $config['tabs'];
 	}
 
 	/**
@@ -77,7 +86,7 @@ class TabMap
 
 			if (empty($tabParams))
 				continue;
-		//	pr(count($this->tabMap));
+
 			if ($tabParams['preset']){
 				$siteId = $tabParams['siteId'] ?: '';
 				// preset tab can be only one on current site

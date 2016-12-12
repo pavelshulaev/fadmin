@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Engine;
 
+use Rover\Fadmin\Options;
+
 class Settings
 {
 	const BOOL_CHECKBOX    = 'bool_checkbox';
@@ -26,11 +28,19 @@ class Settings
 
 	protected $storage = [];
 
+	public $options;
+
 	/**
-	 * @param array $settings
+	 * @param Options $options
 	 */
-	public function __construct(array $settings = [])
+	public function __construct(Options $options)
 	{
+		$this->options  = $options;
+		$config         = $this->options->getConfig();
+		$settings       = isset($config['settings'])
+			? $config['settings']
+			: [];
+
 		foreach ($this->defaults as $key => $defValue)
 			$this->storage[$key] = isset($settings[$key])
 				? $settings[$key]

@@ -141,6 +141,9 @@ class Request
 			$params['siteId']
 		);
 
+		//reload tabs
+		$this->options->tabMap->getTabs(true);
+
 		// action afterAddPreset
 		$this->options->runEvent(Options::EVENT__AFTER_ADD_PRESET, $params);
 

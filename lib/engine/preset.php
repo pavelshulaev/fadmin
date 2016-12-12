@@ -3,6 +3,7 @@ namespace Rover\Fadmin\Engine;
 
 use Bitrix\Main\ArgumentNullException;
 use \Bitrix\Main\Config\Option;
+use Rover\Fadmin\Options;
 
 /**
  *  ласс дл€ манипул€ции с пресетами
@@ -17,18 +18,14 @@ class Preset
 	/**
 	 * @var string
 	 */
-	protected $moduleId;
+	protected $options;
 
 	/**
-	 * @param $moduleId
-	 * @throws ArgumentNullException
+	 * @param Options $options
 	 */
-	public function __construct($moduleId)
+	public function __construct(Options $options)
 	{
-		if (is_null($moduleId))
-			throw new ArgumentNullException('moduleId');
-
-		$this->moduleId = $moduleId;
+		$this->options = $options;
 	}
 
 	/**
@@ -39,7 +36,8 @@ class Preset
 	 */
 	public function getList($siteId = '')
 	{
-		return unserialize(Option::get($this->moduleId, self::OPTION_ID, '', $siteId));
+		return unserialize(Option::get($this->options->getModuleId(),
+			self::OPTION_ID, '', $siteId));
 	}
 
 	/**
@@ -129,7 +127,8 @@ class Preset
 	 */
 	protected function update($presets, $siteId = '')
 	{
-		Option::set($this->moduleId, self::OPTION_ID, serialize($presets), $siteId);
+		Option::set($this->options->getModuleId(),
+			self::OPTION_ID, serialize($presets), $siteId);
 	}
 
 	/**
