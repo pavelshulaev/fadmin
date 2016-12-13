@@ -81,7 +81,7 @@ class Selectbox extends Input
 						$selected = $this->value==$v ? true : false;
 					}
 
-					?><option value="<?=$v?>"<?php if($selected) echo" selected=\"selected\" ";?>><?=$k?></option><?php
+					?><option value="<?=$v?>"<?=$selected ? " selected=\"selected\" ": ''?>><?=$k?></option><?php
 				}
 				?>
 			</select>

@@ -10,6 +10,9 @@
 
 namespace Rover\Fadmin\Engine;
 
+use Bitrix\Main\SystemException;
+use Rover\Fadmin\Options;
+
 class Message
 {
 	/**
@@ -21,7 +24,13 @@ class Message
 	const TYPE__OK      = 'OK';
 	const TYPE__ERROR   = 'ERROR';
 
-	public function __construct(){}
+	/**
+	 * @param Options $options
+	 */
+	public function __construct(Options $options)
+	{
+		$this->options = $options;
+	}
 
 	/**
 	 * @param        $message

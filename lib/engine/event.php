@@ -10,29 +10,25 @@
 
 namespace Rover\Fadmin\Engine;
 
-use Bitrix\Main\ArgumentNullException;
 use \Bitrix\Main\Event as BxEvent;
 use \Bitrix\Main\EventManager;
 use Bitrix\Main\EventResult;
 use Rover\Fadmin\Inputs\Input;
+use Rover\Fadmin\Options;
 
 class Event
 {
 	/**
 	 * @var string
 	 */
-	protected $moduleId;
+	public $options;
 
 	/**
-	 * @param $moduleId
-	 * @throws ArgumentNullException
+	 * @param Options $options
 	 */
-	public function __construct($moduleId)
+	public function __construct(Options $options)
 	{
-		if (is_null($moduleId))
-			throw new ArgumentNullException('moduleId');
-
-		$this->moduleId = $moduleId;
+		$this->options = $options;
 	}
 
 	/**
@@ -44,7 +40,7 @@ class Event
 	 */
 	public function send($name, array $params = [], $sender = null)
 	{
-		$event = new BxEvent($this->moduleId, $name, $params);
+		$event = new BxEvent($this->options->getModuleId(), $name, $params);
 		$event->send($sender);
 
 		return $event;
@@ -58,7 +54,7 @@ class Event
 	public function addHandler($name, $callback)
 	{
 		$eventManager = EventManager::getInstance();
-		$eventManager->addEventHandler($this->moduleId, $name, $callback);
+		$eventManager->addEventHandler($this->options->getModuleId(), $name, $callback);
 	}
 
 	/**
@@ -96,7 +92,7 @@ class Event
 	public function getErrorResult($handler)
 	{
 		return new EventResult(EventResult::ERROR,
-			['handler' => $handler], $this->moduleId);
+			['handler' => $handler], $this->options->getModuleId());
 	}
 
 	/**
@@ -110,7 +106,7 @@ class Event
 		$params['handler'] = $handler;
 
 		return new EventResult(EventResult::SUCCESS,
-			$params, $this->moduleId);
+			$params, $this->options->getModuleId());
 	}
 
 	/**

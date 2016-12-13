@@ -15,7 +15,6 @@ use Bitrix\Main\Request as BxRequest;
 use Rover\Fadmin\Inputs\Addpreset;
 use Rover\Fadmin\Inputs\Removepreset;
 use Rover\Fadmin\Options;
-use Rover\Fadmin\Presets;
 use Rover\Fadmin\Tab;
 use \Bitrix\Main\Config\Option;
 
@@ -65,40 +64,6 @@ class Request
 	 */
 	public function get()
 	{
-		$this->getRequest();
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function redirect()
-	{
-		if (false === $this->options->runEvent(Options::EVENT__BEFORE_REDIRECT_AFTER_REQUEST))
-			return;
-
-		$request = Application::getInstance()->getContext()->getRequest();
-
-		if (strlen($this->update) && strlen($request["back_url_settings"]))
-		{
-			LocalRedirect($request["back_url_settings"]);
-		} else {
-			global $APPLICATION;
-			LocalRedirect($APPLICATION->GetCurPage()
-				. "?mid=" . urlencode($this->moduleId)
-				. "&lang=" . urlencode(LANGUAGE_ID)
-				. "&back_url_settings=" . urlencode($request["back_url_settings"])
-				. "&" . $this->tabControl->ActiveTabParam());
-		}
-	}
-
-	/**
-	 * @return \Bitrix\Main\HttpRequest|void
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 * @throws \Bitrix\Main\SystemException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function getRequest()
-	{
 		// action before
 		if(false === $this->options->runEvent(Options::EVENT__BEFORE_GET_REQUEST))
 			return;
@@ -132,6 +97,29 @@ class Request
 	}
 
 	/**
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function redirect()
+	{
+		if (false === $this->options->runEvent(Options::EVENT__BEFORE_REDIRECT_AFTER_REQUEST))
+			return;
+
+		$request = Application::getInstance()->getContext()->getRequest();
+
+		if (strlen($this->update) && strlen($request["back_url_settings"]))
+		{
+			LocalRedirect($request["back_url_settings"]);
+		} else {
+			global $APPLICATION;
+			LocalRedirect($APPLICATION->GetCurPage()
+				. "?mid=" . urlencode($this->moduleId)
+				. "&lang=" . urlencode(LANGUAGE_ID)
+				. "&back_url_settings=" . urlencode($request["back_url_settings"])
+				. "&" . $this->tabControl->ActiveTabParam());
+		}
+	}
+
+	/**
 	 * @param BxRequest $request
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
@@ -148,11 +136,13 @@ class Request
 		if (!isset($params['name']))
 			$params['name'] = $params['value'];
 
-		$params['id'] = Presets::add(
-			$this->moduleId,
+		$params['id'] = $this->options->preset->add(
 			$params['name'],
 			$params['siteId']
 		);
+
+		//reload tabs
+		$this->options->tabMap->getTabs(true);
 
 		// action afterAddPreset
 		$this->options->runEvent(Options::EVENT__AFTER_ADD_PRESET, $params);
@@ -180,14 +170,17 @@ class Request
 			compact('siteId', 'id')))
 			return;
 
-		$presetTab = $this->options->getTabByPresetId($id, $siteId);
+		/**
+		 * @var Tab $presetTab
+		 */
+		$presetTab = $this->options->tabMap->getTabByPresetId($id, $siteId);
 
 		if ($presetTab instanceof Tab === false)
 			throw new \Bitrix\Main\SystemException('presetTab is not an Tab instance');
 
 		$presetTab->clear();
 
-		Presets::remove($this->moduleId, $id, $siteId);
+		$this->options->preset->remove($id, $siteId);
 
 		// action afterRemovePreset
 		$this->options->runEvent(Options::EVENT__AFTER_REMOVE_PRESET,
@@ -234,7 +227,7 @@ class Request
 			if(false === $this->options->runEvent(
 					Options::EVENT__BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST,
 					compact('tab')))
-				return;
+				continue;
 
 			$tab->setValuesFromRequest();
 		}

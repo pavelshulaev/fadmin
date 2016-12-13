@@ -19,6 +19,7 @@ use \Rover\Fadmin\Engine\Message;
 use \Rover\Fadmin\Engine\Settings;
 use \Rover\Fadmin\Engine\Event;
 use \Rover\Fadmin\Engine\TabMap;
+use \Rover\Fadmin\Engine\Preset;
 
 Loc::LoadMessages(__FILE__);
 
@@ -52,7 +53,6 @@ abstract class Options
 
 	const SEPARATOR = '__';
 
-
 	/**
 	 * current module id
 	 * @var string
@@ -84,15 +84,20 @@ abstract class Options
 	public $settings;
 
 	/**
+	 * @var Event
+	 */
+	public $event;
+
+	/**
+	 * @var Preset
+	 */
+	public $preset;
+
+	/**
 	 * unique instance for each module
 	 * @var array
 	 */
 	protected static $instances = [];
-
-	/**
-	 * @var Event
-	 */
-	public $event;
 
 	/**
 	 * for singleton
@@ -119,18 +124,11 @@ abstract class Options
 
 		$this->moduleId = $moduleId;
 
-		$this->message  = new Message();
-		$this->event    = new Event($this->moduleId);
-		// method must be in child
-		$config = $this->getConfig();
-
-		// tabs
-		if (!isset($config['tabs']))
-			throw new ArgumentNullException('tabs');
-
-		$this->tabMap   = new TabMap($this, $config['tabs']);
-
-		$this->settings = new Settings(isset($config['settings']) ? $config['settings'] : []);
+		$this->message  = new Message($this);
+		$this->event    = new Event($this);
+		$this->preset   = new Preset($this);
+		$this->tabMap   = new TabMap($this);
+		$this->settings = new Settings($this);
 	}
 
 	/**
@@ -162,16 +160,6 @@ abstract class Options
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	abstract public function getConfig();
-
-	/**
-	 * @param string $siteId
-	 * @return int
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getPresetsCount($siteId = '')
-	{
-		return Presets::getCount($this->moduleId, $siteId);
-	}
 
 	/**
 	 * @return array
@@ -208,17 +196,6 @@ abstract class Options
 			$name = htmlspecialcharsbx($siteId) . self::SEPARATOR . $name;
 
 		return $name;
-	}
-
-	/**
-	 * @param        $message
-	 * @param string $type
-	 * @deprecated
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function addMessage($message, $type = Message::TYPE__OK)
-	{
-		$this->message->add($message, $type);
 	}
 
 	/**
@@ -305,7 +282,7 @@ abstract class Options
 			if ($input instanceof Input)
 				$this->cache[$key] = $input->getValue();
 			else
-				throw new Main\SystemException('input not found');
+				throw new Main\SystemException('input "' . $inputName . '" not found');
 		}
 
 		return $this->cache[$key];
@@ -327,70 +304,6 @@ abstract class Options
 			return $input->getDefault();
 
 		throw new Main\SystemException('input not found');
-	}
-
-	/**
-	 * @param        $presetId
-	 * @param string $siteId
-	 * @return mixed
-	 * @throws Main\SystemException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getTabByPresetId($presetId, $siteId = '')
-	{
-		if (!$presetId)
-			throw new Main\ArgumentNullException('presetId');
-
-		return $this->tabMap->getTabByPresetId($presetId, $siteId);
-	}
-
-	/**
-	 * @param string $siteId
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getPresetsIds($siteId = '')
-	{
-		return Presets::getIds($this->moduleId, $siteId);
-	}
-
-	/**
-	 * @param        $presetId
-	 * @param string $siteId
-	 * @return bool
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function isPresetExists($presetId, $siteId = '')
-	{
-		return Presets::isExists($presetId, $this->moduleId, $siteId);
-	}
-
-	/**
-	 * @param        $presetId
-	 * @param string $siteId
-	 * @return mixed
-	 * @throws Main\ArgumentOutOfRangeException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getPresetNameById($presetId, $siteId = '')
-	{
-		$preset = Presets::getById($presetId, $this->moduleId, $siteId);
-		if (!$preset)
-			throw new Main\ArgumentOutOfRangeException('presetId');
-
-		return $preset['name'];
-	}
-
-	/**
-	 * @param        $presetId
-	 * @param        $presetName
-	 * @param string $siteId
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function setPresetName($presetId, $presetName, $siteId = '')
-	{
-		Presets::updateName($presetId, $presetName, $this->moduleId, $siteId);
 	}
 
 	/**
