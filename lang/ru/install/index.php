@@ -1,14 +1,14 @@
 <?php
 
 $MESS['rover_fa__name']				    = "Конструктор административной части";
-$MESS['rover_fa__descr']				= "Позволяет быстро собрать и запустить административную часть модулей Битрикс.";
+$MESS['rover_fa__descr']				= "Фреймворк для сборки и работы с административной частью модулей Битрикс.";
 
 $MESS['rover_fa__reference_deny']		= "Запрещено";
 $MESS['rover_fa__reference_read']		= "Чтение";
 $MESS['rover_fa__reference_write']	    = "Запись";
 
-$MESS['rover_fa__install_title']		= "Установка модуля \"Конструктор административной части\"";
-$MESS['rover_fa__uninstall_title']	    = "Удаление модуля \"Конструктор административной части\"";
+$MESS['rover_fa__install_title']		= "Установка модуля «Конструктор административной части»";
+$MESS['rover_fa__uninstall_title']	    = "Удаление модуля «Конструктор административной части»";
 
 $MESS['rover_fa__version_info_error']	= "Не найдена информация о версии";
 $MESS['rover_fa__php_version_error']	= "Требуется php версии 5.4 и выше";

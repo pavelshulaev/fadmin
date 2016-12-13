@@ -216,11 +216,6 @@ class TestOptions extends Options
 		];
 	}
 
-	/*protected static function getSitesIds()
-	{
-		$query
-	}*/
-
 	/**
 	 * @param bool|false $reload
 	 * @return mixed|null
