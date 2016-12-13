@@ -135,7 +135,7 @@ class TabMap
 		if (!$presetId)
 			throw new ArgumentNullException('presetId');
 
-		foreach ($this->tabMap as $tab)
+		foreach ($this->getTabs(true) as $tab)
 			/**
 			 * @var Tab $tab
 			 */
