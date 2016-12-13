@@ -63,11 +63,14 @@ class Form
 	 */
 	public function show()
 	{
-		$this->tabControl->Begin();
-		$this->showFormBegin();
-
 		// showing tabs
 		$tabs = $this->options->tabMap->getTabs(true);
+
+		if (!count($tabs))
+			return;
+
+		$this->tabControl->Begin();
+		$this->showFormBegin();
 
 		foreach ($tabs as $tab)
 			$this->showTab($tab);

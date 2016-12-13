@@ -50,10 +50,8 @@ class TabMap
 		$this->options = $options; // for events
 
 		$config = $options->getConfig();
-		if (!isset($config['tabs']))
-			throw new ArgumentNullException('tabs');
-
-		$this->tabsParams = $config['tabs'];
+		if (is_array($config) && isset($config['tabs']))
+			$this->tabsParams = $config['tabs'];
 	}
 
 	/**
