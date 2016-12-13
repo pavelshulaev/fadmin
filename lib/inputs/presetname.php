@@ -10,9 +10,11 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Presets;
+use Bitrix\Main\Localization\Loc;
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Event;
+
+Loc::loadMessages(__FILE__);
 
 class PresetName extends Text
 {
@@ -62,6 +64,13 @@ class PresetName extends Text
 			return true;
 
 		$value = $event->getParameter('value');
+
+		if (empty($value)){
+			$this->tab->options->message->addError(
+				Loc::getMessage('rover-fa__presetname-no-name',
+					['#last-preset-name#' => $this->getValue()]));
+			return $this->getEvent()->getErrorResult($this);
+		}
 
 		$this->tab->options->preset->updateName($presetId, $value,
 			$this->tab->getSiteId());

@@ -403,6 +403,9 @@ abstract class Input
 
 		// EVENT__BEFORE_SAVE_REQUEST
 		$params = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_REQUEST, compact('value'), $this);
+		if ($params === false)
+			return;
+
 		if (isset($params['value']))
 			$value = $params['value'];
 
