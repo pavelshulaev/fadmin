@@ -63,7 +63,10 @@ class Selectbox extends Input
 		$valueId    = $this->getValueId();
 		$valueName  = $this->getValueName();
 
-		$this->showLabel($valueId);
+		if ($this->multiple)
+			$this->showMultiLabel($valueId);
+		else
+			$this->showLabel($valueId);
 
 		?><select
 			name="<?=$valueName . ($this->multiple ? '[]' : '')?>"
@@ -105,5 +108,23 @@ class Selectbox extends Input
 	public function getOptions()
 	{
 		return $this->options;
+	}
+
+	protected function showMultiLabel($valueId)
+	{
+		?>
+		<tr>
+		<td
+			width="50%"
+			class="adm-detail-content-cell-l"
+			style="vertical-align: top; padding-top: 7px;">
+				<label for="<?php echo $valueId?>"><?php echo $this->label?>:<br>
+					<img src="/bitrix/images/form/mouse.gif" width="44" height="21" border="0" alt="">
+				</label>
+		</td>
+		<td
+			width="50%"
+			class="adm-detail-content-cell-r"
+			><?php
 	}
 }
