@@ -124,18 +124,19 @@ class TabMap
 	}
 
 	/**
-	 * @param        $presetId
-	 * @param string $siteId
-	 * @return null
-	 * @throws \Bitrix\Main\ArgumentNullException
+	 * @param            $presetId
+	 * @param string     $siteId
+	 * @param bool|false $reload
+	 * @return null|Tab
+	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function getTabByPresetId($presetId, $siteId = '')
+	public function getTabByPresetId($presetId, $siteId = '', $reload = false)
 	{
 		if (!$presetId)
 			throw new ArgumentNullException('presetId');
 
-		foreach ($this->getTabs(true) as $tab)
+		foreach ($this->getTabs($reload) as $tab)
 			/**
 			 * @var Tab $tab
 			 */
@@ -148,12 +149,13 @@ class TabMap
 	}
 
 	/**
+	 * @param bool|false $reload
 	 * @return array
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function getAllTabsInfo()
+	public function getAllTabsInfo($reload = false)
 	{
-		$tabs           = $this->getTabs();
+		$tabs           = $this->getTabs($reload);
 		$allTabsInfo    = [];
 
 		foreach ($tabs as $tab)
@@ -166,13 +168,14 @@ class TabMap
 	}
 
 	/**
-	 * @param $valueName
-	 * @return null
+	 * @param            $valueName
+	 * @param bool|false $reload
+	 * @return null|Input
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function getInputByValueName($valueName)
+	public function getInputByValueName($valueName, $reload = false)
 	{
-		$aTabs = $this->getTabs();
+		$aTabs = $this->getTabs($reload);
 
 		$filter = ['name' => $valueName];
 
@@ -189,13 +192,14 @@ class TabMap
 	}
 
 	/**
-	 * @param $name
+	 * @param            $name
+	 * @param bool|false $reload
 	 * @return null|Tab
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function searchTabByName($name)
+	public function searchTabByName($name, $reload = false)
 	{
-		$tabs = $this->getTabs();
+		$tabs = $this->getTabs($reload);
 
 		foreach ($tabs as $tab)
 			/**
