@@ -1,2 +1,2 @@
 #API
-[Rover\Fadmin\Options](./doc/api/options.md)
+[Rover\Fadmin\Options](./api/options.md)
