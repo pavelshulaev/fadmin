@@ -38,6 +38,7 @@ abstract class Input
 	const TYPE__CUSTOM          = 'custom';
 	const TYPE__CLOCK           = 'clock';
 	const TYPE__PRESET_NAME     = 'presetname';
+	const TYPE__SCHEDULE        = 'schedule';
 
 	/**
 	 * input id

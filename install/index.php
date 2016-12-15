@@ -1,6 +1,8 @@
 <?php
 use Bitrix\Main\ModuleManager;
+use Bitrix\Main\Application;
 use Bitrix\Main\Localization\Loc;
+use \Bitrix\Main\IO\Directory;
 
 Loc::loadMessages(__FILE__);
 
@@ -86,6 +88,8 @@ class rover_fadmin extends CModule
         if (PHP_VERSION_ID < 50400)
             $errors[] = Loc::getMessage('rover_fa__php_version_error');
 
+        $this->copyFiles();
+
         if (empty($errors))
             ModuleManager::registerModule($this->MODULE_ID);
 
@@ -99,9 +103,95 @@ class rover_fadmin extends CModule
 	{
         global $APPLICATION, $errors;
 
+        $this->removeFiles();
+
         if (empty($errors))
             ModuleManager::unRegisterModule($this->MODULE_ID);
 
         $APPLICATION->IncludeAdminFile(Loc::getMessage("rover_fa__uninstall_title"), $_SERVER['DOCUMENT_ROOT'] . getLocalPath("modules/". $this->MODULE_ID ."/install/unMessage.php"));
 	}
+
+    /**
+     * @param $fromDir
+     * @param $toDir
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    private function copyDir($fromDir, $toDir)
+    {
+        global $errors;
+
+        $dir = $this->checkDir($toDir);
+
+        if (!is_writable($dir->getPhysicalPath())){
+            $errors[] = Loc::getMessage('rover_fa__ERROR_PERMISSIONS', array('#path#' => $dir->getPhysicalPath()));
+            return;
+        }
+
+        $fromDir = getLocalPath("modules/". $this->MODULE_ID . $fromDir);
+
+        if (!\CopyDirFiles(
+            Application::getDocumentRoot() . $fromDir,
+            Application::getDocumentRoot() . $toDir,
+            TRUE,
+            TRUE)
+        )
+            $errors[] = Loc::getMessage('rover_fa__ERROR_COPY_FILES',
+                array('#pathFrom#' => $fromDir, '#toPath#' => $toDir));
+    }
+
+    /**
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    private function copyFiles()
+    {
+        $this->copyDir('/install/js/', '/bitrix/js/' . $this->MODULE_ID . '/');
+        $this->copyDir('/install/css/', '/bitrix/css/' . $this->MODULE_ID . '/');
+    }
+
+    /**
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    private function removeFiles()
+    {
+       $this->deleteDir('/bitrix/js/' . $this->MODULE_ID . '/');
+       $this->deleteDir('/bitrix/css/' . $this->MODULE_ID . '/');
+    }
+
+    /**
+     * @param $dirName
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    private function deleteDir($dirName)
+    {
+        global $errors;
+
+        $dirName = str_replace(array('//', '///'), '/', Application::getDocumentRoot() . '/' . $dirName);
+
+        if (!is_writable($dirName)){
+            $errors[] = Loc::getMessage('rover_fa__ERROR_PERMISSIONS', array('#path#' => $dirName));
+            return;
+        }
+
+        Directory::deleteDirectory($dirName);
+    }
+
+    /**
+     * @param $path
+     * @return Directory
+     * @throws \Bitrix\Main\IO\FileNotFoundException
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    private function checkDir($path)
+    {
+        $path = Application::getDocumentRoot() . $path;
+
+        if (Directory::isDirectoryExists($path))
+            $dir = new Directory($path);
+        else
+            $dir = Directory::createDirectory($path);
+
+        $dir->markWritable();
+
+        return $dir;
+    }
 }
