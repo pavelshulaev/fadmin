@@ -10,8 +10,6 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Bitrix\Bizproc\BaseType\Date;
-use Bitrix\Main\Type\DateTime;
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Localization\Loc;
 use \Bitrix\Main\Event;
@@ -31,6 +29,9 @@ class Schedule extends Input
 	 */
 	public static $type = self::TYPE__SCHEDULE;
 
+	/**
+	 * @var bool
+	 */
 	protected static $assetsAdded = false;
 
 	/**
@@ -49,6 +50,8 @@ class Schedule extends Input
 	 * @var int
 	 */
 	protected $width = 500;
+
+	protected $inputValue = [];
 
 	/**
 	 * @param array $params
@@ -73,6 +76,7 @@ class Schedule extends Input
 			$this->height = $params['height'];
 
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
 	}
 
 	/**
@@ -129,9 +133,11 @@ class Schedule extends Input
 
 		$this->showLabel($valueId);
 
+
+
 		?><input type="hidden"
 		         id="<?=$valueId?>"
-		         value="<?=$this->value?>"
+		         value='<?=json_encode($this->inputValue)?>'
 		         name="<?=$valueName?>">
 		<div id="scheduler-<?=$valueId?>"></div>
 		<style>
@@ -141,7 +147,24 @@ class Schedule extends Input
 		</style>
 		<script type="text/javascript">
 			$(document).ready(function () {
-				var appointments = [];
+				var appointments = [
+					<?php
+
+					$num = 1;
+
+					foreach ($this->value as $period):	?>{
+						id: "<?=$valueId?>-<?=$num?>",
+						subject: "<?=$this->periodLabel?>",
+						calendar: "1",
+						start: new Date(<?=$period['start']->format('Y, ' . $period['jqwStartMonth'] .', d, H, i, s')?>),
+						end: new Date(<?=$period['end']->format('Y, ' . $period['jqwEndMonth'] .', d, H, i, s')?>)
+					},
+					<?php
+
+					$num++;
+
+					endforeach; ?>
+				];
 
 				// prepare the data
 				var source =
@@ -158,10 +181,12 @@ class Schedule extends Input
 					localData: appointments
 				};
 				var adapter = new $.jqx.dataAdapter(source),
-					$scheduler = $("#scheduler-<?=$valueId?>");
+					$scheduler = $("#scheduler-<?=$valueId?>"),
+					$export = $('#<?=$valueId?>');
 
 				$scheduler.jqxScheduler({
-					date: new $.jqx.date(2016, 11, 23),
+					//date: new $.jqx.date(),
+					date: new $.jqx.date('todayDate'),
 					width: <?=$this->width?>,
 					height: <?=$this->height?>,
 					rowsHeight: 15,
@@ -207,6 +232,16 @@ class Schedule extends Input
 							// shortest day names
 							//namesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
 						},
+						editDialogFromString: "<?=Loc::getMessage('rover-fa__schedule-start')?>",
+						editDialogToString: "<?=Loc::getMessage('rover-fa__schedule-end')?>",
+						editDialogAllDayString: "<?=Loc::getMessage('rover-fa__schedule-all-day')?>",
+						editDialogTitleString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
+						contextMenuEditAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
+						editDialogCreateTitleString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
+						contextMenuCreateAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
+						editDialogSaveString: "<?=Loc::getMessage('rover-fa__schedule-save')?>",
+						editDialogDeleteString: "<?=Loc::getMessage('rover-fa__schedule-delete')?>",
+						editDialogCancelString: "<?=Loc::getMessage('rover-fa__schedule-cancel')?>",
 					},
 					editDialogOpen: function (dialog, fields, editAppointment) {
 						fields.locationContainer.hide();
@@ -225,10 +260,10 @@ class Schedule extends Input
 								type: 'weekView',
 								workTime:
 								{
-									fromDayOfWeek: 1,
-									toDayOfWeek: 0,
-									fromHour: 1,
-									toHour: 0
+									fromDayOfWeek: 0,
+									toDayOfWeek: 6,
+									fromHour: -1,
+									toHour: 24
 								},
 								timeRuler:
 								{
@@ -239,25 +274,16 @@ class Schedule extends Input
 						]
 				});
 
-				var $export = $('#<?=$valueId?>');
-
 				$scheduler.on('appointmentChange appointmentDelete appointmentAdd', function (event) {
-
-					event.args.appointment.subject = "<?=$this->periodLabel?>";
-
 					var timeout = event.type == "appointmentChange"
 						? 100
 						: 200;
-					console.log(event);
 
 					setTimeout(function(){
 						exportPeriods();
 					}, timeout);
 				});
 
-				/**
-				 *
-				 */
 				function exportPeriods()
 				{
 					var schedule = JSON.parse($scheduler.jqxScheduler('exportData', 'json')),
@@ -271,20 +297,13 @@ class Schedule extends Input
 						delete period.calendar;
 						delete period.subject;
 
-						//period.start = period.start.getTime();
-						//period.end   = period.end.getTime();
-console.log(period);
 						result.push(period);
 					}
-
-
-					console.log(result);
+//console.log(result);
 					$export.val(JSON.stringify(result));
 				}
 			});
-
 		</script>
-
 		<?php
 
 		$this->showHelp();
@@ -301,27 +320,19 @@ console.log(period);
 		if ($event->getSender() !== $this)
 			return $this->getEvent()->getErrorResult($this);
 
-		$value = $event->getParameter('value');
+		$value      = $event->getParameter('value');
+		$periods    = json_decode($value, true);
 
-		$result = [];
+		if (is_array($periods)){
 
-		$periods = json_decode($value, true);
-		if (!is_array($periods)){
+			$value = $this->preparePeriodsDates($periods);
+			$value = $this->pastePeriodsTogether($value);
+			$value = $this->markWeekDays($value);
+
+		} else
 			$value = [];
-			return $this->getEvent()->getSuccessResult($this, compact('value'));
-		}
 
-		foreach ($periods as $period)
-		{
-			$period['start'] = $this->createTimestamp($period['start']);
-			$period['end'] = $this->createTimestamp($period['end']);
-
-			if (intval($period['start']) && intval($period['end']))
-				$result[] = $period;
-		}
-
-		$result = $this->pasteTogetherPeriods($result);
-
+		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
 
 	/**
@@ -329,11 +340,68 @@ console.log(period);
 	 * @return array
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function pasteTogetherPeriods($periods)
+	protected function markWeekDays($periods)
+	{
+		$result = [];
+
+		foreach ($periods as $period)
+		{
+			$dateStart  = (new \DateTime())->setTimestamp($period['start']);
+			$dateEnd    = (new \DateTime())->setTimestamp($period['end']);
+
+			$result[] = [
+				'startWeekDay'  => $dateStart->format('l'),
+				'startTime'     => $dateStart->format('H:i:s'),
+				'endWeekDay'    => $dateEnd->format('l'),
+				'endTime'       => $dateEnd->format('H:i:s'),
+			];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * make timestamps from periods` dates, remove invalid periods
+	 * @param array $periods
+	 * @return array
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function preparePeriodsDates(array $periods)
+	{
+		$result = [];
+
+		$minTimestamp = $this->getMinTimestamp();
+		$maxTimestamp = $this->getMaxTimestamp();
+
+		foreach ($periods as $period)
+		{
+			$period['start']    = $this->createTimestamp($period['start']);
+			$period['end']      = $this->createTimestamp($period['end']);
+
+			if ($period['start'] < $minTimestamp)
+				$period['start'] = $minTimestamp;
+
+			if ($period['end'] > $maxTimestamp)
+				$period['end'] = $maxTimestamp;
+
+			if (intval($period['start']) && intval($period['end'])
+				&& ($period['start'] < $period['end']))
+				$result[] = $period;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @param $periods
+	 * @return array
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function pastePeriodsTogether(array $periods)
 	{
 		do {
 			$result = [];
-			$pastedTogether = false;
+			$pasted = false;
 
 			foreach ($periods as $periodNum => $period){
 
@@ -352,10 +420,11 @@ console.log(period);
 					{
 						if ($period['end'] > $resultPeriod['end']){
 							$resultPeriod['end'] = $period['end'];
-							$pastedTogether = true;
+							$pasted = true;
 						}
 
 						$periodInResult = true;
+
 						break;
 					}
 
@@ -364,10 +433,11 @@ console.log(period);
 					{
 						if ($period['start'] < $resultPeriod['start']){
 							$resultPeriod['start'] = $period['start'];
-							$pastedTogether = true;
+							$pasted = true;
 						}
 
 						$periodInResult = true;
+
 						break;
 					}
 				}
@@ -378,7 +448,7 @@ console.log(period);
 
 			$periods = $result;
 
-		} while ($pastedTogether);
+		} while ($pasted);
 
 		return $result;
 	}
@@ -392,9 +462,66 @@ console.log(period);
 	{
 		$dateTime = \DateTime::createFromFormat('Y-m-d\TH:i:s', $time);
 
-		if ($dateTime instanceof \DateTime)
-			return $dateTime->getTimestamp();
+		if (false === $dateTime instanceof \DateTime)
+			return null;
 
-		return null;
+		return $dateTime->getTimestamp();
+	}
+
+	/**
+	 * @return int
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function getMinTimestamp()
+	{
+		return (new \DateTime('Monday this week'))->getTimestamp();
+	}
+
+	/**
+	 * @return int
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function getMaxTimestamp()
+	{
+		return (new \DateTime('Monday next week'))->getTimestamp() - 1;
+	}
+
+	/**
+	 * @param Event $event
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function afterLoadValue(Event $event)
+	{
+		if ($event->getSender() !== $this)
+			return;
+
+		foreach ($this->value as &$period)
+		{
+			$period['start']    = $this->getDateByWeekDayTime($period['startWeekDay'], $period['startTime']);
+			$period['end']      = $this->getDateByWeekDayTime($period['endWeekDay'], $period['endTime']);
+
+			$period['jqwStartMonth']    = $period['start']->format('m') - 1;
+			$period['jqwEndMonth']      = $period['end']->format('m') - 1;
+
+			$this->inputValue[] = [
+				'start' => $period['start']->format('Y-m-d\TH:i:s'),
+				'end'   => $period['end']->format('Y-m-d\TH:i:s')
+			];
+		}
+	}
+
+	/**
+	 * @param $weekDay
+	 * @param $time
+	 * @return \DateTime
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	protected function getDateByWeekDayTime($weekDay, $time)
+	{
+		$date = new \DateTime($weekDay . ' this week');
+		$time = explode(':', $time);
+		$date->setTime($time[0], $time[1], $time[2]);
+
+		return $date;
 	}
 }

@@ -307,8 +307,6 @@ abstract class Input
 		$this->value = Option::get($this->tab->getModuleId(),
 			$this->getValueName(), $this->default, $this->tab->getSiteId());
 
-		$this->getEvent()->send(self::EVENT__AFTER_LOAD_VALUE, [], $this);
-
 		if ($this->multiple) {
 			if (!is_array($this->value))
 				$this->value = unserialize($this->value);
@@ -316,6 +314,8 @@ abstract class Input
 			if (!$this->value)
 				$this->value = [];
 		}
+
+		$this->getEvent()->send(self::EVENT__AFTER_LOAD_VALUE, [], $this);
 	}
 
 	/**
