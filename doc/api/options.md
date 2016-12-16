@@ -5,81 +5,55 @@
 
 ##Константы
 Константы содержат названия методов, которые могут быть определены и вызваны в унаследованном пользовательском классе при наступлении соотвествующего события.
-
-<b>`EVENT__BEFORE_GET_REQUEST = 'beforeGetRequest'`</b>
-
+###`EVENT__BEFORE_GET_REQUEST = 'beforeGetRequest'`
 Вызывается перед обработкой реквеста. Не принимает параметров. Если возвращает `false`, то реквест не обрабатывается.
-
-<b>`EVENT__BEFORE_REDIRECT_AFTER_REQUEST = 'beforeRedirectAfterRequest'`</b>
-
+###`EVENT__BEFORE_REDIRECT_AFTER_REQUEST = 'beforeRedirectAfterRequest'`
 Вызывается перед редиректом после реквеста. Не принимает параметров. Если возвращает `false`, редирект не производится.
-
-<b>`EVENT__BEFORE_ADD_VALUES_FROM_REQUEST = 'beforeAddValuesFromRequest'`</b>
-
+###`EVENT__BEFORE_ADD_VALUES_FROM_REQUEST = 'beforeAddValuesFromRequest'`
 Вызывается перед сохранением данных из реквеста. Не принимает параметров. Если возвращает `false` данные не сохраняются.
-
-<b>`EVENT__BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST = 'beforeAddValuesToTabFromRequest'`</b>
-
+###`EVENT__BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST = 'beforeAddValuesToTabFromRequest'`
 Вызывается перед сохранением данных из реквеста в каждый таб. Принимает параметры:
 * `tab` - Объект \Rover\Fadmin\Tab таба, в котором предстоит обновить значения инпутов.
 
 Если возвращает `false` данные в таб не сохраняются.
-
-<b>`EVENT__AFTER_ADD_VALUES_FROM_REQUEST = 'afterAddValuesFromRequest'`</b>
-
+###`EVENT__AFTER_ADD_VALUES_FROM_REQUEST = 'afterAddValuesFromRequest'`
 Ввызывается после сохранением данных из реквеста. Не принимает параметров.
-
-<b>`EVENT__BEFORE_ADD_PRESET = 'beforeAddPreset'`</b>
-
+###`EVENT__BEFORE_ADD_PRESET = 'beforeAddPreset'`
 Вызывается перед добавлением нового пресета. Принимает и позволяет менять параметры:
 * `siteId` - id сайта, для которого добавляется пресет
 * `value` - имя пресета, полученное из реквета
 
 Если вы хотите задать другое имя пресета, то сохраните его в ключе `name`. Если возвращает `false`, то пресет не добавляется.
-
-<b>`EVENT__AFTER_ADD_PRESET = 'afterAddPreset'`</b>
-
+###`EVENT__AFTER_ADD_PRESET = 'afterAddPreset'`
 Вызывается после добавления нового пресета. Принимает и позволяет менять параметры:
 * `siteId` - id сайта, для которого добавляется пресет
 * `value` - имя пресета, полученное из реквета
 * `name`  - итоговое имя, которое могло быть задано в `EVENT__BEFORE_ADD_PRESET`   
 * `id`    - id пресета
 
-<b>`EVENT__BEFORE_REMOVE_PRESET = 'beforeRemovePreset'`</b>
-
+###`EVENT__BEFORE_REMOVE_PRESET = 'beforeRemovePreset'`
 Вызывается перед удалением пресета. Принимает и позволяет менять параметры:                                	
 * `siteId` - id сайта, для которого добавляется пресет
 * `id`    - id пресета
     
 Если возвращает `false`, то пресет не удаляется. 
-
-<b>`EVENT__AFTER_REMOVE_PRESET    = 'afterRemovePreset'`</b>
-
+###`EVENT__AFTER_REMOVE_PRESET    = 'afterRemovePreset'`
 Вызывается после удаления пресета. Получает параметр `siteId` удаленного пресета.
-
-<b>`EVENT__BEFORE_MAKE_PRESET_TAB = 'beforeMakePresetTab'`</b>
-
+###`EVENT__BEFORE_MAKE_PRESET_TAB = 'beforeMakePresetTab'`
 Вызывается перед созданием таба пресета. Принимает и позволяет менять параметры:
 * `tab` - Объект \Rover\Fadmin\Tab таба-шаблона пресета
 * `presetId`    - id пресета
 
 Позволяет изменить параметры таба-шаблона перед созданием таба для пресета. Если возвращает `false`, то таб не создается.  
-
-<b>`EVENT__AFTER_MAKE_PRESET_TAB = 'afterMakePresetTab'`</b>
-
+###`EVENT__AFTER_MAKE_PRESET_TAB = 'afterMakePresetTab'`
 Вызывается после создания таба пресета. Принимает и позволяет менять параметры:
 * `tab` - Объект \Rover\Fadmin\Tab данного пресета
 
-<b>`EVENT__BEFORE_SHOW_TAB = 'beforeShowTab'`</b>
-
+###`EVENT__BEFORE_SHOW_TAB = 'beforeShowTab'`
 Вызывается перед выводом таба в административной части. Получает пармаметр `tab`, содержащий объект \Rover\Fadmin\Tab выводимого таба. Если возвращает `false`, то таб не отображается.  
-
-<b>`EVENT__AFTER_GET_TABS = 'afterGetTabs'`</b>
-
+###`EVENT__AFTER_GET_TABS = 'afterGetTabs'`
 Вызывается после получения массива всех существующих табов. Получает пармаметр `tabs`, содержащий массив объектов \Rover\Fadmin\Tab существующих табов.  
-
-<b>`EVENT__BEFORE_GET_TAB_INFO = 'beforeGetTabInfo'`</b>
-
+###`EVENT__BEFORE_GET_TAB_INFO = 'beforeGetTabInfo'`
 Вызывается перед заданием параметров для каждого таба. Принимает и позволяет менять параметры:
 * `name` - имя таба в системе
 * `label` - название вкладки таба
@@ -100,22 +74,24 @@
 ###`protected static $instances = []`
 Сущности Fadmin-а для каждого из использующих модулей
 ##Методы
-### `public static getInstance($moduleId)`
+###`public static getInstance($moduleId)`
 Возвращает объект `\Rover\Fadmin\Options` для модуля с идентификатором `$moduleId`
-### `protected __construct($moduleId)`
+###`protected __construct($moduleId)`
 Создает объект `\Rover\Fadmin\Options` для модуля с идентификатором `$moduleId`
-### `public runEvent($name, &$params = [])` 
+###`public runEvent($name, &$params = [])` 
 Запускает внутреннее событие `\Rover\Fadmin\Options`.
-*`$name` - имя события
-*`$params` - параметры, передаваемые в событие
+* `$name` - имя события
+* `$params` - параметры, передаваемые в событие
 
-### `public getPresetsCount($siteId = '')`
+###`public getPresetsCount($siteId = '')`
 Возвращает кол-во существующих пресетов. Если для модуля настроена многосайтовость, то по `$siteId` - кол-во пресетов для данного сайта.
-### `public getAllTabsInfo()` 
+###`public getAllTabsInfo()` 
 Возвращает информацию (имя в системе, имя вкладки, описание, иконка) для всех существующих табов
-### `abstract public getConfig()`
+###`abstract public getConfig()`
 Метод, возвращающий конфигурацию. Должен быть переопределен в каждом потомке.
-### `public getModuleId()`
+###`public getModuleId()`
 Возвращает идентификатор модуля, для которого создан объект `\Rover\Fadmin\Options`
-### `public static getFullName($name, $presetId = '', $siteId = '')`
+###`public static getFullName($name, $presetId = '', $siteId = '')`
 Возвращает полное внутреннее имя сущности, включающее номер пресета и сайт (если имеются)
+###`public getPresetValue($inputName, $presetId, $siteId = '', $reload = false)`
+Возвращает значение опции пресета
