@@ -105,8 +105,9 @@ class rover_fadmin extends CModule
 
         $this->removeFiles();
 
-        if (empty($errors))
-            ModuleManager::unRegisterModule($this->MODULE_ID);
+        //if (empty($errors))
+        // uninstall anywhere
+        ModuleManager::unRegisterModule($this->MODULE_ID);
 
         $APPLICATION->IncludeAdminFile(Loc::getMessage("rover_fa__uninstall_title"), $_SERVER['DOCUMENT_ROOT'] . getLocalPath("modules/". $this->MODULE_ID ."/install/unMessage.php"));
 	}
