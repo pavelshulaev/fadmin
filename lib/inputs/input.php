@@ -240,6 +240,24 @@ abstract class Input
 	 * @param $value
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
+	public function setHelp($value)
+	{
+		$this->help = $value;
+	}
+
+	/**
+	 * @return string
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getHelp()
+	{
+		return $this->help;
+	}
+
+	/**
+	 * @param $value
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
 	public function setValue($value)
 	{
 		$this->value = $this->saveValue($value)
