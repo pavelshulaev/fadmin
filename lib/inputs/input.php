@@ -89,6 +89,12 @@ abstract class Input
 	protected $tab;
 
 	/**
+	 * sort on tab
+	 * @var int
+	 */
+	protected $sort = 500;
+
+	/**
 	 * @param array $params = ['id', 'name', 'label', 'default', 'multiple', 'help']
 	 * @param Tab   $tab
 	 * @throws Main\ArgumentNullException
@@ -117,6 +123,9 @@ abstract class Input
 
 		if (isset($params['help']))
 			$this->help = $params['help'];
+
+		if (isset($params['sort']) && intval($params['sort']))
+			$this->sort = intval($params['sort']);
 	}
 
 	/**
@@ -127,6 +136,24 @@ abstract class Input
 	protected function addEventHandler($name, $callback)
 	{
 		$this->getEvent()->addHandler($name, $callback);
+	}
+
+	/**
+	 * @return int
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getSort()
+	{
+		return $this->sort;
+	}
+
+	/**
+	 * @param $sort
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function setSort($sort)
+	{
+		$this->sort = intval($sort);
 	}
 
 	/**

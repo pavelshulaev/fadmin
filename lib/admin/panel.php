@@ -47,10 +47,10 @@ class Panel
 	 */
 	protected function getTabControl()
 	{
-		if (is_null($this->tabControl))
-			$this->tabControl
-				= new \CAdminTabControl("tabControl",
-				$this->options->getAllTabsInfo());
+		if (is_null($this->tabControl)) {
+			$allTabsInfo      = $this->options->getAllTabsInfo();
+			$this->tabControl = new \CAdminTabControl("tabControl", $allTabsInfo);
+		}
 
 		return $this->tabControl;
 	}
