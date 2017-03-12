@@ -114,7 +114,8 @@ class TestOptions extends Options
 							'type'      => Input::TYPE__IBLOCK,
 							'name'      => 'iblock',
 							'label'     => 'This is a single iblock',
-							'sort'      => '900'
+							'sort'      => '900',
+							'display'   => false
 						],
 						[
 							'type'      => Input::TYPE__IBLOCK,
