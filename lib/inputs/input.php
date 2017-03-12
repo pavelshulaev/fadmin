@@ -95,6 +95,11 @@ abstract class Input
 	protected $sort = 500;
 
 	/**
+	 * display on tab
+	 * @var bool
+	 */
+	protected $display = true;
+	/**
 	 * @param array $params = ['id', 'name', 'label', 'default', 'multiple', 'help']
 	 * @param Tab   $tab
 	 * @throws Main\ArgumentNullException
@@ -126,6 +131,9 @@ abstract class Input
 
 		if (isset($params['sort']) && intval($params['sort']))
 			$this->sort = intval($params['sort']);
+
+		if (array_key_exists('display', $params))
+			$this->display = boolval($params['display']);
 	}
 
 	/**
@@ -136,6 +144,24 @@ abstract class Input
 	protected function addEventHandler($name, $callback)
 	{
 		$this->getEvent()->addHandler($name, $callback);
+	}
+
+	/**
+	 * @param $display
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function setDisplay($display)
+	{
+		$this->display = boolval($display);
+	}
+
+	/**
+	 * @return bool
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getDisplay()
+	{
+		return $this->display;
 	}
 
 	/**
@@ -182,7 +208,9 @@ abstract class Input
 	public function show()
 	{
 		$this->loadValue();
-		$this->draw();
+
+		if ($this->getDisplay())
+			$this->draw();
 	}
 
 	/**

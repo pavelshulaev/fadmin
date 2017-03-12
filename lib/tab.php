@@ -288,7 +288,7 @@ class Tab
 	 */
 	public function show()
 	{
-		$this->sort();
+		//$this->sort();
 
 		foreach ($this->inputs as $input)
 			/**
@@ -305,9 +305,8 @@ class Tab
 	{
 		if (!count($this->inputs))
 			return;
-			//throw new Main\SystemException('This tab has ho inputs');
 
-		usort($this->inputs, function(Input $i1, Input $i2){
+		uasort($this->inputs, function(Input $i1, Input $i2){
 			if($i1->getSort() < $i2->getSort()) return -1;
 			elseif($i1->getSort() > $i2->getSort()) return 1;
 			else return 0;
