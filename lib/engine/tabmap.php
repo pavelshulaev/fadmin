@@ -42,14 +42,21 @@ class TabMap
 	protected $tabsParams = [];
 
 	/**
+	 * for events
+	 * @var Options
+	 */
+	protected $options;
+
+	/**
 	 * @param Options $options
 	 * @throws ArgumentNullException
 	 */
 	public function __construct(Options $options)
 	{
-		$this->options = $options; // for events
+		$this->options = $options;
 
 		$config = $options->getConfig();
+
 		if (is_array($config) && isset($config['tabs']))
 			$this->tabsParams = $config['tabs'];
 	}
@@ -77,8 +84,8 @@ class TabMap
 	 */
 	protected function loadTabs()
 	{
-		$this->tabMap = [];
-		$this->presetMap = [];
+		$this->tabMap       = [];
+		$this->presetMap    = [];
 
 		foreach ($this->tabsParams as $tabParams){
 
