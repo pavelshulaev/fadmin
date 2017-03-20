@@ -133,7 +133,7 @@ abstract class Input
 			$this->sort = intval($params['sort']);
 
 		if (array_key_exists('display', $params))
-			$this->display = boolval($params['display']);
+			$this->display = (bool)$params['display'];
 	}
 
 	/**
@@ -152,7 +152,7 @@ abstract class Input
 	 */
 	public function setDisplay($display)
 	{
-		$this->display = boolval($display);
+		$this->display = (bool)$display;
 	}
 
 	/**
