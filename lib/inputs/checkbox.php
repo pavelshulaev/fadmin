@@ -51,7 +51,12 @@ class Checkbox extends Input
 
 		$this->showLabel($valueId);
 
-		?><input type="checkbox" id="<?php echo $valueId?>" name="<?php echo $valueName?>" value="Y"<?=($this->value=="Y")?" checked=\"checked\"":'';?>/><?php
+		?><input
+			type="checkbox"
+			<?=$this->disabled ? 'disabled="disabled"': '';?>
+			id="<?=$valueId?>"
+			name="<?=$valueName?>"
+			value="Y"<?=($this->value=="Y")?" checked=\"checked\"":'';?>/><?php
 
 		$this->showHelp();
 	}

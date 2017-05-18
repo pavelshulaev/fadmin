@@ -116,9 +116,10 @@ class Submit extends Input
 		</style>
 
 		<button type='submit'
-                  id="<?=$id?>"
-                  name="<?=$name?>"
-                  value="<?=urlencode($value)?>"><?php echo $label?></button><?php
+				<?=$this->disabled ? 'disabled="disabled"': '';?>
+				id="<?=$id?>"
+				name="<?=$name?>"
+				value="<?=urlencode($value)?>"><?php echo $label?></button><?php
 	}
 
 	/**

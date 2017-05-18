@@ -69,6 +69,7 @@ class Selectbox extends Input
 			$this->showLabel($valueId);
 
 		?><select
+			<?=$this->disabled ? 'disabled="disabled"': '';?>
 			name="<?=$valueName . ($this->multiple ? '[]' : '')?>"
 			id="<?=$valueId?>"
 			size="<?=$this->size?>"

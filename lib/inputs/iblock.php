@@ -39,10 +39,12 @@ class Iblock extends Input
 
 		$this->showLabel($valueId);
 
+		$additionsHtml = $this->disabled ? 'disabled="disabled"': '';
+
 		if ($this->multiple)
-			echo self::getIBlockDropDownListMultiple($this->value, $this->name . '_type', $valueName);
+			echo self::getIBlockDropDownListMultiple($this->value, $this->name . '_type', $valueName, false, '', '', $additionsHtml);
 		else
-			echo GetIBlockDropDownList($this->value, $this->name . '_type', $valueName);
+			echo GetIBlockDropDownList($this->value, $this->name . '_type', $valueName, false, '', '', $additionsHtml);
 
 		$this->showHelp();
 	}

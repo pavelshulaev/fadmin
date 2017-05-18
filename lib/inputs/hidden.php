@@ -31,6 +31,12 @@ class Hidden extends Text
 		$valueId    = $this->getValueId();
 		$valueName  = $this->getValueName();
 
-		?><input id="<?php echo $valueId?>" maxlength="<?php echo $this->maxLength?>" type="hidden" value="<?php $this->value?>" name="<?php echo $valueName?>"><?php
+		?><input
+			<?=$this->disabled ? 'disabled="disabled"': '';?>
+			id="<?=$valueId?>" 
+			maxlength="<?=$this->maxLength?>"
+			type="hidden"
+			value="<?php $this->value?>" 
+			name="<?=$valueName?>"><?php
 	}
 }

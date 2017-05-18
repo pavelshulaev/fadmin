@@ -73,6 +73,7 @@ class Number extends Text
 		}
 
 		?><input
+			<?=$this->disabled ? 'disabled="disabled"': '';?>
 			type="number"
 			id="<?=$valueId?>"
 			size="<?=$this->size?>"

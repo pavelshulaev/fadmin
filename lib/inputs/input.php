@@ -99,6 +99,12 @@ abstract class Input
 	 * @var bool
 	 */
 	protected $display = true;
+
+	/**
+	 * @var bool
+	 */
+	protected $disabled = false;
+
 	/**
 	 * @param array $params = ['id', 'name', 'label', 'default', 'multiple', 'help']
 	 * @param Tab   $tab
@@ -125,6 +131,9 @@ abstract class Input
 
 		if (isset($params['multiple']))
 			$this->multiple = (bool)$params['multiple'];
+
+		if (isset($params['disabled']))
+			$this->disabled = (bool)$params['disabled'];
 
 		if (isset($params['help']))
 			$this->help = $params['help'];

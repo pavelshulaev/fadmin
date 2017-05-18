@@ -98,15 +98,42 @@ class Input
 	}
 
 	/**
-	 * @param        $name
-	 * @param string $default
+	 * @param            $name
+	 * @param string     $default
+	 * @param bool|false $disabled
 	 * @return array
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getCheckbox($name, $default = 'Y')
+	public static function getCheckbox($name, $default = 'Y', $disabled = false)
 	{
-		return self::get($name, InputAbstract::TYPE__CHECKBOX, $default == 'Y' ? 'Y' : 'N');
+		$checkbox = self::get($name, InputAbstract::TYPE__CHECKBOX, $default == 'Y' ? 'Y' : 'N');
+		if ($disabled)
+			$checkbox['disabled'] = true;
+
+		return $checkbox;
+	}
+
+	/**
+	 * @param $name
+	 * @return array
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getPresetName($name)
+	{
+		return self::get($name, InputAbstract::TYPE__PRESET_NAME);
+	}
+
+	/**
+	 * @param $name
+	 * @return array
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getRemovePreset($name)
+	{
+		return self::get($name, InputAbstract::TYPE__REMOVE_PRESET);
 	}
 
 	/**
@@ -118,16 +145,13 @@ class Input
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getSelect($name, $options, $label = null, $default = null)
+	public static function getSelect($name, $options, $label = null, $default = null, $multiple = false)
 	{
-		$input = self::get($name, InputAbstract::TYPE__SELECTBOX);
+		$input = self::get($name, InputAbstract::TYPE__SELECTBOX, $default, $label);
 		$input['options'] = $options;
 
-		if (!is_null($label))
-			$input['label'] = $label;
-
-		if (!is_null($default))
-			$input['default'] = $default;
+		if ($multiple)
+			$input['multiple'] = true;
 
 		return $input;
 	}

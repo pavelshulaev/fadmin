@@ -33,7 +33,12 @@ class Color extends Input
 
 		$this->showLabel($valueId);
 
-		?><input id="<?php echo $valueId?>" type="color" value="<?php echo $this->value?>" name="<?php echo $valueName?>"><?php
+		?><input
+			<?=$this->disabled ? 'disabled="disabled"': '';?>
+			id="<?=$valueId?>"
+			type="color"
+			value="<?=$this->value?>"
+			name="<?=$valueName?>"><?php
 
 		$this->showHelp();
 	}
