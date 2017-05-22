@@ -155,13 +155,17 @@ abstract class Input
 		$this->getEvent()->addHandler($name, $callback);
 	}
 
+
 	/**
 	 * @param $display
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setDisplay($display)
 	{
 		$this->display = (bool)$display;
+
+		return $this;
 	}
 
 	/**
@@ -184,20 +188,26 @@ abstract class Input
 
 	/**
 	 * @param $sort
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setSort($sort)
 	{
 		$this->sort = intval($sort);
+
+		return $this;
 	}
 
 	/**
 	 * @param Tab $tab
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setTab(Tab $tab)
 	{
 		$this->tab = $tab;
+
+		return $this;
 	}
 
 	/**
@@ -263,11 +273,14 @@ abstract class Input
 
 	/**
 	 * @param $label
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setLabel($label)
 	{
 		$this->label = trim($label);
+
+		return $this;
 	}
 
 	/**
@@ -281,6 +294,7 @@ abstract class Input
 
 	/**
 	 * @param $default
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setDefault($default)
@@ -289,6 +303,8 @@ abstract class Input
 			$default = serialize($default);
 
 		$this->default = trim($default);
+
+		return $this;
 	}
 
 	/**
@@ -302,11 +318,14 @@ abstract class Input
 
 	/**
 	 * @param $value
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setHelp($value)
 	{
 		$this->help = $value;
+
+		return $this;
 	}
 
 	/**
@@ -320,13 +339,23 @@ abstract class Input
 
 	/**
 	 * @param $value
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function setValue($value)
+	public function setDisabled($value)
 	{
-		$this->value = $this->saveValue($value)
-		    ? $value
-			: null;
+		$this->disabled = (bool)$value;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getDisabled()
+	{
+		return $this->disabled;
 	}
 
 	/**
@@ -334,7 +363,24 @@ abstract class Input
 	 * @return bool
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function saveValue($value)
+	public function setValue($value)
+	{
+		if ($this->disabled)
+			return false;
+
+		$this->value = $this->saveValue($value)
+		    ? $value
+			: null;
+
+		return $this;
+	}
+
+	/**
+	 * @param $value
+	 * @return bool
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	private function saveValue($value)
 	{
 		$result = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_VALUE,
 			compact('value'), $this);
@@ -487,7 +533,7 @@ abstract class Input
 		// EVENT__BEFORE_SAVE_REQUEST
 		$params = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_REQUEST, compact('value'), $this);
 		if ($params === false)
-			return;
+			return false;
 
 		if (isset($params['value']))
 			$value = $params['value'];
@@ -497,6 +543,8 @@ abstract class Input
 			$value = serialize($value);
 
 		$this->setValue($value);
+
+		return true;
 	}
 
 	/**
