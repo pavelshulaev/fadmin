@@ -178,15 +178,21 @@ class Input
 	}
 
 	/**
-	 * @param $name
-	 * @param $label
+	 * @param      $name
+	 * @param null $label
 	 * @return array
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getCustom($name, $label)
+	public static function getCustom($name, $label = null)
 	{
-		return self::get($name, InputAbstract::TYPE__CUSTOM, null, $label);
+		$result = self::get($name, InputAbstract::TYPE__CUSTOM);
+
+		$label = trim($label);
+		if (strlen($label))
+			$result['label'] = $label;
+
+		return $result;
 	}
 
 	/**
@@ -199,5 +205,51 @@ class Input
 	public static function getIblock($name, $multiple = false)
 	{
 		return self::get($name, InputAbstract::TYPE__IBLOCK, null, $multiple);
+	}
+
+	/**
+	 * @param $name
+	 * @param $default
+	 * @return array
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getSubmit($name, $default)
+	{
+		// button's name
+		$default = trim($default);
+		if (!strlen($default))
+			throw new ArgumentNullException('default');
+
+		return self::get($name, InputAbstract::TYPE__SUBMIT, $default);
+	}
+
+	/**
+	 * @param            $name
+	 * @param bool|false $popup
+	 * @return array
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	/**
+	 * @param            $name
+	 * @param            $default
+	 * @param bool|false $popup
+	 * @return array
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getAddPreset($name, $default, $popup = false)
+	{
+		$result = self::get($name, InputAbstract::TYPE__ADD_PRESET);
+
+		$default = trim($default);
+		if (!strlen($default))
+			throw new ArgumentNullException('default');
+
+		$result['default']  = $default;
+		$result['popup']    = $popup;
+
+		return $result;
 	}
 }
