@@ -42,22 +42,20 @@ class Input
 		if (!isset($input['help']))
 			$input['help'] = Loc::getMessage($input['name'] . '_help');
 
-		if (!isset($input['default']))
-			$input['default'] = Loc::getMessage($input['name'] . '_default');
-
 		return $input;
 	}
 
 	/**
-	 * @param      $name
-	 * @param      $type
-	 * @param null $default
-	 * @param null $label
+	 * @param            $name
+	 * @param            $type
+	 * @param null       $default
+	 * @param bool|false $multiple
+	 * @param bool|false $disabled
 	 * @return array
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function get($name, $type, $default = null, $label = null)
+	public static function get($name, $type, $default = null, $multiple = false, $disabled = false)
 	{
 		if (!isset($name))
 			throw new ArgumentNullException('name');
@@ -69,7 +67,8 @@ class Input
 			'type'      => $type,
 			'name'      => $name,
 			'default'   => $default,
-			'label'     => $label
+			'multiple'  => $multiple,
+			'disabled'  => $disabled
 		]);
 	}
 
@@ -83,6 +82,18 @@ class Input
 	public static function getText($name, $default = null)
 	{
 		return self::get($name, InputAbstract::TYPE__TEXT, $default);
+	}
+
+	/**
+	 * @param      $name
+	 * @param null $default
+	 * @return array
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getTextarea($name, $default = null)
+	{
+		return self::get($name, InputAbstract::TYPE__TEXTAREA, $default);
 	}
 
 	/**
@@ -107,11 +118,7 @@ class Input
 	 */
 	public static function getCheckbox($name, $default = 'Y', $disabled = false)
 	{
-		$checkbox = self::get($name, InputAbstract::TYPE__CHECKBOX, $default == 'Y' ? 'Y' : 'N');
-		if ($disabled)
-			$checkbox['disabled'] = true;
-
-		return $checkbox;
+		return self::get($name, InputAbstract::TYPE__CHECKBOX, $default == 'Y' ? 'Y' : 'N', false, $disabled);
 	}
 
 	/**
@@ -137,21 +144,22 @@ class Input
 	}
 
 	/**
-	 * @param      $name
-	 * @param      $options
-	 * @param null $label
-	 * @param null $default
+	 * @param            $name
+	 * @param            $options
+	 * @param null       $label
+	 * @param null       $default
+	 * @param bool|false $multiple
 	 * @return array
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getSelect($name, $options, $label = null, $default = null, $multiple = false)
+	public static function getSelect($name, $options, $default = null, $multiple = false, $label = null)
 	{
-		$input = self::get($name, InputAbstract::TYPE__SELECTBOX, $default, $label);
+		$input = self::get($name, InputAbstract::TYPE__SELECTBOX, $default, $multiple);
 		$input['options'] = $options;
 
-		if ($multiple)
-			$input['multiple'] = true;
+		if ($label)
+			$input['label'] = $label;
 
 		return $input;
 	}
@@ -179,5 +187,17 @@ class Input
 	public static function getCustom($name, $label)
 	{
 		return self::get($name, InputAbstract::TYPE__CUSTOM, null, $label);
+	}
+
+	/**
+	 * @param            $name
+	 * @param bool|false $multiple
+	 * @return array
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getIblock($name, $multiple = false)
+	{
+		return self::get($name, InputAbstract::TYPE__IBLOCK, null, $multiple);
 	}
 }

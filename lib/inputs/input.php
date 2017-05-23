@@ -528,7 +528,14 @@ abstract class Input
 	 */
 	public function setValueFromRequest()
 	{
-		$value = $this->getValueFromRequest();
+		$request = Application::getInstance()
+			->getContext()
+			->getRequest();
+
+		if (!$request->offsetExists($this->getValueName()))
+			return false;
+
+		$value = $request->get($this->getValueName());
 
 		// EVENT__BEFORE_SAVE_REQUEST
 		$params = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_REQUEST, compact('value'), $this);
@@ -545,19 +552,6 @@ abstract class Input
 		$this->setValue($value);
 
 		return true;
-	}
-
-	/**
-	 * @return null|string
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function getValueFromRequest()
-	{
-		$request = Application::getInstance()
-			->getContext()
-			->getRequest();
-
-		return $request->get($this->getValueName());
 	}
 
 	/**
