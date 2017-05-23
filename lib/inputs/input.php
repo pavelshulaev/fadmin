@@ -532,7 +532,8 @@ abstract class Input
 			->getContext()
 			->getRequest();
 
-		if (!$request->offsetExists($this->getValueName()))
+		if ((!$request->offsetExists($this->getValueName())
+			&& $this->getType() != self::TYPE__CHECKBOX))
 			return false;
 
 		$value = $request->get($this->getValueName());
