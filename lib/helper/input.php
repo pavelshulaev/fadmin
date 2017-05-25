@@ -178,15 +178,22 @@ class Input
 	}
 
 	/**
-	 * @param $name
-	 * @param $label
+	 * @param      $name
+	 * @param null $label
 	 * @return array
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getCustom($name, $label)
+	public static function getCustom($name, $label = null)
 	{
-		return self::get(InputAbstract::TYPE__CUSTOM, $name, null, $label);
+		$result = self::get(InputAbstract::TYPE__CUSTOM, $name);
+
+		$label = trim($label);
+		if (strlen($label))
+			$result['label'] = $label;
+
+		return $result;
+
 	}
 
 	/**
@@ -226,4 +233,43 @@ class Input
     {
         return self::get(InputAbstract::TYPE__CLOCK, $name, $default);
     }
+
+    /**
+     * @param $name
+     * @param $default
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+	public static function getSubmit($name, $default)
+	{
+		// button's name
+		$default = trim($default);
+		if (!strlen($default))
+			throw new ArgumentNullException('default');
+
+		return self::get($name, InputAbstract::TYPE__SUBMIT, $default);
+	}
+
+    /**
+     * @param      $name
+     * @param      $default
+     * @param bool $popup
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+	public static function getAddPreset($name, $default, $popup = false)
+	{
+		$result = self::get($name, InputAbstract::TYPE__ADD_PRESET);
+
+		$default = trim($default);
+		if (!strlen($default))
+			throw new ArgumentNullException('default');
+
+		$result['default']  = $default;
+		$result['popup']    = $popup;
+
+		return $result;
+	}
 }
