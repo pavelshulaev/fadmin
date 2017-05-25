@@ -55,13 +55,13 @@ class Input
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function get($name, $type, $default = null, $multiple = false, $disabled = false)
+	public static function get($type, $name, $default = null, $multiple = false, $disabled = false)
 	{
-		if (!isset($name))
-			throw new ArgumentNullException('name');
-
 		if (!isset($type))
 			throw new ArgumentNullException('type');
+
+        if (!isset($name))
+            throw new ArgumentNullException('name');
 
 		return self::addFields([
 			'type'      => $type,
@@ -79,9 +79,9 @@ class Input
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getText($name, $default = null)
+	public static function getText($name, $default = '')
 	{
-		return self::get($name, InputAbstract::TYPE__TEXT, $default);
+		return self::get(InputAbstract::TYPE__TEXT, $name, $default);
 	}
 
 	/**
@@ -91,9 +91,9 @@ class Input
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getTextarea($name, $default = null)
+	public static function getTextarea($name, $default = '')
 	{
-		return self::get($name, InputAbstract::TYPE__TEXTAREA, $default);
+		return self::get(InputAbstract::TYPE__TEXTAREA, $name, $default);
 	}
 
 	/**
@@ -105,7 +105,7 @@ class Input
 	 */
 	public static function getNumber($name, $default = null)
 	{
-		return self::get($name, InputAbstract::TYPE__NUMBER, $default);
+		return self::get(InputAbstract::TYPE__NUMBER, $name, $default);
 	}
 
 	/**
@@ -118,7 +118,7 @@ class Input
 	 */
 	public static function getCheckbox($name, $default = 'Y', $disabled = false)
 	{
-		return self::get($name, InputAbstract::TYPE__CHECKBOX, $default == 'Y' ? 'Y' : 'N', false, $disabled);
+		return self::get(InputAbstract::TYPE__CHECKBOX, $name, $default == 'Y' ? 'Y' : 'N', false, $disabled);
 	}
 
 	/**
@@ -129,7 +129,7 @@ class Input
 	 */
 	public static function getPresetName($name)
 	{
-		return self::get($name, InputAbstract::TYPE__PRESET_NAME);
+		return self::get(InputAbstract::TYPE__PRESET_NAME, $name);
 	}
 
 	/**
@@ -140,7 +140,7 @@ class Input
 	 */
 	public static function getRemovePreset($name)
 	{
-		return self::get($name, InputAbstract::TYPE__REMOVE_PRESET);
+		return self::get(InputAbstract::TYPE__REMOVE_PRESET, $name);
 	}
 
 	/**
@@ -155,7 +155,7 @@ class Input
 	 */
 	public static function getSelect($name, $options, $default = null, $multiple = false, $label = null)
 	{
-		$input = self::get($name, InputAbstract::TYPE__SELECTBOX, $default, $multiple);
+		$input = self::get(InputAbstract::TYPE__SELECTBOX, $name, $default, $multiple);
 		$input['options'] = $options;
 
 		if ($label)
@@ -186,7 +186,7 @@ class Input
 	 */
 	public static function getCustom($name, $label)
 	{
-		return self::get($name, InputAbstract::TYPE__CUSTOM, null, $label);
+		return self::get(InputAbstract::TYPE__CUSTOM, $name, null, $label);
 	}
 
 	/**
@@ -198,6 +198,32 @@ class Input
 	 */
 	public static function getIblock($name, $multiple = false)
 	{
-		return self::get($name, InputAbstract::TYPE__IBLOCK, null, $multiple);
+		return self::get(InputAbstract::TYPE__IBLOCK, $name, null, $multiple);
 	}
+
+	/**
+	 * @param        $label
+	 * @param string $default
+	 * @return array
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getLabel($label, $default = '')
+	{
+		return [
+			'type'      => InputAbstract::TYPE__HEADER,
+			'label'     => $label,
+			'default'   => $default
+		];
+	}
+
+    /**
+     * @param        $name
+     * @param string $default
+     * @return array
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+	public static function getClock($name, $default = '0:00')
+    {
+        return self::get(InputAbstract::TYPE__CLOCK, $name, $default);
+    }
 }

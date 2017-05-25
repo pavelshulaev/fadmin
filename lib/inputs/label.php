@@ -34,7 +34,7 @@ class Label extends Input
 	public function __construct(array $params, Tab $tab)
 	{
 		if (!isset($params['name']))
-			$params['name'] = 'label_default';
+			$params['name'] = self::$type;
 
 		parent::__construct($params, $tab);
 
