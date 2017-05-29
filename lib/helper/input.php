@@ -193,7 +193,6 @@ class Input
 			$result['label'] = $label;
 
 		return $result;
-
 	}
 
 	/**
@@ -248,7 +247,7 @@ class Input
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 
-		return self::get($name, InputAbstract::TYPE__SUBMIT, $default);
+		return self::get(InputAbstract::TYPE__SUBMIT, $name, $default);
 	}
 
     /**
@@ -261,7 +260,7 @@ class Input
      */
 	public static function getAddPreset($name, $default, $popup = false)
 	{
-		$result = self::get($name, InputAbstract::TYPE__ADD_PRESET);
+		$result = self::get(InputAbstract::TYPE__ADD_PRESET, $name);
 
 		$default = trim($default);
 		if (!strlen($default))
