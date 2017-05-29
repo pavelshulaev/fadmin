@@ -272,4 +272,24 @@ class Input
 
 		return $result;
 	}
+
+    /**
+     * @param        $name
+     * @param string $default
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+	public static function getHidden($name, $default = '')
+    {
+        $name = trim($name);
+        if (!$name)
+            throw new ArgumentNullException('name');
+
+        return [
+            'type'      => InputAbstract::TYPE__HIDDEN,
+            'name'      => $name,
+            'default'   => $default
+        ];
+    }
 }

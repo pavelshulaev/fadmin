@@ -240,7 +240,10 @@ class Request
 			$tab->setValuesFromRequest();
 		}
 
-		$this->options->runEvent(Options::EVENT__AFTER_ADD_VALUES_FROM_REQUEST);
+        if(false === $this->options->runEvent(
+		    Options::EVENT__AFTER_ADD_VALUES_FROM_REQUEST,
+            compact('tabs')))
+            return;
 
 		$this->redirect();
 	}

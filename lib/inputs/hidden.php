@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Rover\Fadmin\Tab;
+
 /**
  * Class Hidden
  *
@@ -22,6 +24,19 @@ class Hidden extends Text
 	 * @var string
 	 */
 	public static $type = self::TYPE__HIDDEN;
+
+    /**
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     */
+    public function __construct(array $params, Tab $tab)
+    {
+        if (!isset($params['label']))
+            $params['label'] = self::$type;
+
+        parent::__construct($params, $tab);
+    }
 
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)

@@ -198,22 +198,30 @@ class TabMap
 		return null;
 	}
 
-	/**
-	 * @param            $name
-	 * @param bool|false $reload
-	 * @return null|Tab
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function searchTabByName($name, $reload = false)
+    /**
+     * @param        $name
+     * @param string $siteId
+     * @param bool   $reload
+     * @return mixed|null|Tab
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+	public function searchTabByName($name, $siteId = '', $reload = false)
 	{
-		$tabs = $this->getTabs($reload);
+		$tabs   = $this->getTabs($reload);
+        $siteId = trim($siteId);
 
-		foreach ($tabs as $tab)
-			/**
-			 * @var Tab $tab
-			 */
-			if ($tab->getName() == $name)
-				return $tab;
+		foreach ($tabs as $tab){
+            /**
+             * @var Tab $tab
+             */
+            if ($tab->getName() != $name)
+			    continue;
+
+            if (strlen($siteId) && ($siteId != $tab->getSiteId()))
+                continue;
+
+            return $tab;
+        }
 
 		return null;
 	}
