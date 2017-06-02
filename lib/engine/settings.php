@@ -12,6 +12,12 @@ namespace Rover\Fadmin\Engine;
 
 use Rover\Fadmin\Options;
 
+/**
+ * Class Settings
+ *
+ * @package Rover\Fadmin\Engine
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
 class Settings
 {
 	const BOOL_CHECKBOX    = 'bool_checkbox';

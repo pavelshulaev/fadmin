@@ -13,6 +13,7 @@ namespace Rover\Fadmin;
 use Bitrix\Main;
 use Bitrix\Main\ArgumentNullException;
 use Rover\Fadmin\Inputs\Input;
+
 /**
  * Class Tab
  *
@@ -27,7 +28,9 @@ class Tab
 	 */
 	protected $inputs = [];
 
-	protected $id;
+	/**
+	 * @var string
+	 */
 	protected $name;
 	protected $label;
 	protected $description;
@@ -276,11 +279,16 @@ class Tab
 
 	/**
 	 * @param array $input
+	 * @return Input
+	 * @throws Main\SystemException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function addInputArray(array $input)
 	{
-		$this->inputs[] = Input::factory($input, $this);
+		$input = Input::factory($input, $this);
+		$this->inputs[] = $input;
+
+		return $input;
 	}
 
 	/**
@@ -363,8 +371,8 @@ class Tab
 			|| !$this->getPresetId())
 			return null;
 
-		$preset = Presets::getById($this->getPresetId(),
-			$this->getModuleId(), $this->siteId);
+		$preset = $this->options->preset->getById(
+			$this->getPresetId(), $this->siteId);
 
 		if (is_array($preset) && isset($preset['name']))
 			return $preset['name'];

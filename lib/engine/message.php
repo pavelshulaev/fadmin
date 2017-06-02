@@ -10,9 +10,13 @@
 
 namespace Rover\Fadmin\Engine;
 
-use Bitrix\Main\SystemException;
 use Rover\Fadmin\Options;
-
+/**
+ * Class Message
+ *
+ * @package Rover\Fadmin\Engine
+ * @author  Pavel Shulaev (http://rover-it.me)
+ */
 class Message
 {
 	/**
@@ -32,35 +36,45 @@ class Message
 		$this->options = $options;
 	}
 
-	/**
-	 * @param        $message
-	 * @param string $type
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function add($message, $type = self::TYPE__OK)
+    /**
+     * @param        $message
+     * @param string $type
+     * @param bool   $html
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+	public function add($message, $type = self::TYPE__OK, $html = true)
 	{
+	    if (is_array($message))
+	        $message = implode("\n", $message);
+
+	    if (!$html)
+	        $message = htmlspecialcharsbx($message);
+
 		$this->messages[] = [
-			'MESSAGE'   => htmlspecialcharsbx($message),
+			'MESSAGE'   => trim($message),
+            'HTML'      => (bool)$html,
 			'TYPE'      => htmlspecialcharsbx($type),
 		];
 	}
 
-	/**
-	 * @param $message
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function addOk($message)
+    /**
+     * @param      $message
+     * @param bool $html
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+	public function addOk($message, $html = false)
 	{
-		$this->add($message, self::TYPE__OK);
+		$this->add($message, self::TYPE__OK, $html);
 	}
 
-	/**
-	 * @param $message
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function addError($message)
+    /**
+     * @param      $message
+     * @param bool $html
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+	public function addError($message, $html = false)
 	{
-		$this->add($message, self::TYPE__ERROR);
+		$this->add($message, self::TYPE__ERROR, $html);
 	}
 
 	/**

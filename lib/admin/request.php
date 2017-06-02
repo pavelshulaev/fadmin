@@ -17,7 +17,6 @@ use Rover\Fadmin\Inputs\Removepreset;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
 use \Bitrix\Main\Config\Option;
-
 /**
  * Class Request
  *
@@ -240,7 +239,10 @@ class Request
 			$tab->setValuesFromRequest();
 		}
 
-		$this->options->runEvent(Options::EVENT__AFTER_ADD_VALUES_FROM_REQUEST);
+        if(false === $this->options->runEvent(
+		    Options::EVENT__AFTER_ADD_VALUES_FROM_REQUEST,
+            compact('tabs')))
+            return;
 
 		$this->redirect();
 	}

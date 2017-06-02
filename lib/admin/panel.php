@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Admin;
 
 use \Rover\Fadmin\Options;
-
 /**
  * Class Panel
  *

@@ -11,7 +11,6 @@
 namespace Rover\Fadmin;
 
 use Rover\Fadmin\Inputs\Input;
-
 /**
  * Class TestOptions
  *

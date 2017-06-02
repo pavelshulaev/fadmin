@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
-
 /**
  * Class Text
  *
@@ -57,12 +56,14 @@ class Text extends Input
 
 		$this->showLabel($valueId);
 
-		?><input type="text"
-		         id="<?=$valueId?>"
-		         size="<?=$this->size?>"
-		         maxlength="<?=$this->maxLength?>"
-		         value="<?=$this->value?>"
-		         name="<?=$valueName?>"><?php
+		?><input
+			type="text"
+			<?=$this->disabled ? 'disabled="disabled"': '';?>
+			id="<?=$valueId?>"
+			size="<?=$this->size?>"
+			maxlength="<?=$this->maxLength?>"
+			value="<?=$this->value?>"
+			name="<?=$valueName?>"><?php
 
 		$this->showHelp();
 	}

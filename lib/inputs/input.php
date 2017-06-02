@@ -6,6 +6,7 @@ use Bitrix\Main\Application;
 use \Bitrix\Main\Config\Option;
 use \Rover\Fadmin\Tab;
 use \Rover\Fadmin\Options;
+
 /**
  * Class Input
  *
@@ -99,6 +100,12 @@ abstract class Input
 	 * @var bool
 	 */
 	protected $display = true;
+
+	/**
+	 * @var bool
+	 */
+	protected $disabled = false;
+
 	/**
 	 * @param array $params = ['id', 'name', 'label', 'default', 'multiple', 'help']
 	 * @param Tab   $tab
@@ -126,6 +133,9 @@ abstract class Input
 		if (isset($params['multiple']))
 			$this->multiple = (bool)$params['multiple'];
 
+		if (isset($params['disabled']))
+			$this->disabled = (bool)$params['disabled'];
+
 		if (isset($params['help']))
 			$this->help = $params['help'];
 
@@ -146,13 +156,17 @@ abstract class Input
 		$this->getEvent()->addHandler($name, $callback);
 	}
 
+
 	/**
 	 * @param $display
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setDisplay($display)
 	{
 		$this->display = (bool)$display;
+
+		return $this;
 	}
 
 	/**
@@ -175,20 +189,26 @@ abstract class Input
 
 	/**
 	 * @param $sort
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setSort($sort)
 	{
 		$this->sort = intval($sort);
+
+		return $this;
 	}
 
 	/**
 	 * @param Tab $tab
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setTab(Tab $tab)
 	{
 		$this->tab = $tab;
+
+		return $this;
 	}
 
 	/**
@@ -254,11 +274,14 @@ abstract class Input
 
 	/**
 	 * @param $label
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setLabel($label)
 	{
 		$this->label = trim($label);
+
+		return $this;
 	}
 
 	/**
@@ -272,6 +295,7 @@ abstract class Input
 
 	/**
 	 * @param $default
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setDefault($default)
@@ -280,6 +304,8 @@ abstract class Input
 			$default = serialize($default);
 
 		$this->default = trim($default);
+
+		return $this;
 	}
 
 	/**
@@ -293,11 +319,14 @@ abstract class Input
 
 	/**
 	 * @param $value
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function setHelp($value)
 	{
 		$this->help = $value;
+
+		return $this;
 	}
 
 	/**
@@ -311,13 +340,41 @@ abstract class Input
 
 	/**
 	 * @param $value
+	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
+	public function setDisabled($value)
+	{
+		$this->disabled = (bool)$value;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function getDisabled()
+	{
+		return $this->disabled;
+	}
+
+    /**
+     * @param $value
+     * @return $this
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function setValue($value)
 	{
+		if ($this->disabled)
+			throw new Main\SystemException('input is disabled');
+
 		$this->value = $this->saveValue($value)
 		    ? $value
 			: null;
+
+		return $this;
 	}
 
 	/**
@@ -325,7 +382,7 @@ abstract class Input
 	 * @return bool
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function saveValue($value)
+	private function saveValue($value)
 	{
 		$result = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_VALUE,
 			compact('value'), $this);
@@ -473,12 +530,23 @@ abstract class Input
 	 */
 	public function setValueFromRequest()
 	{
-		$value = $this->getValueFromRequest();
+	    if ($this->getDisabled())
+	        return false;
+
+		$request = Application::getInstance()
+			->getContext()
+			->getRequest();
+
+		if ((!$request->offsetExists($this->getValueName())
+			&& $this->getType() != self::TYPE__CHECKBOX))
+			return false;
+
+		$value = $request->get($this->getValueName());
 
 		// EVENT__BEFORE_SAVE_REQUEST
 		$params = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_REQUEST, compact('value'), $this);
 		if ($params === false)
-			return;
+			return false;
 
 		if (isset($params['value']))
 			$value = $params['value'];
@@ -488,19 +556,8 @@ abstract class Input
 			$value = serialize($value);
 
 		$this->setValue($value);
-	}
 
-	/**
-	 * @return null|string
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function getValueFromRequest()
-	{
-		$request = Application::getInstance()
-			->getContext()
-			->getRequest();
-
-		return $request->get($this->getValueName());
+		return true;
 	}
 
 	/**

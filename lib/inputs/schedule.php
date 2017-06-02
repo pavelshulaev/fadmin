@@ -15,7 +15,6 @@ use Bitrix\Main\Localization\Loc;
 use \Bitrix\Main\Event;
 
 Loc::loadMessages(__FILE__);
-
 /**
  * Class Schedule
  *
@@ -132,8 +131,6 @@ class Schedule extends Input
 		$valueName  = $this->getValueName();
 
 		$this->showLabel($valueId);
-
-
 
 		?><input type="hidden"
 		         id="<?=$valueId?>"

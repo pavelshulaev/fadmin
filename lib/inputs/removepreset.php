@@ -16,7 +16,6 @@ use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 
 Loc::loadMessages(__FILE__);
-
 /**
  * Class Removepreset
  *

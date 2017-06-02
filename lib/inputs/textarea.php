@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
-
 /**
  * Class Textarea
  *
@@ -61,10 +60,12 @@ class Textarea extends Input
 
 		$this->showLabel($valueId);
 
-		?><textarea id="<?=$valueId?>"
-		            rows="<?=$this->rows?>"
-		            cols="<?=$this->cols?>"
-		            name="<?=$valueName?>"><?=$this->value?></textarea><?php
+		?><textarea
+			<?=$this->disabled ? 'disabled="disabled"': '';?>
+			id="<?=$valueId?>"
+			rows="<?=$this->rows?>"
+			cols="<?=$this->cols?>"
+			name="<?=$valueName?>"><?=$this->value?></textarea><?php
 
 		$this->showHelp();
 	}

@@ -12,6 +12,7 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Event;
+
 /**
  * Class Number
  *
@@ -73,6 +74,7 @@ class Number extends Text
 		}
 
 		?><input
+			<?=$this->disabled ? 'disabled="disabled"': '';?>
 			type="number"
 			id="<?=$valueId?>"
 			size="<?=$this->size?>"

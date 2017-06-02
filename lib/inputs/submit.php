@@ -13,6 +13,7 @@ namespace Rover\Fadmin\Inputs;
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
+
 /**
  * Class Submit
  *
@@ -116,9 +117,10 @@ class Submit extends Input
 		</style>
 
 		<button type='submit'
-                  id="<?=$id?>"
-                  name="<?=$name?>"
-                  value="<?=urlencode($value)?>"><?php echo $label?></button><?php
+				<?=$this->disabled ? 'disabled="disabled"': '';?>
+				id="<?=$id?>"
+				name="<?=$name?>"
+				value="<?=urlencode($value)?>"><?php echo $label?></button><?php
 	}
 
 	/**

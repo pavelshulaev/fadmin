@@ -22,7 +22,6 @@ use \Rover\Fadmin\Engine\TabMap;
 use \Rover\Fadmin\Engine\Preset;
 
 Loc::LoadMessages(__FILE__);
-
 /**
  * Class Options
  * Абстрактный класс шаблона опций.
@@ -111,6 +110,40 @@ abstract class Options
 			self::$instances[$moduleId] = new static($moduleId);
 
 		return self::$instances[$moduleId];
+	}
+
+	/**
+	 * @param $name
+	 * @param $arguments
+	 * @return mixed|null
+	 * @throws ArgumentNullException
+	 * @throws Main\SystemException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function __call($name, $arguments)
+	{
+		if (0 !== strpos($name, 'get'))
+			throw new Main\SystemException('unacceptable method name');
+
+		$name       = substr($name, 3);
+		$isPreset   = (0 === strpos($name, 'Preset'));
+
+		if ($isPreset)
+			$name = substr($name, 6);
+
+		preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $name, $matches);
+		$ret = $matches[0];
+		foreach ($ret as &$match)
+			$match = strtoupper($match);
+
+		$constName = 'static::OPTION__' . implode('_', $ret);
+
+		if (!defined($constName))
+			throw new Main\SystemException('option "' . $constName . '" not found');
+
+		return $isPreset
+			? $this->getPresetValue(constant($constName), $arguments[0], $arguments[1], $arguments[2])
+			: $this->getNormalValue(constant($constName), $arguments[0], $arguments[1]);
 	}
 
 	/**
