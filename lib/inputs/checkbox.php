@@ -12,6 +12,7 @@ namespace Rover\Fadmin\Inputs;
 
 use \Bitrix\Main\Event;
 use Rover\Fadmin\Tab;
+
 /**
  * Class Checkbox
  *

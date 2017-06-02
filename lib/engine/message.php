@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Engine;
 
 use Rover\Fadmin\Options;
-
 /**
  * Class Message
  *

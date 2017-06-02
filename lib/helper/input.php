@@ -13,7 +13,6 @@ namespace Rover\Fadmin\Helper;
 use Bitrix\Main\ArgumentNullException;
 use Rover\Fadmin\Inputs\Input as InputAbstract;
 use Bitrix\Main\Localization\Loc;
-
 /**
  * Class Input
  *

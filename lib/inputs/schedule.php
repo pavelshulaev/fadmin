@@ -15,7 +15,6 @@ use Bitrix\Main\Localization\Loc;
 use \Bitrix\Main\Event;
 
 Loc::loadMessages(__FILE__);
-
 /**
  * Class Schedule
  *

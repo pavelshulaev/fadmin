@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
-
 /**
  * Class Textarea
  *

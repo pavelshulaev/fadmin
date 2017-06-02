@@ -22,7 +22,6 @@ use \Rover\Fadmin\Engine\TabMap;
 use \Rover\Fadmin\Engine\Preset;
 
 Loc::LoadMessages(__FILE__);
-
 /**
  * Class Options
  * Абстрактный класс шаблона опций.

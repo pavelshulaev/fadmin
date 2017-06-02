@@ -16,7 +16,6 @@ use Bitrix\Main\Localization\Loc;
 use Rover\Fadmin\Tab;
 
 Loc::loadMessages(__FILE__);
-
 /**
  * Class Addpreset
  *
