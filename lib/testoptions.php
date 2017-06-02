@@ -48,13 +48,15 @@ class TestOptions extends Options
 						[
 							'type'      => Input::TYPE__HEADER,
 							'label'     => 'First tab header',
+							'sort'      => 100,
 						],
 						[
 							'type'      => Input::TYPE__TEXT,
 							'name'      => 'text',
 							'label'     => 'text input (maxlength 50)',
 							'default'   => 'default text',
-							'maxLength' => 50
+							'maxLength' => 50,
+							'sort'      => '200'
 						],
 						[
 							'type'      => Input::TYPE__NUMBER,
@@ -62,7 +64,8 @@ class TestOptions extends Options
 							'label'     => 'number input (min 0, max 100)',
 							'default'   => 50,
 							'max'       => 100,
-							'min'       => 0
+							'min'       => 0,
+							'sort'      => '300'
 						],
 						[
 							'type'      => Input::TYPE__TEXTAREA,
@@ -72,26 +75,30 @@ class TestOptions extends Options
 							'rows'      => 3,
 							'cols'      => 20,
 							'help'      => 'textarea help',
+							'sort'      => '500'
 						],
 						[
 							'type'      => Input::TYPE__CLOCK,
 							'name'      => 'clock',
 							'label'     => 'This is a clock',
 							'default'   => '15:15',
+							'sort'      => 400
 						],
 						[
 							'type'      => Input::TYPE__COLOR,
 							'name'      => 'color',
 							'label'     => 'This is a color',
 							'default'   => '15:15',
-							'help'      => 'Please, select a color'
+							'help'      => 'Please, select a color',
+							'sort'      => '600'
 						],
 						[
 							'type'      => Input::TYPE__CHECKBOX,
 							'name'      => 'checkbox',
 							'label'     => 'This is a checkbox',
 							'default'   => '#FFFF00',
-							'help'      => 'Please, check me!'
+							'help'      => 'Please, check me!',
+							'sort'      => '700'
 						],
 						[
 							'type'      => Input::TYPE__FILE,
@@ -100,25 +107,30 @@ class TestOptions extends Options
 							'default'   => '15:15',
 							'help'      => 'You may load an image here (max size 1 M)',
 							'maxSize'   => 1024 * 1024,
-							'isImage'   => true
+							'isImage'   => true,
+							'sort'      => '800'
 						],
 						[
 							'type'      => Input::TYPE__IBLOCK,
 							'name'      => 'iblock',
 							'label'     => 'This is a single iblock',
+							'sort'      => '900',
+							'display'   => false
 						],
 						[
 							'type'      => Input::TYPE__IBLOCK,
 							'name'      => 'multiple_iblock',
 							'multiple'  => true,
 							'label'     => 'This is a multiple iblock',
+							'sort'      => '1000'
 						],
 
 						[
 							'type'      => Input::TYPE__ADD_PRESET,
 							'label'     => 'add preset s1',
 							'default'   => 'new preset default name',
-							'popup'     => 'add preset popup' // false - not show
+							'popup'     => 'add preset popup', // false - not show
+							'sort'      => '1100'
 						]
 					]
 				],

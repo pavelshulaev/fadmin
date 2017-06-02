@@ -288,11 +288,29 @@ class Tab
 	 */
 	public function show()
 	{
+		//$this->sort();
+
 		foreach ($this->inputs as $input)
 			/**
 			 * @var Input $input
 			 */
 			$input->show();
+	}
+
+	/**
+	 * @throws Main\SystemException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function sort()
+	{
+		if (!count($this->inputs))
+			return;
+
+		uasort($this->inputs, function(Input $i1, Input $i2){
+			if($i1->getSort() < $i2->getSort()) return -1;
+			elseif($i1->getSort() > $i2->getSort()) return 1;
+			else return 0;
+		});
 	}
 
 	/**

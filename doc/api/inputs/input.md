@@ -1,2 +1,2 @@
-#Описание класса \Rover\Fadmin\Inputs\Input
+# Описание класса \Rover\Fadmin\Inputs\Input
 раздел находится в разработке

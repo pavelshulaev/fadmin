@@ -31,11 +31,11 @@ class Panel
 	 */
 	public function __construct(Options $options, $formName = null)
 	{
+		global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
+
 		$this->options = $options;
 
 		$tabControl = $this->getTabControl();
-
-		global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
 
 		$this->request  = new Request($tabControl, $options, $REQUEST_METHOD, $Update, $Apply, $RestoreDefaults);
 		$this->form     = new Form($tabControl, $options, $formName);
@@ -47,10 +47,10 @@ class Panel
 	 */
 	protected function getTabControl()
 	{
-		if (is_null($this->tabControl))
-			$this->tabControl
-				= new \CAdminTabControl("tabControl",
-				$this->options->getAllTabsInfo());
+		if (is_null($this->tabControl)) {
+			$allTabsInfo      = $this->options->getAllTabsInfo();
+			$this->tabControl = new \CAdminTabControl("tabControl", $allTabsInfo);
+		}
 
 		return $this->tabControl;
 	}

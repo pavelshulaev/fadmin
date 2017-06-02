@@ -97,9 +97,10 @@ class Request
 	}
 
 	/**
+	 * @param null $activeTab
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function redirect()
+	protected function redirect($activeTab = null)
 	{
 		if (false === $this->options->runEvent(Options::EVENT__BEFORE_REDIRECT_AFTER_REQUEST))
 			return;
@@ -110,12 +111,17 @@ class Request
 		{
 			LocalRedirect($request["back_url_settings"]);
 		} else {
+
+			$activeTab = $activeTab
+				? 'tabControl_active_tab=' . $activeTab
+				: $this->tabControl->ActiveTabParam();
+
 			global $APPLICATION;
 			LocalRedirect($APPLICATION->GetCurPage()
 				. "?mid=" . urlencode($this->moduleId)
 				. "&lang=" . urlencode(LANGUAGE_ID)
 				. "&back_url_settings=" . urlencode($request["back_url_settings"])
-				. "&" . $this->tabControl->ActiveTabParam());
+				. "&" . $activeTab);
 		}
 	}
 
@@ -140,14 +146,16 @@ class Request
 			$params['name'],
 			$params['siteId']
 		);
-
 		//reload tabs
 		$this->options->tabMap->getTabs(true);
 
 		// action afterAddPreset
 		$this->options->runEvent(Options::EVENT__AFTER_ADD_PRESET, $params);
 
-		$this->redirect();
+
+		$presetTabName = $this->options->tabMap->getTabByPresetId($params['id']);
+
+		$this->redirect($presetTabName->getName());
 	}
 
 	/**
@@ -164,7 +172,7 @@ class Request
 		if (!$id)
 			throw new \Bitrix\Main\ArgumentNullException('id');
 
-		// action beforeAddPreset
+		// action beforeRemovePreset
 		if(false === $this->options->runEvent(
 			Options::EVENT__BEFORE_REMOVE_PRESET,
 			compact('siteId', 'id')))
