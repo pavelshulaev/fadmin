@@ -43,7 +43,7 @@ class Message
      * @param bool   $html
      * @author Pavel Shulaev (http://rover-it.me)
      */
-	public function add($message, $type = self::TYPE__OK, $html = false)
+	public function add($message, $type = self::TYPE__OK, $html = true)
 	{
 	    if (is_array($message))
 	        $message = implode("\n", $message);
