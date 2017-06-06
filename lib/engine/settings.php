@@ -42,7 +42,7 @@ class Settings
 	public function __construct(Options $options)
 	{
 		$this->options  = $options;
-		$config         = $this->options->getConfig();
+		$config         = $this->options->getConfigCache();
 		$settings       = isset($config['settings'])
 			? $config['settings']
 			: [];

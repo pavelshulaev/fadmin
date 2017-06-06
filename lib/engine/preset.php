@@ -5,7 +5,6 @@ use Bitrix\Main\ArgumentNullException;
 use \Bitrix\Main\Config\Option;
 use Rover\Fadmin\Options;
 /**
- *  ласс дл€ манипул€ции с пресетами
  * Class Presets
  * @package Fadmin
  * @author Pavel Shulaev (http://rover-it.me)

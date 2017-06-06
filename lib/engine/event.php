@@ -132,6 +132,7 @@ class Event
 		 * @var Input $sender
 		 */
 		echo $sender->getValueName() . ' ' . $handler->getValueName() . '<br>';
+
 		return $sender->getValueName() === $handler->getValueName();
 	}
 }

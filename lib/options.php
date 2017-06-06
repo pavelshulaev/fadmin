@@ -98,6 +98,11 @@ abstract class Options
 	 */
 	protected static $instances = [];
 
+    /**
+     * config cache
+     * @var array
+     */
+	protected $config;
 	/**
 	 * for singleton
 	 * @param $moduleId
@@ -187,11 +192,23 @@ abstract class Options
 		}
 	}
 
-	/**
-	 * returns config array. Now it's contained only 'tabs' section
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param bool $reload
+     * @return array|mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getConfigCache($reload = false)
+    {
+        if (is_null($this->config) || $reload)
+            $this->config = $this->getConfig();
+
+        return $this->config;
+    }
+
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	abstract public function getConfig();
 
 	/**
@@ -265,35 +282,6 @@ abstract class Options
 	}
 
 	/**
-	 * search input in tabs by name
-	 * @param        $inputName
-	 * @param string $presetId
-	 * @param string $siteId
-	 * @return null|Input
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function getInputByName($inputName, $presetId = '', $siteId = '')
-	{
-		$tabs = $this->tabMap->getTabs();
-
-		foreach ($tabs as $tab) {
-			/**
-			 * @var Tab $tab
-			 */
-			if (($presetId && $tab->getPresetId() != $presetId)
-				|| ($siteId && $tab->getSiteId() != $siteId))
-				continue;
-
-			$input = $tab->searchByName($inputName);
-
-			if ($input instanceof Input)
-				return $input;
-		}
-
-		return null;
-	}
-
-	/**
 	 * @param            $inputName
 	 * @param string     $presetId
 	 * @param string     $siteId
@@ -311,7 +299,7 @@ abstract class Options
 
 		if (!isset($this->cache[$key]) || $reload) {
 
-			$input = $this->getInputByName($inputName, $presetId, $siteId);
+			$input = $this->tabMap->searchInputByName($inputName, $presetId, $siteId, $reload);
 
 			if ($input instanceof Input)
 				$this->cache[$key] = $input->getValue();
@@ -332,12 +320,12 @@ abstract class Options
 	 */
 	public function getDefaultValue($inputName, $presetId = '', $siteId = '')
 	{
-		$input = $this->getInputByName($inputName, $presetId, $siteId);
+		$input = $this->tabMap->searchInputByName($inputName, $presetId, $siteId);
 
 		if ($input instanceof Input)
 			return $input->getDefault();
 
-		throw new Main\SystemException('input not found');
+		throw new Main\SystemException('input ' . $inputName . ' not found');
 	}
 
 	/**
