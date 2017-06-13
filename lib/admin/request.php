@@ -245,6 +245,6 @@ class Request
             compact('tabs')))
             return;
 
-		$this->redirect();
+		//$this->redirect();
 	}
 }
