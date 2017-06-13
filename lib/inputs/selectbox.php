@@ -12,6 +12,7 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Event;
+
 /**
  * Class Selectbox
  *
@@ -111,6 +112,10 @@ class Selectbox extends Input
 		return $this->options;
 	}
 
+    /**
+     * @param $valueId
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	protected function showMultiLabel($valueId)
 	{
 		?>

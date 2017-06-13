@@ -6,6 +6,7 @@ use Bitrix\Main\Application;
 use \Bitrix\Main\Config\Option;
 use \Rover\Fadmin\Tab;
 use \Rover\Fadmin\Options;
+
 /**
  * Class Input
  *
@@ -358,15 +359,16 @@ abstract class Input
 		return $this->disabled;
 	}
 
-	/**
-	 * @param $value
-	 * @return bool
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param $value
+     * @return $this
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function setValue($value)
 	{
 		if ($this->disabled)
-			return false;
+			throw new Main\SystemException('input is disabled');
 
 		$this->value = $this->saveValue($value)
 		    ? $value
@@ -528,6 +530,9 @@ abstract class Input
 	 */
 	public function setValueFromRequest()
 	{
+	    if ($this->getDisabled())
+	        return false;
+
 		$request = Application::getInstance()
 			->getContext()
 			->getRequest();

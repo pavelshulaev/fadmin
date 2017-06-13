@@ -12,6 +12,12 @@ namespace Rover\Fadmin\Engine;
 
 use Rover\Fadmin\Options;
 
+/**
+ * Class Settings
+ *
+ * @package Rover\Fadmin\Engine
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
 class Settings
 {
 	const BOOL_CHECKBOX     = 'bool_checkbox';
@@ -37,7 +43,7 @@ class Settings
 	public function __construct(Options $options)
 	{
 		$this->options  = $options;
-		$config         = $this->options->getConfig();
+		$config         = $this->options->getConfigCache();
 		$settings       = isset($config['settings'])
 			? $config['settings']
 			: [];

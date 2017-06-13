@@ -16,6 +16,12 @@ use Bitrix\Main\Event;
 
 Loc::loadMessages(__FILE__);
 
+/**
+ * Class PresetName
+ *
+ * @package Rover\Fadmin\Inputs
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
 class PresetName extends Text
 {
 	public static $type = self::TYPE__PRESET_NAME;

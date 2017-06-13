@@ -14,7 +14,6 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Application;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
-
 /**
  * Class Form
  *

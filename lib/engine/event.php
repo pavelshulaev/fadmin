@@ -16,6 +16,12 @@ use Bitrix\Main\EventResult;
 use Rover\Fadmin\Inputs\Input;
 use Rover\Fadmin\Options;
 
+/**
+ * Class Event
+ *
+ * @package Rover\Fadmin\Engine
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
 class Event
 {
 	/**
@@ -126,6 +132,7 @@ class Event
 		 * @var Input $sender
 		 */
 		echo $sender->getValueName() . ' ' . $handler->getValueName() . '<br>';
+
 		return $sender->getValueName() === $handler->getValueName();
 	}
 }
