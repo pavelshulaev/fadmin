@@ -79,10 +79,7 @@ class Request
 
 			$this->removePreset($request);
 
-		} else {
-
-			if (!$this->check())
-				return;
+		} elseif ($this->check()){
 
 			if(strlen($this->restoreDefaults) > 0)
 				$this->restoreDefaults();

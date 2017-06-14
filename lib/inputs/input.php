@@ -20,26 +20,27 @@ abstract class Input
 	const EVENT__BEFORE_GET_VALUE       = 'beforeGetValue';
 	const EVENT__AFTER_LOAD_VALUE       = 'afterLoadValue';
 
-	const TYPE__HIDDEN          = 'hidden';
-	const TYPE__DATE            = 'date';
-	const TYPE__DATETIME        = 'datetime';
-	const TYPE__LABEL           = 'label';
-	const TYPE__HEADER          = 'header';
+    const TYPE__ADD_PRESET      = 'addpreset';
 	const TYPE__CHECKBOX        = 'checkbox';
-	const TYPE__TEXT            = 'text';
-	const TYPE__NUMBER          = 'number';
-	const TYPE__FILE            = 'file';
+    const TYPE__CLOCK           = 'clock';
 	const TYPE__COLOR           = 'color';
-	const TYPE__IBLOCK          = 'iblock';
+    const TYPE__CUSTOM          = 'custom';
+    const TYPE__DATE            = 'date';
+	const TYPE__DATETIME        = 'datetime';
+    const TYPE__FILE            = 'file';
+	const TYPE__HEADER          = 'header';
+    const TYPE__HIDDEN          = 'hidden';
+    const TYPE__IBLOCK          = 'iblock';
+    const TYPE__LABEL           = 'label';
+    const TYPE__NUMBER          = 'number';
+    const TYPE__PRESET_NAME     = 'presetname';
+    const TYPE__RADIO           = 'radio';
+    const TYPE__REMOVE_PRESET   = 'removepreset';
+    const TYPE__SELECTBOX       = 'selectbox';
+    const TYPE__SCHEDULE        = 'schedule';
+    const TYPE__SUBMIT          = 'submit';
+    const TYPE__TEXT            = 'text';
 	const TYPE__TEXTAREA        = 'textarea';
-	const TYPE__SELECTBOX       = 'selectbox';
-	const TYPE__SUBMIT          = 'submit';
-	const TYPE__ADD_PRESET      = 'addpreset';
-	const TYPE__REMOVE_PRESET   = 'removepreset';
-	const TYPE__CUSTOM          = 'custom';
-	const TYPE__CLOCK           = 'clock';
-	const TYPE__PRESET_NAME     = 'presetname';
-	const TYPE__SCHEDULE        = 'schedule';
 
 	/**
 	 * input id
@@ -106,15 +107,21 @@ abstract class Input
 	 */
 	protected $disabled = false;
 
-	/**
-	 * @param array $params = ['id', 'name', 'label', 'default', 'multiple', 'help']
-	 * @param Tab   $tab
-	 * @throws Main\ArgumentNullException
-	 */
+    /**
+     * Input constructor.
+     *
+     * @param array $params ['id', 'name', 'label', 'default', 'multiple', 'help']
+     * @param Tab   $tab
+     * @throws Main\ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		if (is_null($params['name']))
 			throw new Main\ArgumentNullException('name');
+
+		if (preg_match('#[.]#usi', $params['name']))
+		    throw new Main\ArgumentOutOfRangeException('name');
 
 		if (is_null($params['label']))
 			throw new Main\ArgumentNullException('label');

@@ -297,7 +297,6 @@ class Tab
 	public function show()
 	{
 		//$this->sort();
-
 		foreach ($this->inputs as $input)
 			/**
 			 * @var Input $input

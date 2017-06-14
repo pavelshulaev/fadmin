@@ -163,6 +163,21 @@ class Input
 		return $input;
 	}
 
+    /**
+     * @param       $name
+     * @param array $options
+     * @param null  $default
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getRadio($name, array $options = [], $default = null)
+	{
+		$input = self::get(InputAbstract::TYPE__RADIO, $name, $default);
+		$input['options'] = $options;
+
+		return $input;
+	}
+
 	/**
 	 * @param $label
 	 * @return array
