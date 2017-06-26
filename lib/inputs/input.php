@@ -569,7 +569,7 @@ abstract class Input
 				class="adm-detail-content-cell-l"
 				style="vertical-align: top; padding-top: 7px;">
 				<?php if (!$empty) : ?>
-					<label for="<?php echo $valueId?>"><?php echo $this->label?>:</label>
+					<label for="<?=$valueId?>"><?=$this->label?>:</label>
 				<?php endif; ?>
 			</td>
 			<td

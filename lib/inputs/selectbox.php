@@ -111,6 +111,10 @@ class Selectbox extends Input
 		return $this->options;
 	}
 
+    /**
+     * @param $valueId
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
 	protected function showMultiLabel($valueId)
 	{
 		?>
