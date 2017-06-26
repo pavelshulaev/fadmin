@@ -17,7 +17,6 @@ use Rover\Fadmin\Inputs\Removepreset;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
 use \Bitrix\Main\Config\Option;
-
 /**
  * Class Request
  *
@@ -80,10 +79,7 @@ class Request
 
 			$this->removePreset($request);
 
-		} else {
-
-			if (!$this->check())
-				return;
+		} elseif ($this->check()){
 
 			if(strlen($this->restoreDefaults) > 0)
 				$this->restoreDefaults();
@@ -245,6 +241,6 @@ class Request
             compact('tabs')))
             return;
 
-		$this->redirect();
+		//$this->redirect();
 	}
 }

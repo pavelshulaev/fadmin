@@ -12,6 +12,7 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Event;
+
 /**
  * Class Selectbox
  *
@@ -113,7 +114,7 @@ class Selectbox extends Input
 
     /**
      * @param $valueId
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @author Pavel Shulaev (https://rover-it.me)
      */
 	protected function showMultiLabel($valueId)
 	{
@@ -123,8 +124,8 @@ class Selectbox extends Input
 			width="50%"
 			class="adm-detail-content-cell-l"
 			style="vertical-align: top; padding-top: 7px;">
-				<label for="<?php echo $valueId?>"><?php echo $this->label?>:<br>
-					<img src="/bitrix/images/form/mouse.gif" width="44" height="21" border="0" alt="">
+				<label for="<?=$valueId?>"><?=$this->label?>:<br>
+					<img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
 				</label>
 		</td>
 		<td

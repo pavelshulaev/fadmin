@@ -13,6 +13,7 @@ namespace Rover\Fadmin;
 use Bitrix\Main;
 use Bitrix\Main\ArgumentNullException;
 use Rover\Fadmin\Inputs\Input;
+
 /**
  * Class Tab
  *
@@ -296,7 +297,6 @@ class Tab
 	public function show()
 	{
 		//$this->sort();
-
 		foreach ($this->inputs as $input)
 			/**
 			 * @var Input $input

@@ -13,8 +13,8 @@ namespace Rover\Fadmin\Engine;
 use \Bitrix\Main\ArgumentNullException;;
 use \Rover\Fadmin\Options;
 use \Rover\Fadmin\Tab;
-use \Rover\Fadmin\Engine\Preset;
 use \Rover\Fadmin\Inputs\Input;
+
 /**
  * Class TabMap
  *
@@ -55,7 +55,7 @@ class TabMap
 	{
 		$this->options = $options;
 
-		$config = $options->getConfig();
+		$config = $options->getConfigCache();
 
 		if (is_array($config) && isset($config['tabs']))
 			$this->tabsParams = $config['tabs'];
@@ -171,6 +171,15 @@ class TabMap
 			 */
 			$allTabsInfo[] = $tab->getInfo();
 
+        // add group rights tab
+        if ($this->options->settings->getGroupRights())
+            $allTabsInfo[] = [
+                "DIV" => "edit2",
+                "TAB" => GetMessage("MAIN_TAB_RIGHTS"),
+                "ICON" => "form_settings",
+                "TITLE" => GetMessage("MAIN_TAB_TITLE_RIGHTS")
+            ];
+
 		return $allTabsInfo;
 	}
 
@@ -225,4 +234,33 @@ class TabMap
 
 		return null;
 	}
+
+    /**
+     * @param        $inputName
+     * @param string $presetId
+     * @param string $siteId
+     * @param bool   $reload
+     * @return null|Input
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function searchInputByName($inputName, $presetId = '', $siteId = '', $reload = false)
+    {
+        $tabs = $this->getTabs($reload);
+
+        foreach ($tabs as $tab) {
+            /**
+             * @var Tab $tab
+             */
+            if (($presetId && $tab->getPresetId() != $presetId)
+                || ($siteId && $tab->getSiteId() != $siteId))
+                continue;
+
+            $input = $tab->searchByName($inputName);
+
+            if ($input instanceof Input)
+                return $input;
+        }
+
+        return null;
+    }
 }

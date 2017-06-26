@@ -12,18 +12,25 @@ namespace Rover\Fadmin\Engine;
 
 use Rover\Fadmin\Options;
 
+/**
+ * Class Settings
+ *
+ * @package Rover\Fadmin\Engine
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
 class Settings
 {
-	const BOOL_CHECKBOX    = 'bool_checkbox';
-	const LOG_ERRORS       = 'log_errors';
-
+	const BOOL_CHECKBOX     = 'bool_checkbox';
+	const LOG_ERRORS        = 'log_errors';
+    const GROUP_RIGHTS      = 'group_rights';
 	/**
 	 * default settings
 	 * @var array
 	 */
 	protected $defaults = [
 		self::BOOL_CHECKBOX    => false,
-		self::LOG_ERRORS       => false
+		self::LOG_ERRORS       => false,
+		self::GROUP_RIGHTS     => false,
 	];
 
 	protected $storage = [];
@@ -36,7 +43,7 @@ class Settings
 	public function __construct(Options $options)
 	{
 		$this->options  = $options;
-		$config         = $this->options->getConfig();
+		$config         = $this->options->getConfigCache();
 		$settings       = isset($config['settings'])
 			? $config['settings']
 			: [];
@@ -64,4 +71,13 @@ class Settings
 	{
 		return $this->storage[self::LOG_ERRORS];
 	}
+
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getGroupRights()
+    {
+        return $this->storage[self::GROUP_RIGHTS];
+    }
 }

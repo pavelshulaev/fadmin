@@ -13,7 +13,6 @@ namespace Rover\Fadmin\Helper;
 use Bitrix\Main\ArgumentNullException;
 use Rover\Fadmin\Inputs\Input as InputAbstract;
 use Bitrix\Main\Localization\Loc;
-
 /**
  * Class Input
  *
@@ -153,13 +152,28 @@ class Input
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getSelect($name, $options, $default = null, $multiple = false, $label = null)
+	public static function getSelect($name, array $options = [], $default = null, $multiple = false, $label = null)
 	{
 		$input = self::get(InputAbstract::TYPE__SELECTBOX, $name, $default, $multiple);
 		$input['options'] = $options;
 
 		if ($label)
 			$input['label'] = $label;
+
+		return $input;
+	}
+
+    /**
+     * @param       $name
+     * @param array $options
+     * @param null  $default
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getRadio($name, array $options = [], $default = null)
+	{
+		$input = self::get(InputAbstract::TYPE__RADIO, $name, $default);
+		$input['options'] = $options;
 
 		return $input;
 	}

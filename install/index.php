@@ -21,7 +21,8 @@ class rover_fadmin extends CModule
     {
         global $errors;
         
-		$arModuleVersion = array();
+		$arModuleVersion    = array();
+        $errors             = array();
 
         require(__DIR__ . "/version.php");
 
