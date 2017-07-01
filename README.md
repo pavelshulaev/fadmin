@@ -23,3 +23,8 @@
 
 ## Контакты
 По всем вопросам вы можете связаться со мной по email: rover.webdev@gmail.com, либо через форму на сайте http://rover-it.me. Гитхаб проекта: https://github.com/pavelshulaev/fadmin
+
+## Пожертвования
+Если решение оказалось вам полезным, вы можете сделать пожертование
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=M2ZQGRZJ5ZZXQ)
