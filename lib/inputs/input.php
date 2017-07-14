@@ -248,7 +248,7 @@ abstract class Input
 	/**
 	 * @param array $params
 	 * @param Tab   $tab
-	 * @return mixed
+	 * @return Input
 	 * @throws Main\SystemException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
