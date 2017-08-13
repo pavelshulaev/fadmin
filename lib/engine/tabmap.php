@@ -174,9 +174,9 @@ class TabMap
         // add group rights tab
         if ($this->options->settings->getGroupRights())
             $allTabsInfo[] = [
-                "DIV" => "edit2",
-                "TAB" => GetMessage("MAIN_TAB_RIGHTS"),
-                "ICON" => "form_settings",
+                "DIV"   => "edit2",
+                "TAB"   => GetMessage("MAIN_TAB_RIGHTS"),
+                "ICON"  => "form_settings",
                 "TITLE" => GetMessage("MAIN_TAB_TITLE_RIGHTS")
             ];
 
