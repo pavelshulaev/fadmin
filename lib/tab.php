@@ -102,7 +102,7 @@ class Tab
 	 */
 	public function setLabel($label)
 	{
-		$this->label = trim($label);
+		$this->label = html_entity_decode(trim($label));
 	}
 
 	/**
@@ -221,7 +221,7 @@ class Tab
 
 	/**
 	 * @param $inputName
-	 * @return Input|null
+	 * @return mixed
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getValue($inputName)
