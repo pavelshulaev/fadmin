@@ -37,7 +37,7 @@ abstract class Input
     const TYPE__RADIO           = 'radio';
     const TYPE__REMOVE_PRESET   = 'removepreset';
     const TYPE__SELECTBOX       = 'selectbox';
-    const TYPE__SELECTBOX_GROUP = 'selectboxgroup';
+    const TYPE__SELECT_GROUP    = 'selectgroup';
     const TYPE__SCHEDULE        = 'schedule';
     const TYPE__SUBMIT          = 'submit';
     const TYPE__TEXT            = 'text';
