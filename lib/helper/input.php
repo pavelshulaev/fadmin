@@ -164,6 +164,42 @@ class Input
 	}
 
 	/**
+	 * @param            $name
+	 * @param            $options
+	 * @param null       $label
+	 * @param null       $default
+	 * @param bool|false $multiple
+	 * @return array
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getSelectGroup($name, array $options = [], $default = null, $multiple = false, $label = null)
+	{
+		$input = self::get(InputAbstract::TYPE__SELECT_GROUP, $name, $default, $multiple);
+		$input['options'] = $options;
+
+		if ($label)
+			$input['label'] = $label;
+
+		return $input;
+	}
+
+    /**
+     * @param       $name
+     * @param array $options
+     * @param null  $default
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getRadio($name, array $options = [], $default = null)
+	{
+		$input = self::get(InputAbstract::TYPE__RADIO, $name, $default);
+		$input['options'] = $options;
+
+		return $input;
+	}
+
+	/**
 	 * @param $label
 	 * @return array
 	 * @author Pavel Shulaev (http://rover-it.me)

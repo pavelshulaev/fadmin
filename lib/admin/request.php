@@ -79,10 +79,7 @@ class Request
 
 			$this->removePreset($request);
 
-		} else {
-
-			if (!$this->check())
-				return;
+		} elseif ($this->check()){
 
 			if(strlen($this->restoreDefaults) > 0)
 				$this->restoreDefaults();
@@ -244,6 +241,6 @@ class Request
             compact('tabs')))
             return;
 
-		$this->redirect();
+		//$this->redirect();
 	}
 }

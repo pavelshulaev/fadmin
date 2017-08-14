@@ -74,6 +74,9 @@ class Form
 		foreach ($tabs as $tab)
 			$this->showTab($tab);
 
+		if ($this->options->settings->getGroupRights())
+		    $this->showGroupRightsTab();
+
 		$this->tabControl->EndTab();
 
 		$this->showFormEnd();
@@ -94,6 +97,25 @@ class Form
 		$this->tabControl->BeginNextTab();
 		$tab->show();
 	}
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	protected function showGroupRightsTab()
+    {
+
+        global $APPLICATION, $REQUEST_METHOD;
+
+        $RIGHTS     = $_REQUEST['RIGHTS'];
+        $SITES      = $_REQUEST['SITES'];
+        $GROUPS     = $_REQUEST['GROUPS'];
+        $Apply      = $_REQUEST['Apply'];
+        $Update     = $_REQUEST['Update'] ?:$Apply;
+        $module_id  = $_REQUEST['mid'];
+
+        $this->tabControl->BeginNextTab();
+        require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/admin/group_rights.php");
+    }
 
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)

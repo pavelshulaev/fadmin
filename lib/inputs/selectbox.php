@@ -124,7 +124,7 @@ class Selectbox extends Input
 			width="50%"
 			class="adm-detail-content-cell-l"
 			style="vertical-align: top; padding-top: 7px;">
-				<label for="<?php echo $valueId?>"><?php echo $this->label?>:<br>
+				<label for="<?=$valueId?>"><?=$this->label?>:<br>
 					<img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
 				</label>
 		</td>

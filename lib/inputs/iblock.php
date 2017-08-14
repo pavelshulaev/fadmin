@@ -132,9 +132,9 @@ class Iblock extends Input
 			}
 		}
 
-		$htmlTypeName = htmlspecialcharsbx($strTypeName);
+		$htmlTypeName   = htmlspecialcharsbx($strTypeName);
 		$htmlIBlockName = htmlspecialcharsbx($strIBlockName);
-		$onChangeType = 'OnType_'.$filterId.'_Changed(this, \''.\CUtil::JSEscape($strIBlockName).'\');'.$onChangeType.';';
+		$onChangeType   = 'OnType_'.$filterId.'_Changed(this, \''.\CUtil::JSEscape($strIBlockName).'\');'.$onChangeType.';';
 		$onChangeIBlock = trim($onChangeIBlock);
 
 		$html .= '<select name="'.$htmlTypeName.'" id="'.$htmlTypeName.'" onchange="'.htmlspecialcharsbx($onChangeType).'" '.$strAddType.'>'."\n";
@@ -146,12 +146,11 @@ class Iblock extends Input
 		}
 		$html .= "</select>\n";
 		$html .= "&nbsp;\n";
-		$size = count($arIBlocks[$filterId][$IBLOCK_TYPE]) > 5 ? '8' : '3';
-		$html .= '<select multiple="multiple" size="' . $size .'"  name="'.$htmlIBlockName.'[]" id="'.$htmlIBlockName.'"'.($onChangeIBlock != ''? ' onchange="'.htmlspecialcharsbx($onChangeIBlock).'"': '').' '.$strAddIBlock.'>'."\n";
+		$html .= '<select multiple="multiple" size="' . count($arIBlocks[$filterId][$IBLOCK_TYPE]) > 5 ? '8' : '3' .'"  name="'.$htmlIBlockName.'[]" id="'.$htmlIBlockName.'"'.($onChangeIBlock != ''? ' onchange="'.htmlspecialcharsbx($onChangeIBlock).'"': '').' '.$strAddIBlock.'>'."\n";
+
 		foreach($arIBlocks[$filterId][$IBLOCK_TYPE] as $key => $value)
-		{
 			$html .= '<option value="'.htmlspecialcharsbx($key).'"'.(in_array($key, $iblockIds)? ' selected': '').'>'.htmlspecialcharsEx($value).'</option>'."\n";
-		}
+
 		$html .= "</select>\n";
 
 		return $html;

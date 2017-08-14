@@ -296,7 +296,8 @@ class Tab
 	 */
 	public function show()
 	{
-		//$this->sort();
+	    if ($this->options->settings->getUseSort())
+		    $this->sort();
 
 		foreach ($this->inputs as $input)
 			/**
