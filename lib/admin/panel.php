@@ -19,9 +19,24 @@ use \Rover\Fadmin\Options;
  */
 class Panel
 {
+    /**
+     * @var Options
+     */
 	protected $options;
+
+    /**
+     * @var Request
+     */
 	protected $request;
+
+    /**
+     * @var Form
+     */
 	protected $form;
+
+    /**
+     * @var \CAdminTabControl
+     */
 	protected $tabControl;
 
 	/**
@@ -30,13 +45,11 @@ class Panel
 	 */
 	public function __construct(Options $options, $formName = null)
 	{
-		global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
-
 		$this->options = $options;
 
 		$tabControl = $this->getTabControl();
 
-		$this->request  = new Request($tabControl, $options, $REQUEST_METHOD, $Update, $Apply, $RestoreDefaults);
+		$this->request  = new Request($tabControl, $options);
 		$this->form     = new Form($tabControl, $options, $formName);
 	}
 

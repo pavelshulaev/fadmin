@@ -52,9 +52,7 @@ class Form
 		$this->tabControl   = $tabControl;
 		$this->options      = $options;
 		$this->moduleId     = htmlspecialcharsbx($this->options->getModuleId());
-		$this->name         = $name
-			? $name
-			: $this->moduleId;
+		$this->name         = $name ?: $this->moduleId;
 	}
 
 	/**

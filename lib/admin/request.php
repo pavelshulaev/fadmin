@@ -11,8 +11,10 @@
 namespace Rover\Fadmin\Admin;
 
 use Bitrix\Main\Application;
+use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\Request as BxRequest;
 use Rover\Fadmin\Inputs\Addpreset;
+use Rover\Fadmin\Inputs\Input;
 use Rover\Fadmin\Inputs\Removepreset;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
@@ -25,35 +27,59 @@ use \Bitrix\Main\Config\Option;
  */
 class Request
 {
+    /**
+     * @var mixed|string
+     */
 	protected $moduleId;
+
+    /**
+     * @var Options
+     */
 	protected $options;
+
+    /**
+     * @var \CAdminTabControl
+     */
 	protected $tabControl;
 
-	protected $requestMethod = 'POST';
+    /**
+     * @var mixed|string
+     */
+	protected $requestMethod;
+
+    /**
+     * @var bool
+     */
 	protected $update;
+
+    /**
+     * @var bool
+     */
 	protected $apply;
+
+    /**
+     * @var bool
+     */
 	protected $restoreDefaults;
 
-	/**
-	 * @param \CAdminTabControl $tabControl
-	 * @param Options           $options
-	 * @param                   $requestMethod
-	 * @param                   $update
-	 * @param                   $apply
-	 * @param                   $restoreDefaults
-	 */
-	public function __construct(\CAdminTabControl $tabControl, Options $options, $requestMethod, $update, $apply, $restoreDefaults)
+    /**
+     * Request constructor.
+     *
+     * @param \CAdminTabControl $tabControl
+     * @param Options           $options
+     */
+	public function __construct(\CAdminTabControl $tabControl, Options $options)
 	{
-		$this->tabControl   = $tabControl;
-		$this->options      = $options;
-		$this->moduleId     = htmlspecialcharsbx($this->options->getModuleId());
+	    global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
 
-		if (!is_null($requestMethod))
-			$this->requestMethod = htmlspecialcharsbx($requestMethod);
+		$this->requestMethod    = htmlspecialcharsbx($REQUEST_METHOD);
+		$this->update           = (bool)$Update;
+		$this->apply            = (bool)$Apply;
+		$this->restoreDefaults  = (bool)$RestoreDefaults;
 
-		$this->update           = (bool)$update;
-		$this->apply            = (bool)$apply;
-		$this->restoreDefaults  = (bool)$restoreDefaults;
+        $this->tabControl   = $tabControl;
+        $this->options      = $options;
+        $this->moduleId     = htmlspecialcharsbx($this->options->getModuleId());
 	}
 
 	/**
@@ -71,15 +97,15 @@ class Request
 			->getContext()
 			->getRequest();
 
-		if ($request->get(Addpreset::$type)) {
+		if ($request->get(Input::TYPE__ADD_PRESET)) {
 
 			$this->addPreset($request);
 
-		} elseif ($request->get(Removepreset::$type)) {
+		} elseif ($request->get(Input::TYPE__REMOVE_PRESET)) {
 
 			$this->removePreset($request);
 
-		} elseif ($this->check()){
+		} elseif ($this->checkParams()){
 
 			if(strlen($this->restoreDefaults) > 0)
 				$this->restoreDefaults();
@@ -166,7 +192,7 @@ class Request
 			$request->get(Removepreset::$type));
 
 		if (!$id)
-			throw new \Bitrix\Main\ArgumentNullException('id');
+			throw new ArgumentNullException('id');
 
 		// action beforeRemovePreset
 		if(false === $this->options->runEvent(
@@ -197,7 +223,7 @@ class Request
 	 * @return bool
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function check()
+	protected function checkParams()
 	{
 		return (($this->requestMethod === 'POST')
 			&& (strlen($this->update.$this->apply.$this->restoreDefaults) > 0)
