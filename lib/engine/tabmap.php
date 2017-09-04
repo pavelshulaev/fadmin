@@ -69,7 +69,7 @@ class TabMap
 	public function getTabs($reload = false)
 	{
 		if (!count($this->tabMap) || $reload)
-			$this->loadTabs();
+			$this->reloadTabs();
 
 		$tabs = $this->tabMap;
 
@@ -82,7 +82,7 @@ class TabMap
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function loadTabs()
+	public function reloadTabs()
 	{
 		$this->tabMap       = [];
 		$this->presetMap    = [];
@@ -144,13 +144,13 @@ class TabMap
 			throw new ArgumentNullException('presetId');
 
 		foreach ($this->getTabs($reload) as $tab)
-			/**
-			 * @var Tab $tab
-			 */
-			if ($tab->isPreset()
-				&& ($tab->getSiteId() == $siteId)
-				&& ($tab->getPresetId() == $presetId))
-				return $tab;
+            /**
+             * @var Tab $tab
+             */
+            if ($tab->isPreset()
+                && ($tab->getSiteId() == $siteId)
+                && ($tab->getPresetId() == $presetId))
+                return $tab;
 
 		return null;
 	}
@@ -174,10 +174,10 @@ class TabMap
         // add group rights tab
         if ($this->options->settings->getGroupRights())
             $allTabsInfo[] = [
-                "DIV" => "edit2",
-                "TAB" => GetMessage("MAIN_TAB_RIGHTS"),
-                "ICON" => "form_settings",
-                "TITLE" => GetMessage("MAIN_TAB_TITLE_RIGHTS")
+                "DIV"       => "edit2",
+                "TAB"       => GetMessage("MAIN_TAB_RIGHTS"),
+                "ICON"      => "form_settings",
+                "TITLE"     => GetMessage("MAIN_TAB_TITLE_RIGHTS")
             ];
 
 		return $allTabsInfo;

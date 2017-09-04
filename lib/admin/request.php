@@ -142,16 +142,17 @@ class Request
 			$params['name'],
 			$params['siteId']
 		);
-		//reload tabs
-		$this->options->tabMap->getTabs(true);
 
-		// action afterAddPreset
+		//reload tabs
+		$this->options->tabMap->reloadTabs();
 		$this->options->runEvent(Options::EVENT__AFTER_ADD_PRESET, $params);
 
+		$presetTabName = $this->options->tabMap->getTabByPresetId($params['id'], $params['siteId'], true);
 
-		$presetTabName = $this->options->tabMap->getTabByPresetId($params['id']);
-
-		$this->redirect($presetTabName->getName());
+		if ($presetTabName instanceof Tab)
+		    $this->redirect($presetTabName->getName());
+        else
+            $this->options->message->addError('added preset not found');
 	}
 
 	/**
@@ -241,6 +242,6 @@ class Request
             compact('tabs')))
             return;
 
-		//$this->redirect();
+		$this->redirect();
 	}
 }

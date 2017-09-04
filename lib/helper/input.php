@@ -83,16 +83,26 @@ class Input
 		return self::get(InputAbstract::TYPE__TEXT, $name, $default);
 	}
 
-	/**
-	 * @param      $name
-	 * @param null $default
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getTextarea($name, $default = '')
+    /**
+     * @param        $name
+     * @param string $default
+     * @param null   $cols
+     * @param null   $rows
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     *
+     */
+	public static function getTextarea($name, $default = '', $cols = null, $rows = null)
 	{
-		return self::get(InputAbstract::TYPE__TEXTAREA, $name, $default);
+		$textarea = self::get(InputAbstract::TYPE__TEXTAREA, $name, $default);
+
+		if (!is_null($cols))
+		    $textarea['cols']   = intval($cols);
+
+		if (!is_null($rows))
+		    $textarea['rows']   = intval($rows);
+
+		return $textarea;
 	}
 
 	/**
@@ -281,7 +291,7 @@ class Input
 			throw new ArgumentNullException('default');
 
 		$result['default']  = $default;
-		$result['popup']    = $popup;
+		$result['popup']    = $popup ?: Loc::getMessage($name . '_popup');
 
 		return $result;
 	}
