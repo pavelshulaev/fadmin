@@ -39,31 +39,24 @@ class Radio extends Input
 			$this->options = $params['options'];
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		$this->showLabel($valueId);
-
-		foreach ($this->options as $optionValue => $optionName):
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        foreach ($this->options as $optionValue => $optionName):
 
             ?><label><input
-                type="radio"
-                <?=$this->disabled ? 'disabled="disabled"': '';?>
-                name="<?=$valueName?>"
-                id="<?=$valueId?>"
-                value="<?=$optionValue?>"
-                <?=$this->value == $optionValue ? ' checked="checked "' : ''?>
+            type="radio"
+            <?=$this->disabled ? 'disabled="disabled"': '';?>
+            name="<?=$this->getValueName()?>"
+            id="<?=$this->getValueId()?>"
+            value="<?=$optionValue?>"
+            <?=$this->value == $optionValue ? ' checked="checked "' : ''?>
             ><?=$optionName?></label><?php
 
         endforeach;
-
-		$this->showHelp();
-	}
+    }
 
 	/**
 	 * @param array $options

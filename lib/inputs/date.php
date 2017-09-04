@@ -23,11 +23,12 @@ class Date extends DateTime
 	 */
 	public static $type = self::TYPE__DATE;
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		parent::draw(false);
-	}
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        $this->hideTime();
+        parent::showInput();
+    }
 }

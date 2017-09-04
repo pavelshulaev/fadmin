@@ -48,6 +48,7 @@ class File extends Input
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected $size = 20;
+
 	/**
 	 * @param array $params
 	 * @param Tab   $tab
@@ -74,39 +75,32 @@ class File extends Input
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        $valueName  = $this->getValueName();
 
-		$this->showLabel($valueId);
+        $fileType = $this->isImage
+            ? 'IMAGE'
+            : '';
 
-		$fileType = $this->isImage
-			? 'IMAGE'
-			: '';
+        if (strlen($this->value) > 0):
 
+            $file = \CFile::GetFileArray($this->value);
 
-		if (strlen($this->value) > 0):
+            echo '<code>' . $file['ORIGINAL_NAME'] . '</code><br>';
 
-			$file = \CFile::GetFileArray($this->value);
+            if ($this->isImage)
+                echo \CFile::ShowImage($this->value, 200, 200, "border=0", "", true) . '<br>';
 
-			echo '<code>' . $file['ORIGINAL_NAME'] . '</code><br>';
+        endif;
 
-			if ($this->isImage)
-				echo \CFile::ShowImage($this->value, 200, 200, "border=0", "", true) . '<br>';
-
-		endif;
-
-		echo \CFile::InputFile($valueName, $this->size, $this->value, false, $this->maxSize,
-				$fileType, "class=typefile", 0, "class=typeinput", '', false, false, false)
-			. '<br>';
-
-		$this->showHelp();
-	}
-
+        echo \CFile::InputFile($valueName, $this->size, $this->value, false, $this->maxSize,
+                $fileType, "class=typefile", 0, "class=typeinput", '', false, false)
+            . '<br>';
+    }
 
 	/**
 	 * @param Event $event

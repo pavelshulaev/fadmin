@@ -66,20 +66,23 @@ class Selectgroup extends Input
     }
 
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @param bool $empty
+     * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function showLabel($empty = false)
     {
-        $valueId = $this->getValueId();
-
         if ($this->multiple)
-            $this->showMultiLabel($valueId);
+            parent::showMultiLabel();
         else
-            $this->showLabel($valueId);
+            parent::showLabel($empty);
+    }
 
-        echo self::getList();
-
-        $this->showHelp();
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showInput()
+    {
+        echo $this->getList();
     }
 
     /**
@@ -98,28 +101,6 @@ class Selectgroup extends Input
     public function getOptions()
     {
         return $this->options;
-    }
-
-    /**
-     * @param $valueId
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    protected function showMultiLabel($valueId)
-    {
-        ?>
-        <tr>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-l"
-            style="vertical-align: top; padding-top: 7px;">
-            <label for="<?=$valueId?>"><?=$this->label?>:<br>
-                <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
-            </label>
-        </td>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-r"
-        ><?php
     }
 
     /**
@@ -234,11 +215,6 @@ class Selectgroup extends Input
                 {
                     var items       = '.\CUtil::PhpToJSObject($this->options).';
                     var selected    = BX(selectID);
-                    
-                    console.log(typeSelect);
-                    console.log(selectID);
-                    console.log(items);
-                    console.log(selected);
                     
                     if(!!selected)
                     {

@@ -28,6 +28,10 @@ class Text extends Input
 	 * @var int
 	 */
 	protected $maxLength    = 255;
+
+    /**
+     * @var int
+     */
 	protected $size         = 50;
 
 	/**
@@ -46,25 +50,18 @@ class Text extends Input
 			$this->size = intval(htmlspecialcharsbx($params['size']));
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		$this->showLabel($valueId);
-
-		?><input
-			type="text"
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			id="<?=$valueId?>"
-			size="<?=$this->size?>"
-			maxlength="<?=$this->maxLength?>"
-			value="<?=$this->value?>"
-			name="<?=$valueName?>"><?php
-
-		$this->showHelp();
-	}
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        ?><input
+            type="text"
+            <?=$this->disabled ? 'disabled="disabled"': '';?>
+            id="<?=$this->getValueId()?>"
+            size="<?=$this->size?>"
+            maxlength="<?=$this->maxLength?>"
+            value="<?=$this->value?>"
+            name="<?=$this->getValueName()?>"><?php
+    }
 }

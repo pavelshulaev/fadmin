@@ -50,33 +50,26 @@ class Textarea extends Input
 			$this->cols = htmlspecialcharsbx($params['cols']);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		$this->showLabel($valueId);
-
-		?><textarea
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			id="<?=$valueId?>"
-			rows="<?=$this->rows?>"
-			cols="<?=$this->cols?>"
-			name="<?=$valueName?>"><?=$this->value?></textarea><?php
-
-		$this->showHelp();
-	}
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        ?><textarea
+            <?=$this->disabled ? 'disabled="disabled"': '';?>
+            id="<?=$this->getValueId()?>"
+            rows="<?=$this->rows?>"
+            cols="<?=$this->cols?>"
+            name="<?=$this->getValueName()?>"><?=$this->value?></textarea><?php
+    }
 
     /**
-     * @param      $valueId
      * @param bool $empty
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @author Pavel Shulaev (https://rover-it.me)
      */
-	protected function showLabel($valueId, $empty = false)
+	protected function showLabel($empty = false)
 	{
+        $valueId = $this->getValueId();
 		?>
 		<tr>
 		<td

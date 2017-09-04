@@ -71,13 +71,12 @@ class Input
 		]);
 	}
 
-	/**
-	 * @param      $name
-	 * @param null $default
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $name
+     * @param string $default
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public static function getText($name, $default = '')
 	{
 		return self::get(InputAbstract::TYPE__TEXT, $name, $default);

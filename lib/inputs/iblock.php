@@ -28,27 +28,21 @@ class Iblock extends Input
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function draw()
-	{
-		if (!Loader::includeModule('iblock')){
-			ShowError('Iblock module not found');
-			return;
-		}
+	public function showInput()
+    {
+        if (!Loader::includeModule('iblock')){
+            ShowError('Iblock module not found');
+            return;
+        }
 
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+        $valueName      = $this->getValueName();
+        $additionsHtml  = $this->disabled ? 'disabled="disabled"': '';
 
-		$this->showLabel($valueId);
-
-		$additionsHtml = $this->disabled ? 'disabled="disabled"': '';
-
-		if ($this->multiple)
-			echo self::getIBlockDropDownListMultiple($this->value, $this->name . '_type', $valueName, false, '', '', $additionsHtml);
-		else
-			echo GetIBlockDropDownList($this->value, $this->name . '_type', $valueName, false, '', '', $additionsHtml);
-
-		$this->showHelp();
-	}
+        if ($this->multiple)
+            echo self::getIBlockDropDownListMultiple($this->value, $this->name . '_type', $valueName, false, '', '', $additionsHtml);
+        else
+            echo GetIBlockDropDownList($this->value, $this->name . '_type', $valueName, false, '', $additionsHtml);
+    }
 
 	/**
 	 * @param array      $iblockIds

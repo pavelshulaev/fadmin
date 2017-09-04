@@ -32,10 +32,30 @@ class Tab
 	 * @var string
 	 */
 	protected $name;
+
+    /**
+     * @var string
+     */
 	protected $label;
+
+    /**
+     * @var string
+     */
 	protected $description;
+
+    /**
+     * @var bool
+     */
 	protected $preset;
+
+    /**
+     * @var string
+     */
 	protected $presetId = '';
+
+    /**
+     * @var string
+     */
 	protected $siteId = '';
 
 	/**
@@ -292,21 +312,6 @@ class Tab
 	}
 
 	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function show()
-	{
-	    if ($this->options->settings->getUseSort())
-		    $this->sort();
-
-		foreach ($this->inputs as $input)
-			/**
-			 * @var Input $input
-			 */
-			$input->show();
-	}
-
-	/**
 	 * @throws Main\SystemException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
@@ -332,34 +337,6 @@ class Tab
 			 * @var Input $input
 			 */
 			$input->setValueFromRequest();
-	}
-
-	/**
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getInfo()
-	{
-		$name           = $this->getName();
-		$icon           = "ib_settings";
-		$label          = strlen($this->siteId)
-			? $this->label . ' [' . $this->siteId . ']'
-			: $this->label;
-		$description    = strlen($this->siteId)
-			? $this->description . ' [' . $this->siteId . ']'
-			: $this->description;
-
-		$params = array_merge(['tab' => $this],
-			compact('name', 'icon', 'label', 'description'));
-
-		$this->options->runEvent(Options::EVENT__BEFORE_GET_TAB_INFO, $params);
-
-		return [
-			'DIV'   => $params['name'],
-			'TAB'   => $params['label'],
-			'ICON'  => $params['icon'],
-			'TITLE' => $params['description']
-		];
 	}
 
 	/**

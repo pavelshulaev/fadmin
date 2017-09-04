@@ -11,6 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Localization\Loc;
+use Rover\Fadmin\Helper\Layout;
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
@@ -54,11 +55,10 @@ class Removepreset extends Submit
 		if (!$presetId)
 			return;
 
-		$siteId     = $this->tab->getSiteId();
 		$valueId    = $this->getValueId();
 
-		$this->showLabel($valueId, true);
-		$this->drawSubmit($valueId, self::$type, $siteId . self::SEPARATOR . $presetId, $this->label);
+		$this->showLabel(true);
+		$this->showInput();
 		$this->showHelp();
 
 		if ($this->popup === false) return;
@@ -69,6 +69,19 @@ class Removepreset extends Submit
 
 		$this->drawConfirm($valueId, $confirm);
 	}
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        $presetId = $this->tab->getPresetId();
+
+        if (!$presetId)
+            return;
+
+        Layout::submit($this, self::$type, $this->tab->getSiteId() . self::SEPARATOR . $presetId);
+    }
 
 	/**
 	 * not save

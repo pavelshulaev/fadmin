@@ -212,16 +212,6 @@ abstract class Options
 	abstract public function getConfig();
 
 	/**
-	 * @param bool|false $reload
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getAllTabsInfo($reload = false)
-	{
-		return $this->tabMap->getAllTabsInfo($reload);
-	}
-
-	/**
 	 * @return mixed
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */

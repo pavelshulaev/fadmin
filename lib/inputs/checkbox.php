@@ -42,25 +42,18 @@ class Checkbox extends Input
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		$this->showLabel($valueId);
-
-		?><input
-			type="checkbox"
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			id="<?=$valueId?>"
-			name="<?=$valueName?>"
-			value="Y"<?=($this->value=="Y")?" checked=\"checked\"":'';?>/><?php
-
-		$this->showHelp();
-	}
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showInput()
+    {
+        ?><input
+            type="checkbox"
+            <?=$this->disabled ? 'disabled="disabled"': '';?>
+            id="<?=$this->getValueId()?>"
+            name="<?=$this->getValueName()?>"
+            value="Y"<?=($this->value=="Y")?" checked=\"checked\"":'';?>/><?php
+    }
 
 	/**
 	 * @param Event $event

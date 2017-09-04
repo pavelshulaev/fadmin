@@ -58,34 +58,28 @@ class Number extends Text
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        if (!self::$cssPrinted){
+            $this->printCss();
+            self::$cssPrinted = true;
+        }
 
-		$this->showLabel($valueId);
-
-		if (!self::$cssPrinted){
-			$this->printCss();
-			self::$cssPrinted = true;
-		}
-
-		?><input
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			type="number"
-			id="<?=$valueId?>"
-			size="<?=$this->size?>"
-			maxlength="<?=$this->maxLength?>"
-			value="<?=$this->value?>"
-			name="<?=$valueName?>"
-			max="<?=$this->max?>"
-			min="<?=$this->min?>"
-		><?php
-		$this->showHelp();
-	}
+        ?><input
+            <?=$this->disabled ? 'disabled="disabled"': '';?>
+            type="number"
+            id="<?=$this->getValueId()?>"
+            value="<?=$this->value?>"
+            name="<?=$this->getValueName()?>"
+            <?=is_numeric($this->size) ? " size='{$this->size}' " : ''?>
+            <?=is_numeric($this->maxLength) ? " maxlength='{$this->maxLength}' " : ''?>
+            <?=is_numeric($this->max) ? " max='{$this->max}' " : ''?>
+            <?=is_numeric($this->min) ? " min='{$this->min}' " : ''?>
+            ><?php
+    }
 
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
