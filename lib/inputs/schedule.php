@@ -50,6 +50,9 @@ class Schedule extends Input
 	 */
 	protected $width = 500;
 
+    /**
+     * @var array
+     */
 	protected $inputValue = [];
 
 	/**
@@ -120,192 +123,186 @@ class Schedule extends Input
 		self::$assetsAdded = true;
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$this->addAssets();
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        $this->addAssets();
 
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+        $valueId = $this->getValueId();
 
-		$this->showLabel($valueId);
+        ?><input type="hidden"
+                 id="<?=$valueId?>"
+                 value='<?=json_encode($this->inputValue)?>'
+                 name="<?=$this->getValueName()?>">
+        <div id="scheduler-<?=$valueId?>"></div>
+        <style>
+            .jqx-scheduler-all-day-cell span{
+                display: none;
+            }
+        </style>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var appointments = [
+                        <?php
 
-		?><input type="hidden"
-		         id="<?=$valueId?>"
-		         value='<?=json_encode($this->inputValue)?>'
-		         name="<?=$valueName?>">
-		<div id="scheduler-<?=$valueId?>"></div>
-		<style>
-			.jqx-scheduler-all-day-cell span{
-				display: none;
-			}
-		</style>
-		<script type="text/javascript">
-			$(document).ready(function () {
-				var appointments = [
-					<?php
+                        $num = 1;
 
-					$num = 1;
+                        foreach ($this->value as $period):	?>{
+                        id: "<?=$valueId?>-<?=$num?>",
+                        subject: "<?=$this->periodLabel?>",
+                        calendar: "1",
+                        start: new Date(<?=$period['start']->format('Y, ' . $period['jqwStartMonth'] .', d, H, i, s')?>),
+                        end: new Date(<?=$period['end']->format('Y, ' . $period['jqwEndMonth'] .', d, H, i, s')?>)
+                    },
+                    <?php
 
-					foreach ($this->value as $period):	?>{
-						id: "<?=$valueId?>-<?=$num?>",
-						subject: "<?=$this->periodLabel?>",
-						calendar: "1",
-						start: new Date(<?=$period['start']->format('Y, ' . $period['jqwStartMonth'] .', d, H, i, s')?>),
-						end: new Date(<?=$period['end']->format('Y, ' . $period['jqwEndMonth'] .', d, H, i, s')?>)
-					},
-					<?php
+                    $num++;
 
-					$num++;
+                    endforeach; ?>
+                ];
 
-					endforeach; ?>
-				];
+                // prepare the data
+                var source =
+                    {
+                        dataType: "array",
+                        dataFields: [
+                            { name: 'id', type: 'string' },
+                            { name: 'subject', type: 'string' },
+                            { name: 'calendar', type: 'string' },
+                            { name: 'start', type: 'date' },
+                            { name: 'end', type: 'date' }
+                        ],
+                        id: 'id',
+                        localData: appointments
+                    };
+                var adapter = new $.jqx.dataAdapter(source),
+                    $scheduler = $("#scheduler-<?=$valueId?>"),
+                    $export = $('#<?=$valueId?>');
 
-				// prepare the data
-				var source =
-				{
-					dataType: "array",
-					dataFields: [
-						{ name: 'id', type: 'string' },
-						{ name: 'subject', type: 'string' },
-						{ name: 'calendar', type: 'string' },
-						{ name: 'start', type: 'date' },
-						{ name: 'end', type: 'date' }
-					],
-					id: 'id',
-					localData: appointments
-				};
-				var adapter = new $.jqx.dataAdapter(source),
-					$scheduler = $("#scheduler-<?=$valueId?>"),
-					$export = $('#<?=$valueId?>');
+                $scheduler.jqxScheduler({
+                    //date: new $.jqx.date(),
+                    date: new $.jqx.date('todayDate'),
+                    width: <?=$this->width?>,
+                    height: <?=$this->height?>,
+                    rowsHeight: 15,
+                    columnsHeight: 30,
+                    source: adapter,
+                    view: 'weekView',
+                    enableHover: false,
+                    exportSettings: {
+                        serverURL: null,
+                        characterSet: null,
+                        fileName: null,
+                        dateTimeFormatString: "S",
+                        resourcesInMultipleICSFiles: true
+                    },
+                    showToolbar: false,
+                    resources:
+                        {
+                            dataField: "calendar",
+                            source:  adapter
+                        },
+                    appointmentDataFields:
+                        {
+                            from: "start",
+                            to: "end",
+                            id: "id",
+                            subject: "subject",
+                            resourceId: "calendar"
+                        },
+                    localization: {
+                        firstDay: 1,
+                        days: {
+                            // full day names
+                            names: [
+                                "<?=Loc::getMessage('rover-fa__schedule-sunday')?>",
+                                "<?=Loc::getMessage('rover-fa__schedule-monday')?>",
+                                "<?=Loc::getMessage('rover-fa__schedule-tuesday')?>",
+                                "<?=Loc::getMessage('rover-fa__schedule-wednesday')?>",
+                                "<?=Loc::getMessage('rover-fa__schedule-thursday')?>",
+                                "<?=Loc::getMessage('rover-fa__schedule-friday')?>",
+                                "<?=Loc::getMessage('rover-fa__schedule-saturday')?>"],
+                            // abbreviated day names
+                            //namesAbbr: ["Sonn", "Mon", "Dien", "Mitt", "Donn", "Fre", "Sams"],
+                            // shortest day names
+                            //namesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
+                        },
+                        editDialogFromString: "<?=Loc::getMessage('rover-fa__schedule-start')?>",
+                        editDialogToString: "<?=Loc::getMessage('rover-fa__schedule-end')?>",
+                        editDialogAllDayString: "<?=Loc::getMessage('rover-fa__schedule-all-day')?>",
+                        editDialogTitleString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
+                        contextMenuEditAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
+                        editDialogCreateTitleString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
+                        contextMenuCreateAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
+                        editDialogSaveString: "<?=Loc::getMessage('rover-fa__schedule-save')?>",
+                        editDialogDeleteString: "<?=Loc::getMessage('rover-fa__schedule-delete')?>",
+                        editDialogCancelString: "<?=Loc::getMessage('rover-fa__schedule-cancel')?>",
+                    },
+                    editDialogOpen: function (dialog, fields, editAppointment) {
+                        fields.locationContainer.hide();
+                        fields.repeatContainer.hide();
+                        fields.subject.val("<?=$this->periodLabel?>");
+                        fields.subjectContainer.hide();
+                        fields.statusContainer.hide();
+                        fields.timeZoneContainer.hide();
+                        fields.colorContainer.hide();
+                        fields.descriptionContainer.hide();
+                        fields.resourceContainer.hide();
+                    },
+                    views:
+                        [
+                            {
+                                type: 'weekView',
+                                workTime:
+                                    {
+                                        fromDayOfWeek: 0,
+                                        toDayOfWeek: 6,
+                                        fromHour: -1,
+                                        toHour: 24
+                                    },
+                                timeRuler:
+                                    {
+                                        formatString: "HH:mm",
+                                        scale: 'hour'
+                                    }
+                            }
+                        ]
+                });
 
-				$scheduler.jqxScheduler({
-					//date: new $.jqx.date(),
-					date: new $.jqx.date('todayDate'),
-					width: <?=$this->width?>,
-					height: <?=$this->height?>,
-					rowsHeight: 15,
-					columnsHeight: 30,
-					source: adapter,
-					view: 'weekView',
-					enableHover: false,
-					exportSettings: {
-						serverURL: null,
-						characterSet: null,
-						fileName: null,
-						dateTimeFormatString: "S",
-						resourcesInMultipleICSFiles: true
-					},
-					showToolbar: false,
-					resources:
-					{
-						dataField: "calendar",
-						source:  adapter
-					},
-					appointmentDataFields:
-					{
-						from: "start",
-						to: "end",
-						id: "id",
-						subject: "subject",
-						resourceId: "calendar"
-					},
-					localization: {
-						firstDay: 1,
-						days: {
-							// full day names
-							names: [
-								"<?=Loc::getMessage('rover-fa__schedule-sunday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-monday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-tuesday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-wednesday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-thursday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-friday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-saturday')?>"],
-							// abbreviated day names
-							//namesAbbr: ["Sonn", "Mon", "Dien", "Mitt", "Donn", "Fre", "Sams"],
-							// shortest day names
-							//namesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
-						},
-						editDialogFromString: "<?=Loc::getMessage('rover-fa__schedule-start')?>",
-						editDialogToString: "<?=Loc::getMessage('rover-fa__schedule-end')?>",
-						editDialogAllDayString: "<?=Loc::getMessage('rover-fa__schedule-all-day')?>",
-						editDialogTitleString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
-						contextMenuEditAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
-						editDialogCreateTitleString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
-						contextMenuCreateAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
-						editDialogSaveString: "<?=Loc::getMessage('rover-fa__schedule-save')?>",
-						editDialogDeleteString: "<?=Loc::getMessage('rover-fa__schedule-delete')?>",
-						editDialogCancelString: "<?=Loc::getMessage('rover-fa__schedule-cancel')?>",
-					},
-					editDialogOpen: function (dialog, fields, editAppointment) {
-						fields.locationContainer.hide();
-						fields.repeatContainer.hide();
-						fields.subject.val("<?=$this->periodLabel?>");
-						fields.subjectContainer.hide();
-						fields.statusContainer.hide();
-						fields.timeZoneContainer.hide();
-						fields.colorContainer.hide();
-						fields.descriptionContainer.hide();
-						fields.resourceContainer.hide();
-					},
-					views:
-						[
-							{
-								type: 'weekView',
-								workTime:
-								{
-									fromDayOfWeek: 0,
-									toDayOfWeek: 6,
-									fromHour: -1,
-									toHour: 24
-								},
-								timeRuler:
-								{
-									formatString: "HH:mm",
-									scale: 'hour'
-								}
-							}
-						]
-				});
+                $scheduler.on('appointmentChange appointmentDelete appointmentAdd', function (event) {
+                    var timeout = event.type == "appointmentChange"
+                        ? 100
+                        : 200;
 
-				$scheduler.on('appointmentChange appointmentDelete appointmentAdd', function (event) {
-					var timeout = event.type == "appointmentChange"
-						? 100
-						: 200;
+                    setTimeout(function(){
+                        exportPeriods();
+                    }, timeout);
+                });
 
-					setTimeout(function(){
-						exportPeriods();
-					}, timeout);
-				});
+                function exportPeriods()
+                {
+                    var schedule = JSON.parse($scheduler.jqxScheduler('exportData', 'json')),
+                        propNum, period, result = [];
 
-				function exportPeriods()
-				{
-					var schedule = JSON.parse($scheduler.jqxScheduler('exportData', 'json')),
-						propNum, period, result = [];
+                    for (propNum in schedule)
+                    {
+                        period = schedule[propNum];
 
-					for (propNum in schedule)
-					{
-						period = schedule[propNum];
+                        delete period.id;
+                        delete period.calendar;
+                        delete period.subject;
 
-						delete period.id;
-						delete period.calendar;
-						delete period.subject;
-
-						result.push(period);
-					}
+                        result.push(period);
+                    }
 //console.log(result);
-					$export.val(JSON.stringify(result));
-				}
-			});
-		</script>
-		<?php
-
-		$this->showHelp();
-	}
-
+                    $export.val(JSON.stringify(result));
+                }
+            });
+        </script>
+        <?php
+    }
 
 	/**
 	 * @param Event $event

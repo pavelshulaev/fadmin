@@ -20,21 +20,29 @@ use Rover\Fadmin\Options;
  */
 class Settings
 {
-	const BOOL_CHECKBOX     = 'bool_checkbox';
-	const LOG_ERRORS        = 'log_errors';
-    const GROUP_RIGHTS      = 'group_rights';
+	const BOOL_CHECKBOX = 'bool_checkbox';
+	const LOG_ERRORS    = 'log_errors';
+    const GROUP_RIGHTS  = 'group_rights';
+    const USE_SORT      = 'use_sort';
 	/**
 	 * default settings
 	 * @var array
 	 */
 	protected $defaults = [
-		self::BOOL_CHECKBOX    => false,
-		self::LOG_ERRORS       => false,
-		self::GROUP_RIGHTS     => false,
+		self::BOOL_CHECKBOX => false,
+		self::LOG_ERRORS    => false,
+		self::GROUP_RIGHTS  => false,
+		self::USE_SORT      => false,
 	];
 
+    /**
+     * @var array
+     */
 	protected $storage = [];
 
+    /**
+     * @var Options
+     */
 	public $options;
 
 	/**
@@ -79,5 +87,14 @@ class Settings
 	public function getGroupRights()
     {
         return $this->storage[self::GROUP_RIGHTS];
+    }
+
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getUseSort()
+    {
+        return $this->storage[self::USE_SORT];
     }
 }

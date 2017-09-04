@@ -71,13 +71,12 @@ class Input
 		]);
 	}
 
-	/**
-	 * @param      $name
-	 * @param null $default
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $name
+     * @param string $default
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public static function getText($name, $default = '')
 	{
 		return self::get(InputAbstract::TYPE__TEXT, $name, $default);
@@ -165,6 +164,27 @@ class Input
 	public static function getSelect($name, array $options = [], $default = null, $multiple = false, $label = null)
 	{
 		$input = self::get(InputAbstract::TYPE__SELECTBOX, $name, $default, $multiple);
+		$input['options'] = $options;
+
+		if ($label)
+			$input['label'] = $label;
+
+		return $input;
+	}
+
+	/**
+	 * @param            $name
+	 * @param            $options
+	 * @param null       $label
+	 * @param null       $default
+	 * @param bool|false $multiple
+	 * @return array
+	 * @throws ArgumentNullException
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public static function getSelectGroup($name, array $options = [], $default = null, $multiple = false, $label = null)
+	{
+		$input = self::get(InputAbstract::TYPE__SELECT_GROUP, $name, $default, $multiple);
 		$input['options'] = $options;
 
 		if ($label)

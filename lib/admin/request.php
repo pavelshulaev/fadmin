@@ -25,28 +25,56 @@ use \Bitrix\Main\Config\Option;
  */
 class Request
 {
+    /**
+     * @var mixed|string
+     */
 	protected $moduleId;
-	protected $options;
-	protected $tabControl;
 
+    /**
+     * @var Options
+     */
+	protected $options;
+
+    /**
+     * @var string
+     */
+	protected $defaultActiveTab;
+
+    /**
+     * @var mixed|string
+     */
 	protected $requestMethod = 'POST';
+
+    /**
+     * @var bool
+     */
 	protected $update;
+
+    /**
+     * @var bool
+     */
 	protected $apply;
+
+    /**
+     * @var bool
+     */
 	protected $restoreDefaults;
 
-	/**
-	 * @param \CAdminTabControl $tabControl
-	 * @param Options           $options
-	 * @param                   $requestMethod
-	 * @param                   $update
-	 * @param                   $apply
-	 * @param                   $restoreDefaults
-	 */
-	public function __construct(\CAdminTabControl $tabControl, Options $options, $requestMethod, $update, $apply, $restoreDefaults)
+    /**
+     * Request constructor.
+     *
+     * @param Options $options
+     * @param         $requestMethod
+     * @param         $update
+     * @param         $apply
+     * @param         $restoreDefaults
+     * @param null    $defaultActiveTab
+     */
+	public function __construct(Options $options, $requestMethod, $update, $apply, $restoreDefaults, $defaultActiveTab = null)
 	{
-		$this->tabControl   = $tabControl;
-		$this->options      = $options;
-		$this->moduleId     = htmlspecialcharsbx($this->options->getModuleId());
+		$this->defaultActiveTab = trim(defaultActiveTab);
+		$this->options          = $options;
+		$this->moduleId         = htmlspecialcharsbx($this->options->getModuleId());
 
 		if (!is_null($requestMethod))
 			$this->requestMethod = htmlspecialcharsbx($requestMethod);
@@ -104,21 +132,19 @@ class Request
 		$request = Application::getInstance()->getContext()->getRequest();
 
 		if (strlen($this->update) && strlen($request["back_url_settings"]))
-		{
 			LocalRedirect($request["back_url_settings"]);
-		} else {
 
-			$activeTab = $activeTab
-				? 'tabControl_active_tab=' . $activeTab
-				: $this->tabControl->ActiveTabParam();
 
-			global $APPLICATION;
-			LocalRedirect($APPLICATION->GetCurPage()
-				. "?mid=" . urlencode($this->moduleId)
-				. "&lang=" . urlencode(LANGUAGE_ID)
-				. "&back_url_settings=" . urlencode($request["back_url_settings"])
-				. "&" . $activeTab);
-		}
+        $activeTab = $activeTab
+            ? 'tabControl_active_tab=' . $activeTab
+            : $this->defaultActiveTab;
+
+        global $APPLICATION;
+        LocalRedirect($APPLICATION->GetCurPage()
+            . "?mid=" . urlencode($this->moduleId)
+            . "&lang=" . urlencode(LANGUAGE_ID)
+            . "&back_url_settings=" . urlencode($request["back_url_settings"])
+            . "&" . $activeTab);
 	}
 
 	/**

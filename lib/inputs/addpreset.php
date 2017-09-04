@@ -13,6 +13,7 @@ namespace Rover\Fadmin\Inputs;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Localization\Loc;
+use Rover\Fadmin\Helper\Layout;
 use Rover\Fadmin\Tab;
 
 Loc::loadMessages(__FILE__);
@@ -50,11 +51,8 @@ class Addpreset extends Submit
 	 */
 	public function draw()
 	{
-		$valueId    = $this->getValueId();
-		$siteId     = $this->tab->getSiteId();
-
-		$this->showLabel($valueId, true);
-		$this->drawSubmit($valueId, self::$type, $siteId . self::SEPARATOR . $this->default, $this->label);
+		$this->showLabel(true);
+		$this->showInput();
 		$this->showHelp();
 
 		if ($this->popup === false) return;
@@ -71,25 +69,33 @@ class Addpreset extends Submit
 		<script>
 			(function()
 			{
-				document.getElementById('<?php echo $valueId?>').onclick = function()
+				document.getElementById('<?=$this->getValueId()?>').onclick = function()
 				{
-					var presetName = prompt('<?php echo $text ?>', '<?php echo $default?>');
+					var presetName = prompt('<?=$text ?>', '<?=$default?>');
 
 					if (presetName == null)
 						return false;
 
 					if (!presetName.length) {
-						alert('<?php echo Loc::getMessage('rover-fa__ADDPRESET_ALERT')?>');
+						alert('<?=Loc::getMessage('rover-fa__ADDPRESET_ALERT')?>');
 						return false;
 					}
 
-					this.setAttribute('value', '<?php echo $siteId . self::SEPARATOR?>' + presetName);
+					this.setAttribute('value', '<?=$this->tab->getSiteId() . self::SEPARATOR?>' + presetName);
 					return true;
 				}
 			})();
 		</script>
 		<?php
 	}
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showInput()
+    {
+        Layout::submit($this, self::$type, $this->tab->getSiteId() . self::SEPARATOR . $this->default);
+    }
 
 	/**
 	 * not save

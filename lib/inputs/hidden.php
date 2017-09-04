@@ -42,15 +42,20 @@ class Hidden extends Text
 	 */
 	public function draw()
 	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		?><input
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			id="<?=$valueId?>" 
-			maxlength="<?=$this->maxLength?>"
-			type="hidden"
-			value="<?php $this->value?>" 
-			name="<?=$valueName?>"><?php
+        $this->showInput();
 	}
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        ?><input
+            <?=$this->disabled ? 'disabled="disabled"': '';?>
+            id="<?=$this->getValueId()?>"
+            maxlength="<?=$this->maxLength?>"
+            type="hidden"
+            value="<?php $this->value?>"
+            name="<?=$this->getValueName()?>"><?php
+    }
 }

@@ -4,6 +4,7 @@ namespace Rover\Fadmin\Inputs;
 use Bitrix\Main;
 use Bitrix\Main\Application;
 use \Bitrix\Main\Config\Option;
+use Rover\Fadmin\Helper\Layout;
 use \Rover\Fadmin\Tab;
 use \Rover\Fadmin\Options;
 
@@ -37,6 +38,7 @@ abstract class Input
     const TYPE__RADIO           = 'radio';
     const TYPE__REMOVE_PRESET   = 'removepreset';
     const TYPE__SELECTBOX       = 'selectbox';
+    const TYPE__SELECT_GROUP    = 'selectgroup';
     const TYPE__SCHEDULE        = 'schedule';
     const TYPE__SUBMIT          = 'submit';
     const TYPE__TEXT            = 'text';
@@ -241,14 +243,9 @@ abstract class Input
 	}
 
 	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	abstract public function draw();
-
-	/**
 	 * @param array $params
 	 * @param Tab   $tab
-	 * @return mixed
+	 * @return Input
 	 * @throws Main\SystemException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
@@ -439,7 +436,7 @@ abstract class Input
 	 * @throws Main\ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	protected function loadValue()
+	public function loadValue()
 	{
 		$this->value = Option::get($this->tab->getModuleId(),
 			$this->getValueName(), $this->default, $this->tab->getSiteId());
@@ -567,39 +564,45 @@ abstract class Input
 		return true;
 	}
 
-	/**
-	 * @param            $valueId
-	 * @param bool|false $empty
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function showLabel($valueId, $empty = false)
+    /**
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    public function draw()
+    {
+        $this->showLabel();
+        $this->showInput();
+        $this->showHelp();
+    }
+
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    abstract public function showInput();
+
+    /**
+     * @param bool $empty
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	protected function showLabel($empty = false)
 	{
-		?>
-		<tr>
-			<td
-				width="50%"
-				class="adm-detail-content-cell-l"
-				style="vertical-align: top; padding-top: 7px;">
-				<?php if (!$empty) : ?>
-					<label for="<?php echo $valueId?>"><?php echo $this->label?>:</label>
-				<?php endif; ?>
-			</td>
-			<td
-			width="50%"
-			class="adm-detail-content-cell-r"
-			><?php
+        Layout::label($this, $empty);
 	}
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function showMultiLabel()
+    {
+        Layout::multiLabel($this);
+    }
 
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	protected function showHelp()
 	{
-		if (strlen($this->help))
-			echo '<br><small style="color: #777;">' . $this->help . '</small>';
-		?></td>
-		</tr>
-		<?php
+        Layout::help($this);
 	}
 
 	/**

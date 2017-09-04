@@ -56,43 +56,48 @@ class Selectbox extends Input
 			$this->size = 1;
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+    /**
+     * @param bool $empty
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showLabel($empty = false)
+    {
+        if ($this->multiple)
+            parent::showMultiLabel();
+        else
+            parent::showLabel($empty);
+    }
 
-		if ($this->multiple)
-			$this->showMultiLabel($valueId);
-		else
-			$this->showLabel($valueId);
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        $valueId    = $this->getValueId();
+        $valueName  = $this->getValueName();
 
-		?><select
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			name="<?=$valueName . ($this->multiple ? '[]' : '')?>"
-			id="<?=$valueId?>"
-			size="<?=$this->size?>"
-			<?=$this->multiple ? ' multiple="multiple" ' : ''?>
-			>
-				<?php
-				foreach($this->options as $v => $k){
-					if ($this->multiple) {
-						$selected = is_array($this->value) && in_array($v, $this->value)
-								? true
-								: false;
-					} else {
-						$selected = $this->value==$v ? true : false;
-					}
+        ?><select
+            <?=$this->disabled ? 'disabled="disabled"': '';?>
+            name="<?=$valueName . ($this->multiple ? '[]' : '')?>"
+            id="<?=$valueId?>"
+            size="<?=$this->size?>"
+            <?=$this->multiple ? ' multiple="multiple" ' : ''?>>
+        <?php
+            foreach($this->options as $v => $k){
+                if ($this->multiple) {
+                    $selected = is_array($this->value) && in_array($v, $this->value)
+                        ? true
+                        : false;
+                } else {
+                    $selected = $this->value==$v ? true : false;
+                }
 
-					?><option value="<?=$v?>"<?=$selected ? " selected=\"selected\" ": ''?>><?=$k?></option><?php
-				}
-				?>
-			</select>
-		<?php
-		$this->showHelp();
-	}
+                ?><option value="<?=$v?>"<?=$selected ? " selected=\"selected\" ": ''?>><?=$k?></option><?php
+            }
+        ?>
+        </select>
+        <?php
+    }
 
 	/**
 	 * @param array $options
@@ -110,27 +115,5 @@ class Selectbox extends Input
 	public function getOptions()
 	{
 		return $this->options;
-	}
-
-    /**
-     * @param $valueId
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	protected function showMultiLabel($valueId)
-	{
-		?>
-		<tr>
-		<td
-			width="50%"
-			class="adm-detail-content-cell-l"
-			style="vertical-align: top; padding-top: 7px;">
-				<label for="<?=$valueId?>"><?=$this->label?>:<br>
-					<img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
-				</label>
-		</td>
-		<td
-			width="50%"
-			class="adm-detail-content-cell-r"
-			><?php
 	}
 }

@@ -12,6 +12,7 @@ namespace Rover\Fadmin\Admin;
 
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Application;
+use Rover\Fadmin\Inputs\Input;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
 /**
@@ -95,8 +96,30 @@ class Form
 			return;
 
 		$this->tabControl->BeginNextTab();
-		$tab->show();
+
+        if ($this->options->settings->getUseSort())
+            $tab->sort();
+
+        $inputs = $tab->getInputs();
+
+        foreach ($inputs as $input)
+            /**
+             * @var Input $input
+             */
+            $this->showInput($input);
 	}
+
+    /**
+     * @param Input $input
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	protected function showInput(Input $input)
+    {
+        $input->loadValue();
+
+        if ($input->getDisplay())
+            $input->draw();
+    }
 
     /**
      * @author Pavel Shulaev (https://rover-it.me)

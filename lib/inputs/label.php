@@ -42,17 +42,13 @@ class Label extends Input
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$this->showLabel($this->getValueId());
-
-		echo $this->default;
-
-		$this->showHelp();
-	}
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        echo $this->default;
+    }
 
 	/**
 	 * not save

@@ -52,6 +52,12 @@ class Header extends Input
 		</tr><?php
 	}
 
+    /**
+     * for capability
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput(){}
+
 	/**
 	 * not save
 	 * @param Event $event

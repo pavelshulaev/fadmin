@@ -11,7 +11,7 @@
 
 Для использования фреймворка, программисту в своём модуле необходимо создать файл, унаследованный от `\Rover\Fadmin\Options` и переопределить в нем метод `getConfig()`. Из этого метода следует вернуть конфигурацию вкладок, табов и прочих параметров в формате, понятном для «Конструктора».
 
-Модуль доступен на [Маркетплейсе Битрикса](http://marketplace.1c-bitrix.ru/solutions/rover.fadmin/).
+Модуль доступен на [Маркетплейсе Битрикса](https://marketplace.1c-bitrix.ru/solutions/rover.fadmin/).
 
 «Конструктор» поддерживает:
 * многосайтовость;
@@ -22,4 +22,9 @@
 * вывод сообщений для администратора.
 
 ## Контакты
-По всем вопросам вы можете связаться со мной по email: rover.webdev@gmail.com, либо через форму на сайте http://rover-it.me. Гитхаб проекта: https://github.com/pavelshulaev/fadmin
+По всем вопросам вы можете связаться со мной по email: rover.webdev@gmail.com, либо через форму на сайте https://rover-it.me. Гитхаб проекта: https://github.com/pavelshulaev/fadmin
+
+## Пожертвования
+Если решение оказалось вам полезным, вы можете оставить пожертование
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2STAMDSM7E3BG)

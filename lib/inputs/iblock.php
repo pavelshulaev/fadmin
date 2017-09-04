@@ -28,27 +28,21 @@ class Iblock extends Input
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function draw()
-	{
-		if (!Loader::includeModule('iblock')){
-			ShowError('Iblock module not found');
-			return;
-		}
+	public function showInput()
+    {
+        if (!Loader::includeModule('iblock')){
+            ShowError('Iblock module not found');
+            return;
+        }
 
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+        $valueName      = $this->getValueName();
+        $additionsHtml  = $this->disabled ? 'disabled="disabled"': '';
 
-		$this->showLabel($valueId);
-
-		$additionsHtml = $this->disabled ? 'disabled="disabled"': '';
-
-		if ($this->multiple)
-			echo self::getIBlockDropDownListMultiple($this->value, $this->name . '_type', $valueName, false, '', '', $additionsHtml);
-		else
-			echo GetIBlockDropDownList($this->value, $this->name . '_type', $valueName, false, '', '', $additionsHtml);
-
-		$this->showHelp();
-	}
+        if ($this->multiple)
+            echo self::getIBlockDropDownListMultiple($this->value, $this->name . '_type', $valueName, false, '', '', $additionsHtml);
+        else
+            echo GetIBlockDropDownList($this->value, $this->name . '_type', $valueName, false, '', $additionsHtml);
+    }
 
 	/**
 	 * @param array      $iblockIds
@@ -132,9 +126,9 @@ class Iblock extends Input
 			}
 		}
 
-		$htmlTypeName = htmlspecialcharsbx($strTypeName);
+		$htmlTypeName   = htmlspecialcharsbx($strTypeName);
 		$htmlIBlockName = htmlspecialcharsbx($strIBlockName);
-		$onChangeType = 'OnType_'.$filterId.'_Changed(this, \''.\CUtil::JSEscape($strIBlockName).'\');'.$onChangeType.';';
+		$onChangeType   = 'OnType_'.$filterId.'_Changed(this, \''.\CUtil::JSEscape($strIBlockName).'\');'.$onChangeType.';';
 		$onChangeIBlock = trim($onChangeIBlock);
 
 		$html .= '<select name="'.$htmlTypeName.'" id="'.$htmlTypeName.'" onchange="'.htmlspecialcharsbx($onChangeType).'" '.$strAddType.'>'."\n";
@@ -146,12 +140,11 @@ class Iblock extends Input
 		}
 		$html .= "</select>\n";
 		$html .= "&nbsp;\n";
-		$size = count($arIBlocks[$filterId][$IBLOCK_TYPE]) > 5 ? '8' : '3';
-		$html .= '<select multiple="multiple" size="' . $size .'"  name="'.$htmlIBlockName.'[]" id="'.$htmlIBlockName.'"'.($onChangeIBlock != ''? ' onchange="'.htmlspecialcharsbx($onChangeIBlock).'"': '').' '.$strAddIBlock.'>'."\n";
+		$html .= '<select multiple="multiple" size="' . count($arIBlocks[$filterId][$IBLOCK_TYPE]) > 5 ? '8' : '3' .'"  name="'.$htmlIBlockName.'[]" id="'.$htmlIBlockName.'"'.($onChangeIBlock != ''? ' onchange="'.htmlspecialcharsbx($onChangeIBlock).'"': '').' '.$strAddIBlock.'>'."\n";
+
 		foreach($arIBlocks[$filterId][$IBLOCK_TYPE] as $key => $value)
-		{
 			$html .= '<option value="'.htmlspecialcharsbx($key).'"'.(in_array($key, $iblockIds)? ' selected': '').'>'.htmlspecialcharsEx($value).'</option>'."\n";
-		}
+
 		$html .= "</select>\n";
 
 		return $html;

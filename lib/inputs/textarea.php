@@ -50,39 +50,35 @@ class Textarea extends Input
 			$this->cols = htmlspecialcharsbx($params['cols']);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        ?><textarea
+            <?=$this->disabled ? 'disabled="disabled"': '';?>
+            id="<?=$this->getValueId()?>"
+            rows="<?=$this->rows?>"
+            cols="<?=$this->cols?>"
+            name="<?=$this->getValueName()?>"><?=$this->value?></textarea><?php
+    }
+
+    /**
+     * @param bool $empty
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	protected function showLabel($empty = false)
 	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		$this->showLabel($valueId);
-
-		?><textarea
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			id="<?=$valueId?>"
-			rows="<?=$this->rows?>"
-			cols="<?=$this->cols?>"
-			name="<?=$valueName?>"><?=$this->value?></textarea><?php
-
-		$this->showHelp();
-	}
-
-	/**
-	 * @param $valueId
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function showLabel($valueId)
-	{
+        $valueId = $this->getValueId();
 		?>
 		<tr>
 		<td
 			width="50%"
 			style="vertical-align: top; padding-top: 7px;"
 			class="adm-detail-valign-top">
-			<label for="<?php echo $valueId?>"><?php echo $this->label?>:</label>
+            <?php if (!$empty) : ?>
+                <label for="<?=$valueId?>"><?=$this->label?>:</label>
+            <?php endif; ?>
 		</td>
 		<td width="50%"><?php
 	}

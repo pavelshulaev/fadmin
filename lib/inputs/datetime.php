@@ -14,31 +14,45 @@ class DateTime extends Input
 	 */
 	public static $type = self::TYPE__DATE;
 
-	/**
-	 * @param bool|true $time
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw($time = true)
-	{
-		global $APPLICATION;
+    /**
+     * show time flag
+     * @var bool
+     */
+	protected $showTime = true;
 
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function hideTime()
+    {
+        $this->showTime = false;
+    }
 
-		$this->showLabel($valueId);
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showTime()
+    {
+        $this->showTime = true;
+    }
 
-		$APPLICATION->IncludeComponent("bitrix:main.calendar","",Array(
-				"SHOW_INPUT" => "Y",
-				"FORM_NAME" => "",
-				"INPUT_NAME" => $valueName,
-				"INPUT_NAME_FINISH" => "",
-				"INPUT_VALUE" => $this->value,
-				"INPUT_VALUE_FINISH" => '',
-				"SHOW_TIME" => $time ? 'Y' : "N",
-				"HIDE_TIMEBAR" => $time ? 'N' : "Y"
-			)
-		);
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function showInput()
+    {
+        global $APPLICATION;
 
-		$this->showHelp();
-	}
+        $APPLICATION->IncludeComponent("bitrix:main.calendar","",Array(
+                "SHOW_INPUT" => "Y",
+                "FORM_NAME" => "",
+                "INPUT_NAME" => $this->getValueName(),
+                "INPUT_NAME_FINISH" => "",
+                "INPUT_VALUE" => $this->value,
+                "INPUT_VALUE_FINISH" => '',
+                "SHOW_TIME"     => $this->showTime ? 'Y' : "N",
+                "HIDE_TIMEBAR"  => $this->showTime ? 'N' : "Y"
+            )
+        );
+    }
 }
