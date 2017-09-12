@@ -3,23 +3,23 @@
  * Created by PhpStorm.
  * User: lenovo
  * Date: 12.09.2017
- * Time: 14:21
+ * Time: 14:54
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Admin\Input;
 
-use Rover\Fadmin\Layout\Admin;
+use Rover\Fadmin\Layout\Admin\Input;
 
-class Custom extends Admin
+class Header extends Input
 {
     /**
-     * @author Pavel Shulaev (https://rover-it.me)
+     * @author Pavel Shulaev (http://rover-it.me)
      */
     public function draw()
     {
-        ?><tr>
+        ?><tr class="heading">
             <td colspan="2"><?=$this->input->getLabel()?></td>
         </tr><?php
     }
@@ -29,4 +29,5 @@ class Custom extends Admin
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput(){}
+
 }

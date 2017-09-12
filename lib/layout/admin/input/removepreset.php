@@ -8,7 +8,7 @@
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Admin\Input;
 
 use Bitrix\Main\Localization\Loc;
 use \Rover\Fadmin\Inputs\Removepreset as RemovePresetInput;
@@ -18,7 +18,7 @@ Loc::loadMessages(__FILE__);
 /**
  * Class Removepreset
  *
- * @package Rover\Fadmin\Layout\Admin
+ * @package Rover\Fadmin\Layout\Admin\Input
  * @author  Pavel Shulaev (https://rover-it.me)
  */
 class Removepreset extends Submit

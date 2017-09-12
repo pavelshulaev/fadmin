@@ -24,6 +24,7 @@ class Settings
 	const LOG_ERRORS    = 'log_errors';
     const GROUP_RIGHTS  = 'group_rights';
     const USE_SORT      = 'use_sort';
+
 	/**
 	 * default settings
 	 * @var array
@@ -38,7 +39,7 @@ class Settings
     /**
      * @var array
      */
-	protected $storage = [];
+	protected $storage;
 
     /**
      * @var Options
@@ -51,16 +52,40 @@ class Settings
 	public function __construct(Options $options)
 	{
 		$this->options  = $options;
-		$config         = $this->options->getConfigCache();
-		$settings       = isset($config['settings'])
-			? $config['settings']
-			: [];
-
-		foreach ($this->defaults as $key => $defValue)
-			$this->storage[$key] = isset($settings[$key])
-				? $settings[$key]
-				: $defValue;
 	}
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	protected function init()
+    {
+        if (is_null($this->storage)) {
+            $config         = $this->options->getConfigCache();
+            $settings       = isset($config['settings'])
+                ? $config['settings']
+                : [];
+
+            foreach ($this->defaults as $key => $defValue)
+                $this->storage[$key] = isset($settings[$key])
+                    ? $settings[$key]
+                    : $defValue;
+        }
+    }
+
+    /**
+     * @param $key
+     * @return mixed|null
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getFromStorage($key)
+    {
+        $this->init();
+
+        if (isset($this->storage[$key]))
+            return $this->storage[$key];
+
+        return null;
+    }
 
 	/**
 	 * @return mixed
@@ -68,7 +93,7 @@ class Settings
 	 */
 	public function getBoolCheckbox()
 	{
-		return $this->storage[self::BOOL_CHECKBOX];
+		return $this->getFromStorage(self::BOOL_CHECKBOX);
 	}
 
 	/**
@@ -77,7 +102,7 @@ class Settings
 	 */
 	public function getLogErrors()
 	{
-		return $this->storage[self::LOG_ERRORS];
+        return $this->getFromStorage(self::LOG_ERRORS);
 	}
 
     /**
@@ -86,7 +111,7 @@ class Settings
      */
 	public function getGroupRights()
     {
-        return $this->storage[self::GROUP_RIGHTS];
+        return $this->getFromStorage(self::GROUP_RIGHTS);
     }
 
     /**
@@ -95,6 +120,6 @@ class Settings
      */
 	public function getUseSort()
     {
-        return $this->storage[self::USE_SORT];
+        return $this->getFromStorage(self::USE_SORT);
     }
 }

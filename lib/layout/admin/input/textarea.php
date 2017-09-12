@@ -8,17 +8,17 @@
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Admin\Input;
 
-use Rover\Fadmin\Layout\Admin;
+use Rover\Fadmin\Layout\Admin\Input;
 
 /**
  * Class Textarea
  *
- * @package Rover\Fadmin\Layout\Admin
+ * @package Rover\Fadmin\Layout\Admin\Input
  * @author  Pavel Shulaev (https://rover-it.me)
  */
-class Textarea extends Admin
+class Textarea extends Input
 {
     /**
      * @author Pavel Shulaev (https://rover-it.me)

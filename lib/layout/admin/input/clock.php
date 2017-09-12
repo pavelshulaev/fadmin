@@ -8,11 +8,17 @@
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Admin\Input;
 
-use Rover\Fadmin\Layout\Admin;
+use Rover\Fadmin\Layout\Admin\Input;
 
-class Clock extends Admin
+/**
+ * Class Clock
+ *
+ * @package Rover\Fadmin\Layout\Admin\Input
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
+class Clock extends Input
 {
     /**
      * @author Pavel Shulaev (https://rover-it.me)

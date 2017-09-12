@@ -8,15 +8,16 @@
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Admin\Input;
 
 use Bitrix\Main\Localization\Loc;
 use \Rover\Fadmin\Inputs\Addpreset as AddPresetInput;
+
 Loc::loadMessages(__FILE__);
 /**
  * Class Addpreset
  *
- * @package Rover\Fadmin\Layout\Admin
+ * @package Rover\Fadmin\Layout\Admin\Input
  * @author  Pavel Shulaev (https://rover-it.me)
  */
 class Addpreset extends Submit
@@ -48,7 +49,7 @@ class Addpreset extends Submit
                 {
                     var presetName = prompt('<?=$text ?>', '<?=$default?>');
 
-                    if (presetName === null)
+                    if (presetName == null)
                         return false;
 
                     if (!presetName.length) {

@@ -7,16 +7,16 @@
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
-namespace Rover\Fadmin\Layout;
+namespace Rover\Fadmin\Layout\Admin;
 
-use Rover\Fadmin\Layout;
+use Rover\Fadmin\Layout\Input as InputAbstract;
 /**
  * Class Admin
  *
  * @package Rover\Fadmin\Layout
  * @author  Pavel Shulaev (https://rover-it.me)
  */
-abstract class Admin extends Layout
+abstract class Input extends InputAbstract
 {
     /**
      * @var string

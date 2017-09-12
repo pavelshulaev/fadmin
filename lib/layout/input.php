@@ -8,13 +8,19 @@
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin;
+namespace Rover\Fadmin\Layout;
 
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
-use Rover\Fadmin\Inputs\Input;
+use Rover\Fadmin\Inputs\Input as InputEngine;
 
-abstract class Layout
+/**
+ * Class Layout
+ *
+ * @package Rover\Fadmin
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
+abstract class Input
 {
     /**
      * @var string
@@ -22,35 +28,35 @@ abstract class Layout
     protected static $type;
 
     /**
-     * @var Input
+     * @var InputEngine
      */
     protected $input;
 
     /**
      * Layout constructor.
      *
-     * @param Input $input
+     * @param InputEngine $input
      */
-    public function __construct(Input $input)
+    public function __construct(InputEngine $input)
     {
         $this->input = $input;
     }
 
     /**
-     * @param Input $input
-     * @return Layout
+     * @param InputEngine $input
+     * @return Input
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function factory(Input $input)
+    public static function factory(InputEngine $input)
     {
         if (!strlen(static::$type))
             throw new ArgumentNullException('type');
 
         $inputClassName = $input::getClassName();
         $inputType      = substr($inputClassName, strripos($inputClassName, '\\') + 1);
-        $namespace      = '\\Rover\\Fadmin\\Layout\\' . static::$type . '\\' . $inputType;
+        $namespace      = '\\Rover\\Fadmin\\Layout\\' . static::$type . '\\Input\\' . $inputType;
 
         if (!class_exists($namespace))
             throw new ArgumentOutOfRangeException($namespace);
@@ -63,10 +69,10 @@ abstract class Layout
     }
 
     /**
-     * @param Input $input
+     * @param InputEngine $input
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function drawStatic(Input $input)
+    public static function drawStatic(InputEngine $input)
     {
         $layoutDriver = self::factory($input);
         $layoutDriver->draw();

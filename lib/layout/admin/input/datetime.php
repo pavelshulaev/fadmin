@@ -8,11 +8,17 @@
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Admin\Input;
 
-use Rover\Fadmin\Layout\Admin;
+use Rover\Fadmin\Layout\Admin\Input;
 
-class DateTime extends Admin
+/**
+ * Class DateTime
+ *
+ * @package Rover\Fadmin\Layout\Admin\Input
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
+class DateTime extends Input
 {
     /**
      * show time flag

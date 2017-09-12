@@ -8,17 +8,17 @@
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Admin\Input;
 
-use Rover\Fadmin\Layout\Admin;
+use Rover\Fadmin\Layout\Admin\Input;
 
 /**
  * Class File
  *
- * @package Rover\Fadmin\Layout\Admin
+ * @package Rover\Fadmin\Layout\Admin\Input
  * @author  Pavel Shulaev (https://rover-it.me)
  */
-class File extends Admin
+class File extends Input
 {
     /**
      * @author Pavel Shulaev (https://rover-it.me)

@@ -10,7 +10,6 @@
 
 namespace Rover\Fadmin\Options;
 
-use Rover\Fadmin\Options;
 /**
  * Class Message
  *
@@ -27,19 +26,6 @@ class Message
 	 * @var array
 	 */
 	protected $messages = [];
-
-    /**
-     * @var Options
-     */
-	protected $options;
-
-	/**
-	 * @param Options $options
-	 */
-	public function __construct(Options $options)
-	{
-		$this->options = $options;
-	}
 
     /**
      * @param        $message
@@ -82,12 +68,12 @@ class Message
 		$this->add($message, self::TYPE__ERROR, $html);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function show()
-	{
-		foreach ($this->messages as $message)
-			\CAdminMessage::ShowMessage($message);
-	}
+    /**
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function get()
+    {
+        return $this->messages;
+    }
 }

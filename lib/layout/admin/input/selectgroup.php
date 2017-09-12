@@ -8,8 +8,14 @@
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Admin\Input;
 
+/**
+ * Class Selectgroup
+ *
+ * @package Rover\Fadmin\Layout\Admin\Input
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
 class Selectgroup extends Selectbox
 {
     /**

@@ -134,7 +134,6 @@ class Request
 		if (strlen($this->update) && strlen($request["back_url_settings"]))
 			LocalRedirect($request["back_url_settings"]);
 
-
         $activeTab = $activeTab
             ? 'tabControl_active_tab=' . $activeTab
             : $this->defaultActiveTab;

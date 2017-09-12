@@ -8,11 +8,17 @@
  * @author Pavel Shulaev (https://rover-it.me)
  */
 
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Admin\Input;
 
-use Rover\Fadmin\Layout\Admin;
+use Rover\Fadmin\Layout\Admin\Input;
 
-class Checkbox extends Admin
+/**
+ * Class Checkbox
+ *
+ * @package Rover\Fadmin\Layout\Admin\Input
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
+class Checkbox extends Input
 {
     /**
      * @author Pavel Shulaev (https://rover-it.me)

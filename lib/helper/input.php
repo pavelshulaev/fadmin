@@ -300,7 +300,7 @@ class Input
      * @param bool $popup
      * @return array
      * @throws ArgumentNullException
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getAddPreset($name, $default, $popup = false)
 	{
@@ -310,8 +310,9 @@ class Input
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 
+		$result['id']       = $name;
 		$result['default']  = $default;
-		$result['popup']    = $popup ?: Loc::getMessage($name . '_popup');
+		$result['popup']    = $popup;
 
 		return $result;
 	}

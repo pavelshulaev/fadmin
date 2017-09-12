@@ -162,7 +162,7 @@ abstract class Options
 
 		$this->moduleId = $moduleId;
 
-		$this->message  = new Message($this);
+		$this->message  = new Message();
 		$this->event    = new Event($this);
 		$this->preset   = new Preset($this);
 		$this->tabMap   = new TabMap($this);

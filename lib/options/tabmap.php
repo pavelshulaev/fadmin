@@ -78,7 +78,6 @@ class TabMap
 		return $tabs;
 	}
 
-
 	/**
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
