@@ -8,7 +8,7 @@
  * @author Pavel Shulaev (http://rover-it.me)
  */
 
-namespace Rover\Fadmin\Engine;
+namespace Rover\Fadmin\Options;
 
 use Rover\Fadmin\Options;
 /**
@@ -19,14 +19,19 @@ use Rover\Fadmin\Options;
  */
 class Message
 {
+    const TYPE__OK      = 'OK';
+    const TYPE__ERROR   = 'ERROR';
+
 	/**
 	 * message storage
 	 * @var array
 	 */
 	protected $messages = [];
 
-	const TYPE__OK      = 'OK';
-	const TYPE__ERROR   = 'ERROR';
+    /**
+     * @var Options
+     */
+	protected $options;
 
 	/**
 	 * @param Options $options

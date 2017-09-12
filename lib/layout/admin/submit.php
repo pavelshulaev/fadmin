@@ -2,97 +2,69 @@
 /**
  * Created by PhpStorm.
  * User: lenovo
- * Date: 13.08.2017
- * Time: 19:25
+ * Date: 12.09.2017
+ * Time: 14:41
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
-namespace Rover\Fadmin\Helper;
 
-use \Rover\Fadmin\Inputs\Input;
-/**
- * Class Layout
- *
- * @package Rover\Fadmin\Helper
- * @author  Pavel Shulaev (https://rover-it.me)
- */
-class Layout
+namespace Rover\Fadmin\Layout\Admin;
+
+use Rover\Fadmin\Layout\Admin;
+
+class Submit extends Admin
 {
     /**
-     * @param Input $input
-     * @param bool  $empty
+     * @var string
+     */
+    protected $customInputName;
+
+    /**
+     * @var string
+     */
+    protected $customInputValue;
+
+    /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function label(Input $input, $empty = false)
+    public function draw()
+    {
+        if (!$this->input instanceof \Rover\Fadmin\Inputs\Submit)
+            return;
+
+        parent::draw();
+
+        if (!$this->input->getPopup())
+            return;
+
+        $this->confirm($this->input->getValueId(), $this->input->getPopup());
+    }
+
+    /**
+     * @param $valueId
+     * @param $popup
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function confirm($valueId, $popup)
     {
         ?>
-        <tr>
-            <td
-                width="50%"
-                class="adm-detail-content-cell-l"
-                style="vertical-align: top; padding-top: 7px;">
-                <?php if (!$empty) : ?>
-                    <label for="<?=$input->getValueId()?>"><?=$input->getLabel()?>:</label>
-                <?php endif; ?>
-            </td>
-            <td
-            width="50%"
-            class="adm-detail-content-cell-r"
-            ><?php
+        <script>
+            (function(){
+                document.getElementById('<?=$valueId?>').onclick = function(){
+                    return confirm('<?=$popup?>');
+                }
+            })();
+        </script>
+        <?php
     }
 
     /**
-     * @param Input $input
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function help(Input $input)
+    public function showInput()
     {
-        $help = trim($input->getHelp());
-
-        if (strlen($help)):
-            ?><br><small style="color: #777;"><?=$help?></small><?php
-        endif;
-
-        ?></td>
-        </tr>
-    <?php
-    }
-
-    /**
-     * @param Input $input
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public static function multiLabel(Input $input)
-    {
-        ?>
-        <tr>
-            <td
-                width="50%"
-                class="adm-detail-content-cell-l"
-                style="vertical-align: top; padding-top: 7px;">
-                <label for="<?=$input->getValueId()?>"><?=$input->getLabel()?>:<br>
-                    <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
-                </label>
-            </td>
-            <td
-                width="50%"
-                class="adm-detail-content-cell-r"
-            ><?php
-    }
-
-    /**
-     * @param Input $input
-     * @param null  $name
-     * @param null  $value
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public static function submit(Input $input, $name = null, $value = null)
-    {
-        if (is_null($name))
-            $name = $input->getValueName();
-
-        if (is_null($value))
-            $value = $input->getDefault();
+        $name   = $this->customInputName ?: $this->input->getValueName();
+        $value  = $this->customInputValue ?: $this->input->getDefault();
 
         ?>
         <style>
@@ -137,9 +109,49 @@ class Layout
         </style>
 
         <button type='submit'
-        <?=$input->getDisabled() ? 'disabled="disabled"': '';?>
-                id="<?=$input->getValueId()?>"
+        <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+                id="<?=$this->input->getValueId()?>"
                 name="<?=$name?>"
-                value="<?=urlencode($value)?>"><?=$input->getLabel()?></button><?php
+                value="<?=urlencode($value)?>"><?=$this->input->getLabel()?></button><?php
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomInputName()
+    {
+        return $this->customInputName;
+    }
+
+    /**
+     * @param $customInputName
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setCustomInputName($customInputName)
+    {
+        $this->customInputName = $customInputName;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomInputValueId()
+    {
+        return $this->customInputValue;
+    }
+
+    /**
+     * @param $customInputValue
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setCustomInputValueId($customInputValue)
+    {
+        $this->customInputValue = $customInputValue;
+
+        return $this;
     }
 }

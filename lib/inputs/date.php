@@ -22,13 +22,4 @@ class Date extends DateTime
 	 * @var string
 	 */
 	public static $type = self::TYPE__DATE;
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput()
-    {
-        $this->hideTime();
-        parent::showInput();
-    }
 }

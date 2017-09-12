@@ -42,19 +42,6 @@ class Checkbox extends Input
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function showInput()
-    {
-        ?><input
-            type="checkbox"
-            <?=$this->disabled ? 'disabled="disabled"': '';?>
-            id="<?=$this->getValueId()?>"
-            name="<?=$this->getValueName()?>"
-            value="Y"<?=($this->value=="Y")?" checked=\"checked\"":'';?>/><?php
-    }
-
 	/**
 	 * @param Event $event
 	 * @return \Bitrix\Main\EventResult

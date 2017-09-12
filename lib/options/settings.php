@@ -8,7 +8,7 @@
  * @author Pavel Shulaev (http://rover-it.me)
  */
 
-namespace Rover\Fadmin\Engine;
+namespace Rover\Fadmin\Options;
 
 use Rover\Fadmin\Options;
 

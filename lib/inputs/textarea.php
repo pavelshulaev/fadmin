@@ -51,35 +51,42 @@ class Textarea extends Input
 	}
 
     /**
-     * @author Pavel Shulaev (https://rover-it.me)
+     * @return int
      */
-	public function showInput()
+    public function getRows()
     {
-        ?><textarea
-            <?=$this->disabled ? 'disabled="disabled"': '';?>
-            id="<?=$this->getValueId()?>"
-            rows="<?=$this->rows?>"
-            cols="<?=$this->cols?>"
-            name="<?=$this->getValueName()?>"><?=$this->value?></textarea><?php
+        return $this->rows;
     }
 
     /**
-     * @param bool $empty
+     * @param $rows
+     * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	protected function showLabel($empty = false)
-	{
-        $valueId = $this->getValueId();
-		?>
-		<tr>
-		<td
-			width="50%"
-			style="vertical-align: top; padding-top: 7px;"
-			class="adm-detail-valign-top">
-            <?php if (!$empty) : ?>
-                <label for="<?=$valueId?>"><?=$this->label?>:</label>
-            <?php endif; ?>
-		</td>
-		<td width="50%"><?php
-	}
+    public function setRows($rows)
+    {
+        $this->rows = $rows;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCols()
+    {
+        return $this->cols;
+    }
+
+    /**
+     * @param $cols
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setCols($cols)
+    {
+        $this->cols = $cols;
+
+        return $this;
+    }
 }

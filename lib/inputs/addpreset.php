@@ -47,57 +47,6 @@ class Addpreset extends Submit
 	}
 
 	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$this->showLabel(true);
-		$this->showInput();
-		$this->showHelp();
-
-		if ($this->popup === false) return;
-
-		$text = $this->popup
-			? $this->popup
-			: Loc::getMessage('rover-fa__ADDPRESET_TEXT');
-
-		$default = $this->default
-			? $this->default
-			: Loc::getMessage('rover-fa__ADDPRESET_DEFAULT');
-
-		?>
-		<script>
-			(function()
-			{
-				document.getElementById('<?=$this->getValueId()?>').onclick = function()
-				{
-					var presetName = prompt('<?=$text ?>', '<?=$default?>');
-
-					if (presetName == null)
-						return false;
-
-					if (!presetName.length) {
-						alert('<?=Loc::getMessage('rover-fa__ADDPRESET_ALERT')?>');
-						return false;
-					}
-
-					this.setAttribute('value', '<?=$this->tab->getSiteId() . self::SEPARATOR?>' + presetName);
-					return true;
-				}
-			})();
-		</script>
-		<?php
-	}
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function showInput()
-    {
-        Layout::submit($this, self::$type, $this->tab->getSiteId() . self::SEPARATOR . $this->default);
-    }
-
-	/**
 	 * not save
 	 * @param Event $event
 	 * @return EventResult

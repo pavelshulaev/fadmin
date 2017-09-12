@@ -13,6 +13,7 @@ namespace Rover\Fadmin\Admin;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Application;
 use Rover\Fadmin\Inputs\Input;
+use Rover\Fadmin\Layout\Admin;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
 /**
@@ -118,7 +119,7 @@ class Form
         $input->loadValue();
 
         if ($input->getDisplay())
-            $input->draw();
+            Admin::drawStatic($input);
     }
 
     /**

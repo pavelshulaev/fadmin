@@ -10,6 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Rover\Fadmin\Inputs\Params\Options;
 use Rover\Fadmin\Tab;
 /**
  * Class Selectbox
@@ -19,12 +20,12 @@ use Rover\Fadmin\Tab;
  */
 class Radio extends Input
 {
-	public static $type = self::TYPE__RADIO;
+    use Options;
 
-	/**
-	 * @var array
-	 */
-	protected $options = [];
+    /**
+     * @var string
+     */
+	public static $type = self::TYPE__RADIO;
 
 	/**
 	 * @param array $params
@@ -38,41 +39,4 @@ class Radio extends Input
 		if (isset($params['options']))
 			$this->options = $params['options'];
 	}
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput()
-    {
-        foreach ($this->options as $optionValue => $optionName):
-
-            ?><label><input
-            type="radio"
-            <?=$this->disabled ? 'disabled="disabled"': '';?>
-            name="<?=$this->getValueName()?>"
-            id="<?=$this->getValueId()?>"
-            value="<?=$optionValue?>"
-            <?=$this->value == $optionValue ? ' checked="checked "' : ''?>
-            ><?=$optionName?></label><?php
-
-        endforeach;
-    }
-
-	/**
-	 * @param array $options
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function setOptions(array $options)
-	{
-		$this->options = $options;
-	}
-
-	/**
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getOptions()
-    {
-        return $this->options;
-    }
 }

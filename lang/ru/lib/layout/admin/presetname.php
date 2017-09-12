@@ -7,4 +7,4 @@
  *
  * @author Pavel Shulaev (http://rover-it.me)
  */
-$MESS['rover-fa__presetname-no-name']    = 'Не задано имя пресета. Было «#last-preset-name#»';
+$MESS['rover-fa__presetname-no-name']    = 'РќРµ Р·Р°РґР°РЅРѕ РёРјСЏ РїСЂРµСЃРµС‚Р°. Р‘С‹Р»Рѕ В«#last-preset-name#В»';

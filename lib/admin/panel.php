@@ -26,11 +26,13 @@ class Panel
 	protected $form;
 	protected $tabControl;
 
-	/**
-	 * @param Options $options
-	 * @param null    $formName
-	 */
-	public function __construct(Options $options, $formName = null)
+    /**
+     * Panel constructor.
+     *
+     * @param Options $options
+     * @param array   $formParams
+     */
+	public function __construct(Options $options, array $formParams = [])
 	{
 		global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
 

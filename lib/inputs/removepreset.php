@@ -46,44 +46,6 @@ class Removepreset extends Submit
 	}
 
 	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$presetId   = $this->tab->getPresetId();
-
-		if (!$presetId)
-			return;
-
-		$valueId    = $this->getValueId();
-
-		$this->showLabel(true);
-		$this->showInput();
-		$this->showHelp();
-
-		if ($this->popup === false) return;
-
-		$confirm = $this->popup
-			? $this->popup
-			: Loc::getMessage('rover-fa__REMOVEPRESET_CONFIRM');
-
-		$this->drawConfirm($valueId, $confirm);
-	}
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput()
-    {
-        $presetId = $this->tab->getPresetId();
-
-        if (!$presetId)
-            return;
-
-        Layout::submit($this, self::$type, $this->tab->getSiteId() . self::SEPARATOR . $presetId);
-    }
-
-	/**
 	 * not save
 	 * @param Event $event
 	 * @return EventResult

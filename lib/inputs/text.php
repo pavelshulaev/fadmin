@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Rover\Fadmin\Inputs\Params\MaxLength;
+use Rover\Fadmin\Inputs\Params\Size;
 use Rover\Fadmin\Tab;
 /**
  * Class Text
@@ -19,20 +21,12 @@ use Rover\Fadmin\Tab;
  */
 class Text extends Input
 {
-	/**
+    use Size, MaxLength;
+
+    /**
 	 * @var string
 	 */
 	public static $type = self::TYPE__TEXT;
-
-	/**
-	 * @var int
-	 */
-	protected $maxLength    = 255;
-
-    /**
-     * @var int
-     */
-	protected $size         = 50;
 
 	/**
 	 * @param array $params
@@ -45,23 +39,12 @@ class Text extends Input
 
 		if (isset($params['maxLength']) && intval($params['maxLength']))
 			$this->maxLength = intval($params['maxLength']);
+		else
+		    $this->maxLength = 255;
 
 		if (isset($params['size']) && intval($params['size']))
 			$this->size = intval(htmlspecialcharsbx($params['size']));
+		else
+		    $this->size = 50;
 	}
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput()
-    {
-        ?><input
-            type="text"
-            <?=$this->disabled ? 'disabled="disabled"': '';?>
-            id="<?=$this->getValueId()?>"
-            size="<?=$this->size?>"
-            maxlength="<?=$this->maxLength?>"
-            value="<?=$this->value?>"
-            name="<?=$this->getValueName()?>"><?php
-    }
 }

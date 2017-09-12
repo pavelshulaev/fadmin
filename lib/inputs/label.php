@@ -42,14 +42,6 @@ class Label extends Input
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
 	}
 
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput()
-    {
-        echo $this->default;
-    }
-
 	/**
 	 * not save
 	 * @param Event $event

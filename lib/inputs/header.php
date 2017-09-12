@@ -43,22 +43,6 @@ class Header extends Input
 	}
 
 	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		?><tr class="heading">
-			<td colspan="2"><?=$this->label?></td>
-		</tr><?php
-	}
-
-    /**
-     * for capability
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput(){}
-
-	/**
 	 * not save
 	 * @param Event $event
 	 * @return EventResult

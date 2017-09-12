@@ -2,15 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: lenovo
- * Date: 01.09.2017
- * Time: 17:00
+ * Date: 12.09.2017
+ * Time: 15:43
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
-namespace Rover\Fadmin\Helper\Layout;
 
+namespace Rover\Fadmin\Layout\Admin;
 
-class Panel
+class Presetname extends Text
 {
 
 }

@@ -36,26 +36,4 @@ class Hidden extends Text
 
         parent::__construct($params, $tab);
     }
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-        $this->showInput();
-	}
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput()
-    {
-        ?><input
-            <?=$this->disabled ? 'disabled="disabled"': '';?>
-            id="<?=$this->getValueId()?>"
-            maxlength="<?=$this->maxLength?>"
-            type="hidden"
-            value="<?php $this->value?>"
-            name="<?=$this->getValueName()?>"><?php
-    }
 }

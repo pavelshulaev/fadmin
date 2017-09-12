@@ -25,7 +25,7 @@ class Submit extends Input
 {
 	public static $type = self::TYPE__SUBMIT;
 
-	const SEPARATOR = '__';
+    const SEPARATOR = '__';
 
 	/**
 	 * @var string
@@ -46,45 +46,6 @@ class Submit extends Input
 
 		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		parent::draw();
-
-		if (!$this->popup)
-			return;
-
-		$this->drawConfirm($this->getValueId(), $this->popup);
-	}
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput()
-    {
-        Layout::submit($this);
-    }
-
-	/**
-	 * @param $id
-	 * @param $popup
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function drawConfirm($id, $popup)
-	{
-		?>
-		<script>
-			(function(){
-				document.getElementById('<?=$id?>').onclick = function(){
-					return confirm('<?=$popup?>');
-				}
-			})();
-		</script>
-		<?php
 	}
 
 	/**
@@ -109,4 +70,24 @@ class Submit extends Input
 
 		$this->value = $this->default;
 	}
+
+    /**
+     * @return string
+     */
+    public function getPopup()
+    {
+        return $this->popup;
+    }
+
+    /**
+     * @param $popup
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setPopup($popup)
+    {
+        $this->popup = $popup;
+
+        return $this;
+    }
 }

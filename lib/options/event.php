@@ -8,7 +8,7 @@
  * @author Pavel Shulaev (http://rover-it.me)
  */
 
-namespace Rover\Fadmin\Engine;
+namespace Rover\Fadmin\Options;
 
 use \Bitrix\Main\Event as BxEvent;
 use \Bitrix\Main\EventManager;

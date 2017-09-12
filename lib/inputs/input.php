@@ -4,7 +4,6 @@ namespace Rover\Fadmin\Inputs;
 use Bitrix\Main;
 use Bitrix\Main\Application;
 use \Bitrix\Main\Config\Option;
-use Rover\Fadmin\Helper\Layout;
 use \Rover\Fadmin\Tab;
 use \Rover\Fadmin\Options;
 
@@ -43,6 +42,11 @@ abstract class Input
     const TYPE__SUBMIT          = 'submit';
     const TYPE__TEXT            = 'text';
 	const TYPE__TEXTAREA        = 'textarea';
+
+    /**
+     * @var string
+     */
+	public static $type;
 
 	/**
 	 * input id
@@ -227,19 +231,6 @@ abstract class Input
 	public function getTab()
 	{
 		return $this->tab;
-	}
-
-	/**
-	 * loading value before showing input
-	 *
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function show()
-	{
-		$this->loadValue();
-
-		if ($this->getDisplay())
-			$this->draw();
 	}
 
 	/**
@@ -564,46 +555,6 @@ abstract class Input
 		return true;
 	}
 
-    /**
-     * @author Pavel Shulaev (http://rover-it.me)
-     */
-    public function draw()
-    {
-        $this->showLabel();
-        $this->showInput();
-        $this->showHelp();
-    }
-
-    /**
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    abstract public function showInput();
-
-    /**
-     * @param bool $empty
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	protected function showLabel($empty = false)
-	{
-        Layout::label($this, $empty);
-	}
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    protected function showMultiLabel()
-    {
-        Layout::multiLabel($this);
-    }
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function showHelp()
-	{
-        Layout::help($this);
-	}
 
 	/**
 	 * @return string
@@ -613,4 +564,13 @@ abstract class Input
 	{
 		return $this->tab->getModuleId();
 	}
+
+    /**
+     * @return string
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getClassName()
+    {
+        return get_called_class();
+    }
 }

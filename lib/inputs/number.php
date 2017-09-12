@@ -26,10 +26,6 @@ class Number extends Text
 	 */
 	public static $type = self::TYPE__NUMBER;
 
-	/**
-	 * @var bool
-	 */
-	public static $cssPrinted = false;
 
 	/**
 	 * @var int
@@ -58,56 +54,7 @@ class Number extends Text
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput()
-    {
-        if (!self::$cssPrinted){
-            $this->printCss();
-            self::$cssPrinted = true;
-        }
 
-        ?><input
-            <?=$this->disabled ? 'disabled="disabled"': '';?>
-            type="number"
-            id="<?=$this->getValueId()?>"
-            value="<?=$this->value?>"
-            name="<?=$this->getValueName()?>"
-            <?=is_numeric($this->size) ? " size='{$this->size}' " : ''?>
-            <?=is_numeric($this->maxLength) ? " maxlength='{$this->maxLength}' " : ''?>
-            <?=is_numeric($this->max) ? " max='{$this->max}' " : ''?>
-            <?=is_numeric($this->min) ? " min='{$this->min}' " : ''?>
-            ><?php
-    }
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function printCss()
-	{
-		?>
-		<style>
-			.adm-workarea input[type="number"]{
-				background: #fff;
-				border: 1px solid;
-				border-color: #87919c #959ea9 #9ea7b1 #959ea9;
-				border-radius: 4px;
-				color: #000;
-				-webkit-box-shadow: 0 1px 0 0 rgba(255,255,255,0.3), inset 0 2px 2px -1px rgba(180,188,191,0.7);
-				box-shadow: 0 1px 0 0 rgba(255,255,255,0.3), inset 0 2px 2px -1px rgba(180,188,191,0.7);
-				display: inline-block;
-				outline: none;
-				vertical-align: middle;
-				-webkit-font-smoothing: antialiased;
-				font-size: 13px;
-				height: 25px;
-				padding: 0 5px;
-				margin: 0;
-			}
-		</style>
-		<?php
-	}
 
 	/**
 	 * @param Event $event
@@ -135,4 +82,37 @@ class Number extends Text
 
 		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
+
+    /**
+     * @return int
+     */
+    public function getMin()
+    {
+        return $this->min;
+    }
+
+    /**
+     * @param int $min
+     */
+    public function setMin($min)
+    {
+        $this->min = $min;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMax()
+    {
+        return $this->max;
+    }
+
+    /**
+     * @param int $max
+     */
+    public function setMax($max)
+    {
+        $this->max = $max;
+    }
+
 }

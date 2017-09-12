@@ -72,7 +72,7 @@ class Request
      */
 	public function __construct(Options $options, $requestMethod, $update, $apply, $restoreDefaults, $defaultActiveTab = null)
 	{
-		$this->defaultActiveTab = trim(defaultActiveTab);
+		$this->defaultActiveTab = trim($defaultActiveTab);
 		$this->options          = $options;
 		$this->moduleId         = htmlspecialcharsbx($this->options->getModuleId());
 

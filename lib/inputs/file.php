@@ -11,6 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Application;
+use Rover\Fadmin\Inputs\Params\Size;
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
@@ -23,6 +24,7 @@ use Bitrix\Main\EventResult;
  */
 class File extends Input
 {
+    use Size;
 	/**
 	 * @var string
 	 */
@@ -44,12 +46,6 @@ class File extends Input
 	protected $maxSize = 0;
 
 	/**
-	 * @var int
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected $size = 20;
-
-	/**
 	 * @param array $params
 	 * @param Tab   $tab
 	 * @throws \Bitrix\Main\ArgumentNullException
@@ -69,37 +65,49 @@ class File extends Input
 
 		if (isset($params['size']) && intval($params['size']))
 			$this->size = intval(htmlspecialcharsbx($params['size']));
+		else
+		    $this->size = 20;
 
 		// add events
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
 	}
 
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function showInput()
+	public function isImage()
     {
-        $valueName  = $this->getValueName();
+        return $this->isImage;
+    }
 
-        $fileType = $this->isImage
-            ? 'IMAGE'
-            : '';
+    /**
+     * @return string
+     */
+    public function getMimeType()
+    {
+        return $this->mimeType;
+    }
 
-        if (strlen($this->value) > 0):
+    /**
+     * @param string $mimeType
+     */
+    public function setMimeType($mimeType)
+    {
+        $this->mimeType = $mimeType;
+    }
 
-            $file = \CFile::GetFileArray($this->value);
+    /**
+     * @return int
+     */
+    public function getMaxSize()
+    {
+        return $this->maxSize;
+    }
 
-            echo '<code>' . $file['ORIGINAL_NAME'] . '</code><br>';
-
-            if ($this->isImage)
-                echo \CFile::ShowImage($this->value, 200, 200, "border=0", "", true) . '<br>';
-
-        endif;
-
-        echo \CFile::InputFile($valueName, $this->size, $this->value, false, $this->maxSize,
-                $fileType, "class=typefile", 0, "class=typeinput", '', false, false)
-            . '<br>';
+    /**
+     * @param int $maxSize
+     */
+    public function setMaxSize($maxSize)
+    {
+        $this->maxSize = $maxSize;
     }
 
 	/**
