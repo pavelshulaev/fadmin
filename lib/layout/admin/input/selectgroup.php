@@ -51,12 +51,14 @@ class Selectgroup extends Selectbox
         if (!$this->input instanceof \Rover\Fadmin\Inputs\Selectgroup)
             return '';
 
-        if (empty($this->options))
-            return '';
+        $options = $this->input->getOptions();
 
-        $optionsId  = md5(serialize($this->options));
+        if (empty($options))
+            return '-';
 
-        $value      = empty($this->value) ? [] : $this->value;
+        $optionsId  = md5(serialize($options));
+
+        $value      = empty($this->input->getValue()) ? [] : $this->input->getValue();
         if (!is_array($value))
             $value = [$value];
 
@@ -68,7 +70,7 @@ class Selectgroup extends Selectbox
 			<script type="text/javascript">
                 function OnType_'.$optionsId.'_Changed(typeSelect, selectID)
                 {
-                    var items       = '.\CUtil::PhpToJSObject($this->options).';
+                    var items       = '.\CUtil::PhpToJSObject($this->input->getOptions()).';
                     var selected    = BX(selectID);
                     
                     if(!!selected)
@@ -97,7 +99,7 @@ class Selectgroup extends Selectbox
                 id="' . $valueGroupName . '"
                 onchange="'.htmlspecialcharsbx($onChangeGroup).'">'."\n";
 
-        foreach($this->options as $key => $optionValue)
+        foreach($options as $key => $optionValue)
             $html .= '<option value="'.htmlspecialcharsbx($key).'"'.($groupValue==$key? ' selected': '').'>'.htmlspecialcharsEx($optionValue['name']).'</option>'."\n";
 
         $html .= "</select>\n";
@@ -110,7 +112,7 @@ class Selectgroup extends Selectbox
                     id="' . $valueName . '">'."\n";
 
         if (!is_null($groupValue))
-            foreach($this->options[$groupValue]['options'] as $key => $optionValue)
+            foreach($options[$groupValue]['options'] as $key => $optionValue)
                 $html .= '<option value="'.htmlspecialcharsbx($key).'"'.(in_array($key, $value)? ' selected': '').'>'.htmlspecialcharsEx($optionValue).'</option>'."\n";
 
         $html .= "</select>\n";
