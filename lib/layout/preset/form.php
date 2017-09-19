@@ -51,6 +51,10 @@ class Form extends FromAbstract
             ? trim($this->params['back_url'])
             : '';
 
+        $this->params['this_url'] = isset($this->params['this_url'])
+            ? trim($this->params['this_url'])
+            : '';
+
         $this->params['custom_buttons'] = isset($this->params['custom_buttons'])
             ? trim($this->params['custom_buttons'])
             : '';
@@ -67,7 +71,9 @@ class Form extends FromAbstract
     {
         if (is_null($this->request)) {
             $this->request = new Request($this->options, [
-                'back_url' => $this->params['back_url']
+                'back_url' => $this->params['back_url'],
+                'this_url' => $this->params['this_url'],
+                'preset_id' => $this->params['preset_id'],
             ]);
         }
 
@@ -80,7 +86,7 @@ class Form extends FromAbstract
     public function show()
     {
         $this->getRequest()->process();
-        //$this->showMessages();
+        $this->showMessages();
         $this->showForm();
     }
 
