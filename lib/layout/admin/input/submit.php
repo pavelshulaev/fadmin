@@ -11,11 +11,10 @@
 namespace Rover\Fadmin\Layout\Admin\Input;
 
 use Rover\Fadmin\Layout\Admin\Input;
-
 /**
  * Class Submit
  *
- * @package Rover\Fadmin\Layout\Admin\Input
+ * @package Rover\Fadmin\Layout\Preset\Input
  * @author  Pavel Shulaev (https://rover-it.me)
  */
 class Submit extends Input
@@ -31,20 +30,14 @@ class Submit extends Input
     protected $customInputValue;
 
     /**
-     * @author Pavel Shulaev (https://rover-it.me)
+     * @var string
      */
-    public function draw()
-    {
-        if (!$this->input instanceof \Rover\Fadmin\Inputs\Submit)
-            return;
+    protected $customInputId;
 
-        parent::draw();
-
-        if (!$this->input->getPopup())
-            return;
-
-        $this->confirm($this->input->getValueId(), $this->input->getPopup());
-    }
+    /**
+     * @var string
+     */
+    protected $customPopup;
 
     /**
      * @param $valueId
@@ -53,6 +46,8 @@ class Submit extends Input
      */
     protected function confirm($valueId, $popup)
     {
+        if ($popup === false)
+            return;
         ?>
         <script>
             (function(){
@@ -69,8 +64,13 @@ class Submit extends Input
      */
     public function showInput()
     {
+        if (!$this->input instanceof \Rover\Fadmin\Inputs\Submit)
+            return;
+
         $name   = $this->customInputName ?: $this->input->getValueName();
         $value  = $this->customInputValue ?: $this->input->getDefault();
+        $id     = $this->customInputId ?: $this->input->getValueId();
+        $popup  = $this->customPopup !== null ? $this->customPopup : $this->input->getPopup();
 
         ?>
         <style>
@@ -119,6 +119,8 @@ class Submit extends Input
                 id="<?=$this->input->getValueId()?>"
                 name="<?=$name?>"
                 value="<?=urlencode($value)?>"><?=$this->input->getLabel()?></button><?php
+
+        $this->confirm($id, $popup);
     }
 
     /**

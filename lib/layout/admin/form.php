@@ -10,7 +10,7 @@
 
 namespace Rover\Fadmin\Layout\Admin;
 
-use Rover\Fadmin\Admin\Request;
+
 use \Rover\Fadmin\Layout\Form as FromAbstract;
 use Bitrix\Main\Application;
 use Bitrix\Main\Localization\Loc;
@@ -29,11 +29,6 @@ Loc::loadMessages(__FILE__);
 class Form extends FromAbstract
 {
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
      * @var \CAdminTabControl
      */
     protected $tabControl;
@@ -44,11 +39,6 @@ class Form extends FromAbstract
     protected $moduleId;
 
     /**
-     * @var array|mixed
-     */
-    protected $buttons = [];
-
-    /**
      * Form constructor.
      *
      * @param Options $options
@@ -56,16 +46,36 @@ class Form extends FromAbstract
      */
     public function __construct(Options $options, array $params = [])
     {
-        global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
-
         parent::__construct($options, $params);
 
         $this->tabControl   = new \CAdminTabControl("tabControl", $this->getAllTabsInfo());
-        $this->request      = new Request($options, $REQUEST_METHOD, $Update, $Apply, $RestoreDefaults, $this->tabControl->ActiveTabParam());
         $this->moduleId     = htmlspecialcharsbx($this->options->getModuleId());
 
-        if (!empty($params['buttons']))
-            $this->buttons = $params['buttons'];
+        if (empty($this->params['top_buttons']) || !is_array($this->params['top_buttons']))
+            $this->params['top_buttons'] = [];
+    }
+
+    /**
+     * @return Request
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getRequest()
+    {
+        if (is_null($this->request)) {
+            global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
+
+            $params = [
+                'active_tab'        => $this->tabControl->ActiveTabParam(),
+                'request_method'    => $REQUEST_METHOD,
+                'update'            => $Update,
+                'apply'             => $Apply,
+                'restore_defaults'  => $RestoreDefaults
+            ];
+
+            $this->request = new Request($this->options, $params);
+        }
+
+        return $this->request;
     }
 
     /**
@@ -111,10 +121,10 @@ class Form extends FromAbstract
      */
     protected function showButtons()
     {
-        if (!count($this->buttons))
+        if (!count($this->params['top_buttons']))
             return;
 
-        $context = new \CAdminContextMenu($this->buttons);
+        $context = new \CAdminContextMenu($this->params['top_buttons']);
         $context->Show();
     }
 
@@ -125,12 +135,12 @@ class Form extends FromAbstract
      */
     protected function getTabInfo(Tab $tab)
     {
-        $name           = $tab->getName();
-        $icon           = "ib_settings";
-        $label          = strlen($tab->getSiteId())
+        $name = $tab->getName();
+        $icon = "ib_settings";
+        $label = strlen($tab->getSiteId())
             ? $tab->getLabel() . ' [' . $tab->getSiteId() . ']'
             : $tab->getLabel();
-        $description    = strlen($tab->getSiteId())
+        $description = strlen($tab->getSiteId())
             ? $tab->getDescription() . ' [' . $tab->getSiteId() . ']'
             : $tab->getDescription();
 
@@ -152,7 +162,7 @@ class Form extends FromAbstract
      */
     public function show()
     {
-        $this->request->get();
+        $this->getRequest()->process();
         $this->showMessages();
         $this->showButtons();
         $this->showForm();
@@ -236,7 +246,6 @@ class Form extends FromAbstract
      */
     protected function showGroupRightsTab()
     {
-
         global $APPLICATION, $REQUEST_METHOD;
 
         $RIGHTS     = $_REQUEST['RIGHTS'];

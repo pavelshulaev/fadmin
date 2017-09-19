@@ -239,17 +239,18 @@ class Tab
 		$this->inputs = $newInputs;
 	}
 
-	/**
-	 * @param $inputName
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getValue($inputName)
+    /**
+     * @param      $inputName
+     * @param bool $reload
+     * @return mixed|null
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getValue($inputName, $reload = false)
 	{
 		$input = $this->searchByName($inputName);
 
 		if ($input instanceof Input)
-			return $input->getValue();
+			return $input->getValue($reload);
 
 		return null;
 	}
@@ -332,6 +333,13 @@ class Tab
 	 */
 	public function setValuesFromRequest()
 	{
+	    $tab = $this;
+
+        if(false === $this->options->runEvent(
+                Options::EVENT__BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST,
+                compact('tab')))
+            return;
+
 		foreach ($this->inputs as $input)
 			/**
 			 * @var Input $input
@@ -339,24 +347,39 @@ class Tab
 			$input->setValueFromRequest();
 	}
 
-	/**
-	 * @return null
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getPresetName()
+    /**
+     * @param bool $reload
+     * @return mixed|null
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getPresetName($reload = false)
 	{
-		if (!$this->isPreset()
-			|| !$this->getPresetId())
-			return null;
-
-		$preset = $this->options->preset->getById(
-			$this->getPresetId(), $this->siteId);
+		$preset = $this->getPreset($reload);
 
 		if (is_array($preset) && isset($preset['name']))
 			return $preset['name'];
 
 		return null;
 	}
+
+    /**
+     * @param bool $reload
+     * @return mixed|null
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getPreset($reload = false)
+    {
+        if (!$this->isPreset())
+            throw new Main\ArgumentOutOfRangeException('tab');
+
+        if (!$this->getPresetId())
+            throw new ArgumentNullException('presetId');
+
+        return $this->options->preset->getById(
+            $this->getPresetId(), $this->siteId, $reload);
+    }
 
 	/**
 	 * @param            $name
@@ -377,11 +400,29 @@ class Tab
 	}
 
 	/**
-	 * @return array
+	 * @return Input[]
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getInputs()
 	{
 		return $this->inputs;
 	}
+
+    /**
+     * @param $name
+     * @throws ArgumentNullException
+     * @throws Main\NotSupportedException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function setPresetName($name)
+    {
+        if (!$this->isPreset())
+            throw new Main\NotSupportedException();
+
+        $name = trim($name);
+        if (!strlen($name))
+            throw new ArgumentNullException('name');
+
+        $this->options->preset->updateName($this->getPresetId(), $name, $this->getSiteId());
+    }
 }

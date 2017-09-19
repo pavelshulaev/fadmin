@@ -32,7 +32,7 @@ class Textarea extends Input
         <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
         id="<?=$this->input->getValueId()?>"
         rows="<?=$this->input->getRows()?>"
-        cols="<?=$this->input->getRows()?>"
+        cols="<?=$this->input->getCols()?>"
         name="<?=$this->input->getValueName()?>"><?=$this->input->getValue()?></textarea><?php
     }
 
@@ -40,7 +40,7 @@ class Textarea extends Input
      * @param bool $empty
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function showLabel($empty = false)
+    public function showLabel($empty = false)
     {
         $valueId = $this->input->getValueId();
         ?>

@@ -140,15 +140,19 @@ class Input
 		return self::get(InputAbstract::TYPE__PRESET_NAME, $name);
 	}
 
-	/**
-	 * @param $name
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getRemovePreset($name)
+    /**
+     * @param      $name
+     * @param bool $popup
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getRemovePreset($name, $popup = false)
 	{
-		return self::get(InputAbstract::TYPE__REMOVE_PRESET, $name);
+		$input = self::get(InputAbstract::TYPE__REMOVE_PRESET, $name);
+		if ($popup !== false)
+		    $input['popup'] = $popup;
+
+        return $input;
 	}
 
 	/**

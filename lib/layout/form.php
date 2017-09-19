@@ -31,6 +31,11 @@ abstract class Form
     protected $params;
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * Form constructor.
      *
      * @param Options $options
@@ -40,6 +45,27 @@ abstract class Form
     {
         $this->options  = $options;
         $this->params   = $params;
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * @return Request
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     abstract public function show();

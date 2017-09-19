@@ -18,6 +18,11 @@ class Preset
 	 */
 	protected $options;
 
+    /**
+     * @var array
+     */
+	protected $presets;
+
 	/**
 	 * @param Options $options
 	 */
@@ -26,37 +31,47 @@ class Preset
 		$this->options = $options;
 	}
 
-	/**
-	 * @param string $siteId
-	 * @return mixed
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getList($siteId = '')
+    /**
+     * @param string $siteId
+     * @param bool   $reload
+     * @return array|mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getList($siteId = '', $reload = false)
 	{
-		return unserialize(Option::get($this->options->getModuleId(),
-			self::OPTION_ID, '', $siteId));
+	    if (is_null($this->presets) || $reload)
+	        $this->presets = unserialize(Option::get($this->options->getModuleId(),
+                self::OPTION_ID, '', $siteId));
+
+		return $this->presets;
 	}
 
-	/**
-	 * @param string $siteId
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getIds($siteId = '')
+    /**
+     * @param string $siteId
+     * @param bool   $reload
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getIds($siteId = '', $reload = false)
 	{
-		return array_keys($this->getList($siteId));
+		return array_keys($this->getList($siteId, $reload));
 	}
 
-	/**
-	 * @param        $id
-	 * @param string $siteId
-	 * @return null
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getById($id, $siteId = '')
+    /**
+     * @param        $id
+     * @param string $siteId
+     * @param bool   $reload
+     * @return mixed|null
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getById($id, $siteId = '', $reload = false)
 	{
-		$presets = $this->getList($siteId);
+        $id = intval($id);
+        if (!$id)
+            throw new ArgumentNullException('id');
+
+		$presets = $this->getList($siteId, $reload);
 
 		if (isset($presets[$id]))
 			return $presets[$id];
@@ -64,14 +79,15 @@ class Preset
 		return null;
 	}
 
-	/**
-	 * @param string $siteId
-	 * @return int
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getCount($siteId = '')
+    /**
+     * @param string $siteId
+     * @param bool   $reload
+     * @return int
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getCount($siteId = '', $reload = false)
 	{
-		return count($this->getList($siteId));
+		return count($this->getList($siteId, $reload));
 	}
 
 	/**
@@ -82,7 +98,8 @@ class Preset
 	 */
 	public function add($name, $siteId = '')
 	{
-		$presets = $this->getList($siteId);
+        $name       = trim($name);
+		$presets    = $this->getList($siteId, true);
 
 		if (!count($presets)){
 			$presets    = [];
@@ -100,14 +117,19 @@ class Preset
 		return $presetId;
 	}
 
-	/**
-	 * @param        $id
-	 * @param string $siteId
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $id
+     * @param string $siteId
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function remove($id, $siteId = '')
 	{
-		$presets = $this->getList($siteId);
+        $id = intval($id);
+        if (!$id)
+            throw new ArgumentNullException('id');
+
+		$presets = $this->getList($siteId, true);
 
 		foreach ($presets as $num => $preset){
 			if ($id == $preset['id']) {
@@ -127,6 +149,9 @@ class Preset
 	{
 		Option::set($this->options->getModuleId(),
 			self::OPTION_ID, serialize($presets), $siteId);
+
+		// reset cache
+		$this->presets = null;
 	}
 
 	/**
@@ -137,20 +162,25 @@ class Preset
 	 */
 	public function sort($sortFunc, $siteId = '')
 	{
-		$presets = $this->getList($siteId);
+		$presets = $this->getList($siteId, true);
 		usort($presets, $sortFunc);
 		$this->update($presets, $siteId);
 	}
 
-	/**
-	 * @param        $id
-	 * @param string $siteId
-	 * @return bool
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function isExists($id, $siteId = '')
+    /**
+     * @param        $id
+     * @param string $siteId
+     * @param bool   $reload
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function isExists($id, $siteId = '', $reload = false)
 	{
-		return in_array($id, $this->getIds($siteId));
+        $id = intval($id);
+        if (!$id)
+            return false;
+
+		return in_array($id, $this->getIds($siteId, $reload));
 	}
 
 	/**
@@ -162,13 +192,15 @@ class Preset
 	 */
 	public function updateName($id, $name, $siteId = '')
 	{
+        $id = intval($id);
 		if (!$id)
 			throw new ArgumentNullException('id');
 
+		$name = trim($name);
 		if (!$name)
 			throw new ArgumentNullException('name');
 
-		$presets = $this->getList($siteId);
+		$presets = $this->getList($siteId, true);
 
 		foreach ($presets as $num => &$preset){
 			if ($preset['id'] != $id)
@@ -181,15 +213,16 @@ class Preset
 		$this->update($presets, $siteId);
 	}
 
-	/**
-	 * @param        $id
-	 * @param string $siteId
-	 * @return null
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getNameById($id, $siteId = '')
+    /**
+     * @param        $id
+     * @param string $siteId
+     * @param bool   $reload
+     * @return null
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getNameById($id, $siteId = '', $reload = false)
 	{
-		$preset = $this->getById($id, $siteId);
+		$preset = $this->getById($id, $siteId, $reload);
 		if (isset($preset['name']))
 			return $preset['name'];
 

@@ -7,9 +7,10 @@
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
-namespace Rover\Fadmin\Layout\Admin;
+namespace Rover\Fadmin\Layout\Preset;
 
 use Rover\Fadmin\Layout\Input as InputAbstract;
+use Rover\Fadmin\Inputs\Input as InputEngine;
 /**
  * Class Admin
  *
@@ -19,10 +20,28 @@ use Rover\Fadmin\Layout\Input as InputAbstract;
 abstract class Input extends InputAbstract
 {
     /**
-     * for factory
      * @var string
      */
-    public static $type = 'Admin';
+    public static $type = 'Preset';
+
+    /**
+     * @var InputAbstract
+     */
+    protected $adminInput;
+
+    /**
+     * Input constructor.
+     *
+     * @param InputEngine $input
+     */
+    public function __construct(InputEngine $input)
+    {
+        parent::__construct($input);
+
+        $className          = get_called_class();
+        $inputClassName     = str_replace(self::$type, \Rover\Fadmin\Layout\Admin\Input::$type, $className);
+        $this->adminInput   = new $inputClassName($input);
+    }
 
     /**
      * @author Pavel Shulaev (http://rover-it.me)
@@ -40,56 +59,32 @@ abstract class Input extends InputAbstract
      */
     public function showLabel($empty = false)
     {
-        ?>
-        <tr>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-l"
-            style="vertical-align: top; padding-top: 7px;">
-            <?php if (!$empty) : ?>
-                <label for="<?=$this->input->getValueId()?>"><?=$this->input->getLabel()?>:</label>
-            <?php endif; ?>
-        </td>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-r"
-        ><?php
+       if (!$empty) : ?>
+            <label for="<?=$this->input->getValueId()?>"><?=$this->input->getLabel()?>:</label>
+        <?php endif;
     }
 
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function showMultiLabel()
+    public function showMultiLabel()
     {
         ?>
-        <tr>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-l"
-            style="vertical-align: top; padding-top: 7px;">
             <label for="<?=$this->input->getValueId()?>"><?=$this->input->getLabel()?>:<br>
                 <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
             </label>
-        </td>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-r"
-        ><?php
+        <?php
     }
 
     /**
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    protected function showHelp()
+    public function showHelp()
     {
         $help = trim($this->input->getHelp());
 
         if (strlen($help)):
             ?><br><small style="color: #777;"><?=$help?></small><?php
         endif;
-
-        ?></td>
-        </tr>
-        <?php
     }
 }

@@ -18,7 +18,7 @@ Loc::loadMessages(__FILE__);
 /**
  * Class Removepreset
  *
- * @package Rover\Fadmin\Layout\Admin\Input
+ * @package Rover\Fadmin\Layout\Preset\Input
  * @author  Pavel Shulaev (https://rover-it.me)
  */
 class Removepreset extends Submit
@@ -31,7 +31,7 @@ class Removepreset extends Submit
         if (!$this->input instanceof RemovePresetInput)
             return;
 
-        $presetId   = $this->input->getTab()->getPresetId();
+        $presetId = $this->input->getTab()->getPresetId();
 
         if (!$presetId)
             return;
@@ -39,15 +39,6 @@ class Removepreset extends Submit
         $this->showLabel(true);
         $this->showInput();
         $this->showHelp();
-
-        $popup = $this->input->getPopup();
-
-        if ($popup === false) return;
-
-        $valueId    = $this->input->getValueId();
-        $confirm    = $popup ? : Loc::getMessage('rover-fa__REMOVEPRESET_CONFIRM');
-
-        $this->confirm($valueId, $confirm);
     }
 
     /**
@@ -55,13 +46,23 @@ class Removepreset extends Submit
      */
     public function showInput()
     {
+        if (!$this->input instanceof RemovePresetInput)
+            return;
+
         $presetId = $this->input->getTab()->getPresetId();
 
         if (!$presetId)
             return;
 
+        $popup = $this->input->getPopup();
+
+        if (($popup !== false) && !strlen($popup))
+            $popup = Loc::getMessage('rover-fa__REMOVEPRESET_CONFIRM');
+
         $this->customInputName  = \Rover\Fadmin\Inputs\Removepreset::$type;
         $this->customInputValue = $this->input->getTab()->getSiteId() . RemovePresetInput::SEPARATOR . $presetId;
+        $this->customInputId    = $this->input->getValueId();
+        $this->customPopup      = $popup;
 
         parent::showInput();
     }

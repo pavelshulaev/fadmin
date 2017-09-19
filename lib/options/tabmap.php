@@ -11,6 +11,8 @@
 namespace Rover\Fadmin\Options;
 
 use \Bitrix\Main\ArgumentNullException;;
+
+use Bitrix\Main\ArgumentOutOfRangeException;
 use \Rover\Fadmin\Options;
 use \Rover\Fadmin\Tab;
 use \Rover\Fadmin\Inputs\Input;
@@ -63,7 +65,7 @@ class TabMap
 
 	/**
 	 * @param bool|false $reload
-	 * @return array
+	 * @return Tab[]
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function getTabs($reload = false)
@@ -91,7 +93,7 @@ class TabMap
 			if (empty($tabParams))
 				continue;
 
-			if ($tabParams['preset']){
+			if (isset($tabParams['preset']) && $tabParams['preset']){
 				$siteId = $tabParams['siteId'] ?: '';
 				// preset tab can be only one on current site
 				if (isset($this->presetMap[$siteId]))
@@ -109,9 +111,9 @@ class TabMap
 
 						// event before create preset tab
 						if (false === $this->options->runEvent(
-								Options::EVENT__BEFORE_MAKE_PRESET_TAB,
-								compact('tabParams')))
-						return null;
+                            Options::EVENT__BEFORE_MAKE_PRESET_TAB,
+                            compact('tabParams')))
+						continue;
 
 						$tab = Tab::factory($tabParams, $this->options);
 
@@ -233,5 +235,95 @@ class TabMap
         }
 
         return null;
+    }
+
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setValuesFromRequest()
+    {
+        if(false === $this->options->runEvent(Options::EVENT__BEFORE_ADD_VALUES_FROM_REQUEST))
+            return false;
+
+        $tabs = $this->getTabs();
+
+        foreach ($tabs as $tab)
+            $tab->setValuesFromRequest();
+
+        if(false === $this->options->runEvent(
+                Options::EVENT__AFTER_ADD_VALUES_FROM_REQUEST,
+                compact('tabs')))
+            return false;
+
+        return true;
+    }
+
+    /**
+     * @param        $value
+     * @param string $siteId
+     * @return bool|int|mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function addPreset($value, $siteId = '')
+    {
+        $params = compact('siteId', 'value');
+        if (false === $this->options->runEvent(Options::EVENT__BEFORE_ADD_PRESET, $params))
+            return false;
+
+        if (!isset($params['name']))
+            $params['name'] = $params['value'];
+
+        $params['id'] = $this->options->preset->add(
+            $params['name'],
+            $params['siteId']
+        );
+
+        //reload tabs
+        $this->reloadTabs();
+        $this->options->runEvent(Options::EVENT__AFTER_ADD_PRESET, $params);
+
+        return $params['id'];
+    }
+
+    /**
+     * @param        $id
+     * @param string $siteId
+     * @return bool
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function removePreset($id, $siteId = '')
+    {
+        $id = intval($id);
+        if (!$id)
+            throw new ArgumentNullException('id');
+
+        $params = compact('siteId', 'id');
+
+        // action beforeRemovePreset
+        if(false === $this->options->runEvent(
+                Options::EVENT__BEFORE_REMOVE_PRESET,
+                $params))
+            return false;
+
+        /**
+         * @var Tab $presetTab
+         */
+        $presetTab = $this->getTabByPresetId($params['id'], $params['siteId']);
+
+        if ($presetTab instanceof Tab === false)
+            throw new ArgumentOutOfRangeException('tab');
+
+        $presetTab->clear();
+
+        $this->options->preset->remove($id, $siteId);
+
+        // action afterRemovePreset
+        $this->options->runEvent(Options::EVENT__AFTER_REMOVE_PRESET,
+            compact('siteId'));
+
+        return true;
     }
 }

@@ -27,16 +27,28 @@ class Addpreset extends Submit
      */
     public function draw()
     {
-        if (!$this->input instanceof AddPresetInput)
-            return;
-
         $this->showLabel(true);
         $this->showInput();
         $this->showHelp();
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showInput()
+    {
+        if (!$this->input instanceof AddPresetInput)
+            return;
+
+        $this->customInputName  = \Rover\Fadmin\Inputs\Addpreset::$type;
+        $this->customInputValue = $this->input->getTab()->getSiteId() . AddPresetInput::SEPARATOR . $this->input->getDefault();
+
+        parent::showInput();
 
         $popup = $this->input->getPopup();
 
-        if ($popup === false) return;
+        if ($popup === false)
+            return;
 
         $text       = $popup ? : Loc::getMessage('rover-fa__ADDPRESET_TEXT');
         $default    = $this->input->getDefault() ?: Loc::getMessage('rover-fa__ADDPRESET_DEFAULT');
@@ -63,16 +75,5 @@ class Addpreset extends Submit
             })();
         </script>
         <?php
-    }
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function showInput()
-    {
-        $this->customInputName  = \Rover\Fadmin\Inputs\Addpreset::$type;
-        $this->customInputValue = $this->input->getTab()->getSiteId() . AddPresetInput::SEPARATOR . $this->input->getDefault();
-
-        parent::showInput();
     }
 }

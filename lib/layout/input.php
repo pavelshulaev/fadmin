@@ -25,7 +25,7 @@ abstract class Input
     /**
      * @var string
      */
-    protected static $type;
+    public static $type;
 
     /**
      * @var InputEngine
@@ -83,6 +83,18 @@ abstract class Input
      * @author Pavel Shulaev (https://rover-it.me)
      */
     abstract public function showInput();
+
+    /**
+     * @return string
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getInputLayout()
+    {
+        ob_start();
+        $this->showInput();
+
+        return ob_get_clean();
+    }
 
     /**
      * @return mixed
