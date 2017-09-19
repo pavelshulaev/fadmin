@@ -138,7 +138,7 @@ class Iblock extends Input
         }
         $html .= "</select>\n";
         $html .= "&nbsp;\n";
-        $html .= '<select multiple="multiple" size="' . count($arIBlocks[$filterId][$IBLOCK_TYPE]) > 5 ? '8' : '3' .'"  name="'.$htmlIBlockName.'[]" id="'.$htmlIBlockName.'"'.($onChangeIBlock != ''? ' onchange="'.htmlspecialcharsbx($onChangeIBlock).'"': '').' '.$strAddIBlock.'>'."\n";
+        $html .= '<select multiple="multiple" size="' . (count($arIBlocks[$filterId][$IBLOCK_TYPE]) > 5 ? '8' : '3') .'"  name="'.$htmlIBlockName.'[]" id="'.$htmlIBlockName.'"'.($onChangeIBlock != ''? ' onchange="'.htmlspecialcharsbx($onChangeIBlock).'"': '').' '.$strAddIBlock.'>'."\n";
 
         foreach($arIBlocks[$filterId][$IBLOCK_TYPE] as $key => $value)
             $html .= '<option value="'.htmlspecialcharsbx($key).'"'.(in_array($key, $iblockIds)? ' selected': '').'>'.htmlspecialcharsEx($value).'</option>'."\n";
