@@ -286,7 +286,6 @@ abstract class Options
 			throw new ArgumentNullException('inputName');
 
 		$key = md5($inputName . $presetId . $siteId);
-        file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/agenterr.txt', 'opt' . "\n", FILE_APPEND);
 
 		if (!isset($this->cache[$key]) || $reload) {
 

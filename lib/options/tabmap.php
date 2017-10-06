@@ -219,8 +219,6 @@ class TabMap
     public function searchInputByName($inputName, $presetId = '', $siteId = '', $reload = false)
     {
         $tabs = $this->getTabs($reload);
-        file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/agenterr.txt', 'searchInputByName' . "\n", FILE_APPEND);
-        file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/agenterr.txt', 'tabs cnt: ' . count($tabs) . "\n", FILE_APPEND);
 
         foreach ($tabs as $tab) {
             /**
@@ -229,7 +227,6 @@ class TabMap
             if ((strlen($presetId) && ($tab->getPresetId() != $presetId))
                 || (strlen($siteId) && ($tab->getSiteId() != $siteId)))
                 continue;
-            file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/agenterr.txt', print_r($inputName, 1), FILE_APPEND);
 
             $input = $tab->searchByName($inputName);
 
