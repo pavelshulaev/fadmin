@@ -29,19 +29,19 @@ class TabMap
 	 * tabs collection
 	 * @var array
 	 */
-	protected $tabMap   = [];
+	protected $tabMap   = array();
 
 	/**
 	 * preset tabs collection
 	 * @var array
 	 */
-	protected $presetMap = [];
+	protected $presetMap = array();
 
 	/**
 	 * tabs params
 	 * @var array
 	 */
-	protected $tabsParams = [];
+	protected $tabsParams = array();
 
 	/**
 	 * for events
@@ -85,8 +85,8 @@ class TabMap
 	 */
 	public function reloadTabs()
 	{
-		$this->tabMap       = [];
-		$this->presetMap    = [];
+		$this->tabMap       = array();
+		$this->presetMap    = array();
 
 		foreach ($this->tabsParams as $tabParams){
 
@@ -166,7 +166,7 @@ class TabMap
 	{
 		$aTabs = $this->getTabs($reload);
 
-		$filter = ['name' => $valueName];
+		$filter = array('name' => $valueName);
 
 		foreach ($aTabs as $tab){
 			/**

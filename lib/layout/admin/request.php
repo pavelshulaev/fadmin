@@ -65,7 +65,7 @@ class Request extends RequestAbstract
      * @param Options $options
      * @param array   $params
      */
-    public function __construct(Options $options, array $params = [])
+    public function __construct(Options $options, array $params = array())
     {
         parent::__construct($options, $params);
 

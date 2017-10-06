@@ -29,12 +29,12 @@ class Settings
 	 * default settings
 	 * @var array
 	 */
-	protected $defaults = [
+	protected $defaults = array(
 		self::BOOL_CHECKBOX => false,
 		self::LOG_ERRORS    => false,
 		self::GROUP_RIGHTS  => false,
 		self::USE_SORT      => false,
-	];
+    );
 
     /**
      * @var array
@@ -63,7 +63,7 @@ class Settings
             $config         = $this->options->getConfigCache();
             $settings       = isset($config['settings'])
                 ? $config['settings']
-                : [];
+                : array();
 
             foreach ($this->defaults as $key => $defValue)
                 $this->storage[$key] = isset($settings[$key])

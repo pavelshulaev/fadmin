@@ -37,7 +37,7 @@ class Custom extends Input
 		parent::__construct($params, $tab);
 
 		// add events
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
 	}
 
 	/**

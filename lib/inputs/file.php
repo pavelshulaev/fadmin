@@ -69,8 +69,8 @@ class File extends Input
 		    $this->size = 20;
 
 		// add events
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
 	public function isImage()
@@ -168,6 +168,6 @@ class File extends Input
 		if ($value != $oldValue)
 			\CFile::Delete($oldValue);
 
-		return $this->getEvent()->getSuccessResult($this, ['value' => $value]);
+		return $this->getEvent()->getSuccessResult($this, array('value' => $value));
 	}
 }

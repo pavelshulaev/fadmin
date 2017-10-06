@@ -41,7 +41,7 @@ abstract class Form
      * @param Options $options
      * @param array   $params
      */
-    public function __construct(Options $options, array $params = [])
+    public function __construct(Options $options, array $params = array())
     {
         $this->options  = $options;
         $this->params   = $params;

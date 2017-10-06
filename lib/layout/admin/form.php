@@ -44,7 +44,7 @@ class Form extends FromAbstract
      * @param Options $options
      * @param array   $params
      */
-    public function __construct(Options $options, array $params = [])
+    public function __construct(Options $options, array $params = array())
     {
         parent::__construct($options, $params);
 
@@ -52,7 +52,7 @@ class Form extends FromAbstract
         $this->moduleId     = htmlspecialcharsbx($this->options->getModuleId());
 
         if (empty($this->params['top_buttons']) || !is_array($this->params['top_buttons']))
-            $this->params['top_buttons'] = [];
+            $this->params['top_buttons'] = array();
     }
 
     /**
@@ -64,13 +64,13 @@ class Form extends FromAbstract
         if (is_null($this->request)) {
             global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
 
-            $params = [
+            $params = array(
                 'active_tab'        => $this->tabControl->ActiveTabParam(),
                 'request_method'    => $REQUEST_METHOD,
                 'update'            => $Update,
                 'apply'             => $Apply,
                 'restore_defaults'  => $RestoreDefaults
-            ];
+            );
 
             $this->request = new Request($this->options, $params);
         }
@@ -85,7 +85,7 @@ class Form extends FromAbstract
     protected function getAllTabsInfo()
     {
         $tabs           = $this->options->tabMap->getTabs();
-        $allTabsInfo    = [];
+        $allTabsInfo    = array();
 
         foreach ($tabs as $tab)
             /**
@@ -95,12 +95,12 @@ class Form extends FromAbstract
 
         // add group rights tab
         if ($this->options->settings->getGroupRights())
-            $allTabsInfo[] = [
+            $allTabsInfo[] = array(
                 "DIV"   => "edit2",
                 "TAB"   => GetMessage("MAIN_TAB_RIGHTS"),
                 "ICON"  => "form_settings",
                 "TITLE" => GetMessage("MAIN_TAB_TITLE_RIGHTS")
-            ];
+            );
 
         return $allTabsInfo;
     }
@@ -144,17 +144,17 @@ class Form extends FromAbstract
             ? $tab->getDescription() . ' [' . $tab->getSiteId() . ']'
             : $tab->getDescription();
 
-        $params = array_merge(['tab' => $tab],
+        $params = array_merge(array('tab' => $tab),
             compact('name', 'icon', 'label', 'description'));
 
         $this->options->runEvent(Options::EVENT__BEFORE_GET_TAB_INFO, $params);
 
-        return [
+        return array(
             'DIV'   => $params['name'],
             'TAB'   => $params['label'],
             'ICON'  => $params['icon'],
             'TITLE' => $params['description']
-        ];
+        );
     }
 
     /**

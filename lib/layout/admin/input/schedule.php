@@ -234,7 +234,7 @@ class Schedule extends Input
                 function exportPeriods()
                 {
                     var schedule = JSON.parse($scheduler.jqxScheduler('exportData', 'json')),
-                        propNum, period, result = [];
+                        propNum, period, result = array();
 
                     for (propNum in schedule)
                     {

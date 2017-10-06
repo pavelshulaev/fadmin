@@ -26,7 +26,7 @@ class Tab
 	 * inputs container
 	 * @var array
 	 */
-	protected $inputs = [];
+	protected $inputs = array();
 
 	/**
 	 * @var string
@@ -226,7 +226,7 @@ class Tab
 	 */
 	public function __clone()
 	{
-		$newInputs = [];
+		$newInputs = array();
 
 		foreach ($this->inputs as $input) {
 			/** @var Input $input */
@@ -262,9 +262,9 @@ class Tab
 	 */
 	public function searchByName($name)
 	{
-		$filter = [
+		$filter = array(
 			'name' => Options::getFullName($name, $this->getPresetId(), $this->getSiteId())
-		];
+        );
 
 		return $this->search($filter);
 	}

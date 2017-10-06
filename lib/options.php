@@ -74,7 +74,7 @@ abstract class Options
 	 * options values cache
 	 * @var array
 	 */
-	protected $cache = [];
+	protected $cache = array();
 
 	/**
 	 * settings driver
@@ -96,7 +96,7 @@ abstract class Options
 	 * unique instance for each module
 	 * @var array
 	 */
-	protected static $instances = [];
+	protected static $instances = array();
 
     /**
      * config cache
@@ -175,7 +175,7 @@ abstract class Options
 	 * @return mixed
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function runEvent($name, &$params = [])
+	public function runEvent($name, &$params = array())
 	{
 		if (!method_exists($this, $name))
 			return true;

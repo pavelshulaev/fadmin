@@ -62,13 +62,13 @@ class Input
         if (!isset($name))
             throw new ArgumentNullException('name');
 
-		return self::addFields([
+		return self::addFields(array(
 			'type'      => $type,
 			'name'      => $name,
 			'default'   => $default,
 			'multiple'  => $multiple,
 			'disabled'  => $disabled
-		]);
+        ));
 	}
 
     /**
@@ -165,7 +165,7 @@ class Input
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getSelect($name, array $options = [], $default = null, $multiple = false, $label = null)
+	public static function getSelect($name, array $options = array(), $default = null, $multiple = false, $label = null)
 	{
 		$input = self::get(InputAbstract::TYPE__SELECTBOX, $name, $default, $multiple);
 		$input['options'] = $options;
@@ -186,7 +186,7 @@ class Input
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getSelectGroup($name, array $options = [], $default = null, $multiple = false, $label = null)
+	public static function getSelectGroup($name, array $options = array(), $default = null, $multiple = false, $label = null)
 	{
 		$input = self::get(InputAbstract::TYPE__SELECT_GROUP, $name, $default, $multiple);
 		$input['options'] = $options;
@@ -204,7 +204,7 @@ class Input
      * @return array
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getRadio($name, array $options = [], $default = null)
+	public static function getRadio($name, array $options = array(), $default = null)
 	{
 		$input = self::get(InputAbstract::TYPE__RADIO, $name, $default);
 		$input['options'] = $options;
@@ -219,10 +219,10 @@ class Input
 	 */
 	public static function getHeader($label)
 	{
-		return [
+		return array(
 			'type'  => InputAbstract::TYPE__HEADER,
 			'label' => $label,
-		];
+        );
 	}
 
 	/**
@@ -263,11 +263,11 @@ class Input
 	 */
 	public static function getLabel($label, $default = '')
 	{
-		return [
+		return array(
 			'type'      => InputAbstract::TYPE__HEADER,
 			'label'     => $label,
 			'default'   => $default
-		];
+        );
 	}
 
     /**
@@ -338,10 +338,10 @@ class Input
         if (!$name)
             throw new ArgumentNullException('name');
 
-        return [
+        return array(
             'type'      => InputAbstract::TYPE__HIDDEN,
             'name'      => $name,
             'default'   => $default
-        ];
+        );
     }
 }

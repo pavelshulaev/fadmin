@@ -25,7 +25,7 @@ class Message
 	 * message storage
 	 * @var array
 	 */
-	protected $messages = [];
+	protected $messages = array();
 
     /**
      * @param        $message
@@ -41,11 +41,11 @@ class Message
 	    if (!$html)
 	        $message = htmlspecialcharsbx($message);
 
-		$this->messages[] = [
+		$this->messages[] = array(
 			'MESSAGE'   => trim($message),
             'HTML'      => (bool)$html,
 			'TYPE'      => htmlspecialcharsbx($type),
-		];
+        );
 	}
 
     /**

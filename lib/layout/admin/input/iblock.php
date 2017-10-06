@@ -58,9 +58,9 @@ class Iblock extends Input
     {
         $html = '';
 
-        static $arTypesAll  = [];
-        static $arTypes     = [];
-        static $arIBlocks   = [];
+        static $arTypesAll  = array();
+        static $arTypes     = array();
+        static $arIBlocks   = array();
 
         if(!is_array($arFilter))
             $arFilter = array();

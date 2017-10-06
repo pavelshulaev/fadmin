@@ -34,7 +34,7 @@ class Form extends FromAbstract
      * @param array   $params
      * @throws ArgumentNullException
      */
-    public function __construct(Options $options, array $params = [])
+    public function __construct(Options $options, array $params = array())
     {
         parent::__construct($options, $params);
 
@@ -60,7 +60,7 @@ class Form extends FromAbstract
             : '';
 
         if (empty($this->params['buttons']) || !is_array($this->params['buttons']))
-            $this->params['buttons'] = [];
+            $this->params['buttons'] = array();
     }
 
     /**
@@ -70,11 +70,11 @@ class Form extends FromAbstract
     public function getRequest()
     {
         if (is_null($this->request)) {
-            $this->request = new Request($this->options, [
+            $this->request = new Request($this->options, array(
                 'back_url' => $this->params['back_url'],
                 'this_url' => $this->params['this_url'],
                 'preset_id' => $this->params['preset_id'],
-            ]);
+            ));
         }
 
         return $this->request;
@@ -101,7 +101,7 @@ class Form extends FromAbstract
         if (!$tab->isPreset())
             throw new ArgumentOutOfRangeException('tab');
 
-        $data   = [];
+        $data   = array();
         $inputs = $tab->getInputs();
 
         foreach ($inputs as $input)
@@ -121,8 +121,8 @@ class Form extends FromAbstract
         if (!$tab->isPreset())
             throw new ArgumentOutOfRangeException('tab');
 
-        $formTabs   = [];
-        $formTab    = [];
+        $formTabs   = array();
+        $formTab    = array();
         $inputs     = $tab->getInputs();
 
         foreach ($inputs as $input) {
@@ -130,22 +130,22 @@ class Form extends FromAbstract
                 if (!empty($formTab))
                     $formTabs[] = $formTab;
 
-                $formTab = [
+                $formTab = array(
                     'id'    => (count($formTabs) + 1) . '_' . $input->getValueName(),
                     'name'  => $input->getLabel(),
                     //'title'  => $input->getLabel(),
                     'title' => $input->getHelp(),
-                    'fields'=> []
-                ];
+                    'fields'=> array()
+                );
 
                 continue;
             }
 
-            $field = [
+            $field = array(
                 'id'    => $input->getValueId(),
                 'name'  => strip_tags($input->getLabel()),
                 'type'  => $this->getType($input),
-            ];
+            );
 
             if ($field['type'] == 'custom')
                 $field['value'] = $this->getValue($input);
@@ -153,11 +153,11 @@ class Form extends FromAbstract
             $formTab['fields'][] = $field;
         }
 
-        $formTab['fields'][] = [
+        $formTab['fields'][] = array(
             'type'  => 'custom',
             'id'    => 'preset_id',
             'value' => '<input type="hidden" name="' . Request::INPUT__FORM_ID . '" value="' . $this->params['preset_id'] . '">'
-        ];
+        );
 
         if (!empty($formTab))
             $formTabs[] = $formTab;
@@ -221,16 +221,16 @@ class Form extends FromAbstract
                 //описание вкладок формы
                 "TABS"      =>  $formTabs,
                 //кнопки формы, возможны кастомные кнопки в виде html в "custom_html"
-                "BUTTONS"   =>  [
+                "BUTTONS"   =>  array(
                     "back_url"          => $this->params['back_url'],
                     "custom_html"       => $this->params['custom_buttons'],
                     "standard_buttons"  => true
-                ],
+                ),
                 //данные для редактировани
                 "DATA"      => $data,
             ),
             false,
-            ['HIDE_ICONS' => 'Y']
+            array('HIDE_ICONS' => 'Y')
         );
     }
 

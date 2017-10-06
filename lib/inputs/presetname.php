@@ -47,7 +47,7 @@ class PresetName extends Text
 			$this->setValue($this->tab->options
 				->preset->getNameById($presetId, $this->tab->getSiteId()));
 
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
 	/**
@@ -74,7 +74,7 @@ class PresetName extends Text
 		if (empty($value)){
 			$this->tab->options->message->addError(
 				Loc::getMessage('rover-fa__presetname-no-name',
-					['#last-preset-name#' => $this->getValue()]));
+                    array('#last-preset-name#' => $this->getValue())));
 			return $this->getEvent()->getErrorResult($this);
 		}
 

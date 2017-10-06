@@ -15,7 +15,7 @@ trait Options
     /**
      * @var array
      */
-    protected $options = [];
+    protected $options = array();
 
     /**
      * @param array $options

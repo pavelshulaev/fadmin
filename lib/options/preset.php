@@ -102,15 +102,15 @@ class Preset
 		$presets    = $this->getList($siteId, true);
 
 		if (!count($presets)){
-			$presets    = [];
+			$presets    = array();
 			$presetId   = 1;
 		} else
 			$presetId   = max(array_keys($presets)) + 1;
 
-		$presets[$presetId] = [
+		$presets[$presetId] = array(
 			'id'    => $presetId,
 			'name'  => htmlspecialcharsbx($name)
-		];
+        );
 
 		$this->update($presets, $siteId);
 

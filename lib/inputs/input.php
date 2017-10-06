@@ -405,10 +405,10 @@ abstract class Input
 		Option::delete($this->tab->getModuleId(), $filter);
 	}
 
-	/**
-	 * @return \Rover\Fadmin\Engine\Event
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @return Options\Event
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	protected function getEvent()
 	{
 		return $this->tab->options->event;
@@ -437,10 +437,10 @@ abstract class Input
 				$this->value = unserialize($this->value);
 
 			if (!$this->value)
-				$this->value = [];
+				$this->value = array();
 		}
 
-		$this->getEvent()->send(self::EVENT__AFTER_LOAD_VALUE, [], $this);
+		$this->getEvent()->send(self::EVENT__AFTER_LOAD_VALUE, array(), $this);
 	}
 
 	/**
@@ -475,7 +475,7 @@ abstract class Input
 		if (empty($this->value) || $reload)
 			$this->loadValue();
 
-		$this->getEvent()->send(self::EVENT__BEFORE_GET_VALUE, [], $this);
+		$this->getEvent()->send(self::EVENT__BEFORE_GET_VALUE, array(), $this);
 
 		return $this->value;
 	}

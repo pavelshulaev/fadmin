@@ -27,14 +27,14 @@ class Clock extends Input
     {
         global $APPLICATION;
 
-        $APPLICATION->IncludeComponent("bitrix:main.clock","",[
+        $APPLICATION->IncludeComponent("bitrix:main.clock", "", array(
             "INPUT_ID"      => "",
             "INPUT_NAME"    => $this->input->getValueName(),
             "INPUT_TITLE"   => $this->input->getLabel(),
             "INIT_TIME"     => $this->input->getValue(),
             "STEP"          => "5"
-        ],
-            ['HIDE_ICONS' => 'Y']
+        ),
+            array('HIDE_ICONS' => 'Y')
         );
     }
 }

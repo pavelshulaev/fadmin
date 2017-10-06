@@ -34,7 +34,7 @@ class Selectgroup extends Selectbox
     public function __construct(array $params, Tab $tab)
     {
         parent::__construct($params, $tab);
-        $this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
+        $this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
     }
 
     /**
@@ -62,10 +62,10 @@ class Selectgroup extends Selectbox
      */
     protected function getGroupInput()
     {
-        $params = [
+        $params = array(
             'name' => $this->getGroupName(),
             'type' => self::TYPE__HIDDEN
-        ];
+        );
 
         return self::factory($params, $this->tab);
     }
@@ -97,7 +97,7 @@ class Selectgroup extends Selectbox
     {
         $searchValue = $this->value;
         if (!is_array($searchValue))
-            $searchValue = [$searchValue];
+            $searchValue = array($searchValue);
 
         reset($this->options);
 

@@ -44,8 +44,8 @@ class Addpreset extends Submit
 		parent::__construct($params, $tab);
 
 		// add events
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this,   'afterLoadValue']);
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
+		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this,   'afterLoadValue'));
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
 	}
 
 	/**

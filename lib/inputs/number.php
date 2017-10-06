@@ -51,7 +51,7 @@ class Number extends Text
 		if (isset($params['max']))
 			$this->max = (int)$params['max'];
 
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
 

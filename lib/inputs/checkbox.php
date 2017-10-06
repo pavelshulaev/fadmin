@@ -37,9 +37,9 @@ class Checkbox extends Input
 		parent::__construct($params, $tab);
 
 		// add events
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
-		$this->addEventHandler(self::EVENT__BEFORE_GET_VALUE, [$this, 'beforeGetValue']);
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this, 'afterLoadValue'));
+		$this->addEventHandler(self::EVENT__BEFORE_GET_VALUE, array($this, 'beforeGetValue'));
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
 	/**

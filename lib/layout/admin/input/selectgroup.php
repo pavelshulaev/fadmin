@@ -21,7 +21,7 @@ class Selectgroup extends Selectbox
     /**
      * @var array
      */
-    protected static $idCache = [];
+    protected static $idCache = array();
 
     /**
      * @author Pavel Shulaev (https://rover-it.me)
@@ -58,9 +58,9 @@ class Selectgroup extends Selectbox
 
         $optionsId  = md5(serialize($options));
 
-        $value      = empty($this->input->getValue()) ? [] : $this->input->getValue();
+        $value      = empty($this->input->getValue()) ? array() : $this->input->getValue();
         if (!is_array($value))
-            $value = [$value];
+            $value = array($value);
 
         // change group script
         $html = '';

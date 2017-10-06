@@ -44,7 +44,7 @@ class Event
 	 * @return BxEvent
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function send($name, array $params = [], $sender = null)
+	public function send($name, array $params = array(), $sender = null)
 	{
 		$event = new BxEvent($this->options->getModuleId(), $name, $params);
 		$event->send($sender);
@@ -70,7 +70,7 @@ class Event
 	 * @return bool|null
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function getResult($name, array $params = [], $sender = null)
+	public function getResult($name, array $params = array(), $sender = null)
 	{
 		$event = $this->send($name, $params, $sender);
 
@@ -107,7 +107,7 @@ class Event
 	 * @return EventResult
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public function getSuccessResult($handler, array $params = [])
+	public function getSuccessResult($handler, array $params = array())
 	{
 		$params['handler'] = $handler;
 

@@ -49,7 +49,7 @@ class DateTime extends Input
     {
         global $APPLICATION;
 
-        $APPLICATION->IncludeComponent("bitrix:main.calendar","",[
+        $APPLICATION->IncludeComponent("bitrix:main.calendar", "", array(
             "SHOW_INPUT"    => "Y",
             "FORM_NAME"     => "",
             "INPUT_NAME"    => $this->input->getValueName(),
@@ -58,6 +58,6 @@ class DateTime extends Input
             "INPUT_VALUE_FINISH" => '',
             "SHOW_TIME"     => $this->showTime ? 'Y' : "N",
             "HIDE_TIMEBAR"  => $this->showTime ? 'N' : "Y"
-        ]);
+        ));
     }
 }

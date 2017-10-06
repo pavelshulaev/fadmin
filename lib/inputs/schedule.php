@@ -48,7 +48,7 @@ class Schedule extends Input
     /**
      * @var array
      */
-	protected $inputValue = [];
+	protected $inputValue = array();
 
 	/**
 	 * @param array $params
@@ -72,8 +72,8 @@ class Schedule extends Input
 		if (isset($params['height']) && intval($params['height']))
 			$this->height = $params['height'];
 
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
+		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this, 'afterLoadValue'));
 	}
 
 	/**
@@ -96,7 +96,7 @@ class Schedule extends Input
 			$value = $this->markWeekDays($value);
 
 		} else
-			$value = [];
+			$value = array();
 
 		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
@@ -108,19 +108,22 @@ class Schedule extends Input
 	 */
 	protected function markWeekDays($periods)
 	{
-		$result = [];
+		$result = array();
 
 		foreach ($periods as $period)
 		{
-			$dateStart  = (new \DateTime())->setTimestamp($period['start']);
-			$dateEnd    = (new \DateTime())->setTimestamp($period['end']);
+		    $dateStartObj   = new \DateTime();
+		    $dateEndObj     = new \DateTime();
 
-			$result[] = [
+			$dateStart  = $dateStartObj->setTimestamp($period['start']);
+			$dateEnd    = $dateEndObj->setTimestamp($period['end']);
+
+			$result[] = array(
 				'startWeekDay'  => $dateStart->format('l'),
 				'startTime'     => $dateStart->format('H:i:s'),
 				'endWeekDay'    => $dateEnd->format('l'),
 				'endTime'       => $dateEnd->format('H:i:s'),
-			];
+            );
 		}
 
 		return $result;
@@ -134,7 +137,7 @@ class Schedule extends Input
 	 */
 	protected function preparePeriodsDates(array $periods)
 	{
-		$result = [];
+		$result = array();
 
 		$minTimestamp = $this->getMinTimestamp();
 		$maxTimestamp = $this->getMaxTimestamp();
@@ -166,7 +169,7 @@ class Schedule extends Input
 	protected function pastePeriodsTogether(array $periods)
 	{
 		do {
-			$result = [];
+			$result = array();
 			$pasted = false;
 
 			foreach ($periods as $periodNum => $period){
@@ -269,10 +272,10 @@ class Schedule extends Input
 			$period['jqwStartMonth']    = $period['start']->format('m') - 1;
 			$period['jqwEndMonth']      = $period['end']->format('m') - 1;
 
-			$this->inputValue[] = [
+			$this->inputValue[] = array(
 				'start' => $period['start']->format('Y-m-d\TH:i:s'),
 				'end'   => $period['end']->format('Y-m-d\TH:i:s')
-			];
+            );
 		}
 	}
 
