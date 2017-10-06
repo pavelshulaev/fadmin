@@ -10,7 +10,6 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Inputs\Params\Options;
 use Rover\Fadmin\Tab;
 /**
  * Class Selectbox
@@ -20,7 +19,10 @@ use Rover\Fadmin\Tab;
  */
 class Radio extends Input
 {
-    use Options;
+    /**
+     * @var array
+     */
+    protected $options = array();
 
     /**
      * @var string
@@ -39,4 +41,25 @@ class Radio extends Input
 		if (isset($params['options']))
 			$this->options = $params['options'];
 	}
+
+    /**
+     * @param array $options
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
 }

@@ -24,8 +24,8 @@ use \Rover\Fadmin\Options\Preset;
 Loc::LoadMessages(__FILE__);
 /**
  * Class Options
- * Абстрактный класс шаблона опций.
- * Должен быть унаследован классом, который занимается работой с опциями и рисованием интерфейса
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
+ * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  *
  * @package Rover\Fadmin
  * @author  Pavel Shulaev (http://rover-it.me)
@@ -286,6 +286,7 @@ abstract class Options
 			throw new ArgumentNullException('inputName');
 
 		$key = md5($inputName . $presetId . $siteId);
+        file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/agenterr.txt', 'opt' . "\n", FILE_APPEND);
 
 		if (!isset($this->cache[$key]) || $reload) {
 

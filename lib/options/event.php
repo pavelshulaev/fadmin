@@ -98,7 +98,7 @@ class Event
 	public function getErrorResult($handler)
 	{
 		return new EventResult(EventResult::ERROR,
-			['handler' => $handler], $this->options->getModuleId());
+			array('handler' => $handler), $this->options->getModuleId());
 	}
 
 	/**

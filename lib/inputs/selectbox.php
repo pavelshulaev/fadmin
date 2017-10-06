@@ -10,8 +10,6 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Inputs\Params\Options;
-use Rover\Fadmin\Inputs\Params\Size;
 use Rover\Fadmin\Tab;
 
 /**
@@ -22,11 +20,19 @@ use Rover\Fadmin\Tab;
  */
 class Selectbox extends Input
 {
-    use Size, Options;
     /**
      * @var string
      */
 	public static $type = self::TYPE__SELECTBOX;
+
+    /**
+     * @var array
+     */
+    protected $options = array();
+    /**
+     * @var
+     */
+    protected $size;
 
 	const MAX_MULTI_SIZE = 7;
 
@@ -51,4 +57,49 @@ class Selectbox extends Input
 		else
 			$this->size = 1;
 	}
+
+
+    /**
+     * @param array $options
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+
+
+    /**
+     * @return int
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param $size
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setSize($size)
+    {
+        $this->size = intval($size);
+
+        return $this;
+    }
 }

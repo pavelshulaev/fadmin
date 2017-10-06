@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Application;
-use Rover\Fadmin\Inputs\Params\Size;
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
@@ -24,7 +23,6 @@ use Bitrix\Main\EventResult;
  */
 class File extends Input
 {
-    use Size;
 	/**
 	 * @var string
 	 */
@@ -45,6 +43,10 @@ class File extends Input
 	 */
 	protected $maxSize = 0;
 
+    /**
+     * @var
+     */
+    protected $size;
 	/**
 	 * @param array $params
 	 * @param Tab   $tab
@@ -170,4 +172,25 @@ class File extends Input
 
 		return $this->getEvent()->getSuccessResult($this, array('value' => $value));
 	}
+
+    /**
+     * @return int
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param $size
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setSize($size)
+    {
+        $this->size = intval($size);
+
+        return $this;
+    }
 }

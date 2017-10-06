@@ -243,7 +243,9 @@ class Schedule extends Input
 	 */
 	protected function getMinTimestamp()
 	{
-		return (new \DateTime('Monday this week'))->getTimestamp();
+	    $dateTime = new \DateTime('Monday this week');
+
+		return $dateTime->getTimestamp();
 	}
 
 	/**
@@ -252,7 +254,9 @@ class Schedule extends Input
 	 */
 	protected function getMaxTimestamp()
 	{
-		return (new \DateTime('Monday next week'))->getTimestamp() - 1;
+	    $dateTime = new \DateTime('Monday next week');
+
+		return $dateTime->getTimestamp() - 1;
 	}
 
 	/**

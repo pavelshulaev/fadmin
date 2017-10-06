@@ -18,4 +18,5 @@ if (!Loader::includeModule($mid)
 Loc::loadMessages(__FILE__);
 Loc::loadMessages($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/options.php");
 
-(new Form(TestOptions::getInstance()))->show();
+$form = new Form(TestOptions::getInstance());
+$form->show();
