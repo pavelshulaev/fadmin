@@ -10,7 +10,6 @@
 
 namespace Rover\Fadmin\Layout\Preset\Input;
 
-use Bitrix\Main\Loader;
 use Rover\Fadmin\Layout\Preset\Input;
 
 /**

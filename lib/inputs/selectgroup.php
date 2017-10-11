@@ -81,7 +81,7 @@ class Selectgroup extends Selectbox
 
     /**
      * @param $value
-     * @return $this
+     * @return $this|Input
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setGroupValue($value)

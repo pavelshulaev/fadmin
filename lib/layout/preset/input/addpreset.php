@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Layout\Preset\Input;
 
 use Bitrix\Main\Localization\Loc;
-use \Rover\Fadmin\Inputs\Addpreset as AddPresetInput;
 
 Loc::loadMessages(__FILE__);
 /**

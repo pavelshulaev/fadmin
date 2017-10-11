@@ -58,7 +58,9 @@ class Selectgroup extends Selectbox
 
         $optionsId  = md5(serialize($options));
 
-        $value      = empty($this->input->getValue()) ? array() : $this->input->getValue();
+        $value = $this->input->getValue();
+        $value = empty($value) ? array() : $value;
+
         if (!is_array($value))
             $value = array($value);
 

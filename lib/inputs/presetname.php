@@ -43,7 +43,8 @@ class PresetName extends Text
 		if (!$presetId)
 			return;
 
-		if (empty($this->getValue()))
+		$value = $this->getValue();
+		if (empty($value))
 			$this->setValue($this->tab->options
 				->preset->getNameById($presetId, $this->tab->getSiteId()));
 
