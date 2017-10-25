@@ -123,6 +123,7 @@ class Request extends RequestAbstract
             : $this->activeTab;
 
         global $APPLICATION;
+
         parent::redirect($APPLICATION->GetCurPage()
             . "?mid=" . urlencode($this->moduleId)
             . "&lang=" . urlencode(LANGUAGE_ID)

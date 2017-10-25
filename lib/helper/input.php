@@ -255,18 +255,20 @@ class Input
 		return self::get(InputAbstract::TYPE__IBLOCK, $name, null, $multiple);
 	}
 
-	/**
-	 * @param        $label
-	 * @param string $default
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getLabel($label, $default = '')
+    /**
+     * @param        $label
+     * @param string $default
+     * @param string $help
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getLabel($label, $default = '', $help = '')
 	{
 		return array(
-			'type'      => InputAbstract::TYPE__HEADER,
+			'type'      => InputAbstract::TYPE__LABEL,
 			'label'     => $label,
-			'default'   => $default
+			'default'   => $default,
+            'help'      => $help
         );
 	}
 

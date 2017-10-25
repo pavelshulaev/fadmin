@@ -24,6 +24,7 @@ class Settings
 	const LOG_ERRORS    = 'log_errors';
     const GROUP_RIGHTS  = 'group_rights';
     const USE_SORT      = 'use_sort';
+    const PRESET_CLASS  = 'preset_class';
 
 	/**
 	 * default settings
@@ -34,6 +35,7 @@ class Settings
 		self::LOG_ERRORS    => false,
 		self::GROUP_RIGHTS  => false,
 		self::USE_SORT      => false,
+		self::PRESET_CLASS  => '\\Rover\\Fadmin\\Preset',
     );
 
     /**
@@ -121,5 +123,14 @@ class Settings
 	public function getUseSort()
     {
         return $this->getFromStorage(self::USE_SORT);
+    }
+
+    /**
+     * @return \Rover\Fadmin\Preset
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getPresetClass()
+    {
+        return $this->getFromStorage(self::PRESET_CLASS);
     }
 }

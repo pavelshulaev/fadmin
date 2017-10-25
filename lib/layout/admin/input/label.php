@@ -25,7 +25,6 @@ class Label extends Input
      */
     public function showInput()
     {
-        echo $this->input->getLabel();
+        echo $this->input->getDefault();
     }
-
 }

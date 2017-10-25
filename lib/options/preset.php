@@ -2,6 +2,7 @@
 namespace Rover\Fadmin\Options;
 
 use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use \Bitrix\Main\Config\Option;
 use Rover\Fadmin\Options;
 /**
@@ -39,12 +40,37 @@ class Preset
      */
 	public function getList($siteId = '', $reload = false)
 	{
-	    if (is_null($this->presets) || $reload)
-	        $this->presets = unserialize(Option::get($this->options->getModuleId(),
+	    if (is_null($this->presets[$siteId]) || $reload)
+	        $this->presets[$siteId] = unserialize(Option::get($this->options->getModuleId(),
                 self::OPTION_ID, '', $siteId));
 
-		return $this->presets;
+		return $this->presets[$siteId];
 	}
+
+    /**
+     * @param string $siteId
+     * @param bool   $reload
+     * @return array
+     * @throws ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getInstancesList($siteId = '', $reload = false)
+    {
+        $presets    = $this->getList($siteId);
+        $list       = array();
+        $presetClass= $this->options->settings->getPresetClass();
+
+        foreach ($presets as $preset){
+            $presetInstance = $presetClass::getInstance($preset['id'], $this->options, $reload);
+
+            if (!$presetInstance instanceof \Rover\Fadmin\Preset)
+                throw new ArgumentOutOfRangeException('presetInstance');
+
+            $list[$preset['id']] = $presetInstance;
+        }
+
+        return $list;
+    }
 
     /**
      * @param string $siteId

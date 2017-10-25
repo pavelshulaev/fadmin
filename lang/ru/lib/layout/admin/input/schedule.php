@@ -15,7 +15,6 @@ $MESS['rover-fa__schedule-thursday']    = 'Чт';//'Четверг';
 $MESS['rover-fa__schedule-friday']      = 'Пт';//'Пятница';
 $MESS['rover-fa__schedule-saturday']    = 'Сб';//'Суббота';
 $MESS['rover-fa__schedule-sunday']      = 'Вс';//'Воскресенье';
-$MESS['rover-fa__schedule-default-period']  = 'Период';
 $MESS['rover-fa__schedule-start']       = 'Начало';
 $MESS['rover-fa__schedule-end']         = 'Окончание';
 $MESS['rover-fa__schedule-all-day']     = 'Весь день';
