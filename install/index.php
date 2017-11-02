@@ -17,6 +17,9 @@ class rover_fadmin extends CModule
     var $PARTNER_NAME;
     var $PARTNER_URI;
 
+    /**
+     * rover_fadmin constructor.
+     */
     function __construct()
     {
         global $errors;
@@ -86,7 +89,7 @@ class rover_fadmin extends CModule
     {
         global $APPLICATION, $errors;
 
-        if (PHP_VERSION_ID < 50400)
+        if (PHP_VERSION_ID < 50306)
             $errors[] = Loc::getMessage('rover_fa__php_version_error');
 
         $this->copyFiles();
