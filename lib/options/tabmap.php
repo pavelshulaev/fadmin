@@ -284,9 +284,10 @@ class TabMap
             $params['siteId']
         );
 
-        //reload tabs
-        $this->reloadTabs();
         $this->options->runEvent(Options::EVENT__AFTER_ADD_PRESET, $params);
+
+        // reload tabs afrer event!!!
+        $this->reloadTabs();
 
         return $params['id'];
     }
@@ -327,7 +328,7 @@ class TabMap
 
         // action afterRemovePreset
         $this->options->runEvent(Options::EVENT__AFTER_REMOVE_PRESET,
-            compact('siteId'));
+            $params);
 
         return true;
     }
