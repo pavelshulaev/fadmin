@@ -27,11 +27,14 @@ class Header extends Input
 	 */
 	public static $type = self::TYPE__HEADER;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Header constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		if (!isset($params['name']))

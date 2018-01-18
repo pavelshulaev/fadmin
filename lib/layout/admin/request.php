@@ -61,6 +61,7 @@ class Request extends RequestAbstract
      *
      * @param Options $options
      * @param array   $params
+     * @throws SystemException
      */
     public function __construct(Options $options, array $params = array())
     {
@@ -89,6 +90,8 @@ class Request extends RequestAbstract
     }
 
     /**
+     * @throws SystemException
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setValues()
@@ -109,7 +112,8 @@ class Request extends RequestAbstract
 
     /**
      * @param null $activeTab
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function redirect($activeTab = null)
     {
@@ -123,6 +127,7 @@ class Request extends RequestAbstract
             : $this->activeTab;
 
         global $APPLICATION;
+
         parent::redirect($APPLICATION->GetCurPage()
             . "?mid=" . urlencode($this->moduleId)
             . "&lang=" . urlencode(LANGUAGE_ID)
@@ -131,7 +136,10 @@ class Request extends RequestAbstract
     }
 
     /**
+     * @return int|void
      * @throws ArgumentOutOfRangeException
+     * @throws SystemException
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function addPreset()
@@ -173,8 +181,9 @@ class Request extends RequestAbstract
     }
 
     /**
+     * @throws SystemException
      * @throws \Bitrix\Main\ArgumentNullException
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function restoreDefaults()
     {

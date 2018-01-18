@@ -55,12 +55,11 @@ class Removepreset extends Submit
 		return $this->getEvent()->getErrorResult($this);
 	}
 
-	/**
-	 * value = default value
-	 * @param Event $event
-	 * @return EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * value = default value
+     * @param Event $event
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function afterLoadValue(Event $event)
 	{
 		if ($event->getSender() !== $this)

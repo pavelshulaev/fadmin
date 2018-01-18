@@ -23,6 +23,9 @@ use Rover\Fadmin\Layout\Admin\Input;
 class Text extends Input
 {
     /**
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()

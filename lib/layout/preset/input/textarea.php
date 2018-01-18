@@ -10,7 +10,6 @@
 
 namespace Rover\Fadmin\Layout\Preset\Input;
 
-use Rover\Fadmin\Inputs\Input as InputEngine;
 use Rover\Fadmin\Layout\Preset\Input;
 
 /**

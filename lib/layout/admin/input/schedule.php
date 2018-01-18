@@ -71,6 +71,9 @@ class Schedule extends Input
     }
 
     /**
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()
@@ -127,40 +130,40 @@ class Schedule extends Input
                         id: 'id',
                         localData: appointments
                     };
-                var adapter = new $.jqx.dataAdapter(source),
-                    $scheduler = $("#scheduler-<?=$valueId?>"),
-                    $export = $('#<?=$valueId?>');
+                var adapter     = new $.jqx.dataAdapter(source),
+                    $scheduler  = $("#scheduler-<?=$valueId?>"),
+                    $export     = $('#<?=$valueId?>');
 
                 $scheduler.jqxScheduler({
                     //date: new $.jqx.date(),
-                    date: new $.jqx.date('todayDate'),
-                    width: <?=$this->input->getWidth()?>,
-                    height: <?=$this->input->getHeight()?>,
-                    rowsHeight: 15,
-                    columnsHeight: 30,
-                    source: adapter,
-                    view: 'weekView',
-                    enableHover: false,
-                    exportSettings: {
-                        serverURL: null,
-                        characterSet: null,
-                        fileName: null,
+                    date            : new $.jqx.date('todayDate'),
+                    width           : <?=$this->input->getWidth()?>,
+                    height          : <?=$this->input->getHeight()?>,
+                    rowsHeight      : 15,
+                    columnsHeight   : 30,
+                    source          : adapter,
+                    view            : 'weekView',
+                    enableHover     : false,
+                    exportSettings  : {
+                        serverURL       : null,
+                        characterSet    : null,
+                        fileName        : null,
                         dateTimeFormatString: "S",
                         resourcesInMultipleICSFiles: true
                     },
-                    showToolbar: false,
+                    showToolbar     : false,
                     resources:
                         {
-                            dataField: "calendar",
-                            source:  adapter
+                            dataField   : "calendar",
+                            source      :  adapter
                         },
                     appointmentDataFields:
                         {
-                            from: "start",
-                            to: "end",
-                            id: "id",
-                            subject: "subject",
-                            resourceId: "calendar"
+                            from        : "start",
+                            to          : "end",
+                            id          : "id",
+                            subject     : "subject",
+                            resourceId  : "calendar"
                         },
                     localization: {
                         firstDay: 1,
@@ -179,16 +182,16 @@ class Schedule extends Input
                             // shortest day names
                             //namesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
                         },
-                        editDialogFromString: "<?=Loc::getMessage('rover-fa__schedule-start')?>",
-                        editDialogToString: "<?=Loc::getMessage('rover-fa__schedule-end')?>",
-                        editDialogAllDayString: "<?=Loc::getMessage('rover-fa__schedule-all-day')?>",
-                        editDialogTitleString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
+                        editDialogFromString    : "<?=Loc::getMessage('rover-fa__schedule-start')?>",
+                        editDialogToString      : "<?=Loc::getMessage('rover-fa__schedule-end')?>",
+                        editDialogAllDayString  : "<?=Loc::getMessage('rover-fa__schedule-all-day')?>",
+                        editDialogTitleString   : "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
                         contextMenuEditAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
                         editDialogCreateTitleString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
                         contextMenuCreateAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
-                        editDialogSaveString: "<?=Loc::getMessage('rover-fa__schedule-save')?>",
-                        editDialogDeleteString: "<?=Loc::getMessage('rover-fa__schedule-delete')?>",
-                        editDialogCancelString: "<?=Loc::getMessage('rover-fa__schedule-cancel')?>",
+                        editDialogSaveString    : "<?=Loc::getMessage('rover-fa__schedule-save')?>",
+                        editDialogDeleteString  : "<?=Loc::getMessage('rover-fa__schedule-delete')?>",
+                        editDialogCancelString  : "<?=Loc::getMessage('rover-fa__schedule-cancel')?>",
                     },
                     editDialogOpen: function (dialog, fields, editAppointment) {
                         fields.locationContainer.hide();
@@ -234,7 +237,7 @@ class Schedule extends Input
                 function exportPeriods()
                 {
                     var schedule = JSON.parse($scheduler.jqxScheduler('exportData', 'json')),
-                        propNum, period, result = array();
+                        propNum, period, result = [];
 
                     for (propNum in schedule)
                     {
@@ -246,7 +249,7 @@ class Schedule extends Input
 
                         result.push(period);
                     }
-//console.log(result);
+
                     $export.val(JSON.stringify(result));
                 }
             });

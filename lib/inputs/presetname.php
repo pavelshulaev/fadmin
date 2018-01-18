@@ -26,11 +26,15 @@ class PresetName extends Text
 {
 	public static $type = self::TYPE__PRESET_NAME;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentOutOfRangeException
-	 */
+    /**
+     * PresetName constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);
@@ -51,12 +55,13 @@ class PresetName extends Text
 		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
-	/**
-	 * @param Event $event
-	 * @return \Bitrix\Main\EventResult|bool
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param Event $event
+     * @return \Bitrix\Main\EventResult|bool
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function beforeSaveRequest(Event $event)
 	{
 		if ($event->getSender() !== $this)

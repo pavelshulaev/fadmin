@@ -372,11 +372,12 @@ abstract class Input
 		return $this;
 	}
 
-	/**
-	 * @param $value
-	 * @return bool
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param $value
+     * @return bool
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	private function saveValue($value)
 	{
 		$result = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_VALUE,
@@ -423,10 +424,11 @@ abstract class Input
 		return $this->tab->options;
 	}
 
-	/**
-	 * @throws Main\ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @throws Main\ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function loadValue()
 	{
 		$this->value = Option::get($this->tab->getModuleId(),
@@ -443,15 +445,16 @@ abstract class Input
 		$this->getEvent()->send(self::EVENT__AFTER_LOAD_VALUE, array(), $this);
 	}
 
-	/**
-	 * @param array  $params
-	 * @param        $moduleId
-	 * @param string $presetId
-	 * @param string $siteId
-	 * @return string
-	 * @throws Main\ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param array  $params
+     * @param        $moduleId
+     * @param string $presetId
+     * @param string $siteId
+     * @return string
+     * @throws Main\ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public static function getValueStatic(array $params, $moduleId, $presetId = '', $siteId = '')
 	{
 		if (!isset($params['name']))
@@ -465,11 +468,13 @@ abstract class Input
 			$params['default'], $siteId);
 	}
 
-	/**
-	 * @param bool|false $reload
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param bool $reload
+     * @return array|string
+     * @throws Main\ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getValue($reload = false)
 	{
 		if (empty($this->value) || $reload)
@@ -519,10 +524,11 @@ abstract class Input
 		return $this->name;
 	}
 
-	/**
-	 * can be redefined in children
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @return bool
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function setValueFromRequest()
 	{
 	    if ($this->getDisabled())

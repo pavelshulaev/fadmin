@@ -22,7 +22,11 @@ use Rover\Fadmin\Layout\Admin\Input;
 class Iblock extends Input
 {
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\LoaderException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()
     {

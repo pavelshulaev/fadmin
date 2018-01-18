@@ -81,7 +81,8 @@ class Form extends FromAbstract
     }
 
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function show()
     {
@@ -93,6 +94,7 @@ class Form extends FromAbstract
     /**
      * @param Tab $tab
      * @return array
+     * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
@@ -113,6 +115,7 @@ class Form extends FromAbstract
     /**
      * @param Tab $tab
      * @return array
+     * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
@@ -183,8 +186,10 @@ class Form extends FromAbstract
     }
 
     /**
-     * @param \Rover\Fadmin\Inputs\Input $input
+     * @param Input $input
      * @return string
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function getValue(Input $input)
@@ -203,7 +208,9 @@ class Form extends FromAbstract
     }
 
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showForm()
     {

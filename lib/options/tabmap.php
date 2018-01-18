@@ -29,19 +29,13 @@ class TabMap
 	 * tabs collection
 	 * @var array
 	 */
-	protected $tabMap   = array();
+	protected $tabMap = array();
 
 	/**
 	 * preset tabs collection
 	 * @var array
 	 */
 	protected $presetMap = array();
-
-	/**
-	 * tabs params
-	 * @var array
-	 */
-	protected $tabsParams = array();
 
 	/**
 	 * for events
@@ -56,13 +50,21 @@ class TabMap
 	public function __construct(Options $options)
 	{
 		$this->options = $options;
-
-		$config = $options->getConfigCache();
-
-		if (is_array($config) && isset($config['tabs']))
-			$this->tabsParams = $config['tabs'];
 	}
 
+    /**
+     * @param bool $reload
+     * @return array|mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	protected function getTabsParams($reload = false)
+    {
+        $config = $this->options->getConfigCache($reload);
+
+        return is_array($config) && isset($config['tabs'])
+            ? $config['tabs']
+            : array();
+    }
 	/**
 	 * @param bool|false $reload
 	 * @return Tab[]
@@ -88,7 +90,9 @@ class TabMap
 		$this->tabMap       = array();
 		$this->presetMap    = array();
 
-		foreach ($this->tabsParams as $tabParams){
+		$tabsParams         = $this->getTabsParams();
+
+		foreach ($tabsParams as $tabParams){
 
 			if (empty($tabParams))
 				continue;
@@ -246,7 +250,8 @@ class TabMap
      */
     public function setValuesFromRequest()
     {
-        if(false === $this->options->runEvent(Options::EVENT__BEFORE_ADD_VALUES_FROM_REQUEST))
+        if(false === $this->options->runEvent(
+            Options::EVENT__BEFORE_ADD_VALUES_FROM_REQUEST))
             return false;
 
         $tabs = $this->getTabs();
@@ -282,9 +287,10 @@ class TabMap
             $params['siteId']
         );
 
-        //reload tabs
-        $this->reloadTabs();
         $this->options->runEvent(Options::EVENT__AFTER_ADD_PRESET, $params);
+
+        // reload tabs afrer event!!!
+        $this->reloadTabs();
 
         return $params['id'];
     }
@@ -325,7 +331,7 @@ class TabMap
 
         // action afterRemovePreset
         $this->options->runEvent(Options::EVENT__AFTER_REMOVE_PRESET,
-            compact('siteId'));
+            $params);
 
         return true;
     }

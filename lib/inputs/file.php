@@ -47,11 +47,15 @@ class File extends Input
      * @var
      */
     protected $size;
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+
+    /**
+     * File constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);
@@ -112,12 +116,15 @@ class File extends Input
         $this->maxSize = $maxSize;
     }
 
-	/**
-	 * @param Event $event
-	 * @return EventResult|bool|int|null|string
-	 * @throws \Bitrix\Main\ArgumentException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param Event $event
+     * @return EventResult
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function beforeSaveRequest(Event $event)
 	{
 		if ($event->getSender() !== $this)
@@ -148,12 +155,13 @@ class File extends Input
 		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
 
-	/**
-	 * not save
-	 * @param Event $event
-	 * @return EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param Event $event
+     * @return EventResult
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function beforeSaveValue(Event $event)
 	{
 		if ($event->getSender() !== $this)

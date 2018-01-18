@@ -2,6 +2,7 @@
 namespace Rover\Fadmin\Options;
 
 use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use \Bitrix\Main\Config\Option;
 use Rover\Fadmin\Options;
 /**
@@ -34,22 +35,52 @@ class Preset
     /**
      * @param string $siteId
      * @param bool   $reload
-     * @return array|mixed
+     * @return mixed
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getList($siteId = '', $reload = false)
 	{
-	    if (is_null($this->presets) || $reload)
-	        $this->presets = unserialize(Option::get($this->options->getModuleId(),
+	    if (is_null($this->presets[$siteId]) || $reload)
+	        $this->presets[$siteId] = unserialize(Option::get($this->options->getModuleId(),
                 self::OPTION_ID, '', $siteId));
 
-		return $this->presets;
+		return $this->presets[$siteId];
 	}
 
     /**
      * @param string $siteId
      * @param bool   $reload
      * @return array
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getInstancesList($siteId = '', $reload = false)
+    {
+        $presets    = $this->getList($siteId);
+        $list       = array();
+        $presetClass= $this->options->settings->getPresetClass();
+
+        foreach ($presets as $preset){
+            $presetInstance = $presetClass::getInstance($preset['id'], $this->options, $reload);
+
+            if (!$presetInstance instanceof \Rover\Fadmin\Preset)
+                throw new ArgumentOutOfRangeException('presetInstance');
+
+            $list[$preset['id']] = $presetInstance;
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param string $siteId
+     * @param bool   $reload
+     * @return array
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getIds($siteId = '', $reload = false)
@@ -61,8 +92,9 @@ class Preset
      * @param        $id
      * @param string $siteId
      * @param bool   $reload
-     * @return mixed|null
+     * @return null
      * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getById($id, $siteId = '', $reload = false)
@@ -83,6 +115,8 @@ class Preset
      * @param string $siteId
      * @param bool   $reload
      * @return int
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getCount($siteId = '', $reload = false)
@@ -90,12 +124,14 @@ class Preset
 		return count($this->getList($siteId, $reload));
 	}
 
-	/**
-	 * @param        $name
-	 * @param string $siteId
-	 * @return int|mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $name
+     * @param string $siteId
+     * @return int|mixed
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function add($name, $siteId = '')
 	{
         $name       = trim($name);
@@ -121,6 +157,7 @@ class Preset
      * @param        $id
      * @param string $siteId
      * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function remove($id, $siteId = '')
@@ -140,11 +177,12 @@ class Preset
 		}
 	}
 
-	/**
-	 * @param        $presets
-	 * @param string $siteId
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $presets
+     * @param string $siteId
+     * @throws ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	protected function update($presets, $siteId = '')
 	{
 		Option::set($this->options->getModuleId(),
@@ -154,12 +192,13 @@ class Preset
 		$this->presets = null;
 	}
 
-	/**
-	 * sort presets by external function
-	 * @param        $sortFunc
-	 * @param string $siteId
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $sortFunc
+     * @param string $siteId
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function sort($sortFunc, $siteId = '')
 	{
 		$presets = $this->getList($siteId, true);
@@ -172,6 +211,8 @@ class Preset
      * @param string $siteId
      * @param bool   $reload
      * @return bool
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function isExists($id, $siteId = '', $reload = false)
@@ -183,13 +224,14 @@ class Preset
 		return in_array($id, $this->getIds($siteId, $reload));
 	}
 
-	/**
-	 * @param        $id
-	 * @param        $name
-	 * @param string $siteId
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $id
+     * @param        $name
+     * @param string $siteId
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function updateName($id, $name, $siteId = '')
 	{
         $id = intval($id);
@@ -218,6 +260,8 @@ class Preset
      * @param string $siteId
      * @param bool   $reload
      * @return null
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getNameById($id, $siteId = '', $reload = false)
