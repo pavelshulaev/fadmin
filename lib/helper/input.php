@@ -74,12 +74,19 @@ class Input
     /**
      * @param        $name
      * @param string $default
+     * @param null   $label
      * @return array
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getText($name, $default = '')
+	public static function getText($name, $default = '', $label = null)
 	{
-		return self::get(InputAbstract::TYPE__TEXT, $name, $default);
+		$input = self::get(InputAbstract::TYPE__TEXT, $name, $default);
+
+        if ($label)
+            $input['label'] = $label;
+
+        return $input;
 	}
 
     /**
@@ -88,8 +95,8 @@ class Input
      * @param null   $cols
      * @param null   $rows
      * @return array
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
-     *
      */
 	public static function getTextarea($name, $default = '', $cols = null, $rows = null)
 	{
@@ -104,16 +111,22 @@ class Input
 		return $textarea;
 	}
 
-	/**
-	 * @param      $name
-	 * @param null $default
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getNumber($name, $default = null)
+    /**
+     * @param      $name
+     * @param null $default
+     * @param null $label
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getNumber($name, $default = null, $label = null)
 	{
-		return self::get(InputAbstract::TYPE__NUMBER, $name, $default);
+	    $input = self::get(InputAbstract::TYPE__NUMBER, $name, $default);
+
+        if ($label)
+            $input['label'] = $label;
+
+		return $input;
 	}
 
 	/**
@@ -144,6 +157,7 @@ class Input
      * @param      $name
      * @param bool $popup
      * @return array
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getRemovePreset($name, $popup = false)
@@ -202,6 +216,7 @@ class Input
      * @param array $options
      * @param null  $default
      * @return array
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getRadio($name, array $options = array(), $default = null)
@@ -276,7 +291,8 @@ class Input
      * @param        $name
      * @param string $default
      * @return array
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getClock($name, $default = '0:00')
     {

@@ -24,6 +24,10 @@ class Selectgroup extends Selectbox
     protected static $idCache = array();
 
     /**
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()
@@ -32,18 +36,10 @@ class Selectgroup extends Selectbox
     }
 
     /**
-     * @param array $params = [
-     *  'options' - options' map
-     *  'value' - value(s)
-     *  'multiple' - multiple
-     *  'group_name'
-     *  'item_name'
-     *  'on_change_group'   - additional js-handler
-     *  'on_change_item'    - additional js-handler
-     *  'group_additional'      - additional group params
-     *  'item_additional'       - additional item params
-     * ]
      * @return string
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function getList()

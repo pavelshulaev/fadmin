@@ -44,6 +44,7 @@ abstract class Request
      *
      * @param Options $options
      * @param array   $params
+     * @throws \Bitrix\Main\SystemException
      */
     public function __construct(Options $options, array $params = array())
     {
@@ -53,6 +54,7 @@ abstract class Request
     }
 
     /**
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function process()
@@ -92,6 +94,8 @@ abstract class Request
 
     /**
      * @return bool
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function removePreset()
@@ -113,6 +117,7 @@ abstract class Request
 
     /**
      * @param $url
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function redirect($url)

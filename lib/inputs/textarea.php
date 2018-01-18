@@ -34,11 +34,14 @@ class Textarea extends Input
 	 */
 	protected $cols = 50;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Textarea constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);

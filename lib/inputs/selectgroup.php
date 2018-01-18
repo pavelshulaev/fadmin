@@ -23,17 +23,23 @@ use Bitrix\Main\EventResult;
  */
 class Selectgroup extends Selectbox
 {
+    /**
+     * @var string
+     */
     public static $type = self::TYPE__SELECT_GROUP;
 
-
     /**
+     * Selectgroup constructor.
+     *
      * @param array $params
      * @param Tab   $tab
      * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
     public function __construct(array $params, Tab $tab)
     {
         parent::__construct($params, $tab);
+
         $this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
     }
 
@@ -58,6 +64,7 @@ class Selectgroup extends Selectbox
 
     /**
      * @return Input
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function getGroupInput()
@@ -71,7 +78,10 @@ class Selectgroup extends Selectbox
     }
 
     /**
-     * @return array|int|null|string
+     * @return array|string
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getGroupValue()
@@ -82,6 +92,7 @@ class Selectgroup extends Selectbox
     /**
      * @param $value
      * @return $this|Input
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setGroupValue($value)
@@ -114,10 +125,10 @@ class Selectgroup extends Selectbox
     }
 
     /**
-     * not save
      * @param Event $event
      * @return EventResult
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function beforeSaveValue(Event $event)
     {

@@ -37,10 +37,13 @@ class Number extends Text
 	 */
 	protected $max;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 */
+    /**
+     * Number constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);

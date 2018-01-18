@@ -15,6 +15,7 @@ use \Bitrix\Main;
 use \Bitrix\Main\ArgumentNullException;
 use \Rover\Fadmin\Inputs\Input;
 use \Bitrix\Main\Application;
+use Rover\Fadmin\Options\Cache;
 use \Rover\Fadmin\Options\Message;
 use \Rover\Fadmin\Options\Settings;
 use \Rover\Fadmin\Options\Event;
@@ -71,12 +72,6 @@ abstract class Options
 	public $message;
 
 	/**
-	 * options values cache
-	 * @var array
-	 */
-	protected $cache = array();
-
-	/**
 	 * settings driver
 	 * @var Settings
 	 */
@@ -92,17 +87,16 @@ abstract class Options
 	 */
 	public $preset;
 
+    /**
+     * @var Cache
+     */
+	public $cache;
 	/**
 	 * unique instance for each module
 	 * @var array
 	 */
 	protected static $instances = array();
 
-    /**
-     * config cache
-     * @var array
-     */
-	protected $config;
 	/**
 	 * for singleton
 	 * @param $moduleId
@@ -167,14 +161,16 @@ abstract class Options
 		$this->preset   = new Preset($this);
 		$this->tabMap   = new TabMap($this);
 		$this->settings = new Settings($this);
+		$this->cache    = new Cache($this);
 	}
 
-	/**
-	 * @param $name
-	 * @param $params
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param       $name
+     * @param array $params
+     * @return bool
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function runEvent($name, &$params = array())
 	{
 		if (!method_exists($this, $name))
@@ -194,15 +190,16 @@ abstract class Options
 
     /**
      * @param bool $reload
-     * @return array|mixed
+     * @return null
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getConfigCache($reload = false)
     {
-        if (is_null($this->config) || $reload)
-            $this->config = $this->getConfig();
+        if (!$this->cache->check('config', 'config') || $reload)
+            $this->cache->set('config', $this->getConfig(), 'config');
 
-        return $this->config;
+        return $this->cache->get('config', 'config');
     }
 
     /**
@@ -239,17 +236,16 @@ abstract class Options
 		return $name;
 	}
 
-	/**
-	 * returns value from preset
-	 * @param            $inputName
-	 * @param            $presetId
-	 * @param string     $siteId
-	 * @param bool|false $reload
-	 * @return mixed
-	 * @throws ArgumentNullException
-	 * @throws Main\SystemException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $inputName
+     * @param        $presetId
+     * @param string $siteId
+     * @param bool   $reload
+     * @return mixed
+     * @throws ArgumentNullException
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getPresetValue($inputName, $presetId, $siteId = '', $reload = false)
 	{
 		if (is_null($presetId))
@@ -258,14 +254,14 @@ abstract class Options
 		return $this->getValue($inputName, $presetId, $siteId, $reload);
 	}
 
-	/**
-	 * returns value by name
-	 * @param            $inputName
-	 * @param string     $siteId
-	 * @param bool|false $reload
-	 * @return mixed|null
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $inputName
+     * @param string $siteId
+     * @param bool   $reload
+     * @return mixed
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getNormalValue($inputName, $siteId = '', $reload = false)
 	{
 		return $this->getValue($inputName, '', $siteId, $reload);
@@ -287,17 +283,17 @@ abstract class Options
 
 		$key = md5($inputName . $presetId . $siteId);
 
-		if (!isset($this->cache[$key]) || $reload) {
+		if (!$this->cache->check($key) || $reload) {
 
 			$input = $this->tabMap->searchInputByName($inputName, $presetId, $siteId, $reload);
 
 			if ($input instanceof Input)
-				$this->cache[$key] = $input->getValue();
+                $this->cache->set($key, $input->getValue());
 			else
 				throw new Main\SystemException('input "' . $inputName . '" not found');
 		}
 
-		return $this->cache[$key];
+		return $this->cache->get($key);
 	}
 
 	/**
@@ -318,14 +314,45 @@ abstract class Options
 		throw new Main\SystemException('input ' . $inputName . ' not found');
 	}
 
-	/**
-	 * @param \Exception $e
-	 * @author Shulaev (pavel.shulaev@gmail.com)
-	 */
+    /**
+     * @param \Exception $e
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public static function writeException2Log(\Exception $e)
 	{
 		Application::getInstance()
 			->getExceptionHandler()
 			->writeToLog($e);
 	}
+
+
+    /**
+     * @param        $moduleId
+     * @param        $name
+     * @param string $presetId
+     * @param string $siteId
+     * @param null   $default
+     * @return string
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getValueStatic($moduleId, $name, $presetId = '', $siteId = '', $default = null)
+    {
+        $moduleId = trim($moduleId);
+        if (!strlen($moduleId))
+            throw new ArgumentNullException('moduleId');
+
+        $name = trim($name);
+        if (!strlen($name))
+            throw new ArgumentNullException('name');
+
+        $params = array(
+            'name'      => $name,
+            'default'   => $default
+        );
+
+        return Input::getValueStatic($params, $moduleId, $presetId, $siteId);
+    }
 }

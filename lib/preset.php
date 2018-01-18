@@ -12,8 +12,7 @@ namespace Rover\Fadmin;
 
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
-use Bitrix\Main\SystemException;
-use Rover\Fadmin\Options;
+use Bitrix\Main\SystemException;;
 /**
  * Class Preset
  *

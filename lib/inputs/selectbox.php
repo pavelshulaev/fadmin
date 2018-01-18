@@ -36,11 +36,14 @@ class Selectbox extends Input
 
 	const MAX_MULTI_SIZE = 7;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Selectbox constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);

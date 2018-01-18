@@ -39,11 +39,6 @@ class Settings
     );
 
     /**
-     * @var array
-     */
-	protected $storage;
-
-    /**
      * @var Options
      */
 	public $options;
@@ -57,58 +52,68 @@ class Settings
 	}
 
     /**
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	protected function init()
     {
-        if (is_null($this->storage)) {
-            $config         = $this->options->getConfigCache();
-            $settings       = isset($config['settings'])
+        if ($this->options->cache->checkContainer('settings'))
+            return;
+
+        $config     = $this->options->getConfigCache();
+        $settings   = isset($config['settings'])
                 ? $config['settings']
                 : array();
 
-            foreach ($this->defaults as $key => $defValue)
-                $this->storage[$key] = isset($settings[$key])
-                    ? $settings[$key]
-                    : $defValue;
+        foreach ($this->defaults as $key => $defValue)
+        {
+            $value = isset($settings[$key])
+                ? $settings[$key]
+                : $defValue;
+
+            $this->options->cache->set($key, $value, 'settings');
         }
     }
 
     /**
      * @param $key
      * @return mixed|null
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getFromStorage($key)
     {
         $this->init();
 
-        if (isset($this->storage[$key]))
-            return $this->storage[$key];
+        if ($this->options->cache->check($key, 'settings'))
+            return $this->options->cache->get($key, 'settings');
 
         return null;
     }
 
-	/**
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @return mixed|null
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getBoolCheckbox()
 	{
 		return $this->getFromStorage(self::BOOL_CHECKBOX);
 	}
 
-	/**
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @return mixed|null
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getLogErrors()
 	{
         return $this->getFromStorage(self::LOG_ERRORS);
 	}
 
     /**
-     * @return mixed
+     * @return mixed|null
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getGroupRights()
@@ -117,7 +122,8 @@ class Settings
     }
 
     /**
-     * @return mixed
+     * @return mixed|null
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getUseSort()
@@ -126,7 +132,8 @@ class Settings
     }
 
     /**
-     * @return \Rover\Fadmin\Preset
+     * @return mixed|null
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getPresetClass()

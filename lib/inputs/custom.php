@@ -27,11 +27,14 @@ class Custom extends Input
 	 */
 	public static $type = self::TYPE__CUSTOM;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Custom constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);

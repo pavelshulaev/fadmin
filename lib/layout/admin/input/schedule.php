@@ -71,6 +71,9 @@ class Schedule extends Input
     }
 
     /**
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()
@@ -246,7 +249,7 @@ class Schedule extends Input
 
                         result.push(period);
                     }
-//console.log(result);
+
                     $export.val(JSON.stringify(result));
                 }
             });

@@ -70,6 +70,8 @@ abstract class Input
 
     /**
      * @param InputEngine $input
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public static function drawStatic(InputEngine $input)
