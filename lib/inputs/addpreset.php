@@ -10,9 +10,11 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\Application;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Localization\Loc;
+use Rover\Fadmin\Admin\Request;
 use Rover\Fadmin\Tab;
 
 Loc::loadMessages(__FILE__);
@@ -108,10 +110,10 @@ class Addpreset extends Submit
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
 	public function afterLoadValue(Event $event)
-	{
-		if ($event->getSender() !== $this)
-			return;
+    {
+        if ($event->getSender() !== $this)
+            return;
 
-		$this->value = $this->default;
-	}
+        $this->value = $this->default;
+    }
 }

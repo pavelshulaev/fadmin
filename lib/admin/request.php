@@ -82,6 +82,15 @@ class Request
         $this->moduleId     = htmlspecialcharsbx($this->options->getModuleId());
 	}
 
+    /**
+     * @return Options
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getOptions()
+    {
+        return $this->options;
+    }
+
 	/**
 	 * @throws \Bitrix\Main\ArgumentNullException
 	 * @throws \Bitrix\Main\SystemException
@@ -173,7 +182,6 @@ class Request
 
 		// action afterAddPreset
 		$this->options->runEvent(Options::EVENT__AFTER_ADD_PRESET, $params);
-
 
 		$presetTabName = $this->options->tabMap->getTabByPresetId($params['id']);
 
@@ -267,6 +275,6 @@ class Request
             compact('tabs')))
             return;
 
-		//$this->redirect();
+		$this->redirect();
 	}
 }
