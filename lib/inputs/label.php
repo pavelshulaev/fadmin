@@ -27,11 +27,14 @@ class Label extends Input
 	 */
 	public static $type = self::TYPE__LABEL;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Label constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		if (!isset($params['name']))
@@ -39,19 +42,7 @@ class Label extends Input
 
 		parent::__construct($params, $tab);
 
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$this->showLabel($this->getValueId());
-
-		echo $this->default;
-
-		$this->showHelp();
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
 	}
 
 	/**

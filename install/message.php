@@ -2,16 +2,16 @@
 
 use Bitrix\Main\Localization\Loc;
 
-global $APPLICATION, $errors;
+global $APPLICATION, $fadminErrors;
 
-if (empty($errors))
+if (empty($fadminErrors))
     echo \CAdminMessage::ShowNote(Loc::getMessage("MOD_INST_OK"));
 else
     echo \CAdminMessage::ShowMessage(
         array(
             "TYPE"      => "ERROR",
             "MESSAGE"   => Loc::getMessage("MOD_INST_ERR"),
-            "DETAILS"   => implode("<br/>", $errors),
+            "DETAILS"   => implode("<br/>", $fadminErrors),
             "HTML"      => true
         ));
 

@@ -21,105 +21,26 @@ use Bitrix\Main\EventResult;
  * @package Rover\Fadmin\Inputs
  * @author  Pavel Shulaev (http://rover-it.me)
  */
-class Selectgroup extends Input
+class Selectgroup extends Selectbox
 {
+    /**
+     * @var string
+     */
     public static $type = self::TYPE__SELECT_GROUP;
 
     /**
-     * @var array
-     */
-    protected static $idCache = [];
-
-    /**
-     * @var array
-     */
-    protected $options = [];
-
-    /**
-     * multiple selectbox size
-     * @var int
-     */
-    protected $size = 7;
-
-    /**
+     * Selectgroup constructor.
+     *
      * @param array $params
      * @param Tab   $tab
      * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
     public function __construct(array $params, Tab $tab)
     {
         parent::__construct($params, $tab);
 
-        if (isset($params['options']))
-            $this->options = $params['options'];
-
-        if (isset($params['size']) && intval($params['size']))
-            $this->size = intval($params['size']);
-        elseif ($params['multiple'])
-            $this->size = count($this->options) > $this->size
-                ? $this->size
-                : count($this->options);
-        else
-            $this->size = 1;
-
-        $this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
-    }
-
-    /**
-     * @author Pavel Shulaev (http://rover-it.me)
-     */
-    public function draw()
-    {
-        $valueId = $this->getValueId();
-
-        if ($this->multiple)
-            $this->showMultiLabel($valueId);
-        else
-            $this->showLabel($valueId);
-
-        echo self::getList();
-
-        $this->showHelp();
-    }
-
-    /**
-     * @param array $options
-     * @author Pavel Shulaev (http://rover-it.me)
-     */
-    public function setOptions(array $options)
-    {
-        $this->options = $options;
-    }
-
-    /**
-     * @return array
-     * @author Pavel Shulaev (http://rover-it.me)
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * @param $valueId
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    protected function showMultiLabel($valueId)
-    {
-        ?>
-        <tr>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-l"
-            style="vertical-align: top; padding-top: 7px;">
-            <label for="<?=$valueId?>"><?=$this->label?>:<br>
-                <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
-            </label>
-        </td>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-r"
-        ><?php
+        $this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
     }
 
     /**
@@ -143,20 +64,24 @@ class Selectgroup extends Input
 
     /**
      * @return Input
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function getGroupInput()
     {
-        $params = [
+        $params = array(
             'name' => $this->getGroupName(),
             'type' => self::TYPE__HIDDEN
-        ];
+        );
 
         return self::factory($params, $this->tab);
     }
 
     /**
-     * @return array|int|null|string
+     * @return array|string
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getGroupValue()
@@ -166,7 +91,8 @@ class Selectgroup extends Input
 
     /**
      * @param $value
-     * @return $this
+     * @return $this|Input
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setGroupValue($value)
@@ -182,7 +108,7 @@ class Selectgroup extends Input
     {
         $searchValue = $this->value;
         if (!is_array($searchValue))
-            $searchValue = [$searchValue];
+            $searchValue = array($searchValue);
 
         reset($this->options);
 
@@ -199,99 +125,10 @@ class Selectgroup extends Input
     }
 
     /**
-     * @param array $params = [
-     *  'options' - options' map
-     *  'value' - value(s)
-     *  'multiple' - multiple
-     *  'group_name'
-     *  'item_name'
-     *  'on_change_group'   - additional js-handler
-     *  'on_change_item'    - additional js-handler
-     *  'group_additional'      - additional group params
-     *  'item_additional'       - additional item params
-     * ]
-     * @return string
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    protected function getList()
-    {
-        if (empty($this->options))
-            return '';
-
-        $optionsId  = md5(serialize($this->options));
-
-        $value      = empty($this->value) ? [] : $this->value;
-        if (!is_array($value))
-            $value = [$value];
-
-        // change group script
-        $html = '';
-
-        if(!isset(self::$idCache[$optionsId]))
-            $html .= '
-			<script type="text/javascript">
-                function OnType_'.$optionsId.'_Changed(typeSelect, selectID)
-                {
-                    var items       = '.\CUtil::PhpToJSObject($this->options).';
-                    var selected    = BX(selectID);
-                    
-                    console.log(typeSelect);
-                    console.log(selectID);
-                    console.log(items);
-                    console.log(selected);
-                    
-                    if(!!selected)
-                    {
-                        for(var i=selected.length-1; i >= 0; i--){
-                            selected.remove(i);
-                        }
-                            
-                        for(var j in items[typeSelect.value]["options"])
-                        {
-                            var newOption = new Option(items[typeSelect.value]["options"][j], j, false, false);
-                            selected.options.add(newOption);
-                        }
-                    }
-                }
-			</script>
-			';
-
-        $groupValue     = $this->getGroupValue() ?: $this->calcGroupValue();
-        $valueName      = $this->getValueName();
-        $valueGroupName = $this->getGroupValueName();
-        $onChangeGroup  = 'OnType_'.$optionsId.'_Changed(this, \''.\CUtil::JSEscape($valueName).'\');';
-
-        $html .= '<select 
-                name="' . $valueGroupName . '"
-                id="' . $valueGroupName . '"
-                onchange="'.htmlspecialcharsbx($onChangeGroup).'">'."\n";
-
-        foreach($this->options as $key => $optionValue)
-            $html .= '<option value="'.htmlspecialcharsbx($key).'"'.($groupValue==$key? ' selected': '').'>'.htmlspecialcharsEx($optionValue['name']).'</option>'."\n";
-
-        $html .= "</select>\n";
-        $html .= "&nbsp;\n";
-        $html .= '<select 
-                    name="' . $valueName . ($this->multiple
-                        ? '[]" multiple="multiple" size="' . $this->size . '" '
-                        : '"')
-                    . '
-                    id="' . $valueName . '">'."\n";
-
-        if (!is_null($groupValue))
-            foreach($this->options[$groupValue]['options'] as $key => $optionValue)
-                $html .= '<option value="'.htmlspecialcharsbx($key).'"'.(in_array($key, $value)? ' selected': '').'>'.htmlspecialcharsEx($optionValue).'</option>'."\n";
-
-        $html .= "</select>\n";
-
-        return $html;
-    }
-
-    /**
-     * not save
      * @param Event $event
      * @return EventResult
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function beforeSaveValue(Event $event)
     {

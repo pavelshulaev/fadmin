@@ -8,9 +8,8 @@
  * @author Pavel Shulaev (http://rover-it.me)
  */
 
-namespace Rover\Fadmin\Engine;
+namespace Rover\Fadmin\Options;
 
-use Rover\Fadmin\Options;
 /**
  * Class Message
  *
@@ -19,22 +18,14 @@ use Rover\Fadmin\Options;
  */
 class Message
 {
+    const TYPE__OK      = 'OK';
+    const TYPE__ERROR   = 'ERROR';
+
 	/**
 	 * message storage
 	 * @var array
 	 */
-	protected $messages = [];
-
-	const TYPE__OK      = 'OK';
-	const TYPE__ERROR   = 'ERROR';
-
-	/**
-	 * @param Options $options
-	 */
-	public function __construct(Options $options)
-	{
-		$this->options = $options;
-	}
+	protected $messages = array();
 
     /**
      * @param        $message
@@ -50,11 +41,11 @@ class Message
 	    if (!$html)
 	        $message = htmlspecialcharsbx($message);
 
-		$this->messages[] = [
+		$this->messages[] = array(
 			'MESSAGE'   => trim($message),
             'HTML'      => (bool)$html,
 			'TYPE'      => htmlspecialcharsbx($type),
-		];
+        );
 	}
 
     /**
@@ -77,12 +68,12 @@ class Message
 		$this->add($message, self::TYPE__ERROR, $html);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function show()
-	{
-		foreach ($this->messages as $message)
-			\CAdminMessage::ShowMessage($message);
-	}
+    /**
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function get()
+    {
+        return $this->messages;
+    }
 }

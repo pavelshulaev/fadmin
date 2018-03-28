@@ -19,52 +19,83 @@ use Rover\Fadmin\Tab;
  */
 class Text extends Input
 {
-	/**
+    /**
+     * @var int
+     */
+    protected $maxLength;
+
+    /**
+     * @var
+     */
+    protected $size;
+
+    /**
 	 * @var string
 	 */
 	public static $type = self::TYPE__TEXT;
 
-	/**
-	 * @var int
-	 */
-	protected $maxLength    = 255;
-	protected $size         = 50;
-
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Text constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);
 
 		if (isset($params['maxLength']) && intval($params['maxLength']))
 			$this->maxLength = intval($params['maxLength']);
+		else
+		    $this->maxLength = 255;
 
 		if (isset($params['size']) && intval($params['size']))
 			$this->size = intval(htmlspecialcharsbx($params['size']));
+		else
+		    $this->size = 50;
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+    /**
+     * @return int
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getMaxLength()
+    {
+        return $this->maxLength;
+    }
 
-		$this->showLabel($valueId);
+    /**
+     * @param $maxLength
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setMaxLength($maxLength)
+    {
+        $this->maxLength = intval($maxLength);
 
-		?><input
-			type="text"
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			id="<?=$valueId?>"
-			size="<?=$this->size?>"
-			maxlength="<?=$this->maxLength?>"
-			value="<?=$this->value?>"
-			name="<?=$valueName?>"><?php
+        return $this;
+    }
 
-		$this->showHelp();
-	}
+    /**
+     * @return int
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param $size
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setSize($size)
+    {
+        $this->size = intval($size);
+
+        return $this;
+    }
 }

@@ -43,16 +43,19 @@ class File extends Input
 	 */
 	protected $maxSize = 0;
 
-	/**
-	 * @var int
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected $size = 20;
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * @var
+     */
+    protected $size;
+
+    /**
+     * File constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);
@@ -68,52 +71,60 @@ class File extends Input
 
 		if (isset($params['size']) && intval($params['size']))
 			$this->size = intval(htmlspecialcharsbx($params['size']));
+		else
+		    $this->size = 20;
 
 		// add events
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+	public function isImage()
+    {
+        return $this->isImage;
+    }
 
-		$this->showLabel($valueId);
+    /**
+     * @return string
+     */
+    public function getMimeType()
+    {
+        return $this->mimeType;
+    }
 
-		$fileType = $this->isImage
-			? 'IMAGE'
-			: '';
+    /**
+     * @param string $mimeType
+     */
+    public function setMimeType($mimeType)
+    {
+        $this->mimeType = $mimeType;
+    }
 
+    /**
+     * @return int
+     */
+    public function getMaxSize()
+    {
+        return $this->maxSize;
+    }
 
-		if (strlen($this->value) > 0):
+    /**
+     * @param int $maxSize
+     */
+    public function setMaxSize($maxSize)
+    {
+        $this->maxSize = $maxSize;
+    }
 
-			$file = \CFile::GetFileArray($this->value);
-
-			echo '<code>' . $file['ORIGINAL_NAME'] . '</code><br>';
-
-			if ($this->isImage)
-				echo \CFile::ShowImage($this->value, 200, 200, "border=0", "", true) . '<br>';
-
-		endif;
-
-		echo \CFile::InputFile($valueName, $this->size, $this->value, false, $this->maxSize,
-				$fileType, "class=typefile", 0, "class=typeinput", '', false, false, false)
-			. '<br>';
-
-		$this->showHelp();
-	}
-
-
-	/**
-	 * @param Event $event
-	 * @return EventResult|bool|int|null|string
-	 * @throws \Bitrix\Main\ArgumentException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param Event $event
+     * @return EventResult
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function beforeSaveRequest(Event $event)
 	{
 		if ($event->getSender() !== $this)
@@ -144,12 +155,13 @@ class File extends Input
 		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
 
-	/**
-	 * not save
-	 * @param Event $event
-	 * @return EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param Event $event
+     * @return EventResult
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function beforeSaveValue(Event $event)
 	{
 		if ($event->getSender() !== $this)
@@ -166,6 +178,27 @@ class File extends Input
 		if ($value != $oldValue)
 			\CFile::Delete($oldValue);
 
-		return $this->getEvent()->getSuccessResult($this, ['value' => $value]);
+		return $this->getEvent()->getSuccessResult($this, array('value' => $value));
 	}
+
+    /**
+     * @return int
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param $size
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setSize($size)
+    {
+        $this->size = intval($size);
+
+        return $this;
+    }
 }

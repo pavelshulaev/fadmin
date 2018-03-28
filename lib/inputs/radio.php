@@ -19,18 +19,24 @@ use Rover\Fadmin\Tab;
  */
 class Radio extends Input
 {
+    /**
+     * @var array
+     */
+    protected $options = array();
+
+    /**
+     * @var string
+     */
 	public static $type = self::TYPE__RADIO;
 
-	/**
-	 * @var array
-	 */
-	protected $options = [];
-
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Radio constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);
@@ -39,46 +45,23 @@ class Radio extends Input
 			$this->options = $params['options'];
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
+    /**
+     * @param array $options
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
 
-		$this->showLabel($valueId);
+        return $this;
+    }
 
-		foreach ($this->options as $optionValue => $optionName):
-
-            ?><label><input
-                type="radio"
-                <?=$this->disabled ? 'disabled="disabled"': '';?>
-                name="<?=$valueName?>"
-                id="<?=$valueId?>"
-                value="<?=$optionValue?>"
-                <?=$this->value == $optionValue ? ' checked="checked "' : ''?>
-            ><?=$optionName?></label><?php
-
-        endforeach;
-
-		$this->showHelp();
-	}
-
-	/**
-	 * @param array $options
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function setOptions(array $options)
-	{
-		$this->options = $options;
-	}
-
-	/**
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getOptions()
+    /**
+     * @return array
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    public function getOptions()
     {
         return $this->options;
     }

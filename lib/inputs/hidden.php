@@ -36,21 +36,4 @@ class Hidden extends Text
 
         parent::__construct($params, $tab);
     }
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		?><input
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			id="<?=$valueId?>" 
-			maxlength="<?=$this->maxLength?>"
-			type="hidden"
-			value="<?php $this->value?>" 
-			name="<?=$valueName?>"><?php
-	}
 }

@@ -22,12 +22,4 @@ class Date extends DateTime
 	 * @var string
 	 */
 	public static $type = self::TYPE__DATE;
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		parent::draw(false);
-	}
 }

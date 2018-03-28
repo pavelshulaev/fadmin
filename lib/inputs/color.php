@@ -21,24 +21,4 @@ class Color extends Input
 	 * @var string
 	 */
 	public static $type = self::TYPE__COLOR;
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		$this->showLabel($valueId);
-
-		?><input
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			id="<?=$valueId?>"
-			type="color"
-			value="<?=$this->value?>"
-			name="<?=$valueName?>"><?php
-
-		$this->showHelp();
-	}
 }

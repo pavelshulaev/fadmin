@@ -2,99 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: lenovo
- * Date: 17.11.2016
- * Time: 18:13
+ * Date: 12.09.2017
+ * Time: 17:29
  *
- * @author Pavel Shulaev (http://rover-it.me)
+ * @author Pavel Shulaev (https://rover-it.me)
  */
-
 namespace Rover\Fadmin\Engine;
-
-use Rover\Fadmin\Options;
 
 /**
  * Class Settings
  *
  * @package Rover\Fadmin\Engine
  * @author  Pavel Shulaev (https://rover-it.me)
+ * @deprecated
  */
-class Settings
+class Settings extends \Rover\Fadmin\Options\Settings
 {
-	const BOOL_CHECKBOX = 'bool_checkbox';
-	const LOG_ERRORS    = 'log_errors';
-    const GROUP_RIGHTS  = 'group_rights';
-    const USE_SORT      = 'use_sort';
-	/**
-	 * default settings
-	 * @var array
-	 */
-	protected $defaults = [
-		self::BOOL_CHECKBOX => false,
-		self::LOG_ERRORS    => false,
-		self::GROUP_RIGHTS  => false,
-		self::USE_SORT      => false,
-	];
 
-    /**
-     * @var array
-     */
-	protected $storage = [];
-
-    /**
-     * @var Options
-     */
-	public $options;
-
-	/**
-	 * @param Options $options
-	 */
-	public function __construct(Options $options)
-	{
-		$this->options  = $options;
-		$config         = $this->options->getConfigCache();
-		$settings       = isset($config['settings'])
-			? $config['settings']
-			: [];
-
-		foreach ($this->defaults as $key => $defValue)
-			$this->storage[$key] = isset($settings[$key])
-				? $settings[$key]
-				: $defValue;
-	}
-
-	/**
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getBoolCheckbox()
-	{
-		return $this->storage[self::BOOL_CHECKBOX];
-	}
-
-	/**
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getLogErrors()
-	{
-		return $this->storage[self::LOG_ERRORS];
-	}
-
-    /**
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function getGroupRights()
-    {
-        return $this->storage[self::GROUP_RIGHTS];
-    }
-
-    /**
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public function getUseSort()
-    {
-        return $this->storage[self::USE_SORT];
-    }
 }

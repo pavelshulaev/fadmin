@@ -43,54 +43,8 @@ class Addpreset extends Submit
 		parent::__construct($params, $tab);
 
 		// add events
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this,   'afterLoadValue']);
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$siteId     = $this->tab->getSiteId();
-
-		$this->showLabel($valueId, true);
-		$this->drawSubmit($valueId, self::$type, $siteId . self::SEPARATOR . $this->default, $this->label);
-		$this->showHelp();
-
-		if ($this->popup === false) return;
-
-		$text = $this->popup
-			? $this->popup
-			: Loc::getMessage('rover-fa__ADDPRESET_TEXT');
-
-		$default = $this->default
-			? $this->default
-			: Loc::getMessage('rover-fa__ADDPRESET_DEFAULT');
-
-		?>
-		<script>
-			(function()
-			{
-				document.getElementById('<?php echo $valueId?>').onclick = function()
-				{
-					var presetName = prompt('<?php echo $text ?>', '<?php echo $default?>');
-
-					if (presetName == null)
-						return false;
-
-					if (!presetName.length) {
-						alert('<?php echo Loc::getMessage('rover-fa__ADDPRESET_ALERT')?>');
-						return false;
-					}
-
-					this.setAttribute('value', '<?php echo $siteId . self::SEPARATOR?>' + presetName);
-					return true;
-				}
-			})();
-		</script>
-		<?php
+		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this,   'afterLoadValue'));
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
 	}
 
 	/**

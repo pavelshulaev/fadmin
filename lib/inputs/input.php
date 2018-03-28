@@ -43,6 +43,11 @@ abstract class Input
     const TYPE__TEXT            = 'text';
 	const TYPE__TEXTAREA        = 'textarea';
 
+    /**
+     * @var string
+     */
+	public static $type;
+
 	/**
 	 * input id
 	 * @var string
@@ -229,24 +234,6 @@ abstract class Input
 	}
 
 	/**
-	 * loading value before showing input
-	 *
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function show()
-	{
-		$this->loadValue();
-
-		if ($this->getDisplay())
-			$this->draw();
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	abstract public function draw();
-
-	/**
 	 * @param array $params
 	 * @param Tab   $tab
 	 * @return Input
@@ -385,11 +372,12 @@ abstract class Input
 		return $this;
 	}
 
-	/**
-	 * @param $value
-	 * @return bool
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param $value
+     * @return bool
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	private function saveValue($value)
 	{
 		$result = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_VALUE,
@@ -418,10 +406,10 @@ abstract class Input
 		Option::delete($this->tab->getModuleId(), $filter);
 	}
 
-	/**
-	 * @return \Rover\Fadmin\Engine\Event
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @return Options\Event
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	protected function getEvent()
 	{
 		return $this->tab->options->event;
@@ -436,11 +424,12 @@ abstract class Input
 		return $this->tab->options;
 	}
 
-	/**
-	 * @throws Main\ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function loadValue()
+    /**
+     * @throws Main\ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function loadValue()
 	{
 		$this->value = Option::get($this->tab->getModuleId(),
 			$this->getValueName(), $this->default, $this->tab->getSiteId());
@@ -450,21 +439,22 @@ abstract class Input
 				$this->value = unserialize($this->value);
 
 			if (!$this->value)
-				$this->value = [];
+				$this->value = array();
 		}
 
-		$this->getEvent()->send(self::EVENT__AFTER_LOAD_VALUE, [], $this);
+		$this->getEvent()->send(self::EVENT__AFTER_LOAD_VALUE, array(), $this);
 	}
 
-	/**
-	 * @param array  $params
-	 * @param        $moduleId
-	 * @param string $presetId
-	 * @param string $siteId
-	 * @return string
-	 * @throws Main\ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param array  $params
+     * @param        $moduleId
+     * @param string $presetId
+     * @param string $siteId
+     * @return string
+     * @throws Main\ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public static function getValueStatic(array $params, $moduleId, $presetId = '', $siteId = '')
 	{
 		if (!isset($params['name']))
@@ -478,17 +468,19 @@ abstract class Input
 			$params['default'], $siteId);
 	}
 
-	/**
-	 * @param bool|false $reload
-	 * @return mixed
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param bool $reload
+     * @return array|string
+     * @throws Main\ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getValue($reload = false)
 	{
 		if (empty($this->value) || $reload)
 			$this->loadValue();
 
-		$this->getEvent()->send(self::EVENT__BEFORE_GET_VALUE, [], $this);
+		$this->getEvent()->send(self::EVENT__BEFORE_GET_VALUE, array(), $this);
 
 		return $this->value;
 	}
@@ -532,10 +524,11 @@ abstract class Input
 		return $this->name;
 	}
 
-	/**
-	 * can be redefined in children
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @return bool
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function setValueFromRequest()
 	{
 	    if ($this->getDisabled())
@@ -568,40 +561,6 @@ abstract class Input
 		return true;
 	}
 
-	/**
-	 * @param            $valueId
-	 * @param bool|false $empty
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function showLabel($valueId, $empty = false)
-	{
-		?>
-		<tr>
-			<td
-				width="50%"
-				class="adm-detail-content-cell-l"
-				style="vertical-align: top; padding-top: 7px;">
-				<?php if (!$empty) : ?>
-					<label for="<?=$valueId?>"><?=$this->label?>:</label>
-				<?php endif; ?>
-			</td>
-			<td
-			width="50%"
-			class="adm-detail-content-cell-r"
-			><?php
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function showHelp()
-	{
-		if (strlen($this->help))
-			echo '<br><small style="color: #777;">' . $this->help . '</small>';
-		?></td>
-		</tr>
-		<?php
-	}
 
 	/**
 	 * @return string
@@ -611,4 +570,13 @@ abstract class Input
 	{
 		return $this->tab->getModuleId();
 	}
+
+    /**
+     * @return string
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getClassName()
+    {
+        return get_called_class();
+    }
 }

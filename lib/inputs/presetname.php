@@ -26,11 +26,15 @@ class PresetName extends Text
 {
 	public static $type = self::TYPE__PRESET_NAME;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentOutOfRangeException
-	 */
+    /**
+     * PresetName constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);
@@ -43,19 +47,21 @@ class PresetName extends Text
 		if (!$presetId)
 			return;
 
-		if (empty($this->getValue()))
+		$value = $this->getValue();
+		if (empty($value))
 			$this->setValue($this->tab->options
 				->preset->getNameById($presetId, $this->tab->getSiteId()));
 
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
-	/**
-	 * @param Event $event
-	 * @return \Bitrix\Main\EventResult|bool
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param Event $event
+     * @return \Bitrix\Main\EventResult|bool
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function beforeSaveRequest(Event $event)
 	{
 		if ($event->getSender() !== $this)
@@ -74,7 +80,7 @@ class PresetName extends Text
 		if (empty($value)){
 			$this->tab->options->message->addError(
 				Loc::getMessage('rover-fa__presetname-no-name',
-					['#last-preset-name#' => $this->getValue()]));
+                    array('#last-preset-name#' => $this->getValue())));
 			return $this->getEvent()->getErrorResult($this);
 		}
 

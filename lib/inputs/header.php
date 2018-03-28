@@ -27,11 +27,14 @@ class Header extends Input
 	 */
 	public static $type = self::TYPE__HEADER;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Header constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		if (!isset($params['name']))
@@ -39,17 +42,7 @@ class Header extends Input
 
 		parent::__construct($params, $tab);
 
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, [$this,  'beforeSaveValue']);
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		?><tr class="heading">
-			<td colspan="2"><?=$this->label?></td>
-		</tr><?php
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
 	}
 
 	/**

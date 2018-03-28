@@ -62,49 +62,71 @@ class Input
         if (!isset($name))
             throw new ArgumentNullException('name');
 
-		return self::addFields([
+		return self::addFields(array(
 			'type'      => $type,
 			'name'      => $name,
 			'default'   => $default,
 			'multiple'  => $multiple,
 			'disabled'  => $disabled
-		]);
+        ));
 	}
 
-	/**
-	 * @param      $name
-	 * @param null $default
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getText($name, $default = '')
+    /**
+     * @param        $name
+     * @param string $default
+     * @param null   $label
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getText($name, $default = '', $label = null)
 	{
-		return self::get(InputAbstract::TYPE__TEXT, $name, $default);
+		$input = self::get(InputAbstract::TYPE__TEXT, $name, $default);
+
+        if ($label)
+            $input['label'] = $label;
+
+        return $input;
 	}
 
-	/**
-	 * @param      $name
-	 * @param null $default
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getTextarea($name, $default = '')
+    /**
+     * @param        $name
+     * @param string $default
+     * @param null   $cols
+     * @param null   $rows
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getTextarea($name, $default = '', $cols = null, $rows = null)
 	{
-		return self::get(InputAbstract::TYPE__TEXTAREA, $name, $default);
+		$textarea = self::get(InputAbstract::TYPE__TEXTAREA, $name, $default);
+
+		if (!is_null($cols))
+		    $textarea['cols']   = intval($cols);
+
+		if (!is_null($rows))
+		    $textarea['rows']   = intval($rows);
+
+		return $textarea;
 	}
 
-	/**
-	 * @param      $name
-	 * @param null $default
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getNumber($name, $default = null)
+    /**
+     * @param      $name
+     * @param null $default
+     * @param null $label
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getNumber($name, $default = null, $label = null)
 	{
-		return self::get(InputAbstract::TYPE__NUMBER, $name, $default);
+	    $input = self::get(InputAbstract::TYPE__NUMBER, $name, $default);
+
+        if ($label)
+            $input['label'] = $label;
+
+		return $input;
 	}
 
 	/**
@@ -131,15 +153,20 @@ class Input
 		return self::get(InputAbstract::TYPE__PRESET_NAME, $name);
 	}
 
-	/**
-	 * @param $name
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getRemovePreset($name)
+    /**
+     * @param      $name
+     * @param bool $popup
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getRemovePreset($name, $popup = false)
 	{
-		return self::get(InputAbstract::TYPE__REMOVE_PRESET, $name);
+		$input = self::get(InputAbstract::TYPE__REMOVE_PRESET, $name);
+		if ($popup !== false)
+		    $input['popup'] = $popup;
+
+        return $input;
 	}
 
 	/**
@@ -152,7 +179,7 @@ class Input
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getSelect($name, array $options = [], $default = null, $multiple = false, $label = null)
+	public static function getSelect($name, array $options = array(), $default = null, $multiple = false, $label = null)
 	{
 		$input = self::get(InputAbstract::TYPE__SELECTBOX, $name, $default, $multiple);
 		$input['options'] = $options;
@@ -173,7 +200,7 @@ class Input
 	 * @throws ArgumentNullException
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getSelectGroup($name, array $options = [], $default = null, $multiple = false, $label = null)
+	public static function getSelectGroup($name, array $options = array(), $default = null, $multiple = false, $label = null)
 	{
 		$input = self::get(InputAbstract::TYPE__SELECT_GROUP, $name, $default, $multiple);
 		$input['options'] = $options;
@@ -189,9 +216,10 @@ class Input
      * @param array $options
      * @param null  $default
      * @return array
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getRadio($name, array $options = [], $default = null)
+	public static function getRadio($name, array $options = array(), $default = null)
 	{
 		$input = self::get(InputAbstract::TYPE__RADIO, $name, $default);
 		$input['options'] = $options;
@@ -206,10 +234,10 @@ class Input
 	 */
 	public static function getHeader($label)
 	{
-		return [
+		return array(
 			'type'  => InputAbstract::TYPE__HEADER,
 			'label' => $label,
-		];
+        );
 	}
 
 	/**
@@ -242,26 +270,29 @@ class Input
 		return self::get(InputAbstract::TYPE__IBLOCK, $name, null, $multiple);
 	}
 
-	/**
-	 * @param        $label
-	 * @param string $default
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getLabel($label, $default = '')
+    /**
+     * @param        $label
+     * @param string $default
+     * @param string $help
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getLabel($label, $default = '', $help = '')
 	{
-		return [
-			'type'      => InputAbstract::TYPE__HEADER,
+		return array(
+			'type'      => InputAbstract::TYPE__LABEL,
 			'label'     => $label,
-			'default'   => $default
-		];
+			'default'   => $default,
+            'help'      => $help
+        );
 	}
 
     /**
      * @param        $name
      * @param string $default
      * @return array
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getClock($name, $default = '0:00')
     {
@@ -269,20 +300,24 @@ class Input
     }
 
     /**
-     * @param $name
-     * @param $default
+     * @param      $name
+     * @param      $default
+     * @param bool $popup
      * @return array
      * @throws ArgumentNullException
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getSubmit($name, $default)
+	public static function getSubmit($name, $default, $popup = false)
 	{
 		// button's name
 		$default = trim($default);
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 
-		return self::get(InputAbstract::TYPE__SUBMIT, $name, $default);
+		$submit = self::get(InputAbstract::TYPE__SUBMIT, $name, $default);
+		$submit['popup'] = $popup;
+
+		return $submit;
 	}
 
     /**
@@ -291,7 +326,7 @@ class Input
      * @param bool $popup
      * @return array
      * @throws ArgumentNullException
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getAddPreset($name, $default, $popup = false)
 	{
@@ -301,6 +336,7 @@ class Input
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 
+		$result['id']       = $name;
 		$result['default']  = $default;
 		$result['popup']    = $popup;
 
@@ -320,10 +356,10 @@ class Input
         if (!$name)
             throw new ArgumentNullException('name');
 
-        return [
+        return array(
             'type'      => InputAbstract::TYPE__HIDDEN,
             'name'      => $name,
             'default'   => $default
-        ];
+        );
     }
 }

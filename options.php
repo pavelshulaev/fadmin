@@ -5,7 +5,7 @@
 use \Bitrix\Main\Localization\Loc;
 use \Bitrix\Main\SystemException;
 use \Bitrix\Main\Loader;
-use \Rover\Fadmin\Admin\Panel;
+use \Rover\Fadmin\Layout\Admin\Form;
 /**
  * Name of your child from \Rover\Fadmin\Options
  */
@@ -18,4 +18,5 @@ if (!Loader::includeModule($mid)
 Loc::loadMessages(__FILE__);
 Loc::loadMessages($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/options.php");
 
-(new Panel(TestOptions::getInstance()))->show();
+$form = new Form(TestOptions::getInstance());
+$form->show();

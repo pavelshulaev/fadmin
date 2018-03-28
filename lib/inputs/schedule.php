@@ -29,11 +29,6 @@ class Schedule extends Input
 	public static $type = self::TYPE__SCHEDULE;
 
 	/**
-	 * @var bool
-	 */
-	protected static $assetsAdded = false;
-
-	/**
 	 * @var string
 	 */
 	protected $periodLabel;
@@ -50,13 +45,19 @@ class Schedule extends Input
 	 */
 	protected $width = 500;
 
-	protected $inputValue = [];
+    /**
+     * @var array
+     */
+	protected $inputValue = array();
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Schedule constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		// for automatic serialize/unserialize
@@ -74,238 +75,9 @@ class Schedule extends Input
 		if (isset($params['height']) && intval($params['height']))
 			$this->height = $params['height'];
 
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
+		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this, 'afterLoadValue'));
 	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addAssets()
-	{
-		\CJSCore::Init(array("jquery"));
-
-		$asset = \Bitrix\Main\Page\Asset::getInstance();
-
-		//add css
-		if (self::$assetsAdded)
-			return;
-
-		echo $asset->insertCss('/bitrix/css/rover.fadmin/vendor/jqwidgets/jqx.base.css');
-
-		$jsPath = '/bitrix/js/rover.fadmin/vendor/jqwidgets';
-
-		$asset->addJs($jsPath . '/jqxcore.js');
-		$asset->addJs($jsPath . '/jqxbuttons.js');
-		$asset->addJs($jsPath . '/jqxscrollbar.js');
-		$asset->addJs($jsPath . '/jqxdata.js');
-		$asset->addJs($jsPath . '/jqxdata.export.js');
-		$asset->addJs($jsPath . '/jqxdate.js');
-		$asset->addJs($jsPath . '/jqxscheduler.js');
-		$asset->addJs($jsPath . '/jqxscheduler.api.js');
-		$asset->addJs($jsPath . '/jqxdatetimeinput.js');
-		$asset->addJs($jsPath . '/jqxmenu.js');
-		$asset->addJs($jsPath . '/jqxcalendar.js');
-		$asset->addJs($jsPath . '/jqxtooltip.js');
-		$asset->addJs($jsPath . '/jqxwindow.js');
-		$asset->addJs($jsPath . '/jqxcheckbox.js');
-		$asset->addJs($jsPath . '/jqxlistbox.js');
-		$asset->addJs($jsPath . '/jqxdropdownlist.js');
-		$asset->addJs($jsPath . '/jqxnumberinput.js');
-		$asset->addJs($jsPath . '/jqxradiobutton.js');
-		$asset->addJs($jsPath . '/jqxinput.js');
-		$asset->addJs($jsPath . '/globalization/globalize.js');
-		$asset->addJs($jsPath . '/globalization/globalize.culture.ru-RU.js');
-
-		self::$assetsAdded = true;
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$this->addAssets();
-
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		$this->showLabel($valueId);
-
-		?><input type="hidden"
-		         id="<?=$valueId?>"
-		         value='<?=json_encode($this->inputValue)?>'
-		         name="<?=$valueName?>">
-		<div id="scheduler-<?=$valueId?>"></div>
-		<style>
-			.jqx-scheduler-all-day-cell span{
-				display: none;
-			}
-		</style>
-		<script type="text/javascript">
-			$(document).ready(function () {
-				var appointments = [
-					<?php
-
-					$num = 1;
-
-					foreach ($this->value as $period):	?>{
-						id: "<?=$valueId?>-<?=$num?>",
-						subject: "<?=$this->periodLabel?>",
-						calendar: "1",
-						start: new Date(<?=$period['start']->format('Y, ' . $period['jqwStartMonth'] .', d, H, i, s')?>),
-						end: new Date(<?=$period['end']->format('Y, ' . $period['jqwEndMonth'] .', d, H, i, s')?>)
-					},
-					<?php
-
-					$num++;
-
-					endforeach; ?>
-				];
-
-				// prepare the data
-				var source =
-				{
-					dataType: "array",
-					dataFields: [
-						{ name: 'id', type: 'string' },
-						{ name: 'subject', type: 'string' },
-						{ name: 'calendar', type: 'string' },
-						{ name: 'start', type: 'date' },
-						{ name: 'end', type: 'date' }
-					],
-					id: 'id',
-					localData: appointments
-				};
-				var adapter = new $.jqx.dataAdapter(source),
-					$scheduler = $("#scheduler-<?=$valueId?>"),
-					$export = $('#<?=$valueId?>');
-
-				$scheduler.jqxScheduler({
-					//date: new $.jqx.date(),
-					date: new $.jqx.date('todayDate'),
-					width: <?=$this->width?>,
-					height: <?=$this->height?>,
-					rowsHeight: 15,
-					columnsHeight: 30,
-					source: adapter,
-					view: 'weekView',
-					enableHover: false,
-					exportSettings: {
-						serverURL: null,
-						characterSet: null,
-						fileName: null,
-						dateTimeFormatString: "S",
-						resourcesInMultipleICSFiles: true
-					},
-					showToolbar: false,
-					resources:
-					{
-						dataField: "calendar",
-						source:  adapter
-					},
-					appointmentDataFields:
-					{
-						from: "start",
-						to: "end",
-						id: "id",
-						subject: "subject",
-						resourceId: "calendar"
-					},
-					localization: {
-						firstDay: 1,
-						days: {
-							// full day names
-							names: [
-								"<?=Loc::getMessage('rover-fa__schedule-sunday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-monday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-tuesday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-wednesday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-thursday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-friday')?>",
-								"<?=Loc::getMessage('rover-fa__schedule-saturday')?>"],
-							// abbreviated day names
-							//namesAbbr: ["Sonn", "Mon", "Dien", "Mitt", "Donn", "Fre", "Sams"],
-							// shortest day names
-							//namesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
-						},
-						editDialogFromString: "<?=Loc::getMessage('rover-fa__schedule-start')?>",
-						editDialogToString: "<?=Loc::getMessage('rover-fa__schedule-end')?>",
-						editDialogAllDayString: "<?=Loc::getMessage('rover-fa__schedule-all-day')?>",
-						editDialogTitleString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
-						contextMenuEditAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
-						editDialogCreateTitleString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
-						contextMenuCreateAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
-						editDialogSaveString: "<?=Loc::getMessage('rover-fa__schedule-save')?>",
-						editDialogDeleteString: "<?=Loc::getMessage('rover-fa__schedule-delete')?>",
-						editDialogCancelString: "<?=Loc::getMessage('rover-fa__schedule-cancel')?>",
-					},
-					editDialogOpen: function (dialog, fields, editAppointment) {
-						fields.locationContainer.hide();
-						fields.repeatContainer.hide();
-						fields.subject.val("<?=$this->periodLabel?>");
-						fields.subjectContainer.hide();
-						fields.statusContainer.hide();
-						fields.timeZoneContainer.hide();
-						fields.colorContainer.hide();
-						fields.descriptionContainer.hide();
-						fields.resourceContainer.hide();
-					},
-					views:
-						[
-							{
-								type: 'weekView',
-								workTime:
-								{
-									fromDayOfWeek: 0,
-									toDayOfWeek: 6,
-									fromHour: -1,
-									toHour: 24
-								},
-								timeRuler:
-								{
-									formatString: "HH:mm",
-									scale: 'hour'
-								}
-							}
-						]
-				});
-
-				$scheduler.on('appointmentChange appointmentDelete appointmentAdd', function (event) {
-					var timeout = event.type == "appointmentChange"
-						? 100
-						: 200;
-
-					setTimeout(function(){
-						exportPeriods();
-					}, timeout);
-				});
-
-				function exportPeriods()
-				{
-					var schedule = JSON.parse($scheduler.jqxScheduler('exportData', 'json')),
-						propNum, period, result = [];
-
-					for (propNum in schedule)
-					{
-						period = schedule[propNum];
-
-						delete period.id;
-						delete period.calendar;
-						delete period.subject;
-
-						result.push(period);
-					}
-//console.log(result);
-					$export.val(JSON.stringify(result));
-				}
-			});
-		</script>
-		<?php
-
-		$this->showHelp();
-	}
-
 
 	/**
 	 * @param Event $event
@@ -327,7 +99,7 @@ class Schedule extends Input
 			$value = $this->markWeekDays($value);
 
 		} else
-			$value = [];
+			$value = array();
 
 		return $this->getEvent()->getSuccessResult($this, compact('value'));
 	}
@@ -339,19 +111,22 @@ class Schedule extends Input
 	 */
 	protected function markWeekDays($periods)
 	{
-		$result = [];
+		$result = array();
 
 		foreach ($periods as $period)
 		{
-			$dateStart  = (new \DateTime())->setTimestamp($period['start']);
-			$dateEnd    = (new \DateTime())->setTimestamp($period['end']);
+		    $dateStartObj   = new \DateTime();
+		    $dateEndObj     = new \DateTime();
 
-			$result[] = [
+			$dateStart  = $dateStartObj->setTimestamp($period['start']);
+			$dateEnd    = $dateEndObj->setTimestamp($period['end']);
+
+			$result[] = array(
 				'startWeekDay'  => $dateStart->format('l'),
 				'startTime'     => $dateStart->format('H:i:s'),
 				'endWeekDay'    => $dateEnd->format('l'),
 				'endTime'       => $dateEnd->format('H:i:s'),
-			];
+            );
 		}
 
 		return $result;
@@ -365,7 +140,7 @@ class Schedule extends Input
 	 */
 	protected function preparePeriodsDates(array $periods)
 	{
-		$result = [];
+		$result = array();
 
 		$minTimestamp = $this->getMinTimestamp();
 		$maxTimestamp = $this->getMaxTimestamp();
@@ -397,7 +172,7 @@ class Schedule extends Input
 	protected function pastePeriodsTogether(array $periods)
 	{
 		do {
-			$result = [];
+			$result = array();
 			$pasted = false;
 
 			foreach ($periods as $periodNum => $period){
@@ -471,7 +246,9 @@ class Schedule extends Input
 	 */
 	protected function getMinTimestamp()
 	{
-		return (new \DateTime('Monday this week'))->getTimestamp();
+	    $dateTime = new \DateTime('Monday this week');
+
+		return $dateTime->getTimestamp();
 	}
 
 	/**
@@ -480,7 +257,9 @@ class Schedule extends Input
 	 */
 	protected function getMaxTimestamp()
 	{
-		return (new \DateTime('Monday next week'))->getTimestamp() - 1;
+	    $dateTime = new \DateTime('Monday next week');
+
+		return $dateTime->getTimestamp() - 1;
 	}
 
 	/**
@@ -500,10 +279,10 @@ class Schedule extends Input
 			$period['jqwStartMonth']    = $period['start']->format('m') - 1;
 			$period['jqwEndMonth']      = $period['end']->format('m') - 1;
 
-			$this->inputValue[] = [
+			$this->inputValue[] = array(
 				'start' => $period['start']->format('Y-m-d\TH:i:s'),
 				'end'   => $period['end']->format('Y-m-d\TH:i:s')
-			];
+            );
 		}
 	}
 
@@ -521,4 +300,68 @@ class Schedule extends Input
 
 		return $date;
 	}
+
+    /**
+     * @return string
+     */
+    public function getPeriodLabel()
+    {
+        return $this->periodLabel;
+    }
+
+    /**
+     * @param string $periodLabel
+     */
+    public function setPeriodLabel($periodLabel)
+    {
+        $this->periodLabel = $periodLabel;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param int $height
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param int $width
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInputValue()
+    {
+        return $this->inputValue;
+    }
+
+    /**
+     * @param array $inputValue
+     */
+    public function setInputValue($inputValue)
+    {
+        $this->inputValue = $inputValue;
+    }
 }

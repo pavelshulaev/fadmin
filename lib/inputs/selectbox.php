@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
-use Bitrix\Main\Event;
 
 /**
  * Class Selectbox
@@ -21,24 +20,30 @@ use Bitrix\Main\Event;
  */
 class Selectbox extends Input
 {
+    /**
+     * @var string
+     */
 	public static $type = self::TYPE__SELECTBOX;
 
-	/**
-	 * @var array
-	 */
-	protected $options = [];
+    /**
+     * @var array
+     */
+    protected $options = array();
+    /**
+     * @var
+     */
+    protected $size;
 
-	/**
-	 * multiple selectbox size
-	 * @var int
-	 */
-	protected $size = 7;
+	const MAX_MULTI_SIZE = 7;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Selectbox constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);
@@ -49,88 +54,55 @@ class Selectbox extends Input
 		if (isset($params['size']) && intval($params['size']))
 			$this->size = intval($params['size']);
 		elseif ($params['multiple'])
-			$this->size = count($this->options) > $this->size
-				? $this->size
+			$this->size = count($this->options) > self::MAX_MULTI_SIZE
+				? self::MAX_MULTI_SIZE
 				: count($this->options);
 		else
 			$this->size = 1;
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		if ($this->multiple)
-			$this->showMultiLabel($valueId);
-		else
-			$this->showLabel($valueId);
-
-		?><select
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			name="<?=$valueName . ($this->multiple ? '[]' : '')?>"
-			id="<?=$valueId?>"
-			size="<?=$this->size?>"
-			<?=$this->multiple ? ' multiple="multiple" ' : ''?>
-			>
-				<?php
-				foreach($this->options as $v => $k){
-					if ($this->multiple) {
-						$selected = is_array($this->value) && in_array($v, $this->value)
-								? true
-								: false;
-					} else {
-						$selected = $this->value==$v ? true : false;
-					}
-
-					?><option value="<?=$v?>"<?=$selected ? " selected=\"selected\" ": ''?>><?=$k?></option><?php
-				}
-				?>
-			</select>
-		<?php
-		$this->showHelp();
-	}
-
-	/**
-	 * @param array $options
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function setOptions(array $options)
-	{
-		$this->options = $options;
-	}
-
-	/**
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getOptions()
-	{
-		return $this->options;
-	}
 
     /**
-     * @param $valueId
+     * @param array $options
+     * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	protected function showMultiLabel($valueId)
-	{
-		?>
-		<tr>
-		<td
-			width="50%"
-			class="adm-detail-content-cell-l"
-			style="vertical-align: top; padding-top: 7px;">
-				<label for="<?=$valueId?>"><?=$this->label?>:<br>
-					<img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
-				</label>
-		</td>
-		<td
-			width="50%"
-			class="adm-detail-content-cell-r"
-			><?php
-	}
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+
+
+    /**
+     * @return int
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param $size
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setSize($size)
+    {
+        $this->size = intval($size);
+
+        return $this;
+    }
 }

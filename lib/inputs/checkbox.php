@@ -27,39 +27,22 @@ class Checkbox extends Input
 	public static $type = self::TYPE__CHECKBOX;
 
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Checkbox constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		parent::__construct($params, $tab);
 
 		// add events
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, [$this, 'afterLoadValue']);
-		$this->addEventHandler(self::EVENT__BEFORE_GET_VALUE, [$this, 'beforeGetValue']);
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, [$this, 'beforeSaveRequest']);
-	}
-
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function draw()
-	{
-		$valueId    = $this->getValueId();
-		$valueName  = $this->getValueName();
-
-		$this->showLabel($valueId);
-
-		?><input
-			type="checkbox"
-			<?=$this->disabled ? 'disabled="disabled"': '';?>
-			id="<?=$valueId?>"
-			name="<?=$valueName?>"
-			value="Y"<?=($this->value=="Y")?" checked=\"checked\"":'';?>/><?php
-
-		$this->showHelp();
+		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this, 'afterLoadValue'));
+		$this->addEventHandler(self::EVENT__BEFORE_GET_VALUE, array($this, 'beforeGetValue'));
+		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
 	/**
