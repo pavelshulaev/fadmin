@@ -298,6 +298,7 @@ class TabMap
      * @return bool
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function removePreset($id, $siteId = '')
