@@ -145,10 +145,13 @@ class TabMap
 	 */
 	public function getTabByPresetId($presetId, $siteId = '', $reload = false)
 	{
+        $presetId = intval($presetId);
 		if (!$presetId)
 			throw new ArgumentNullException('presetId');
 
-		foreach ($this->getTabs($reload) as $tab)
+		$tabs = $this->getTabs($reload);
+
+		foreach ($tabs as $tab)
             /**
              * @var Tab $tab
              */

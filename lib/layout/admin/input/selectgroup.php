@@ -93,6 +93,7 @@ class Selectgroup extends Selectbox
         $onChangeGroup  = 'OnType_'.$optionsId.'_Changed(this, \''.\CUtil::JSEscape($valueName).'\');';
 
         $html .= '<select 
+                ' . ($this->input->getDisabled() ? 'disabled="disabled"': '') . '
                 name="' . $valueGroupName . '"
                 id="' . $valueGroupName . '"
                 onchange="'.htmlspecialcharsbx($onChangeGroup).'">'."\n";
@@ -102,7 +103,8 @@ class Selectgroup extends Selectbox
 
         $html .= "</select>\n";
         $html .= "&nbsp;\n";
-        $html .= '<select 
+        $html .= '<select
+                    ' . ($this->input->getDisabled() ? 'disabled="disabled"': '') . ' 
                     name="' . $valueName . ($this->input->isMultiple()
                 ? '[]" multiple="multiple" size="' . $this->input->getSize() . '" '
                 : '"')

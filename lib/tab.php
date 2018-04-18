@@ -269,9 +269,10 @@ class Tab
 		return $this->search($filter);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function clear()
 	{
 		foreach ($this->inputs as $input)
