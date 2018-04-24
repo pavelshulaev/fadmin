@@ -66,11 +66,12 @@ class Preset
     }
 
     /**
-     * @param                       $id
-     * @param \Rover\Fadmin\Options $options
-     * @param bool                  $reload
+     * @param         $id
+     * @param Options $options
+     * @param bool    $reload
      * @return mixed
      * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public static function getInstance($id, Options $options, $reload = false)

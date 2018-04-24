@@ -64,7 +64,8 @@ class Form extends FromAbstract
     }
 
     /**
-     * @return \Rover\Fadmin\Layout\Request
+     * @return Request|\Rover\Fadmin\Layout\Request
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getRequest()
@@ -210,6 +211,7 @@ class Form extends FromAbstract
     /**
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showForm()

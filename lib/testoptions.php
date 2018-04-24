@@ -21,13 +21,14 @@ class TestOptions extends Options
 {
 	const MODULE_ID = 'rover.fadmin';
 
-	/**
-	 * @return static
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getInstance()
+    /**
+     * @param string $moduleId
+     * @return static|self|Options
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getInstance($moduleId = self::MODULE_ID)
 	{
-		return parent::getInstance(self::MODULE_ID);
+		return parent::getInstance($moduleId);
 	}
 
 	/**
@@ -236,22 +237,25 @@ class TestOptions extends Options
         );
     }
 
-	/**
-	 * @param bool|false $reload
-	 * @return mixed|null
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param bool $reload
+     * @return mixed
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getTextareaValueS1($reload = false)
 	{
 		return $this->getNormalValue('input_textarea', 's1', $reload);
 	}
 
-	/**
-	 * @param            $presetId
-	 * @param bool|false $reload
-	 * @return mixed|null
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param      $presetId
+     * @param bool $reload
+     * @return mixed
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getS1PresetColor($presetId, $reload = false)
 	{
 		return $this->getPresetValue('preset_color', $presetId, 's1', $reload);

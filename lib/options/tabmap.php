@@ -43,10 +43,11 @@ class TabMap
 	 */
 	protected $options;
 
-	/**
-	 * @param Options $options
-	 * @throws ArgumentNullException
-	 */
+    /**
+     * TabMap constructor.
+     *
+     * @param Options $options
+     */
 	public function __construct(Options $options)
 	{
 		$this->options = $options;
@@ -55,6 +56,7 @@ class TabMap
     /**
      * @param bool $reload
      * @return array|mixed
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	protected function getTabsParams($reload = false)
@@ -65,11 +67,13 @@ class TabMap
             ? $config['tabs']
             : array();
     }
-	/**
-	 * @param bool|false $reload
-	 * @return Tab[]
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+
+    /**
+     * @param bool $reload
+     * @return array
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getTabs($reload = false)
 	{
 		if (!count($this->tabMap) || $reload)
@@ -82,9 +86,12 @@ class TabMap
 		return $tabs;
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function reloadTabs()
 	{
 		$this->tabMap       = array();
@@ -135,14 +142,15 @@ class TabMap
 		}
 	}
 
-	/**
-	 * @param            $presetId
-	 * @param string     $siteId
-	 * @param bool|false $reload
-	 * @return null|Tab
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param        $presetId
+     * @param string $siteId
+     * @param bool   $reload
+     * @return mixed|null|Tab
+     * @throws ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getTabByPresetId($presetId, $siteId = '', $reload = false)
 	{
         $presetId = intval($presetId);
@@ -163,12 +171,13 @@ class TabMap
 		return null;
 	}
 
-	/**
-	 * @param            $valueName
-	 * @param bool|false $reload
-	 * @return null|Input
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param      $valueName
+     * @param bool $reload
+     * @return null|Input
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function getInputByValueName($valueName, $reload = false)
 	{
 		$aTabs = $this->getTabs($reload);
@@ -192,7 +201,8 @@ class TabMap
      * @param string $siteId
      * @param bool   $reload
      * @return mixed|null|Tab
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function searchTabByName($name, $siteId = '', $reload = false)
 	{
@@ -221,6 +231,7 @@ class TabMap
      * @param string $siteId
      * @param bool   $reload
      * @return null|Input
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function searchInputByName($inputName, $presetId = '', $siteId = '', $reload = false)
@@ -246,6 +257,7 @@ class TabMap
 
     /**
      * @return bool
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setValuesFromRequest()
@@ -271,6 +283,9 @@ class TabMap
      * @param        $value
      * @param string $siteId
      * @return bool|int|mixed
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function addPreset($value, $siteId = '')

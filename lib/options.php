@@ -97,12 +97,12 @@ abstract class Options
 	 */
 	protected static $instances = array();
 
-	/**
-	 * for singleton
-	 * @param $moduleId
-	 * @return static
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param $moduleId
+     * @return mixed
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public static function getInstance($moduleId)
 	{
 		if (!isset(self::$instances[$moduleId]))
