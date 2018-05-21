@@ -29,7 +29,7 @@ class TabMap
 	 * tabs collection
 	 * @var array
 	 */
-	protected $tabMap = array();
+	protected $tabs = array();
 
 	/**
 	 * preset tabs collection
@@ -76,15 +76,41 @@ class TabMap
      */
 	public function getTabs($reload = false)
 	{
-		if (!count($this->tabMap) || $reload)
+		if (!count($this->tabs) || $reload)
 			$this->reloadTabs();
 
-		$tabs = $this->tabMap;
+		$tabs = $this->tabs;
 
 		$this->options->runEvent(Options::EVENT__AFTER_GET_TABS, compact('tabs'));
 
 		return $tabs;
 	}
+
+    /**
+     * @param bool $reload
+     * @return Tab[]
+     * @throws ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getAdminTabs($reload = false)
+    {
+        $result = array();
+        $tabs   = $this->getTabs($reload);
+        $tabsCnt= count($tabs);
+
+        for ($i = 0; $i < $tabsCnt; ++$i){
+            /** @var Tab $tab */
+            $tab = $tabs[$i];
+            if (!$this->options->settings->getShowAdminPresets()
+                && $tab->isPreset())
+                continue;
+
+            $result[] = $tab;
+        }
+
+        return $result;
+    }
 
     /**
      * @throws ArgumentNullException
@@ -93,54 +119,52 @@ class TabMap
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function reloadTabs()
-	{
-		$this->tabMap       = array();
-		$this->presetMap    = array();
+    {
+        $this->tabs      = array();
+        $this->presetMap = array();
 
-		$tabsParams         = $this->getTabsParams();
+        $tabsParams = $this->getTabsParams();
 
-		foreach ($tabsParams as $tabParams){
+        foreach ($tabsParams as $tabParams) {
 
-			if (empty($tabParams))
-				continue;
+            if (empty($tabParams))
+                continue;
 
-			if (isset($tabParams['preset']) && $tabParams['preset']){
-				$siteId = $tabParams['siteId'] ?: '';
-				// preset tab can be only one on current site
-				if (isset($this->presetMap[$siteId]))
-					continue;
+            if (isset($tabParams['preset']) && $tabParams['preset']) {
 
-				$this->presetMap[$siteId] = true;
+                $siteId = $tabParams['siteId'] ?: '';
+                // preset tab can be only one on current site
+                if (isset($this->presetMap[$siteId]))
+                    continue;
 
-				$presets = $this->options->preset->getList($siteId);
+                $this->presetMap[$siteId] = true;
 
-				if (is_array($presets) && count($presets)){
-					foreach ($presets as $preset){
+                $presets = $this->options->preset->getList($siteId);
 
-						$tabParams['presetId']  = $preset['id'];
-						$tabParams['label']     = $preset['name'];
+                if (is_array($presets) && count($presets)) {
+                    foreach ($presets as $preset) {
 
-						// event before create preset tab
-						if (false === $this->options->runEvent(
-                            Options::EVENT__BEFORE_MAKE_PRESET_TAB,
-                            compact('tabParams')))
-						continue;
+                        $tabParams['presetId'] = $preset['id'];
+                        $tabParams['label']    = $preset['name'];
 
-						$tab = Tab::factory($tabParams, $this->options);
+                        // event before create preset tab
+                        if (false === $this->options->runEvent(Options::EVENT__BEFORE_MAKE_PRESET_TAB, compact('tabParams')))
+                            continue;
 
-						// event after create preset tab
-						$this->options->runEvent(
-							Options::EVENT__AFTER_MAKE_PRESET_TAB,
-							compact('tab'));
+                        $tab = Tab::factory($tabParams, $this->options);
 
-						$this->tabMap[] = $tab;
-					}
-				}
-			} else {
-				$this->tabMap[] = Tab::factory($tabParams, $this->options);
-			}
-		}
-	}
+                        // event after create preset tab
+                        $this->options->runEvent(Options::EVENT__AFTER_MAKE_PRESET_TAB, compact('tab'));
+
+                        $this->tabs[] = $tab;
+                    }
+                }
+
+            } else {
+                $this->tabs[] = Tab::factory($tabParams, $this->options);
+            }
+        }
+    }
 
     /**
      * @param        $presetId
@@ -256,17 +280,21 @@ class TabMap
     }
 
     /**
+     * @param bool $admin
      * @return bool
+     * @throws ArgumentNullException
      * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setValuesFromRequest()
+    public function setValuesFromRequest($admin = false)
     {
         if(false === $this->options->runEvent(
             Options::EVENT__BEFORE_ADD_VALUES_FROM_REQUEST))
             return false;
 
-        $tabs = $this->getTabs();
+        $tabs = $admin
+            ? $this->getAdminTabs()
+            : $this->getTabs();
 
         foreach ($tabs as $tab)
             $tab->setValuesFromRequest();

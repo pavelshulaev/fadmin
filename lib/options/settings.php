@@ -25,17 +25,19 @@ class Settings
     const GROUP_RIGHTS  = 'group_rights';
     const USE_SORT      = 'use_sort';
     const PRESET_CLASS  = 'preset_class';
+    const SHOW_ADMIN_PRESETS  = 'show_admin_presets';
 
 	/**
 	 * default settings
 	 * @var array
 	 */
 	protected $defaults = array(
-		self::BOOL_CHECKBOX => false,
-		self::LOG_ERRORS    => false,
-		self::GROUP_RIGHTS  => false,
-		self::USE_SORT      => false,
-		self::PRESET_CLASS  => '\\Rover\\Fadmin\\Preset',
+		self::BOOL_CHECKBOX     => false,
+		self::LOG_ERRORS        => false,
+		self::GROUP_RIGHTS      => false,
+		self::USE_SORT          => false,
+		self::PRESET_CLASS      => '\\Rover\\Fadmin\\Preset',
+		self::SHOW_ADMIN_PRESETS=> true,
     );
 
     /**
@@ -139,5 +141,15 @@ class Settings
     public function getPresetClass()
     {
         return $this->getFromStorage(self::PRESET_CLASS);
+    }
+
+    /**
+     * @return mixed|null
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getShowAdminPresets()
+    {
+        return $this->getFromStorage(self::SHOW_ADMIN_PRESETS);
     }
 }

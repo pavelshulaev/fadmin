@@ -43,6 +43,8 @@ class Form extends FromAbstract
      *
      * @param Options $options
      * @param array   $params
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
      */
     public function __construct(Options $options, array $params = array())
     {
@@ -56,7 +58,8 @@ class Form extends FromAbstract
     }
 
     /**
-     * @return Request
+     * @return Request|\Rover\Fadmin\Layout\Request
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getRequest()
@@ -80,11 +83,13 @@ class Form extends FromAbstract
 
     /**
      * @return array
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function getAllTabsInfo()
     {
-        $tabs           = $this->options->tabMap->getTabs();
+        $tabs           = $this->options->tabMap->getAdminTabs();
         $allTabsInfo    = array();
 
         foreach ($tabs as $tab)
@@ -131,6 +136,7 @@ class Form extends FromAbstract
     /**
      * @param Tab $tab
      * @return array
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function getTabInfo(Tab $tab)
@@ -158,7 +164,9 @@ class Form extends FromAbstract
     }
 
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function show()
     {
@@ -169,12 +177,14 @@ class Form extends FromAbstract
     }
 
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showForm()
     {
         // showing tabs
-        $tabs = $this->options->tabMap->getTabs(true);
+        $tabs = $this->options->tabMap->getAdminTabs(true);
 
         if (!count($tabs))
             return;
@@ -205,7 +215,9 @@ class Form extends FromAbstract
 
     /**
      * @param Tab $tab
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function showTab(Tab $tab)
     {
@@ -231,6 +243,8 @@ class Form extends FromAbstract
 
     /**
      * @param InputEngine $input
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function showInput(InputEngine $input)
@@ -260,10 +274,9 @@ class Form extends FromAbstract
         require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/admin/group_rights.php");
     }
 
-
-
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function showFormEnd()
     {
@@ -313,7 +326,15 @@ class Form extends FromAbstract
      */
     protected function showMessages()
     {
-        foreach ($this->options->message->get() as $message)
-            \CAdminMessage::ShowMessage($message);
+        $messages       = $this->options->message->get();
+        $messagesCnt    = count($messages);
+
+        if (!$messagesCnt)
+            return;
+
+        for ($i = 0; $i < $messagesCnt; ++$i){
+            $m = new \CAdminMessage($messages[$i]);
+            echo $m->Show();
+        }
     }
 }

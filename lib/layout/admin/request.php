@@ -103,7 +103,7 @@ class Request extends RequestAbstract
             $this->restoreDefaults();
         else
             try {
-                if ($this->options->tabMap->setValuesFromRequest())
+                if ($this->options->tabMap->setValuesFromRequest(true))
                     $this->redirect();
             } catch (\Exception $e) {
                 $this->options->message->addError($e->getMessage());
