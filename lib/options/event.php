@@ -88,6 +88,8 @@ class Event
 
 			return $eventResult->getParameters();
 		}
+
+		return null;
 	}
 
 	/**

@@ -242,7 +242,9 @@ class Tab
     /**
      * @param      $inputName
      * @param bool $reload
-     * @return mixed|null
+     * @return array|null|string
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getValue($inputName, $reload = false)
@@ -313,10 +315,9 @@ class Tab
 		return $input;
 	}
 
-	/**
-	 * @throws Main\SystemException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function sort()
 	{
 		if (!count($this->inputs))
@@ -329,9 +330,10 @@ class Tab
 		});
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function setValuesFromRequest()
 	{
 	    $tab = $this;
@@ -351,6 +353,8 @@ class Tab
     /**
      * @param bool $reload
      * @return mixed|null
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getPresetName($reload = false)
@@ -382,12 +386,13 @@ class Tab
             $this->getPresetId(), $this->siteId, $reload);
     }
 
-	/**
-	 * @param            $name
-	 * @param            $value
-	 * @return bool
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
+    /**
+     * @param $name
+     * @param $value
+     * @return bool
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function setInputValue($name, $value)
 	{
 		$input = $this->searchByName($name);
@@ -412,6 +417,7 @@ class Tab
     /**
      * @param $name
      * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
      * @throws Main\NotSupportedException
      * @author Pavel Shulaev (https://rover-it.me)
      */

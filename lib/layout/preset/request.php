@@ -51,6 +51,7 @@ class Request extends RequestAbstract
      *
      * @param Options $options
      * @param array   $params
+     * @throws \Bitrix\Main\SystemException
      */
     public function __construct(Options $options, array $params = array())
     {
