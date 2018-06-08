@@ -309,18 +309,21 @@ class Input
      * @param      $name
      * @param      $default
      * @param bool $popup
+     * @param bool $disabled
+     * @param null $label
+     * @param null $help
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getSubmit($name, $default, $popup = false)
+	public static function getSubmit($name, $default, $popup = false, $disabled = false, $label = null, $help = null)
 	{
 		// button's name
 		$default = trim($default);
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 
-		$submit = self::get(InputAbstract::TYPE__SUBMIT, $name, $default);
+		$submit = self::get(InputAbstract::TYPE__SUBMIT, $name, $default, false, $disabled, $label, $help);
 		$submit['popup'] = $popup;
 
 		return $submit;
