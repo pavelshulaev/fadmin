@@ -11,6 +11,8 @@
 namespace Rover\Fadmin;
 
 use Rover\Fadmin\Inputs\Input;
+use Rover\Fadmin\Options\Settings;
+
 /**
  * Class TestOptions
  *
@@ -23,12 +25,13 @@ class TestOptions extends Options
 
     /**
      * @param string $moduleId
-     * @return static|self|Options
+     * @return mixed
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getInstance($moduleId = self::MODULE_ID)
 	{
-		return parent::getInstance($moduleId);
+		return parent::getInstance(self::MODULE_ID);
 	}
 
 	/**
@@ -38,7 +41,10 @@ class TestOptions extends Options
 	public function getConfig()
 	{
 		return array(
-			'tabs' => self::getTabs()
+			'tabs' => self::getTabs(),
+            'settings' => array(
+                Settings::BOOL_CHECKBOX => true
+            )
         );
 	}
 

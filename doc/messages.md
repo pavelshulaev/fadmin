@@ -5,3 +5,9 @@
 	public function addError($message)
 
 Методы добавляют сообщения об успешном и неуспешном выполнении операции соответственно. Затем эти сообщения выводятся над вкладками настроек модуля, подключенного к  «Констуктору».
+
+Пример для класса `Rover\Fadmin\TestOptions`:
+
+    $options = Rover\Fadmin\TestOptions::getInstance();
+    $options->message->addOk('Всё в порядке');
+    $options->message->addError('Но что-то не так');
