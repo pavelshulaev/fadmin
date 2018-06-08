@@ -12,13 +12,16 @@
     
     class Event
     {
-        public static function onAfterMakePresetTab(EventMain $event)
+        public static function onAfterMakePresetTab(Bitrix\Main\Event $event)
         {
             $parameters = $event->getParameters();
+            $tab        = $event->getParameter('tab');
            
             ...
     
-            return new EventResult($event->getEventType(), $parameters, 'partner.module');
+            $parameters['tab'] = $tab;
+    
+            return new Bitrix\Main\EventResult($event->getEventType(), $parameters, 'partner.module');
         }
     }    
     
