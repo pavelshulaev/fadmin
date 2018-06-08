@@ -107,7 +107,6 @@ class Event
             throw new Main\ArgumentNullException('prefix');
 
         $eventName = $prefix . ucfirst($name);
-
         if ($this->run($eventName, $parameters)->isSuccess())
             $this->success = $this->options->runEventOldStyle($name, $this->parameters);
 

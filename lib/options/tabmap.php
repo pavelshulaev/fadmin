@@ -147,7 +147,7 @@ class TabMap
                         // event before create preset tab
                         if (!$this->options->event
                             ->handle(Event::BEFORE_MAKE_PRESET_TAB, array(
-                                'tabParams' => $tabsParams,
+                                'tabParams' => $tabParams,
                                 'presetId'  => $preset['id'],
                                 'presetName'=> $preset['name']
                             ))->isSuccess())
