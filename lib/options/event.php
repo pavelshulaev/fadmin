@@ -102,32 +102,10 @@ class Event
         if (empty($name))
             throw new Main\ArgumentNullException('name');
 
-        $prefix = $this->getPrefix();
-        if (!strlen($prefix))
-            throw new Main\ArgumentNullException('prefix');
-
-        $eventName = $prefix . ucfirst($name);
-        if ($this->run($eventName, $parameters)->isSuccess())
+        if ($this->run($name, $parameters)->isSuccess())
             $this->success = $this->options->runEventOldStyle($name, $this->parameters);
 
         return $this;
-    }
-
-    /**
-     * @return string
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function getPrefix()
-    {
-        $moduleName = str_replace(array('.', '-', '_'), '|', $this->options->getModuleId());
-        $moduleName = explode('|', $moduleName);
-        $itemcCount = count($moduleName);
-        $prefix     = '';
-
-        for ($i = 0; $i < $itemcCount; ++$i)
-            $prefix .= ucfirst(strtolower($moduleName[$i]));
-
-        return $prefix;
     }
 
     /**
