@@ -146,11 +146,12 @@ class Event
         $event = new Main\Event($this->options->getModuleId(), $eventName, $parameters);
         $event->send();
 
-        $results        = $event->getResults();
-        $resultsCount   = count($results);
-        $this->success  = true;
+        $results            = $event->getResults();
+        $resultsCount       = count($results);
+        $this->success      = true;
+        $this->parameters   = $parameters;
 
-        if ($resultsCount){
+        if ($resultsCount) {
 
             for ($i = 0; $i < $resultsCount; $i++) {
 
@@ -169,8 +170,6 @@ class Event
                         break;
                 endswitch;
             }
-        } else {
-            $this->parameters = $parameters;
         }
 
         return $this;
