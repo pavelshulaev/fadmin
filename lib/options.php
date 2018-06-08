@@ -32,24 +32,6 @@ Loc::LoadMessages(__FILE__);
  */
 abstract class Options
 {
-	/**
-	 * events
-	 */
-	const EVENT__BEFORE_GET_REQUEST     = 'beforeGetRequest';
-	const EVENT__BEFORE_REDIRECT_AFTER_REQUEST  = 'beforeRedirectAfterRequest';
-	const EVENT__BEFORE_ADD_VALUES_FROM_REQUEST = 'beforeAddValuesFromRequest';
-	const EVENT__BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST = 'beforeAddValuesToTabFromRequest';
-	const EVENT__AFTER_ADD_VALUES_FROM_REQUEST  = 'afterAddValuesFromRequest';
-	const EVENT__BEFORE_ADD_PRESET      = 'beforeAddPreset';
-	const EVENT__AFTER_ADD_PRESET       = 'afterAddPreset';
-	const EVENT__BEFORE_REMOVE_PRESET   = 'beforeRemovePreset';
-	const EVENT__AFTER_REMOVE_PRESET    = 'afterRemovePreset';
-	const EVENT__BEFORE_MAKE_PRESET_TAB = 'beforeMakePresetTab';
-	const EVENT__AFTER_MAKE_PRESET_TAB  = 'afterMakePresetTab';
-	const EVENT__BEFORE_GET_TAB_INFO    = 'beforeGetTabInfo';
-	const EVENT__AFTER_GET_TABS         = 'afterGetTabs';
-	const EVENT__BEFORE_SHOW_TAB        = 'beforeShowTab';
-
 	const SEPARATOR = '__';
 
 	/** @var string */
@@ -147,11 +129,12 @@ abstract class Options
      * @param       $name
      * @param array $params
      * @return bool
+     * @throws ArgumentNullException
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated
      */
-	public function runEvent($name, &$params = array())
+	public function runEventOldStyle($name, &$params = array())
 	{
 		if (!method_exists($this, $name))
 			return true;

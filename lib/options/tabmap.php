@@ -81,11 +81,9 @@ class TabMap
 		if (!count($this->tabs) || $reload)
 			$this->reloadTabs();
 
-		$tabs = $this->tabs;
-
-		$this->options->runEvent(Options::EVENT__AFTER_GET_TABS, compact('tabs'));
-
-		return $tabs;
+        return $this->options->event
+            ->handle(Event::AFTER_GET_TABS, array('tabs' => $this->tabs))
+            ->getParameter('tabs');
 	}
 
     /**
@@ -146,19 +144,24 @@ class TabMap
                 if (is_array($presets) && count($presets)) {
                     foreach ($presets as $preset) {
 
-                        $tabParams['presetId'] = $preset['id'];
-                        $tabParams['label']    = $preset['name'];
-
                         // event before create preset tab
-                        if (false === $this->options->runEvent(Options::EVENT__BEFORE_MAKE_PRESET_TAB, compact('tabParams')))
+                        if (!$this->options->event
+                            ->handle(Event::BEFORE_MAKE_PRESET_TAB, array(
+                                'tabParams' => $tabsParams,
+                                'presetId'  => $preset['id'],
+                                'presetName'=> $preset['name']
+                            ))->isSuccess())
                             continue;
 
-                        $tab = Tab::factory($tabParams, $this->options);
+                        $resultTabParams            = $this->options->event->getParameter('tabParams');
+                        $resultTabParams['presetId']= $this->options->event->getParameter('presetId');
+                        $resultTabParams['label']   = $this->options->event->getParameter('presetName');
 
-                        // event after create preset tab
-                        $this->options->runEvent(Options::EVENT__AFTER_MAKE_PRESET_TAB, compact('tab'));
+                        $tab = Tab::factory($resultTabParams, $this->options);
 
-                        $this->tabs[] = $tab;
+                        $this->tabs[] = $this->options->event
+                            ->handle(Event::AFTER_MAKE_PRESET_TAB, compact('tab'))
+                            ->getParameter('tab');
                     }
                 }
 
@@ -298,8 +301,9 @@ class TabMap
      */
     public function setValuesFromRequest($admin = false)
     {
-        if(false === $this->options->runEvent(
-            Options::EVENT__BEFORE_ADD_VALUES_FROM_REQUEST))
+        if (!$this->options->event
+            ->handle(Event::BEFORE_ADD_VALUES_FROM_REQUEST)
+            ->isSuccess())
             return false;
 
         $tabs = $admin
@@ -309,9 +313,9 @@ class TabMap
         foreach ($tabs as $tab)
             $tab->setValuesFromRequest();
 
-        if(false === $this->options->runEvent(
-                Options::EVENT__AFTER_ADD_VALUES_FROM_REQUEST,
-                compact('tabs')))
+        if (!$this->options->event
+            ->handle(Event::AFTER_ADD_VALUES_FROM_REQUEST, compact('tabs'))
+            ->isSuccess())
             return false;
 
         return true;
@@ -328,9 +332,12 @@ class TabMap
      */
     public function addPreset($value, $siteId = '')
     {
-        $params = compact('siteId', 'value');
-        if (false === $this->options->runEvent(Options::EVENT__BEFORE_ADD_PRESET, $params))
+        if (!$this->options->event
+            ->handle(Event::BEFORE_ADD_PRESET, compact('siteId', 'value'))
+            ->isSuccess())
             return false;
+
+        $params = $this->options->event->getParameters();
 
         if (!isset($params['name']))
             $params['name'] = $params['value'];
@@ -340,9 +347,11 @@ class TabMap
             $params['siteId']
         );
 
-        $this->options->runEvent(Options::EVENT__AFTER_ADD_PRESET, $params);
+        $params = $this->options->event
+            ->handle(Event::AFTER_ADD_PRESET, $params)
+            ->getParameters();
 
-        // reload tabs afrer event!!!
+        // reload tabs after event!!!
         $this->reloadTabs();
 
         return $params['id'];
@@ -363,18 +372,16 @@ class TabMap
         if (!$id)
             throw new ArgumentNullException('id');
 
-        $params = compact('siteId', 'id');
-
         // action beforeRemovePreset
-        if(false === $this->options->runEvent(
-                Options::EVENT__BEFORE_REMOVE_PRESET,
-                $params))
+        if (!$this->options->event
+            ->handle(Event::BEFORE_REMOVE_PRESET, compact('siteId', 'id'))
+            ->isSuccess())
             return false;
 
-        /**
-         * @var Tab $presetTab
-         */
-        $presetTab = $this->getTabByPresetId($params['id'], $params['siteId']);
+        $params     = $this->options->event->getParameters();
+
+        /** @var Tab $presetTab */
+        $presetTab  = $this->getTabByPresetId($params['id'], $params['siteId']);
 
         if ($presetTab instanceof Tab === false)
             throw new ArgumentOutOfRangeException('tab');
@@ -384,8 +391,7 @@ class TabMap
         $this->options->preset->remove($id, $siteId);
 
         // action afterRemovePreset
-        $this->options->runEvent(Options::EVENT__AFTER_REMOVE_PRESET,
-            $params);
+        $this->options->event->handle(Event::AFTER_REMOVE_PRESET, $params);
 
         return true;
     }

@@ -13,7 +13,7 @@ namespace Rover\Fadmin;
 use Bitrix\Main;
 use Bitrix\Main\ArgumentNullException;
 use Rover\Fadmin\Inputs\Input;
-
+use Rover\Fadmin\Options\Event;
 /**
  * Class Tab
  *
@@ -336,17 +336,13 @@ class Tab
      */
 	public function setValuesFromRequest()
 	{
-	    $tab = $this;
-
-        if(false === $this->options->runEvent(
-                Options::EVENT__BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST,
-                compact('tab')))
+        if (!$this->options->event
+            ->handle(Event::BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST, array('tab' => $this))
+            ->isSuccess())
             return;
 
 		foreach ($this->inputs as $input)
-			/**
-			 * @var Input $input
-			 */
+			/** @var Input $input */
 			$input->setValueFromRequest();
 	}
 

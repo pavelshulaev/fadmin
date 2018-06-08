@@ -15,6 +15,7 @@ use Bitrix\Main\Config\Option;
 use Rover\Fadmin\Inputs\Addpreset;
 use Rover\Fadmin\Inputs\Removepreset;
 use Rover\Fadmin\Options;
+use Rover\Fadmin\Options\Event;
 
 /**
  * Class Request
@@ -24,19 +25,13 @@ use Rover\Fadmin\Options;
  */
 abstract class Request
 {
-    /**
-     * @var Options
-     */
+    /** @var Options */
     protected $options;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $params;
 
-    /**
-     * @var \Bitrix\Main\HttpRequest
-     */
+    /** @var \Bitrix\Main\HttpRequest */
     protected $request;
 
     /**
@@ -60,24 +55,22 @@ abstract class Request
     public function process()
     {
         // action before
-        if(false === $this->options->runEvent(Options::EVENT__BEFORE_GET_REQUEST))
+        if (!$this->options->event->handle(Event::BEFORE_GET_REQUEST)->isSuccess())
             return;
 
         if ($this->request->get(Addpreset::$type)) {
-
             $this->addPreset();
-
         } elseif ($this->request->get(Removepreset::$type)) {
-
             $this->removePreset();
-
         } else {
-
             $this->setValues();
-
         }
     }
 
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
     abstract function setValues();
 
     /**
@@ -126,14 +119,16 @@ abstract class Request
      */
     protected function redirect($url)
     {
-        $params = compact('url');
-
-        if (false === $this->options->runEvent(Options::EVENT__BEFORE_REDIRECT_AFTER_REQUEST, $params))
+        if (!$this->options->event
+            ->handle(Event::BEFORE_REDIRECT_AFTER_REQUEST, compact('url'))
+            ->isSuccess())
             return;
 
-        if (empty($params['url']))
+        $url = $this->options->event->getParameter('url');
+
+        if (empty($url))
             return;
 
-        LocalRedirect($params['url']);
+        LocalRedirect($url);
     }
 }

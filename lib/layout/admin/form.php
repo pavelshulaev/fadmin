@@ -15,6 +15,7 @@ use \Rover\Fadmin\Layout\Form as FromAbstract;
 use Bitrix\Main\Application;
 use Bitrix\Main\Localization\Loc;
 use \Rover\Fadmin\Options;
+use \Rover\Fadmin\Options\Event;
 use Rover\Fadmin\Tab;
 use \Rover\Fadmin\Inputs\Input as InputEngine;
 
@@ -150,10 +151,10 @@ class Form extends FromAbstract
             ? $tab->getDescription() . ' [' . $tab->getSiteId() . ']'
             : $tab->getDescription();
 
-        $params = array_merge(array('tab' => $tab),
-            compact('name', 'icon', 'label', 'description'));
-
-        $this->options->runEvent(Options::EVENT__BEFORE_GET_TAB_INFO, $params);
+        $params = $this->options->event
+            ->handle(Event::BEFORE_GET_TAB_INFO,
+                compact('tab', 'name', 'icon', 'label', 'description'))
+            ->getParameters();
 
         return array(
             'DIV'   => $params['name'],
@@ -222,9 +223,9 @@ class Form extends FromAbstract
     protected function showTab(Tab $tab)
     {
         // action afterRemovePreset
-        if(false === $this->options->runEvent(
-                Options::EVENT__BEFORE_SHOW_TAB,
-                compact('tab')))
+        if (!$this->options->event
+            ->handle(Event::BEFORE_SHOW_TAB, compact('tab'))
+            ->isSuccess())
             return;
 
         $this->tabControl->BeginNextTab();
