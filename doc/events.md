@@ -1,10 +1,10 @@
 # События
-Для более гибкой работы с настройками в «Конструкторе» предусмотрена система событий. Базовые названия всех событий определены в константах класса `\Rover\Fadmin\Options\Event`. Их описание можно найти в [api по \Rover\Fadmin\Options\Event](./api/options/event.md#Константы).
+Для более гибкой работы с настройками в «Конструкторе» предусмотрена система событий. Типы всех событий определены в константах класса `\Rover\Fadmin\Options\Event`. Их описание можно найти в [api по \Rover\Fadmin\Options\Event](./api/options/event.md#Константы).
 
-Для каждого модуля, использующего «Конструктор», генерируются типы событий вида `'ИдМодуляНужноеСобыте'`. Если ваш модуль имеет id `'partner.module'` и необходимо обработать событие `afterMakePresetTab`, то обрабтчик нужно вешать на событие `PartnerModuleAfterMakePresetTab`:
+Эти типы генерируются каждым модулем, использующим «Конструктор». Пример обработчика для модуля `'partner.module'` и события `afterMakePresetTab`:
 
     $eventManager = \Bitrix\Main\EventManager::getInstance();
-    $eventManager->addEventHandler('partner.module', 'PartnerModuleAfterMakePresetTab', array('\Partner\Module\Event', 'onAfterMakePresetTab'));
+    $eventManager->addEventHandler('partner.module', 'afterMakePresetTab', array('\Partner\Module\Event', 'onAfterMakePresetTab'));
 
 Сам обработчик имеет стандартный вид:
 
