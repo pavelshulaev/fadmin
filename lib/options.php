@@ -23,13 +23,12 @@ use \Rover\Fadmin\Options\TabMap;
 use \Rover\Fadmin\Options\Preset;
 
 Loc::LoadMessages(__FILE__);
+
 /**
  * Class Options
- * ����������� ����� ������� �����.
- * ������ ���� ����������� �������, ������� ���������� ������� � ������� � ���������� ����������
  *
  * @package Rover\Fadmin
- * @author  Pavel Shulaev (http://rover-it.me)
+ * @author  Pavel Shulaev (https://rover-it.me)
  */
 abstract class Options
 {
@@ -53,48 +52,28 @@ abstract class Options
 
 	const SEPARATOR = '__';
 
-	/**
-	 * current module id
-	 * @var string
-	 */
+	/** @var string */
 	protected $moduleId;
 
-	/**
-	 * tabs helper
-	 * @var TabMap
-	 */
+	/** @var TabMap */
 	public $tabMap;
 
-	/**
-	 * message driver
-	 * @var Message
-	 */
+	/** @var Message */
 	public $message;
 
-	/**
-	 * settings driver
-	 * @var Settings
-	 */
+	/** @var Settings */
 	public $settings;
 
-	/**
-	 * @var Event
-	 */
+	/** @var Event */
 	public $event;
 
-	/**
-	 * @var Preset
-	 */
+	/** @var Preset */
 	public $preset;
 
-    /**
-     * @var Cache
-     */
+    /** @var Cache */
 	public $cache;
-	/**
-	 * unique instance for each module
-	 * @var array
-	 */
+
+	/** @var array */
 	protected static $instances = array();
 
     /**

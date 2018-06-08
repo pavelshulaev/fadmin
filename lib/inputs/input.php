@@ -15,11 +15,6 @@ use \Rover\Fadmin\Options;
  */
 abstract class Input
 {
-	const EVENT__BEFORE_SAVE_REQUEST    = 'beforeSaveRequest';
-	const EVENT__BEFORE_SAVE_VALUE      = 'beforeSaveValue';
-	const EVENT__BEFORE_GET_VALUE       = 'beforeGetValue';
-	const EVENT__AFTER_LOAD_VALUE       = 'afterLoadValue';
-
     const TYPE__ADD_PRESET      = 'addpreset';
 	const TYPE__CHECKBOX        = 'checkbox';
     const TYPE__CLOCK           = 'clock';
@@ -43,80 +38,46 @@ abstract class Input
     const TYPE__TEXT            = 'text';
 	const TYPE__TEXTAREA        = 'textarea';
 
-    /**
-     * @var string
-     */
+    /** @var string */
 	public static $type;
 
-	/**
-	 * input id
-	 * @var string
-	 */
+	/** input id */
 	protected $id;
 
-	/**
-	 * input name (required)
-	 * @var string
-	 */
+	/** @var string */
 	protected $name;
 
-	/**
-	 * input label (required)
-	 * @var string
-	 */
+	/** @var string */
 	protected $label;
 
-	/**
-	 * input value
-	 * @var string|array
-	 */
+	/** @var string|array */
 	protected $value;
 
-	/**
-	 * default input value
-	 * @var string|array
-	 */
+	/** @var string|array */
 	protected $default;
 
-	/**
-	 * multiple value falg
-	 * @var bool
-	 */
+	/** @var bool */
 	protected $multiple = false;
 
-	/**
-	 * help block
-	 * @var string
-	 */
+	/** @var string */
 	protected $help;
 
-	/**
-	 * input's tab
-	 * @var Tab
-	 */
+	/** @var Tab */
 	protected $tab;
 
-	/**
-	 * sort on tab
-	 * @var int
-	 */
+	/** @var int */
 	protected $sort = 500;
 
-	/**
-	 * display on tab
-	 * @var bool
-	 */
-	protected $display = true;
+	/** @var bool */
+	protected $hidden = false;
 
-	/**
-	 * @var bool
-	 */
+	/** @var bool */
 	protected $disabled = false;
 
     /**
      * Input constructor.
      *
-     * @param array $params ['id', 'name', 'label', 'default', 'multiple', 'help']
+     * @param array $params
      * @param Tab   $tab
      * @throws Main\ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
@@ -155,41 +116,58 @@ abstract class Input
 		if (isset($params['sort']) && intval($params['sort']))
 			$this->sort = intval($params['sort']);
 
+        if (array_key_exists('hidden', $params))
+            $this->hidden = (bool)$params['hidden'];
+
+		// @TODO: deprecated
 		if (array_key_exists('display', $params))
-			$this->display = (bool)$params['display'];
+			$this->hidden = !(bool)$params['display'];
 	}
-
-	/**
-	 * @param $name
-	 * @param $callback
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function addEventHandler($name, $callback)
-	{
-		$this->getEvent()->addHandler($name, $callback);
-	}
-
 
 	/**
 	 * @param $display
 	 * @return $this
 	 * @author Pavel Shulaev (http://rover-it.me)
+     * @deprecated use setHidden()
 	 */
 	public function setDisplay($display)
 	{
-		$this->display = (bool)$display;
+		$this->hidden = !(bool)$display;
 
 		return $this;
 	}
 
+    /**
+     * @param $hidden
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function setHidden($hidden)
+	{
+		$this->hidden = (bool)$hidden;
+
+		return $this;
+	}
+
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function isHidden()
+    {
+        return $this->hidden;
+    }
+
 	/**
 	 * @return bool
 	 * @author Pavel Shulaev (http://rover-it.me)
+     * @deprecated use isHidden()
 	 */
 	public function getDisplay()
 	{
-		return $this->display;
+		return !$this->hidden;
 	}
+
 
 	/**
 	 * @return int
@@ -379,15 +357,9 @@ abstract class Input
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	private function saveValue($value)
-	{
-		$result = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_VALUE,
-			compact('value'), $this);
-
-		if ($result === false)
-			return false;
-
-		if (is_array($result) && array_key_exists('value', $result))
-			$value = $result['value'];
+    {
+        if (!static::beforeSaveValue($value))
+            return false;
 
 		Option::set($this->tab->getModuleId(), $this->getValueName(), $value, $this->tab->getSiteId());
 
@@ -404,15 +376,6 @@ abstract class Input
 		$filter      = array('name' => $this->getValueName(), 'site_id' => $this->tab->getSiteId());
 
 		Option::delete($this->tab->getModuleId(), $filter);
-	}
-
-    /**
-     * @return Options\Event
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	protected function getEvent()
-	{
-		return $this->tab->options->event;
 	}
 
 	/**
@@ -442,7 +405,7 @@ abstract class Input
 				$this->value = array();
 		}
 
-		$this->getEvent()->send(self::EVENT__AFTER_LOAD_VALUE, array(), $this);
+		static::afterLoadValue($this->value);
 	}
 
     /**
@@ -480,7 +443,8 @@ abstract class Input
 		if (empty($this->value) || $reload)
 			$this->loadValue();
 
-		$this->getEvent()->send(self::EVENT__BEFORE_GET_VALUE, array(), $this);
+		if (!static::beforeGetValue($this->value))
+		    return null;
 
 		return $this->value;
 	}
@@ -544,13 +508,9 @@ abstract class Input
 
 		$value = $request->get($this->getValueName());
 
-		// EVENT__BEFORE_SAVE_REQUEST
-		$params = $this->getEvent()->getResult(self::EVENT__BEFORE_SAVE_REQUEST, compact('value'), $this);
-		if ($params === false)
-			return false;
-
-		if (isset($params['value']))
-			$value = $params['value'];
+		// EVENT: beforeSaveRequest
+        if (!static::beforeSaveRequest($value))
+            return false;
 
 		//serialize multiple value
 		if ($this->multiple && is_array($value))
@@ -560,7 +520,6 @@ abstract class Input
 
 		return true;
 	}
-
 
 	/**
 	 * @return string
@@ -578,5 +537,45 @@ abstract class Input
 	public static function getClassName()
     {
         return get_called_class();
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeSaveRequest(&$value)
+    {
+        return true;
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeGetValue(&$value)
+    {
+        return true;
+    }
+
+    /**
+     * @param $value
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function afterLoadValue(&$value) {}
+
+    /**
+     * @param $value
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeSaveValue(&$value)
+    {
+        return true;
     }
 }

@@ -25,9 +25,12 @@ class Hidden extends Text
 	public static $type = self::TYPE__HIDDEN;
 
     /**
+     * Hidden constructor.
+     *
      * @param array $params
      * @param Tab   $tab
      * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
     public function __construct(array $params, Tab $tab)
     {

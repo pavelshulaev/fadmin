@@ -22,24 +22,16 @@ use Bitrix\Main\SystemException;;
 class Preset
 {
 
-    /**
-     * @var integer
-     */
+    /** @var integer */
     protected $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name;
 
-    /**
-     * @var Options
-     */
+    /** @var Options */
     protected $options;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected static $instances = array();
 
     /**

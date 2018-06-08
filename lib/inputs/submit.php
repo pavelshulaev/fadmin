@@ -11,8 +11,6 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
-use Bitrix\Main\Event;
-use Bitrix\Main\EventResult;
 
 /**
  * Class Submit
@@ -22,6 +20,7 @@ use Bitrix\Main\EventResult;
  */
 class Submit extends Input
 {
+    /** @var string  */
 	public static $type = self::TYPE__SUBMIT;
 
     const SEPARATOR = '__';
@@ -45,32 +44,28 @@ class Submit extends Input
 
 		if (isset($params['popup']))
 			$this->popup = $params['popup'];
-
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this, 'afterLoadValue'));
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
 	}
 
-	/**
-	 * not save
-	 * @param Event $event
-	 * @return EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function beforeSaveValue(Event $event)
+    /**
+     * @param $value
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+	protected function beforeSaveValue(&$value)
 	{
-		return $this->getEvent()->getErrorResult($this);
+		return false;
 	}
 
-	/**
-	 * @param Event $event
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function afterLoadValue(Event $event)
+    /**
+     * @param $value
+     * @return bool|void
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+	protected function afterLoadValue(&$value)
 	{
-		if ($event->getSender() !== $this)
-			return;
-
-		$this->value = $this->default;
+		$value = $this->default;
 	}
 
     /**

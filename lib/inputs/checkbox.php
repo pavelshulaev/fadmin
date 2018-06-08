@@ -10,9 +10,6 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use \Bitrix\Main\Event;
-use Rover\Fadmin\Tab;
-
 /**
  * Class Checkbox
  *
@@ -26,68 +23,42 @@ class Checkbox extends Input
 	 */
 	public static $type = self::TYPE__CHECKBOX;
 
+    /**
+     * @param $value
+     * @return bool|mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+	protected function beforeSaveRequest(&$value)
+	{
+		if ($value !== "Y") $value = "N";
+
+		return true;
+	}
 
     /**
-     * Checkbox constructor.
-     *
-     * @param array $params
-     * @param Tab   $tab
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @param $value
+     * @return bool|void
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
      */
-	public function __construct(array $params, Tab $tab)
+	public function afterLoadValue(&$value)
 	{
-		parent::__construct($params, $tab);
-
-		// add events
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this, 'afterLoadValue'));
-		$this->addEventHandler(self::EVENT__BEFORE_GET_VALUE, array($this, 'beforeGetValue'));
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
+        $value = $value == 'Y' ? 'Y' : 'N';
 	}
 
-	/**
-	 * @param Event $event
-	 * @return \Bitrix\Main\EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function beforeSaveRequest(Event $event)
+    /**
+     * @param $value
+     * @return bool|mixed
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+	protected function beforeGetValue(&$value)
 	{
-		if ($event->getSender() !== $this)
-			return $this->getEvent()->getErrorResult($this);
+		if ($this->tab->options->settings->getBoolCheckbox())
+            $value = $value == 'Y';
 
-		$value = $event->getParameter('value');
-
-		if ($value !== "Y")
-			$value = "N";
-
-		return $this->getEvent()->getSuccessResult($this, compact('value'));
-	}
-
-	/**
-	 * @param Event $event
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function afterLoadValue(Event $event)
-	{
-		if ($event->getSender() !== $this)
-			return;
-
-		$this->value = $this->value == 'Y' ? 'Y' : 'N';
-	}
-
-	/**
-	 * @param Event $event
-	 * @return bool|void
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function beforeGetValue(Event $event)
-	{
-		if ($event->getSender() !== $this)
-			return;
-
-		if (!$this->tab->options->settings->getBoolCheckbox())
-			return;
-
-		$this->value = $this->value == 'Y';
+		return true;
 	}
 }

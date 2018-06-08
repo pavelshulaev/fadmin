@@ -12,7 +12,6 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
 use Bitrix\Main\Localization\Loc;
-use \Bitrix\Main\Event;
 
 Loc::loadMessages(__FILE__);
 /**
@@ -74,22 +73,15 @@ class Schedule extends Input
 
 		if (isset($params['height']) && intval($params['height']))
 			$this->height = $params['height'];
-
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this, 'afterLoadValue'));
 	}
 
-	/**
-	 * @param Event $event
-	 * @return \Bitrix\Main\EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function beforeSaveRequest(Event $event)
+    /**
+     * @param $value
+     * @return bool|mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function beforeSaveRequest(&$value)
 	{
-		if ($event->getSender() !== $this)
-			return $this->getEvent()->getErrorResult($this);
-
-		$value      = $event->getParameter('value');
 		$periods    = json_decode($value, true);
 
 		if (is_array($periods)){
@@ -101,7 +93,7 @@ class Schedule extends Input
 		} else
 			$value = array();
 
-		return $this->getEvent()->getSuccessResult($this, compact('value'));
+		return true;
 	}
 
 	/**
@@ -262,16 +254,14 @@ class Schedule extends Input
 		return $dateTime->getTimestamp() - 1;
 	}
 
-	/**
-	 * @param Event $event
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function afterLoadValue(Event $event)
+    /**
+     * @param $value
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+	public function afterLoadValue(&$value)
 	{
-		if ($event->getSender() !== $this)
-			return;
-
-		foreach ($this->value as &$period)
+		foreach ($value as &$period)
 		{
 			$period['start']    = $this->getDateByWeekDayTime($period['startWeekDay'], $period['startTime']);
 			$period['end']      = $this->getDateByWeekDayTime($period['endWeekDay'], $period['endTime']);

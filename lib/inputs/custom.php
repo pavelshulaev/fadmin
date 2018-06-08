@@ -28,29 +28,13 @@ class Custom extends Input
 	public static $type = self::TYPE__CUSTOM;
 
     /**
-     * Custom constructor.
-     *
-     * @param array $params
-     * @param Tab   $tab
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @param $value
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
      */
-	public function __construct(array $params, Tab $tab)
+	public function beforeSaveValue(&$value)
 	{
-		parent::__construct($params, $tab);
-
-		// add events
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
-	}
-
-	/**
-	 * not save
-	 * @param Event $event
-	 * @return EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function beforeSaveValue(Event $event)
-	{
-		return $this->getEvent()->getErrorResult($this);
+		return false;
 	}
 }

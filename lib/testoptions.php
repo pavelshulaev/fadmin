@@ -23,7 +23,8 @@ class TestOptions extends Options
 
     /**
      * @param string $moduleId
-     * @return static|self|Options
+     * @return mixed
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getInstance($moduleId = self::MODULE_ID)

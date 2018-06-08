@@ -12,8 +12,6 @@ namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Application;
 use Rover\Fadmin\Tab;
-use Bitrix\Main\Event;
-use Bitrix\Main\EventResult;
 
 /**
  * Class File
@@ -73,12 +71,12 @@ class File extends Input
 			$this->size = intval(htmlspecialcharsbx($params['size']));
 		else
 		    $this->size = 20;
-
-		// add events
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
 	public function isImage()
     {
         return $this->isImage;
@@ -117,26 +115,23 @@ class File extends Input
     }
 
     /**
-     * @param Event $event
-     * @return EventResult
+     * @param $value
+     * @return bool|mixed
      * @throws \Bitrix\Main\ArgumentException
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
      */
-	public function beforeSaveRequest(Event $event)
+	public function beforeSaveRequest(&$value)
 	{
-		if ($event->getSender() !== $this)
-			return $this->getEvent()->getErrorResult($this);
-
 		$request = Application::getInstance()
 			->getContext()
 			->getRequest();
 
-		$value = null;
-
-		$valueId = $this->getValueId();
+		$value      = null;
+		$valueId    = $this->getValueId();
 
 		if (!empty($_FILES[$valueId]) && $_FILES[$valueId]['error'] == 0){
 
@@ -152,33 +147,29 @@ class File extends Input
 			$value = false;
 		}
 
-		return $this->getEvent()->getSuccessResult($this, compact('value'));
+		return true;
 	}
 
     /**
-     * @param Event $event
-     * @return EventResult
+     * @param $value
+     * @return bool
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
      */
-	public function beforeSaveValue(Event $event)
+	public function beforeSaveValue(&$value)
 	{
-		if ($event->getSender() !== $this)
-			return $this->getEvent()->getErrorResult($this);
-
-		$value = $event->getParameter('value');
-
 		// file is the same, do not save
 		if ($value === null)
-			return $this->getEvent()->getErrorResult($this);
+			return false;
 
 		$oldValue = $this->getValue(true);
 
 		if ($value != $oldValue)
 			\CFile::Delete($oldValue);
 
-		return $this->getEvent()->getSuccessResult($this, array('value' => $value));
+		return true;
 	}
 
     /**

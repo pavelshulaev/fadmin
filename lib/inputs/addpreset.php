@@ -10,11 +10,9 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Bitrix\Main\Application;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Localization\Loc;
-use Rover\Fadmin\Admin\Request;
 use Rover\Fadmin\Tab;
 
 Loc::loadMessages(__FILE__);
@@ -31,43 +29,40 @@ class Addpreset extends Submit
 	 */
 	public static $type = self::TYPE__ADD_PRESET;
 
-	/**
-	 * @param array $params
-	 * @param Tab   $tab
-	 * @throws \Bitrix\Main\ArgumentNullException
-	 */
+    /**
+     * Addpreset constructor.
+     *
+     * @param array $params
+     * @param Tab   $tab
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     */
 	public function __construct(array $params, Tab $tab)
 	{
 		$params['name'] = self::$type;
 
 		parent::__construct($params, $tab);
-
-		// add events
-		$this->addEventHandler(self::EVENT__AFTER_LOAD_VALUE, array($this,   'afterLoadValue'));
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
 	}
 
-	/**
-	 * not save
-	 * @param Event $event
-	 * @return EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function beforeSaveValue(Event $event)
+    /**
+     * @param Event $value
+     * @return EventResult|bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeSaveValue(&$value)
 	{
-		return $this->getEvent()->getErrorResult($this);
+		return false;
 	}
 
-	/**
-	 * value = default value
-	 * @param Event $event
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function afterLoadValue(Event $event)
+    /**
+     * @param Event $value
+     * @return bool|void
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+	public function afterLoadValue(&$value)
     {
-        if ($event->getSender() !== $this)
-            return;
-
-        $this->value = $this->default;
+        $value = $this->default;
     }
 }

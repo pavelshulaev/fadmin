@@ -12,7 +12,6 @@ namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Localization\Loc;
 use Rover\Fadmin\Tab;
-use Bitrix\Main\Event;
 
 Loc::loadMessages(__FILE__);
 
@@ -51,22 +50,18 @@ class PresetName extends Text
 		if (empty($value))
 			$this->setValue($this->tab->options
 				->preset->getNameById($presetId, $this->tab->getSiteId()));
-
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
     /**
-     * @param Event $event
-     * @return \Bitrix\Main\EventResult|bool
+     * @param $value
+     * @return bool|mixed
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
      */
-	public function beforeSaveRequest(Event $event)
+	public function beforeSaveRequest(&$value)
 	{
-		if ($event->getSender() !== $this)
-			return $this->getEvent()->getErrorResult($this);
-
 		if (!$this->tab->isPreset())
 			return true;
 
@@ -75,18 +70,17 @@ class PresetName extends Text
 		if (!$presetId)
 			return true;
 
-		$value = $event->getParameter('value');
-
 		if (empty($value)){
 			$this->tab->options->message->addError(
 				Loc::getMessage('rover-fa__presetname-no-name',
                     array('#last-preset-name#' => $this->getValue())));
-			return $this->getEvent()->getErrorResult($this);
+
+			return false;
 		}
 
 		$this->tab->options->preset->updateName($presetId, $value,
 			$this->tab->getSiteId());
 
-		return $this->getEvent()->getSuccessResult($this, compact('value'));
+		return true;
 	}
 }

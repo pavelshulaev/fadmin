@@ -11,8 +11,6 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
-use Bitrix\Main\Event;
-use Bitrix\Main\EventResult;
 
 /**
  * Class Label
@@ -41,18 +39,16 @@ class Label extends Input
 			$params['name'] = self::$type;
 
 		parent::__construct($params, $tab);
-
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
 	}
 
-	/**
-	 * not save
-	 * @param Event $event
-	 * @return EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function beforeSaveValue(Event $event)
+    /**
+     * @param $value
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+	public function beforeSaveValue(&$value)
 	{
-		return $this->getEvent()->getErrorResult($this);
+		return false;
 	}
 }

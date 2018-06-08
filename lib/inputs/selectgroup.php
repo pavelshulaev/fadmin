@@ -29,21 +29,6 @@ class Selectgroup extends Selectbox
     public static $type = self::TYPE__SELECT_GROUP;
 
     /**
-     * Selectgroup constructor.
-     *
-     * @param array $params
-     * @param Tab   $tab
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     */
-    public function __construct(array $params, Tab $tab)
-    {
-        parent::__construct($params, $tab);
-
-        $this->addEventHandler(self::EVENT__BEFORE_SAVE_VALUE, array($this,  'beforeSaveValue'));
-    }
-
-    /**
      * @return string
      * @author Pavel Shulaev (https://rover-it.me)
      */
@@ -125,18 +110,16 @@ class Selectgroup extends Selectbox
     }
 
     /**
-     * @param Event $event
-     * @return EventResult
+     * @param $value
+     * @return bool
      * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
      */
-    public function beforeSaveValue(Event $event)
+    public function beforeSaveValue(&$value)
     {
-        if ($event->getSender() !== $this)
-            return $this->getEvent()->getErrorResult($this);
-
         $this->getGroupInput()->setValueFromRequest();
 
-        return $this->getEvent()->getSuccessResult($this);
+        return true;
     }
 }

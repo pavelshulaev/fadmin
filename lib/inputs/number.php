@@ -11,7 +11,6 @@
 namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Tab;
-use Bitrix\Main\Event;
 
 /**
  * Class Number
@@ -43,6 +42,7 @@ class Number extends Text
      * @param array $params
      * @param Tab   $tab
      * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
 	public function __construct(array $params, Tab $tab)
 	{
@@ -53,24 +53,16 @@ class Number extends Text
 
 		if (isset($params['max']))
 			$this->max = (int)$params['max'];
-
-		$this->addEventHandler(self::EVENT__BEFORE_SAVE_REQUEST, array($this, 'beforeSaveRequest'));
 	}
 
-
-
-	/**
-	 * @param Event $event
-	 * @return \Bitrix\Main\EventResult
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function beforeSaveRequest(Event $event)
+    /**
+     * @param $value
+     * @return bool|mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+	public function beforeSaveRequest(&$value)
 	{
-		if ($event->getSender() !== $this)
-			return $this->getEvent()->getErrorResult($this);
-
-		$value = $event->getParameter('value');
-
 		// not integer
 		if ($value != intval($value))
 			$value = $this->default;
@@ -83,7 +75,7 @@ class Number extends Text
 		if (!is_null($this->max) && $value > $this->max)
 			$value = $this->default;
 
-		return $this->getEvent()->getSuccessResult($this, compact('value'));
+		return true;
 	}
 
     /**
