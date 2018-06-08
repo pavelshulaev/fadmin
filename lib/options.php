@@ -149,6 +149,7 @@ abstract class Options
      * @return bool
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated
      */
 	public function runEvent($name, &$params = array())
 	{
