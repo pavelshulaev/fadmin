@@ -1,10 +1,33 @@
 # События
-Для более гибкой работы с настройками в «Конструкторе» предусмотрена система событий. Базовые название всех событий определены в классе `\Rover\Fadmin\Options` в константах, начинающихся на `EVENT__`. Описание видов событий можно найти в [api по \Rover\Fadmin\Options](./api/options.md#Константы)
- 
-Чтобы использовать событие в модуле, подключенном к «Констуктору», необходимо 
+Для более гибкой работы с настройками в «Конструкторе» предусмотрена система событий. Базовые названия всех событий определены в константах класса `\Rover\Fadmin\Options\Event`. Их описание можно найти в [api по \Rover\Fadmin\Options\Event](./api/options/event.md#Константы)
 
-Если метод, определённый в константе, начинающейся с `BEFORE_`, вернет false, то действие, обычно совершаемое после этого события, выполнено не будет. Это не относится к событию `'beforeGetTabInfo'`. Оно позволяет только изменить информацию о вкладке, но не отменить ее отображение.
+Для каждого модуля, использующего «Конструктор», генерируются типы событий вида `'ИдМодуляНужноеСобыте'`. Если ваш модуль имеет id `partner.module` и необходимо обработать событие `afterMakePresetTab`, то обрабтчик нужно вешать на событие `PartnerModuleAfterMakePresetTab`:
+
+    $eventManager = \Bitrix\Main\EventManager::getInstance();
+    $eventManager->addEventHandler('partner.module', 'PartnerModuleAfterMakePresetTab', array('\Partner\Module\Event', 'onAfterMakePresetTab'));
+
+Сам обработчик имеет стандартный вид:
+
+    namespace Partner\Module;
+    
+    class Event
+    {
+        public static function onAfterMakePresetTab(EventMain $event)
+        {
+            $parameters = $event->getParameters();
+           
+            ...
+    
+            return new EventResult($event->getEventType(), $parameters, 'partner.module');
+        }
+    }    
+    
+Подробнее про [обытия](https://dev.1c-bitrix.ru/learning/course/index.php?COURSE_ID=43&LESSON_ID=3113&LESSON_PATH=3913.5062.3113) и их [обработку](https://dev.1c-bitrix.ru/learning/course/index.php?COURSE_ID=43&LESSON_ID=2244#events) в ядре d7.
+
+> Если событие, соотвествующее константе, начинающейся с `BEFORE_`, вернет `false`, то действие, обычно совершаемое после этого события, выполнено не будет. Это не относится к событию `'beforeGetTabInfo'`. Оно позволяет только изменить информацию о вкладке, но не отменить ее отображение.
 
 
 > ## Старый стиль
-> Ранее события можно было вызывать, определяя соответствующий метод классе, унаследованном от `\Rover\Fadmin\Options`. На данный момент эта система событий считается устаревшей и больше не поддерживается.
+> Ранее события можно было обрабатывать, определяя соответствующий метод классе, унаследованном от `\Rover\Fadmin\Options`. На данный момент эта система событий считается устаревшей и больше не поддерживается.
+# События
+

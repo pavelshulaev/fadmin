@@ -1,4 +1,4 @@
 # API
-[Rover\Fadmin\Options](./api/options.md)
-
-[Rover\Fadmin\Inputs\Input](./api/inputs/input.md)
+* [Rover\Fadmin\Options](./api/options.md)
+    * [Rover\Fadmin\Options\Event](./api/options/event.md)
+* [Rover\Fadmin\Inputs\Input](./api/inputs/input.md)
