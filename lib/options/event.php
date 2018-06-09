@@ -102,8 +102,9 @@ class Event
         if (empty($name))
             throw new Main\ArgumentNullException('name');
 
-        if ($this->run($name, $parameters)->isSuccess())
-            $this->success = $this->options->runEventOldStyle($name, $this->parameters);
+        if ($this->run($name, $parameters)->isSuccess()
+            && (false === $this->options->runEventOldStyle($name, $this->parameters)))
+            $this->success = false;
 
         return $this;
     }
