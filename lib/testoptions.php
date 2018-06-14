@@ -141,7 +141,7 @@ class TestOptions extends Options
                                         'type'      => Input::TYPE__FILE,
                                         'name'      => 'file',
                                         'label'     => 'This is a file',
-                                        'default'   => '15:15',
+                                        'default'   => '',
                                         'help'      => 'You may load an image here (max size 1 M)',
                                         'maxSize'   => 1024 * 1024,
                                         'isImage'   => true,
