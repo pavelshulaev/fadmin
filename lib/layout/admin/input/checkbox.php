@@ -30,7 +30,7 @@ class Checkbox extends Input
     {
         ?><input
             type="checkbox"
-            <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+            <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
             id="<?=$this->input->getValueId()?>"
             name="<?=$this->input->getValueName()?>"
             value="Y"<?=($this->input->getValue() == "Y")?" checked=\"checked\"":'';?>/><?php

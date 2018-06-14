@@ -328,8 +328,18 @@ abstract class Input
 	/**
 	 * @return bool
 	 * @author Pavel Shulaev (http://rover-it.me)
+     * @deprecated use isDisabled
 	 */
 	public function getDisabled()
+	{
+		return $this->disabled;
+	}
+
+	/**
+	 * @return bool
+	 * @author Pavel Shulaev (http://rover-it.me)
+	 */
+	public function isDisabled()
 	{
 		return $this->disabled;
 	}
@@ -500,7 +510,7 @@ abstract class Input
      */
 	public function setValueFromRequest()
 	{
-	    if ($this->getDisabled())
+	    if ($this->isDisabled())
 	        return false;
 
 		$request = Application::getInstance()
@@ -508,7 +518,8 @@ abstract class Input
 			->getRequest();
 
 		if ((!$request->offsetExists($this->getValueName())
-			&& $this->getType() != self::TYPE__CHECKBOX))
+			&& ($this->getType() != self::TYPE__CHECKBOX))
+            && ($this->getType() != self::TYPE__FILE))
 			return false;
 
 		$value = $request->get($this->getValueName());

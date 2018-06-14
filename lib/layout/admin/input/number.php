@@ -34,7 +34,7 @@ class Number extends Text
         }
 
         ?><input
-            <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+            <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
             type="number"
             id="<?=$this->input->getValueId()?>"
             value="<?=$this->input->getValue()?>"

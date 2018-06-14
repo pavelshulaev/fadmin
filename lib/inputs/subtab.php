@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lenovo
  * Date: 14.06.2018
- * Time: 7:33
+ * Time: 7:59
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
@@ -13,18 +13,18 @@ namespace Rover\Fadmin\Inputs;
 use Rover\Fadmin\Tab;
 
 /**
- * Class SubTabControl
+ * Class SubTab
  *
  * @package Rover\Fadmin\Inputs
  * @author  Pavel Shulaev (https://rover-it.me)
  */
-class SubTabControl extends Input
+class SubTab extends Input
 {
-    /** @var SubTab[] */
-    protected $subTabs = array();
+    /** @var Input[] */
+    protected $inputs;
 
     /**
-     * Subtabcontrol constructor.
+     * SubTab constructor.
      *
      * @param array $params
      * @param Tab   $tab
@@ -36,20 +36,20 @@ class SubTabControl extends Input
     {
         parent::__construct($params, $tab);
 
-        if (isset($params['subTabs']) && is_array($params['subTabs'])){
-            $subTabsCnt = count($params['subTabs']);
-            for ($i = 0; $i < $subTabsCnt; ++$i)
-                $this->subTabs[] = new SubTab($params['subTabs'][$i], $tab);
+        if (isset($params['inputs']) && is_array($params['inputs'])){
+            $inputsCnt = count($params['inputs']);
+            for ($i = 0; $i < $inputsCnt; ++$i)
+                $this->inputs[] = self::factory($params['inputs'][$i], $tab);
         }
     }
 
     /**
-     * @return SubTab[]
+     * @return array|mixed
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getSubTabs()
+    public function getInputs()
     {
-        return $this->subTabs;
+        return $this->inputs;
     }
 
     /**
@@ -70,13 +70,13 @@ class SubTabControl extends Input
      */
     public function setValueFromRequest()
     {
-        $subTabs    = $this->getSubTabs();
-        $subTabsCnt = count($subTabs);
+        $inputs     = $this->getInputs();
+        $inputsCnt  = count($inputs);
 
-        for ($i = 0; $i < $subTabsCnt; ++$i){
-            /** @var Input $subTab */
-            $subTab = $subTabs[$i];
-            $subTab->setValueFromRequest();
+        for ($i = 0; $i < $inputsCnt; ++$i){
+            /** @var Input $input */
+            $input = $inputs[$i];
+            $input->setValueFromRequest();
         }
     }
 }

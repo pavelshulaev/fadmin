@@ -49,7 +49,7 @@ class Selectbox extends Input
         $multiple   = $this->input->isMultiple();
 
         ?><select
-        <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+        <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
         name="<?=$valueName . ($multiple ? '[]' : '')?>"
         id="<?=$valueId?>"
         size="<?=$this->input->getSize()?>"

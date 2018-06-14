@@ -101,44 +101,69 @@ class TestOptions extends Options
                         'sort'      => 400
                     ),
                     array(
-                        'type'      => Input::TYPE__COLOR,
-                        'name'      => 'color',
-                        'label'     => 'This is a color',
-                        'default'   => '15:15',
-                        'help'      => 'Please, select a color',
-                        'sort'      => '600'
-                    ),
-                    array(
-                        'type'      => Input::TYPE__CHECKBOX,
-                        'name'      => 'checkbox',
-                        'label'     => 'This is a checkbox',
-                        'default'   => '#FFFF00',
-                        'help'      => 'Please, check me!',
-                        'sort'      => '700'
-                    ),
-                    array(
-                        'type'      => Input::TYPE__FILE,
-                        'name'      => 'file',
-                        'label'     => 'This is a file',
-                        'default'   => '15:15',
-                        'help'      => 'You may load an image here (max size 1 M)',
-                        'maxSize'   => 1024 * 1024,
-                        'isImage'   => true,
-                        'sort'      => '800'
-                    ),
-                    array(
-                        'type'      => Input::TYPE__IBLOCK,
-                        'name'      => 'iblock',
-                        'label'     => 'This is a single iblock',
-                        'sort'      => '900',
-                        'display'   => false
-                    ),
-                    array(
-                        'type'      => Input::TYPE__IBLOCK,
-                        'name'      => 'multiple_iblock',
-                        'multiple'  => true,
-                        'label'     => 'This is a multiple iblock',
-                        'sort'      => '1000'
+                        'type'      => Input::TYPE__SUBTABCONTROL,
+                        'name'      => 'subtabcontrol',
+                        'label'     => 'subtabcontrol label',
+                        'default'   => 'subtabcontrol default',
+                        'sort'      => 550,
+                        'subTabs'   => array(
+                            array(
+                                'type'      => Input::TYPE__SUBTAB,
+                                'name'      => 'subtab_1',
+                                'label'     => 'subtab 1 label',
+                                'default'   => 'subtab 1 default',
+                                'inputs'    => array(
+                                    array(
+                                        'type'      => Input::TYPE__COLOR,
+                                        'name'      => 'color',
+                                        'label'     => 'This is a color',
+                                        'default'   => '15:15',
+                                        'help'      => 'Please, select a color',
+                                        'sort'      => '600'
+                                    ),
+                                    array(
+                                        'type'      => Input::TYPE__CHECKBOX,
+                                        'name'      => 'checkbox',
+                                        'label'     => 'This is a checkbox',
+                                        'default'   => '#FFFF00',
+                                        'help'      => 'Please, check me!',
+                                        'sort'      => '700'
+                                    ),
+                                )
+                            ),
+                            array(
+                                'type'      => Input::TYPE__SUBTAB,
+                                'name'      => 'subtab_2',
+                                'label'     => 'subtab 2 label',
+                                'default'   => 'subtab 2 default',
+                                'inputs'    => array(
+                                    array(
+                                        'type'      => Input::TYPE__FILE,
+                                        'name'      => 'file',
+                                        'label'     => 'This is a file',
+                                        'default'   => '15:15',
+                                        'help'      => 'You may load an image here (max size 1 M)',
+                                        'maxSize'   => 1024 * 1024,
+                                        'isImage'   => true,
+                                        'sort'      => '800'
+                                    ),
+                                    array(
+                                        'type'      => Input::TYPE__IBLOCK,
+                                        'name'      => 'iblock',
+                                        'label'     => 'This is a single iblock',
+                                        'sort'      => '900',
+                                        'display'   => false
+                                    ),
+                                    array(
+                                        'type'      => Input::TYPE__IBLOCK,
+                                        'name'      => 'multiple_iblock',
+                                        'multiple'  => true,
+                                        'label'     => 'This is a multiple iblock',
+                                        'sort'      => '1000'
+                                    ),
+                                )
+                            )
+                        )
                     ),
 
                     array(
@@ -205,6 +230,37 @@ class TestOptions extends Options
                             '0' => 'option 0',
                             '1' => 'option 1',
                             '2' => 'option 2'
+                        )
+                    ),
+                    array(
+                        'type'      => Input::TYPE__SELECT_GROUP,
+                        'name'      => 'select_group',
+                        'label'     => 'select_group',
+                        'options'   => array(
+                            'g1' => array(
+                                'name' => 'Group 1',
+                                'options' => array(
+                                    'g1:o1' => 'group 1: option 1',
+                                    'g1:o2' => 'group 1: option 2',
+                                    'g1:o3' => 'group 1: option 3',
+                                )
+                            ),
+                            'g2' => array(
+                                'name' => 'Group 2',
+                                'options' => array(
+                                    'g2:o1' => 'group 2: option 1',
+                                    'g2:o2' => 'group 2: option 2',
+                                    'g2:o3' => 'group 2: option 3',
+                                )
+                            ),
+                            'g3' => array(
+                                'name' => 'Group 3',
+                                'options' => array(
+                                    'g3:o1' => 'group 3: option 1',
+                                    'g3:o2' => 'group 3: option 2',
+                                    'g3:o3' => 'group 3: option 3',
+                                )
+                            )
                         )
                     ),
                     array(

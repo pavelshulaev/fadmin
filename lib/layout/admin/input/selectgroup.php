@@ -18,9 +18,7 @@ namespace Rover\Fadmin\Layout\Admin\Input;
  */
 class Selectgroup extends Selectbox
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected static $idCache = array();
 
     /**
@@ -93,27 +91,30 @@ class Selectgroup extends Selectbox
         $onChangeGroup  = 'OnType_'.$optionsId.'_Changed(this, \''.\CUtil::JSEscape($valueName).'\');';
 
         $html .= '<select 
-                ' . ($this->input->getDisabled() ? 'disabled="disabled"': '') . '
+                ' . ($this->input->isDisabled() ? 'disabled="disabled"': '') . '
                 name="' . $valueGroupName . '"
                 id="' . $valueGroupName . '"
                 onchange="'.htmlspecialcharsbx($onChangeGroup).'">'."\n";
 
         foreach($options as $key => $optionValue)
-            $html .= '<option value="'.htmlspecialcharsbx($key).'"'.($groupValue==$key? ' selected': '').'>'.htmlspecialcharsEx($optionValue['name']).'</option>'."\n";
+            $html .= '<option value="' . htmlspecialcharsbx($key) . '"' . ($groupValue == $key? ' selected': '') . '>'
+                . htmlspecialcharsEx(isset($optionValue['name']) ? $optionValue['name'] : $key)
+                . '</option>'."\n";
 
         $html .= "</select>\n";
         $html .= "&nbsp;\n";
         $html .= '<select
-                    ' . ($this->input->getDisabled() ? 'disabled="disabled"': '') . ' 
+                    ' . ($this->input->isDisabled() ? 'disabled="disabled"': '') . ' 
                     name="' . $valueName . ($this->input->isMultiple()
                 ? '[]" multiple="multiple" size="' . $this->input->getSize() . '" '
                 : '"')
-            . '
-                    id="' . $valueName . '">'."\n";
+            . ' id="' . $valueName . '">'."\n";
 
         if (!is_null($groupValue))
             foreach($options[$groupValue]['options'] as $key => $optionValue)
-                $html .= '<option value="'.htmlspecialcharsbx($key).'"'.(in_array($key, $value)? ' selected': '').'>'.htmlspecialcharsEx($optionValue).'</option>'."\n";
+                $html .= '<option value="' . htmlspecialcharsbx($key) . '"' . (in_array($key, $value)? ' selected': '').'>'
+                    . htmlspecialcharsEx($optionValue)
+                    . '</option>'."\n";
 
         $html .= "</select>\n";
 

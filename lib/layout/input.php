@@ -62,7 +62,7 @@ abstract class Input
             throw new ArgumentOutOfRangeException($namespace);
 
         $layoutDriver = new $namespace($input);
-        if (!$layoutDriver instanceof static)
+        if (!$layoutDriver instanceof self)
             throw new ArgumentOutOfRangeException($inputType);
 
         return $layoutDriver;

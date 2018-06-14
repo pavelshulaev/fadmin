@@ -39,10 +39,10 @@ class File extends Input
 
             $file = \CFile::GetFileArray($value);
 
-            echo '<code>' . $file['ORIGINAL_NAME'] . '</code><br>';
-
             if ($this->input->isImage())
                 echo \CFile::ShowImage($value, 200, 200, "border=0", "", true) . '<br>';
+
+            echo '<code>' . $file['ORIGINAL_NAME'] . '</code><br>';
 
         endif;
 

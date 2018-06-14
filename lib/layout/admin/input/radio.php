@@ -37,7 +37,7 @@ class Radio extends Input
 
             ?><label><input
             type="radio"
-            <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+            <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
             name="<?=$this->input->getValueName()?>"
             id="<?=$this->input->getValueId()?>"
             value="<?=$optionValue?>"

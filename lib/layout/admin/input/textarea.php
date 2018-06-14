@@ -32,7 +32,7 @@ class Textarea extends Input
             return;
 
         ?><textarea
-        <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+        <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
         id="<?=$this->input->getValueId()?>"
         rows="<?=$this->input->getRows()?>"
         cols="<?=$this->input->getCols()?>"

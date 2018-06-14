@@ -20,19 +20,13 @@ use Rover\Fadmin\Options;
  */
 abstract class Form
 {
-    /**
-     * @var Options
-     */
+    /** @var Options */
     protected $options;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $params;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
     /**
@@ -66,6 +60,24 @@ abstract class Form
     public function getRequest()
     {
         return $this->request;
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function showMessages()
+    {
+        $messages       = $this->options->message->get();
+        $messagesCnt    = count($messages);
+
+        if (!$messagesCnt)
+            return;
+
+        for ($i = 0; $i < $messagesCnt; ++$i)
+        {
+            $message = new \CAdminMessage($messages[$i]);
+            echo $message->Show();
+        }
     }
 
     abstract public function show();

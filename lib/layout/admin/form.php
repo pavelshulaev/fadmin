@@ -29,14 +29,10 @@ Loc::loadMessages(__FILE__);
  */
 class Form extends FromAbstract
 {
-    /**
-     * @var \CAdminTabControl
-     */
+    /** @var \CAdminTabControl */
     protected $tabControl;
 
-    /**
-     * @var mixed|string
-     */
+    /** @var mixed|string */
     protected $moduleId;
 
     /**
@@ -321,23 +317,5 @@ class Form extends FromAbstract
         <?=bitrix_sessid_post();?>
         <?php $this->tabControl->End();?>
         </form><?php
-    }
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    protected function showMessages()
-    {
-        $messages       = $this->options->message->get();
-        $messagesCnt    = count($messages);
-
-        if (!$messagesCnt)
-            return;
-
-        for ($i = 0; $i < $messagesCnt; ++$i)
-        {
-            $message = new \CAdminMessage($messages[$i]);
-            echo $message->Show();
-        }
     }
 }

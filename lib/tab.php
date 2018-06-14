@@ -342,8 +342,8 @@ class Tab
             return;
 
 		foreach ($this->inputs as $input)
-			/** @var Input $input */
-			$input->setValueFromRequest();
+            /** @var Input $input */
+            $input->setValueFromRequest();
 	}
 
     /**

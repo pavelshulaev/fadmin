@@ -36,14 +36,14 @@ class Iblock extends Input
         }
 
         $valueName      = $this->input->getValueName();
-        $additionsHtml  = $this->input->getDisabled() ? 'disabled="disabled"': '';
+        $additionsHtml  = $this->input->isDisabled() ? 'disabled="disabled"': '';
         $value          = $this->input->getValue();
         $name           = $this->input->getName();
 
         if ($this->input->isMultiple())
-            echo self::getIBlockDropDownListMultiple($value, $name . '_type', $valueName, false, '', '', $additionsHtml);
+            echo self::getIBlockDropDownListMultiple($value, $valueName . '_type', $valueName, false, '', '', $additionsHtml);
         else
-            echo GetIBlockDropDownList($value, $name . '_type', $valueName, false, '', $additionsHtml);
+            echo GetIBlockDropDownList($value, $valueName . '_type', $valueName, false, '', $additionsHtml);
     }
 
     /**

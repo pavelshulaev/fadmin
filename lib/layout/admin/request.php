@@ -13,6 +13,7 @@ namespace Rover\Fadmin\Layout\Admin;
 use Bitrix\Main\Application;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\SystemException;
+use Rover\Fadmin\Inputs\Addpreset;
 use Rover\Fadmin\Layout\Request as RequestAbstract;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
@@ -25,35 +26,22 @@ use Rover\Fadmin\Tab;
  */
 class Request extends RequestAbstract
 {
-
-    /**
-     * @var mixed|string
-     */
+    /** @var mixed|string */
     protected $moduleId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $activeTab;
 
-    /**
-     * @var mixed|string
-     */
+    /** @var mixed|string */
     protected $requestMethod = 'POST';
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $update;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $apply;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $restoreDefaults;
 
     /**
@@ -144,10 +132,13 @@ class Request extends RequestAbstract
      */
     protected function addPreset()
     {
-        $presetId = parent::addPreset();
+        list($siteId, $value) = explode(Addpreset::SEPARATOR,
+            $this->request->get(Addpreset::$type));
+
+        $presetId = intval($this->options->tabMap->addPreset($value, $siteId));
 
         if ($presetId){
-            $presetTab = $this->options->tabMap->getTabByPresetId($presetId, '', true);
+            $presetTab = $this->options->tabMap->getTabByPresetId($presetId, $siteId, true);
             if (!$presetTab instanceof Tab)
                 throw new ArgumentOutOfRangeException('presetId');
 

@@ -23,9 +23,7 @@ use Bitrix\Main\EventResult;
  */
 class Selectgroup extends Selectbox
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public static $type = self::TYPE__SELECT_GROUP;
 
     /**
