@@ -37,6 +37,8 @@ abstract class Input
     const TYPE__SUBMIT          = 'submit';
     const TYPE__TEXT            = 'text';
 	const TYPE__TEXTAREA        = 'textarea';
+	const TYPE__SUBTABCONTROL   = 'subtabcontrol';
+	const TYPE__SUBTAB          = 'subtab';
 
     /** @var string */
 	public static $type;
@@ -373,7 +375,10 @@ abstract class Input
 	public function removeValue()
 	{
 		$this->value = null;
-		$filter      = array('name' => $this->getValueName(), 'site_id' => $this->tab->getSiteId());
+		$filter      = array(
+		    'name' => $this->getValueName(),
+            'site_id' => $this->tab->getSiteId()
+        );
 
 		Option::delete($this->tab->getModuleId(), $filter);
 	}

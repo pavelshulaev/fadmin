@@ -195,9 +195,7 @@ class Form extends FromAbstract
      */
     protected function getValue(Input $input)
     {
-        /**
-         * @var \Rover\Fadmin\Layout\Preset\Input $layout
-         */
+        /** @var \Rover\Fadmin\Layout\Preset\Input $layout */
         $layout = \Rover\Fadmin\Layout\Preset\Input::factory($input);
 
         ob_start();
