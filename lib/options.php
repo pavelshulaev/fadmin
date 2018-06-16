@@ -142,14 +142,25 @@ abstract class Options
 		try{
 			return $this->$name($params);
 		} catch (\Exception $e) {
-			$this->message->addError($e->getMessage());
-
-			if ($this->settings->getLogErrors())
-				$this->writeException2Log($e);
+		    $this->handleException($e);
 
 			return false;
 		}
 	}
+
+    /**
+     * @param \Exception $e
+     * @throws ArgumentNullException
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function handleException(\Exception $e)
+    {
+        $this->message->addError($e->getMessage());
+
+        if ($this->settings->getLogErrors())
+            Application::getInstance()->getExceptionHandler()->writeToLog($e);
+    }
 
     /**
      * @param bool $reload
@@ -164,12 +175,6 @@ abstract class Options
 
         return $this->cache->get('config', 'config');
     }
-
-    /**
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	abstract public function getConfig();
 
 	/**
 	 * @return mixed
@@ -278,19 +283,6 @@ abstract class Options
 	}
 
     /**
-     * @param \Exception $e
-     * @throws Main\SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public static function writeException2Log(\Exception $e)
-	{
-		Application::getInstance()
-			->getExceptionHandler()
-			->writeToLog($e);
-	}
-
-
-    /**
      * @param        $moduleId
      * @param        $name
      * @param string $presetId
@@ -318,4 +310,11 @@ abstract class Options
 
         return Input::getValueStatic($params, $moduleId, $presetId, $siteId);
     }
+
+
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    abstract public function getConfig();
 }

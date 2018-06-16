@@ -74,11 +74,7 @@ class SubTabControl extends Input
 
             if (($subTab instanceof SubTab) && !$subTab->isHidden()) {
                 $subTabControl->BeginNextTab();
-                ?><table class="adm-detail-content-table edit-table"><?php
-
-                    self::drawStatic($subTab);
-
-                ?></table><?php
+                self::drawStatic($subTab);
             }
         }
 

@@ -25,7 +25,7 @@ class TestOptions extends Options
 
     /**
      * @param string $moduleId
-     * @return mixed
+     * @return static
      * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
@@ -43,7 +43,9 @@ class TestOptions extends Options
 		return array(
 			'tabs' => self::getTabs(),
             'settings' => array(
-                Settings::BOOL_CHECKBOX => true
+                Settings::BOOL_CHECKBOX => true,
+                Settings::USE_SORT => true,
+                Settings::GROUP_RIGHTS => true,
             )
         );
 	}
@@ -150,16 +152,16 @@ class TestOptions extends Options
                                     array(
                                         'type'      => Input::TYPE__IBLOCK,
                                         'name'      => 'iblock',
-                                        'label'     => 'This is a single iblock',
+                                        'label'     => 'This is a hidden single iblock',
                                         'sort'      => '900',
-                                        'display'   => false
+                                        'hidden'    => true
                                     ),
                                     array(
                                         'type'      => Input::TYPE__IBLOCK,
                                         'name'      => 'multiple_iblock',
                                         'multiple'  => true,
                                         'label'     => 'This is a multiple iblock',
-                                        'sort'      => '1000'
+                                        'sort'      => '500'
                                     ),
                                 )
                             )

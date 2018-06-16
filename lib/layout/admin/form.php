@@ -258,18 +258,9 @@ class Form extends FromAbstract
      */
     protected function showGroupRightsTab()
     {
-        global $APPLICATION, $REQUEST_METHOD;
-
-        $RIGHTS     = $_REQUEST['RIGHTS'];
-        $SITES      = $_REQUEST['SITES'];
-        $GROUPS     = $_REQUEST['GROUPS'];
-        $Apply      = $_REQUEST['Apply'];
-        $Update     = $_REQUEST['Update'] ?:$Apply;
-        $module_id  = $_REQUEST['mid'];
-
         $this->tabControl->BeginNextTab();
 
-        require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/admin/group_rights.php");
+        parent::includeGroupRightsTab();
     }
 
     /**

@@ -71,6 +71,9 @@ class Request extends RequestAbstract
     }
 
     /**
+     * @return bool|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function removePreset()
@@ -79,11 +82,14 @@ class Request extends RequestAbstract
             if (parent::removePreset() && strlen($this->params['back_url']))
                 $this->redirect($this->params['back_url']);
         } catch (\Exception $e) {
-            $this->options->message->addError($e->getMessage());
+            $this->options->handleException($e);
         }
     }
 
     /**
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setValues()
@@ -104,7 +110,7 @@ class Request extends RequestAbstract
                 : $this->params['this_url'];
             $this->redirect($redirectUrl);
         } catch (\Exception $e) {
-            $this->options->message->addError($e->getMessage());
+            $this->options->handleException($e);
         }
     }
 }

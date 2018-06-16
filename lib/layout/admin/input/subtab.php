@@ -28,7 +28,9 @@ class SubTab extends Input
      */
     public function draw()
     {
-        $this->showInput();
+        ?><table class="adm-detail-content-table edit-table"><?php
+            $this->showInput();
+        ?></table><?php
     }
 
     /**

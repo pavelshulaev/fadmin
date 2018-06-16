@@ -13,6 +13,7 @@ namespace Rover\Fadmin\Options;
 use \Bitrix\Main\ArgumentNullException;;
 
 use Bitrix\Main\ArgumentOutOfRangeException;
+use Rover\Fadmin\Layout\Form;
 use \Rover\Fadmin\Options;
 use \Rover\Fadmin\Tab;
 use \Rover\Fadmin\Inputs\Input;
@@ -312,6 +313,13 @@ class TabMap
 
         foreach ($tabs as $tab)
             $tab->setValuesFromRequest();
+
+        // handle group rights tab
+        if ($this->options->settings->getGroupRights()) {
+            ob_start();
+            Form::includeGroupRightsTab();
+            ob_clean();
+        }
 
         if (!$this->options->event
             ->handle(Event::AFTER_ADD_VALUES_FROM_REQUEST, compact('tabs'))

@@ -81,4 +81,21 @@ abstract class Form
     }
 
     abstract public function show();
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public static function includeGroupRightsTab()
+    {
+        global $APPLICATION, $REQUEST_METHOD;
+
+        $RIGHTS     = $_REQUEST['RIGHTS'];
+        $SITES      = $_REQUEST['SITES'];
+        $GROUPS     = $_REQUEST['GROUPS'];
+        $Apply      = $_REQUEST['Apply'];
+        $Update     = $_REQUEST['Update'] ?:$Apply;
+        $module_id  = $_REQUEST['mid'];
+
+        include($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/admin/group_rights.php");
+    }
 }

@@ -78,6 +78,7 @@ class Request extends RequestAbstract
     }
 
     /**
+     * @return mixed|void
      * @throws SystemException
      * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
@@ -94,7 +95,7 @@ class Request extends RequestAbstract
                 if ($this->options->tabMap->setValuesFromRequest(true))
                     $this->redirect();
             } catch (\Exception $e) {
-                $this->options->message->addError($e->getMessage());
+                $this->options->handleException($e);
             }
     }
 

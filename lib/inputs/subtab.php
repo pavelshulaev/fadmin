@@ -79,4 +79,20 @@ class SubTab extends Input
             $input->setValueFromRequest();
         }
     }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function sort()
+    {
+        if (!count($this->inputs))
+            return;
+
+        usort($this->inputs, function(Input $i1, Input $i2)
+        {
+            if($i1->getSort() < $i2->getSort()) return -1;
+            elseif($i1->getSort() > $i2->getSort()) return 1;
+            else return 0;
+        });
+    }
 }

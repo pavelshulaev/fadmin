@@ -206,9 +206,7 @@ class Tab
 	public function search(array $filter)
 	{
 		foreach ($this->inputs as $input) {
-			/**
-			 * @var Input $input
-			 */
+			/** @var Input $input */
 			if (isset($filter['id']) && strlen($filter['id'])
 				&& $filter['id'] == $input->getValueId())
 				return $input;
@@ -323,7 +321,12 @@ class Tab
 		if (!count($this->inputs))
 			return;
 
-		uasort($this->inputs, function(Input $i1, Input $i2){
+		usort($this->inputs, function(Input $i1, Input $i2)
+        {
+            // sort no subtabs
+		    if (method_exists($i1, 'sort'))
+		        $i1->sort();
+
 			if($i1->getSort() < $i2->getSort()) return -1;
 			elseif($i1->getSort() > $i2->getSort()) return 1;
 			else return 0;

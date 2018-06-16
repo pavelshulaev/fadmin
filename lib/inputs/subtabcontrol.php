@@ -79,4 +79,19 @@ class SubTabControl extends Input
             $subTab->setValueFromRequest();
         }
     }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function sort()
+    {
+        $subTabs    = $this->getSubTabs();
+        $subTabsCnt = count($subTabs);
+
+        for ($i = 0; $i < $subTabsCnt; ++$i){
+            /** @var SubTab $subTab */
+            $subTab = $subTabs[$i];
+            $subTab->sort();
+        }
+    }
 }
