@@ -93,7 +93,7 @@
 ### `protected $hidden = false` 
 Флаг скрытости инпута. Если установлен, то инпут не выводится
 
-### `protected $disabled = 500` 
+### `protected $disabled = false` 
 Атрибут `disabled`
 
 ## Методы
