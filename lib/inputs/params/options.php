@@ -12,9 +12,7 @@ namespace Rover\Fadmin\Inputs\Params;
 
 trait Options
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $options = array();
 
     /**

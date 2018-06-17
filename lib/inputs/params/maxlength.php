@@ -17,9 +17,7 @@ namespace Rover\Fadmin\Inputs\Params;
  */
 trait MaxLength
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $maxLength;
 
     /**

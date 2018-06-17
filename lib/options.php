@@ -32,7 +32,8 @@ Loc::LoadMessages(__FILE__);
  */
 abstract class Options
 {
-	const SEPARATOR = '__';
+    /** @deprecated  */
+    const SEPARATOR = '__';
 
 	/** @var string */
 	protected $moduleId;
@@ -187,6 +188,7 @@ abstract class Options
 	 * @param string $siteId
 	 * @return string
 	 * @author Pavel Shulaev (http://rover-it.me)
+     * @deprecated
 	 */
 	public static function getFullName($name, $presetId = '', $siteId = '')
 	{
