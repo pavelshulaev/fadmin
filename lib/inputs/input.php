@@ -35,10 +35,10 @@ abstract class Input
     const TYPE__SELECT_GROUP    = 'selectgroup';
     const TYPE__SCHEDULE        = 'schedule';
     const TYPE__SUBMIT          = 'submit';
+    const TYPE__SUBTABCONTROL   = 'subtabcontrol';
+    const TYPE__SUBTAB          = 'subtab';
     const TYPE__TEXT            = 'text';
 	const TYPE__TEXTAREA        = 'textarea';
-	const TYPE__SUBTABCONTROL   = 'subtabcontrol';
-	const TYPE__SUBTAB          = 'subtab';
 
     /** @var string */
 	public static $type;

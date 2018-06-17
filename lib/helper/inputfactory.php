@@ -291,21 +291,42 @@ class InputFactory
 	}
 
     /**
-     * @param        $label
+     * @param string $name
      * @param string $default
+     * @param bool   $disabled
+     * @param string $label
      * @param string $help
      * @return array
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getLabel($label, $default = '', $help = '')
+	public static function getLabel($name = '', $default = '', $disabled = false, $label = '', $help = '')
 	{
 		return array(
+		    'name'      => $name ? : Input::TYPE__LABEL,
 			'type'      => Input::TYPE__LABEL,
 			'label'     => $label,
 			'default'   => $default,
+            'disabled'  => $disabled,
             'help'      => $help
         );
 	}
+
+    /**
+     * @param        $label
+     * @param string $help
+     * @param string $default
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getLabelShort($label, $help = '', $default = '')
+    {
+        return array(
+            'type'      => Input::TYPE__LABEL,
+            'label'     => $label,
+            'default'   => $default,
+            'help'      => $help
+        );
+    }
 
     /**
      * @param        $name
