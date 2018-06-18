@@ -10,11 +10,6 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\AmoCRM\Config\Options;
-use Rover\Fadmin\Tab;
-use Bitrix\Main\Event;
-use Bitrix\Main\EventResult;
-
 /**
  * Class Selectbox
  *
@@ -23,11 +18,6 @@ use Bitrix\Main\EventResult;
  */
 class Selectgroup extends Selectbox
 {
-    /**
-     * @var string
-     */
-    public static $type = self::TYPE__SELECT_GROUP;
-
     /**
      * @return string
      * @author Pavel Shulaev (https://rover-it.me)
@@ -39,12 +29,13 @@ class Selectgroup extends Selectbox
 
     /**
      * @return string
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getGroupValueName()
     {
-        return Options::getFullName($this->getGroupName(),
-            $this->tab->getPresetId(), $this->tab->getSiteId());
+        return self::getFullPath($this->getGroupName(),
+            $this->getPresetId(), $this->getSiteId());
     }
 
     /**
@@ -56,10 +47,10 @@ class Selectgroup extends Selectbox
     {
         $params = array(
             'name' => $this->getGroupName(),
-            'type' => self::TYPE__HIDDEN
+            'type' => Hidden::getType()
         );
 
-        return self::factory($params, $this->tab);
+        return self::factory($params, $this->optionsEngine);
     }
 
     /**

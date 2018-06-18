@@ -10,6 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Rover\Fadmin\Options;
 use Rover\Fadmin\Tab;
 /**
  * Class Hidden
@@ -19,24 +20,19 @@ use Rover\Fadmin\Tab;
  */
 class Hidden extends Text
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__HIDDEN;
-
     /**
      * Hidden constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array   $params
+     * @param Options $options
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-    public function __construct(array $params, Tab $tab)
+    public function __construct(array $params, Options $options)
     {
         if (!isset($params['label']))
-            $params['label'] = self::$type;
+            $params['label'] = self::getType();
 
-        parent::__construct($params, $tab);
+        parent::__construct($params, $options);
     }
 }

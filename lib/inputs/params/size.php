@@ -17,7 +17,7 @@ namespace Rover\Fadmin\Inputs\Params;
  */
 trait Size
 {
-    /** @var */
+    /** @var int */
     protected $size;
 
     /**

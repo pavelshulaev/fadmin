@@ -261,7 +261,7 @@ trait Common
      * @return bool
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function getDisabled()
+    public function isDisabled()
     {
         return $this->disabled;
     }

@@ -20,19 +20,13 @@ use Rover\Fadmin\Options;
  */
 abstract class Form
 {
-    /**
-     * @var Options
-     */
+    /** @var Options */
     protected $options;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $params;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
     /**
@@ -68,5 +62,40 @@ abstract class Form
         return $this->request;
     }
 
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function showMessages()
+    {
+        $messages       = $this->options->message->get();
+        $messagesCnt    = count($messages);
+
+        if (!$messagesCnt)
+            return;
+
+        for ($i = 0; $i < $messagesCnt; ++$i)
+        {
+            $message = new \CAdminMessage($messages[$i]);
+            echo $message->Show();
+        }
+    }
+
     abstract public function show();
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public static function includeGroupRightsTab()
+    {
+        global $APPLICATION, $REQUEST_METHOD;
+
+        $RIGHTS     = $_REQUEST['RIGHTS'];
+        $SITES      = $_REQUEST['SITES'];
+        $GROUPS     = $_REQUEST['GROUPS'];
+        $Apply      = $_REQUEST['Apply'];
+        $Update     = $_REQUEST['Update'] ?:$Apply;
+        $module_id  = $_REQUEST['mid'];
+
+        include($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/admin/group_rights.php");
+    }
 }

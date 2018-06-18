@@ -10,7 +10,11 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Inputs\Params\MaxLength;
+
+use Rover\Fadmin\Inputs\Params\Size;
+use Rover\Fadmin\Options;
+
 /**
  * Class Text
  *
@@ -19,32 +23,19 @@ use Rover\Fadmin\Tab;
  */
 class Text extends Input
 {
-    /**
-     * @var int
-     */
-    protected $maxLength;
-
-    /**
-     * @var
-     */
-    protected $size;
-
-    /**
-	 * @var string
-	 */
-	public static $type = self::TYPE__TEXT;
+    use MaxLength, Size;
 
     /**
      * Text constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array   $params
+     * @param Options $options
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options)
 	{
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options);
 
 		if (isset($params['maxLength']) && intval($params['maxLength']))
 			$this->maxLength = intval($params['maxLength']);
@@ -56,46 +47,4 @@ class Text extends Input
 		else
 		    $this->size = 50;
 	}
-
-    /**
-     * @return int
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function getMaxLength()
-    {
-        return $this->maxLength;
-    }
-
-    /**
-     * @param $maxLength
-     * @return $this
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function setMaxLength($maxLength)
-    {
-        $this->maxLength = intval($maxLength);
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    /**
-     * @param $size
-     * @return $this
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function setSize($size)
-    {
-        $this->size = intval($size);
-
-        return $this;
-    }
 }

@@ -10,6 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Rover\Fadmin\Inputs\Params\Options;
 use Rover\Fadmin\Tab;
 
 /**
@@ -20,33 +21,23 @@ use Rover\Fadmin\Tab;
  */
 class Number extends Text
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__NUMBER;
-
-
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $min;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $max;
 
     /**
      * Number constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array   $params
+     * @param Options $options
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options)
 	{
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options);
 
 		if (isset($params['min']))
 			$this->min = (int)$params['min'];

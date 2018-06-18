@@ -29,7 +29,7 @@ class Color extends Input
     public function showInput()
     {
         ?><input
-        <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+        <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
         id="<?=$this->input->getValueId()?>"
         type="color"
         value="<?=$this->input->getValue()?>"

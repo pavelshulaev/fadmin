@@ -11,15 +11,11 @@
 namespace Rover\Fadmin\Inputs;
 
 /**
- * Class Clock
+ * Class Date
  *
  * @package Rover\Fadmin\Inputs
- * @author  Pavel Shulaev (http://rover-it.me)
+ * @author  Pavel Shulaev (https://rover-it.me)
  */
 class Date extends DateTime
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__DATE;
 }

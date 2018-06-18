@@ -10,7 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Options;
 /**
  * Class Header
  *
@@ -19,25 +19,20 @@ use Rover\Fadmin\Tab;
  */
 class Header extends Input
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__HEADER;
-
     /**
      * Header constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array   $params
+     * @param Options $options
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options)
 	{
 		if (!isset($params['name']))
-			$params['name'] = self::$type;
+			$params['name'] = self::getType();
 
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options);
 	}
 
     /**

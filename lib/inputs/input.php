@@ -5,7 +5,6 @@ use Bitrix\Main;
 use Bitrix\Main\Application;
 use \Bitrix\Main\Config\Option;
 use Rover\Fadmin\Inputs\Params\Common;
-use \Rover\Fadmin\Tab;
 use \Rover\Fadmin\Options;
 
 /**
@@ -18,36 +17,56 @@ abstract class Input
 {
     use Common;
 
+    /** @deprecated  */
     const TYPE__ADD_PRESET      = 'addpreset';
-	const TYPE__CHECKBOX        = 'checkbox';
+    /** @deprecated  */
+    const TYPE__CHECKBOX        = 'checkbox';
+    /** @deprecated  */
     const TYPE__CLOCK           = 'clock';
+    /** @deprecated  */
 	const TYPE__COLOR           = 'color';
+    /** @deprecated  */
     const TYPE__CUSTOM          = 'custom';
+    /** @deprecated  */
     const TYPE__DATE            = 'date';
+    /** @deprecated  */
 	const TYPE__DATETIME        = 'datetime';
+    /** @deprecated  */
     const TYPE__FILE            = 'file';
+    /** @deprecated  */
 	const TYPE__HEADER          = 'header';
+    /** @deprecated  */
     const TYPE__HIDDEN          = 'hidden';
+    /** @deprecated  */
     const TYPE__IBLOCK          = 'iblock';
+    /** @deprecated  */
     const TYPE__LABEL           = 'label';
+    /** @deprecated  */
     const TYPE__NUMBER          = 'number';
+    /** @deprecated  */
     const TYPE__PRESET_NAME     = 'presetname';
+    /** @deprecated  */
     const TYPE__RADIO           = 'radio';
+    /** @deprecated  */
     const TYPE__REMOVE_PRESET   = 'removepreset';
+    /** @deprecated  */
     const TYPE__SELECTBOX       = 'selectbox';
+    /** @deprecated  */
     const TYPE__SELECT_GROUP    = 'selectgroup';
+    /** @deprecated  */
     const TYPE__SCHEDULE        = 'schedule';
+    /** @deprecated  */
     const TYPE__SUBMIT          = 'submit';
+    /** @deprecated  */
+    const TYPE__SUBTABCONTROL   = 'subtabcontrol';
+    /** @deprecated  */
+    const TYPE__SUBTAB          = 'subtab';
+    /** @deprecated  */
     const TYPE__TEXT            = 'text';
+    /** @deprecated  */
 	const TYPE__TEXTAREA        = 'textarea';
 
     const SEPARATOR = '__';
-
-    /**
-     * @var Tab
-     * @deprecated
-     */
-	protected $tab;
 
 	/** @var Options */
 	protected $optionsEngine;
@@ -55,13 +74,12 @@ abstract class Input
     /**
      * Input constructor.
      *
-     * @param Options $options
      * @param array   $params
-     * @param Tab     $tab
+     * @param Options $options
      * @throws Main\ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
      */
-	public function __construct(Options $options, array $params, Tab $tab)
+	public function __construct(array $params, Options $options)
 	{
 		if (is_null($params['name']))
 			throw new Main\ArgumentNullException('name');
@@ -75,13 +93,9 @@ abstract class Input
 		if (is_null($params['id']))
 			$params['id'] = $params['name'];
 
-		$this->options = $options;
-
-		// @TODO: delete
-		$this->tab = $tab;
-
-		$this->id   = htmlspecialcharsbx($params['id']);
-		$this->name = htmlspecialcharsbx($params['name']);
+		$this->optionsEngine= $options;
+		$this->id           = htmlspecialcharsbx($params['id']);
+		$this->name         = htmlspecialcharsbx($params['name']);
 
 		$this->setLabel($params['label']);
 		$this->setDefault($params['default']);
@@ -113,14 +127,13 @@ abstract class Input
 	}
 
     /**
-     * @param Options $options
      * @param array   $params
-     * @param Tab     $tab
+     * @param Options $options
      * @return mixed
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function factory(Options $options, array $params, Tab $tab)
+	public static function factory(array $params, Options $options)
 	{
 		$className = '\Rover\Fadmin\Inputs\\' . ucfirst($params['type']);
 
@@ -130,8 +143,7 @@ abstract class Input
 		if ($className == '\Rover\Fadmin\Inputs\Input')
 			throw new Main\SystemException('Can\'t create "' . $className . '" instance');
 
-		// @todo: remove tab
-		$input = new $className($options, $params, $tab);
+		$input = new $className($params, $options);
 
 		if ($input instanceof Input === false)
 			throw new Main\SystemException('"' . $className . '" is not "\Rover\Fadmin\Inputs\Input" instance');
@@ -150,9 +162,7 @@ abstract class Input
         if ($this->disabled)
             throw new Main\SystemException('input is disabled');
 
-        $this->value = $this->saveValue($value)
-            ? $value
-            : null;
+        $this->value = $this->saveValue($value) ? $value : null;
 
         return $this;
     }
@@ -182,8 +192,18 @@ abstract class Input
     /**
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (http://rover-it.me)
+     * @deprecated
      */
     public function removeValue()
+    {
+        $this->clear();
+    }
+
+    /**
+     * @throws Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function clear()
     {
         $this->value = null;
         $filter      = array(
@@ -279,7 +299,7 @@ abstract class Input
             $this->loadValue();
 
         if (!static::beforeGetValue($this->value))
-            return null;
+            $this->value = null;
 
         return $this->value;
     }
@@ -289,32 +309,29 @@ abstract class Input
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setValueFromRequest()
-    {
-        if ($this->getDisabled())
-            return false;
+	public function setValueFromRequest()
+	{
+	    if ($this->isDisabled())
+	        return false;
 
         $request = Application::getInstance()
             ->getContext()
             ->getRequest();
 
-        if ((!$request->offsetExists($this->getValueName())
-            && ($this->getType() != self::TYPE__CHECKBOX)))
-            return false;
+		if (!$request->offsetExists($this->getValueName())
+			&& (static::getType() != Checkbox::getType())
+            && (static::getType() != File::getType()))
+			return false;
 
         $value = $request->get($this->getValueName());
 
-        // EVENT: beforeSaveRequest
         if (!static::beforeSaveRequest($value))
             return false;
 
-        //serialize multiple value
         if ($this->multiple && is_array($value))
             $value = serialize($value);
 
         $this->setValue($value);
-
-        return true;
     }
 
     /**
@@ -330,7 +347,7 @@ abstract class Input
      * @return mixed
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function getType()
+    public static function getType()
     {
         $className = static::getClassName();
 
@@ -380,32 +397,6 @@ abstract class Input
             $result = htmlspecialcharsbx($siteId) . self::SEPARATOR . $result;
 
         return $result;
-    }
-
-
-
-
-    /**
-     * @param Tab $tab
-     * @return $this
-     * @author Pavel Shulaev (http://rover-it.me)
-     * @deprecated
-     */
-    public function setTab(Tab $tab)
-    {
-        $this->tab = $tab;
-
-        return $this;
-    }
-
-    /**
-     * @return Tab
-     * @author Pavel Shulaev (http://rover-it.me)
-     * @deprecated
-     */
-    public function getTab()
-    {
-        return $this->tab;
     }
 
     /**

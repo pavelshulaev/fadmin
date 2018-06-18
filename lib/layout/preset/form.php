@@ -72,8 +72,8 @@ class Form extends FromAbstract
     {
         if (is_null($this->request)) {
             $this->request = new Request($this->options, array(
-                'back_url' => $this->params['back_url'],
-                'this_url' => $this->params['this_url'],
+                'back_url'  => $this->params['back_url'],
+                'this_url'  => $this->params['this_url'],
                 'preset_id' => $this->params['preset_id'],
             ));
         }
@@ -195,9 +195,7 @@ class Form extends FromAbstract
      */
     protected function getValue(Input $input)
     {
-        /**
-         * @var \Rover\Fadmin\Layout\Preset\Input $layout
-         */
+        /** @var \Rover\Fadmin\Layout\Preset\Input $layout */
         $layout = \Rover\Fadmin\Layout\Preset\Input::factory($input);
 
         ob_start();
@@ -225,30 +223,18 @@ class Form extends FromAbstract
             "bitrix:main.interface.form",
             "",
             array(
-                //идентификатор формы
-                "FORM_ID"   =>  $this->params['form_id'],
-                //описание вкладок формы
-                "TABS"      =>  $formTabs,
-                //кнопки формы, возможны кастомные кнопки в виде html в "custom_html"
-                "BUTTONS"   =>  array(
+
+                "FORM_ID"   =>  $this->params['form_id'],   //идентификатор формы
+                "TABS"      =>  $formTabs,                  //описание вкладок формы
+                "BUTTONS"   =>  array(                      //кнопки формы, возможны кастомные кнопки в виде html в "custom_html"
                     "back_url"          => $this->params['back_url'],
                     "custom_html"       => $this->params['custom_buttons'],
                     "standard_buttons"  => true
                 ),
-                //данные для редактировани
-                "DATA"      => $data,
+                "DATA"      => $data,   //данные для редактировани
             ),
             false,
             array('HIDE_ICONS' => 'Y')
         );
-    }
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    protected function showMessages()
-    {
-        foreach ($this->options->message->get() as $message)
-            \CAdminMessage::ShowMessage($message);
     }
 }

@@ -23,8 +23,6 @@ Loc::loadMessages(__FILE__);
  */
 class PresetName extends Text
 {
-	public static $type = self::TYPE__PRESET_NAME;
-
     /**
      * PresetName constructor.
      *
@@ -38,18 +36,18 @@ class PresetName extends Text
 	{
 		parent::__construct($params, $tab);
 
-		if (!$this->tab->isPreset())
+		if (!$this->isPreset())
 			return;
 
-		$presetId = $this->tab->getPresetId();
+		$presetId = $this->getPresetId();
 
 		if (!$presetId)
 			return;
 
 		$value = $this->getValue();
 		if (empty($value))
-			$this->setValue($this->tab->options
-				->preset->getNameById($presetId, $this->tab->getSiteId()));
+			$this->setValue($this->optionsEngine
+				->preset->getNameById($presetId, $this->getSiteId()));
 	}
 
     /**
@@ -62,24 +60,24 @@ class PresetName extends Text
      */
 	public function beforeSaveRequest(&$value)
 	{
-		if (!$this->tab->isPreset())
+		if (!$this->isPreset())
 			return true;
 
-		$presetId = $this->tab->getPresetId();
+		$presetId = $this->getPresetId();
 
 		if (!$presetId)
 			return true;
 
 		if (empty($value)){
-			$this->tab->options->message->addError(
+			$this->optionsEngine->message->addError(
 				Loc::getMessage('rover-fa__presetname-no-name',
                     array('#last-preset-name#' => $this->getValue())));
 
 			return false;
 		}
 
-		$this->tab->options->preset->updateName($presetId, $value,
-			$this->tab->getSiteId());
+		$this->optionsEngine->preset->updateName($presetId, $value,
+			$this->getSiteId());
 
 		return true;
 	}

@@ -24,11 +24,6 @@ Loc::loadMessages(__FILE__);
  */
 class Addpreset extends Submit
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__ADD_PRESET;
-
     /**
      * Addpreset constructor.
      *
@@ -37,11 +32,13 @@ class Addpreset extends Submit
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
-	{
-		$params['name'] = self::$type;
 
-		parent::__construct($params, $tab);
+	public function __construct(array $params, Options $options)
+	{
+	    if (!isset($params['name']))
+		    $params['name'] = self::getType();
+
+		parent::__construct($params, $options);
 	}
 
     /**

@@ -35,7 +35,7 @@ class Text extends Input
 
         ?><input
             type="text"
-            <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+            <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
             id="<?=$this->input->getValueId()?>"
             size="<?=$this->input->getSize()?>"
             maxlength="<?=$this->input->getMaxLength()?>"

@@ -29,14 +29,10 @@ Loc::loadMessages(__FILE__);
  */
 class Form extends FromAbstract
 {
-    /**
-     * @var \CAdminTabControl
-     */
+    /** @var \CAdminTabControl */
     protected $tabControl;
 
-    /**
-     * @var mixed|string
-     */
+    /** @var mixed|string */
     protected $moduleId;
 
     /**
@@ -94,18 +90,16 @@ class Form extends FromAbstract
         $allTabsInfo    = array();
 
         foreach ($tabs as $tab)
-            /**
-             * @var Tab $tab
-             */
+            /** @var Tab $tab */
             $allTabsInfo[] = $this->getTabInfo($tab);
 
         // add group rights tab
         if ($this->options->settings->getGroupRights())
             $allTabsInfo[] = array(
                 "DIV"   => "edit2",
-                "TAB"   => GetMessage("MAIN_TAB_RIGHTS"),
+                "TAB"   => Loc::getMessage("MAIN_TAB_RIGHTS"),
                 "ICON"  => "form_settings",
-                "TITLE" => GetMessage("MAIN_TAB_TITLE_RIGHTS")
+                "TITLE" => Loc::getMessage("MAIN_TAB_TITLE_RIGHTS")
             );
 
         return $allTabsInfo;
@@ -142,9 +136,9 @@ class Form extends FromAbstract
      */
     protected function getTabInfo(Tab $tab)
     {
-        $name = $tab->getName();
-        $icon = "ib_settings";
-        $label = strlen($tab->getSiteId())
+        $name   = $tab->getName();
+        $icon   = "ib_settings";
+        $label  = strlen($tab->getSiteId())
             ? $tab->getLabel() . ' [' . $tab->getSiteId() . ']'
             : $tab->getLabel();
         $description = strlen($tab->getSiteId())
@@ -211,7 +205,11 @@ class Form extends FromAbstract
     {
         global $APPLICATION;
 
-        ?><form method="post" id="fadmin-form" enctype="multipart/form-data" name='<?=$this->moduleId?>' action="<?=$APPLICATION->GetCurPage()?>?mid=<?=urlencode($this->moduleId)?>&amp;lang=<?=LANGUAGE_ID?>"><?php
+        ?><form method="post"
+                id="fadmin-form"
+                enctype="multipart/form-data"
+                name='<?=$this->moduleId?>'
+                action="<?=$APPLICATION->GetCurPage()?>?mid=<?=urlencode($this->moduleId)?>&amp;lang=<?=LANGUAGE_ID?>"><?php
     }
 
     /**
@@ -233,13 +231,12 @@ class Form extends FromAbstract
         if ($this->options->settings->getUseSort())
             $tab->sort();
 
-        $inputs = $tab->getInputs();
+        /** @var InputEngine[] $inputs */
+        $inputs     = $tab->getInputs();
+        $inputsCnt  = count($inputs);
 
-        foreach ($inputs as $input)
-            /**
-             * @var InputEngine $input
-             */
-            $this->showInput($input);
+        for ($i = 0; $i < $inputsCnt; ++$i)
+            $this->showInput($inputs[$i]);
     }
 
     /**
@@ -252,7 +249,7 @@ class Form extends FromAbstract
     {
         $input->loadValue();
 
-        if ($input->getDisplay())
+        if (!$input->isHidden())
             Input::drawStatic($input);
     }
 
@@ -261,18 +258,9 @@ class Form extends FromAbstract
      */
     protected function showGroupRightsTab()
     {
-        global $APPLICATION, $REQUEST_METHOD;
-
-        $RIGHTS     = $_REQUEST['RIGHTS'];
-        $SITES      = $_REQUEST['SITES'];
-        $GROUPS     = $_REQUEST['GROUPS'];
-        $Apply      = $_REQUEST['Apply'];
-        $Update     = $_REQUEST['Update'] ?:$Apply;
-        $module_id  = $_REQUEST['mid'];
-
         $this->tabControl->BeginNextTab();
 
-        require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/admin/group_rights.php");
+        parent::includeGroupRightsTab();
     }
 
     /**
@@ -300,17 +288,17 @@ class Form extends FromAbstract
             value="<?=Loc::getMessage("MAIN_OPT_APPLY")?>"
             title="<?=Loc::getMessage("MAIN_OPT_APPLY_TITLE")?>">
         <?php if(strlen($backUrl) > 0):?>
-        <input
-            type="button"
-            name="Cancel"
-            value="<?=Loc::getMessage("MAIN_OPT_CANCEL")?>"
-            title="<?=Loc::getMessage("MAIN_OPT_CANCEL_TITLE")?>"
-            onclick="window.location='<?=htmlspecialcharsbx(\CUtil::addslashes($backUrl))?>'">
-        <input
-            type="hidden"
-            name="back_url_settings"
-            value="<?=htmlspecialcharsbx($backUrl)?>">
-    <?php endif?>
+            <input
+                type="button"
+                name="Cancel"
+                value="<?=Loc::getMessage("MAIN_OPT_CANCEL")?>"
+                title="<?=Loc::getMessage("MAIN_OPT_CANCEL_TITLE")?>"
+                onclick="window.location='<?=htmlspecialcharsbx(\CUtil::addslashes($backUrl))?>'">
+            <input
+                type="hidden"
+                name="back_url_settings"
+                value="<?=htmlspecialcharsbx($backUrl)?>">
+        <?php endif?>
         <input
             type="submit"
             name="RestoreDefaults"
@@ -320,22 +308,5 @@ class Form extends FromAbstract
         <?=bitrix_sessid_post();?>
         <?php $this->tabControl->End();?>
         </form><?php
-    }
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    protected function showMessages()
-    {
-        $messages       = $this->options->message->get();
-        $messagesCnt    = count($messages);
-
-        if (!$messagesCnt)
-            return;
-
-        for ($i = 0; $i < $messagesCnt; ++$i){
-            $m = new \CAdminMessage($messages[$i]);
-            echo $m->Show();
-        }
     }
 }

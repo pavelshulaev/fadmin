@@ -13,6 +13,7 @@ namespace Rover\Fadmin\Options;
 use \Bitrix\Main\ArgumentNullException;;
 
 use Bitrix\Main\ArgumentOutOfRangeException;
+use Rover\Fadmin\Layout\Form;
 use \Rover\Fadmin\Options;
 use \Rover\Fadmin\Tab;
 use \Rover\Fadmin\Inputs\Input;
@@ -22,6 +23,7 @@ use \Rover\Fadmin\Inputs\Input;
  *
  * @package Rover\Fadmin
  * @author  Pavel Shulaev (http://rover-it.me)
+ * @deprecated
  */
 class TabMap
 {
@@ -47,6 +49,7 @@ class TabMap
      * TabMap constructor.
      *
      * @param Options $options
+     * @deprecated
      */
 	public function __construct(Options $options)
 	{
@@ -58,6 +61,7 @@ class TabMap
      * @return array|mixed
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated
      */
 	protected function getTabsParams($reload = false)
     {
@@ -75,6 +79,7 @@ class TabMap
      * @throws ArgumentOutOfRangeException
      * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated
      */
 	public function getTabs($reload = false)
 	{
@@ -117,6 +122,7 @@ class TabMap
      * @throws ArgumentOutOfRangeException
      * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated
      */
 	public function reloadTabs()
     {
@@ -209,6 +215,7 @@ class TabMap
      * @throws ArgumentOutOfRangeException
      * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated
      */
 	public function getInputByValueName($valueName, $reload = false)
 	{
@@ -217,9 +224,7 @@ class TabMap
 		$filter = array('name' => $valueName);
 
 		foreach ($aTabs as $tab){
-			/**
-			 * @var Tab $tab
-			 */
+			/** @var Tab $tab */
 			$input = $tab->search($filter);
 			if ($input instanceof Input)
 				return $input;
@@ -275,9 +280,7 @@ class TabMap
         $tabs = $this->getTabs($reload);
 
         foreach ($tabs as $tab) {
-            /**
-             * @var Tab $tab
-             */
+            /** @var Tab $tab */
             if ((strlen($presetId) && ($tab->getPresetId() != $presetId))
                 || (strlen($siteId) && ($tab->getSiteId() != $siteId)))
                 continue;
@@ -312,6 +315,13 @@ class TabMap
 
         foreach ($tabs as $tab)
             $tab->setValuesFromRequest();
+
+        // handle group rights tab
+        if ($this->options->settings->getGroupRights()) {
+            ob_start();
+            Form::includeGroupRightsTab();
+            ob_clean();
+        }
 
         if (!$this->options->event
             ->handle(Event::AFTER_ADD_VALUES_FROM_REQUEST, compact('tabs'))

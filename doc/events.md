@@ -21,13 +21,13 @@
     
             $parameters['tab'] = $tab;
     
-            return new Bitrix\Main\EventResult($event->getEventType(), $parameters, 'partner.module');
+            return new Bitrix\Main\EventResult(Bitrix\Main\EventResult::SUCCESS, $parameters, 'partner.module');
         }
     }    
     
 Подробнее про [события](https://dev.1c-bitrix.ru/learning/course/index.php?COURSE_ID=43&LESSON_ID=3113&LESSON_PATH=3913.5062.3113) и их [обработку](https://dev.1c-bitrix.ru/learning/course/index.php?COURSE_ID=43&LESSON_ID=2244#events) в ядре d7 (офф. документация).
 
-> Если событие, начинающееся с `'before'`, вернет `false`, то действие, обычно совершаемое после этого события, выполнено не будет. Это не относится к `'beforeGetTabInfo'`. Оно позволяет только изменить информацию о вкладке, но не отменить ее отображение.
+> Если событие, начинающееся с `'before'`, вернет реузьтат типа `Bitrix\Main\EventResult::ERROR`, то действие, обычно совершаемое после этого события, выполнено не будет. Это не относится к `'beforeGetTabInfo'`. Оно позволяет только изменить информацию о вкладке, но не отменить ее отображение. Для отмены отображения таба можно воспользоваться событием `beforeShowTab`.
 
 
 ## Старый стиль

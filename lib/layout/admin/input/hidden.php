@@ -38,7 +38,7 @@ class Hidden extends Text
             return;
 
         ?><input
-        <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+        <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
         id="<?=$this->input->getValueId()?>"
         maxlength="<?=$this->input->getMaxLength()?>"
         type="hidden"

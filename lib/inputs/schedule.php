@@ -10,7 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Options;
 use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
@@ -22,47 +22,32 @@ Loc::loadMessages(__FILE__);
  */
 class Schedule extends Input
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__SCHEDULE;
-
-	/**
-	 * @var string
-	 */
+	/** @var string*/
 	protected $periodLabel;
 
-	/**
-	 * default height
-	 * @var int
-	 */
+	/** @var int */
 	protected $height = 300;
 
-	/**
-	 * default width
-	 * @var int
-	 */
+	/** @var int */
 	protected $width = 500;
 
-    /**
-     * @var array
-     */
+    /** @var array */
 	protected $inputValue = array();
 
     /**
      * Schedule constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array   $params
+     * @param Options $options
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options)
 	{
 		// for automatic serialize/unserialize
 		$params['multiple'] = true;
 
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options);
 
 		$this->periodLabel = isset($params['periodLabel'])
 			? $params['periodLabel']

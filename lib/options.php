@@ -15,6 +15,7 @@ use \Bitrix\Main;
 use \Bitrix\Main\ArgumentNullException;
 use \Rover\Fadmin\Inputs\Input;
 use \Bitrix\Main\Application;
+use Rover\Fadmin\Inputs\Tabcontrol;
 use Rover\Fadmin\Options\Cache;
 use \Rover\Fadmin\Options\Message;
 use \Rover\Fadmin\Options\Settings;
@@ -38,8 +39,14 @@ abstract class Options
 	/** @var string */
 	protected $moduleId;
 
-	/** @var TabMap */
+    /**
+     * @var TabMap
+     * @deprecated
+     */
 	public $tabMap;
+
+	/** @var Tabcontrol */
+	public $tabControl;
 
 	/** @var Message */
 	public $message;
@@ -127,6 +134,24 @@ abstract class Options
 	}
 
     /**
+     * @param bool $reload
+     * @return Tabcontrol
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getTabControl($reload = false)
+    {
+        if (is_null($this->tabControl) || $reload) {
+            $config = $this->getConfigCache($reload);
+            $tabs   = isset($config['tabs'])? $config['tabs'] : array();
+            $this->tabControl = new Tabcontrol($tabs, $this);
+        }
+
+        return $this->tabControl;
+    }
+
+    /**
      * @param       $name
      * @param array $params
      * @return bool
@@ -143,14 +168,25 @@ abstract class Options
 		try{
 			return $this->$name($params);
 		} catch (\Exception $e) {
-			$this->message->addError($e->getMessage());
-
-			if ($this->settings->getLogErrors())
-				$this->writeException2Log($e);
+		    $this->handleException($e);
 
 			return false;
 		}
 	}
+
+    /**
+     * @param \Exception $e
+     * @throws ArgumentNullException
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function handleException(\Exception $e)
+    {
+        $this->message->addError($e->getMessage());
+
+        if ($this->settings->getLogErrors())
+            Application::getInstance()->getExceptionHandler()->writeToLog($e);
+    }
 
     /**
      * @param bool $reload
@@ -165,12 +201,6 @@ abstract class Options
 
         return $this->cache->get('config', 'config');
     }
-
-    /**
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	abstract public function getConfig();
 
 	/**
 	 * @return mixed
@@ -251,6 +281,7 @@ abstract class Options
 		if (!$this->cache->check($key) || $reload) {
 
 			$input = $this->tabMap->searchInputByName($inputName, $presetId, $siteId, $reload);
+			$input = $this->getTabControl()->search($inputName, $presetId, $siteId, $reload);
 
 			if ($input instanceof Input)
                 $this->cache->set($key, $input->getValue());
@@ -280,19 +311,6 @@ abstract class Options
 	}
 
     /**
-     * @param \Exception $e
-     * @throws Main\SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-	public static function writeException2Log(\Exception $e)
-	{
-		Application::getInstance()
-			->getExceptionHandler()
-			->writeToLog($e);
-	}
-
-
-    /**
      * @param        $moduleId
      * @param        $name
      * @param string $presetId
@@ -320,4 +338,11 @@ abstract class Options
 
         return Input::getValueStatic($params, $moduleId, $presetId, $siteId);
     }
+
+
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    abstract public function getConfig();
 }

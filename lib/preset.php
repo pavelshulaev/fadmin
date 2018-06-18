@@ -21,7 +21,6 @@ use Bitrix\Main\SystemException;;
  */
 class Preset
 {
-
     /** @var integer */
     protected $id;
 

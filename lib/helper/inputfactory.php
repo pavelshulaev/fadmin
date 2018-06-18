@@ -11,16 +11,15 @@
 namespace Rover\Fadmin\Helper;
 
 use Bitrix\Main\ArgumentNullException;
-use Rover\Fadmin\Inputs\Input as InputAbstract;
+use Rover\Fadmin\Inputs\Input;
 use Bitrix\Main\Localization\Loc;
 /**
  * Class Input
  *
  * @package Rover\Fadmin\Helper
  * @author  Pavel Shulaev (http://rover-it.me)
- * @deprecated use InputFactory
  */
-class Input
+class InputFactory
 {
 	/**
 	 * @param array $input
@@ -41,6 +40,15 @@ class Input
 
 		if (empty($input['help']))
 			$input['help'] = Loc::getMessage($input['name'] . '_help');
+
+		if (is_null($input['default']))
+			$input['default'] = Loc::getMessage($input['name'] . '_default');
+
+		if (empty($input['multiple']))
+            $input['multiple'] = false;
+
+		if (empty($input['disabled']))
+            $input['disabled'] = false;
 
 		return $input;
 	}
@@ -86,9 +94,9 @@ class Input
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getText($name, $default = '', $label = null, $disabled = false, $help = null)
+	public static function getText($name, $default = '', $disabled = false, $label = null, $help = null)
 	{
-		return self::get(InputAbstract::TYPE__TEXT, $name, $default, false, $disabled, $label, $help);
+		return self::get(Input::TYPE__TEXT, $name, $default, false, $disabled, $label, $help);
 	}
 
     /**
@@ -105,13 +113,13 @@ class Input
      */
 	public static function getTextarea($name, $default = '', $cols = null, $rows = null, $disabled = false, $label = null, $help = null)
 	{
-		$textarea = self::get(InputAbstract::TYPE__TEXTAREA, $name, $default, false, $disabled, $label, $help);
+		$textarea = self::get(Input::TYPE__TEXTAREA, $name, $default, false, $disabled, $label, $help);
 
-		if (!is_null($cols))
-		    $textarea['cols']   = intval($cols);
+        $cols = intval($cols);
+        $rows = intval($rows);
 
-		if (!is_null($rows))
-		    $textarea['rows']   = intval($rows);
+		if ($cols) $textarea['cols'] = $cols;
+		if ($rows) $textarea['rows'] = $rows;
 
 		return $textarea;
 	}
@@ -126,9 +134,9 @@ class Input
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getNumber($name, $default = null, $label = null, $disabled = false, $help = null)
+	public static function getNumber($name, $default = null, $disabled = false, $label = null, $help = null)
 	{
-	    return self::get(InputAbstract::TYPE__NUMBER, $name, $default, false, $disabled, $label, $help);
+	    return self::get(Input::TYPE__NUMBER, $name, $default, false, $disabled, $label, $help);
 	}
 
     /**
@@ -143,30 +151,38 @@ class Input
      */
 	public static function getCheckbox($name, $default = 'Y', $disabled = false, $label = null, $help = null)
 	{
-		return self::get(InputAbstract::TYPE__CHECKBOX, $name, $default == 'Y' ? 'Y' : 'N', false, $disabled, $label, $help);
+		return self::get(Input::TYPE__CHECKBOX, $name, $default == 'Y' ? 'Y' : 'N', false, $disabled, $label, $help);
 	}
 
-	/**
-	 * @param $name
-	 * @return array
-	 * @throws ArgumentNullException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public static function getPresetName($name)
+    /**
+     * @param      $name
+     * @param null $default
+     * @param bool $disabled
+     * @param null $label
+     * @param null $help
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getPresetName($name, $default = null, $disabled = false, $label = null, $help = null)
 	{
-		return self::get(InputAbstract::TYPE__PRESET_NAME, $name);
+		return self::get(Input::TYPE__PRESET_NAME, $name, $default, false, $disabled, $label, $help);
 	}
 
     /**
      * @param      $name
      * @param bool $popup
+     * @param null $default
+     * @param bool $disabled
+     * @param null $label
+     * @param null $help
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getRemovePreset($name, $popup = false)
+	public static function getRemovePreset($name, $popup = false, $default = null, $disabled = false, $label = null, $help = null)
 	{
-		$input = self::get(InputAbstract::TYPE__REMOVE_PRESET, $name);
+		$input = self::get(Input::TYPE__REMOVE_PRESET, $name, $default, false, $disabled, $label, $help);
 		if ($popup !== false)
 		    $input['popup'] = $popup;
 
@@ -185,9 +201,9 @@ class Input
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getSelect($name, array $options = array(), $default = null, $multiple = false, $label = null, $disabled = false, $help = null)
+	public static function getSelect($name, array $options = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null)
 	{
-		$input = self::get(InputAbstract::TYPE__SELECTBOX, $name, $default, $multiple, $disabled, $label, $help);
+		$input = self::get(Input::TYPE__SELECTBOX, $name, $default, $multiple, $disabled, $label, $help);
 		$input['options'] = $options;
 
 		return $input;
@@ -205,9 +221,9 @@ class Input
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getSelectGroup($name, array $options = array(), $default = null, $multiple = false, $label = null, $disabled = false, $help = null)
+	public static function getSelectGroup($name, array $options = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null)
 	{
-		$input = self::get(InputAbstract::TYPE__SELECT_GROUP, $name, $default, $multiple, $disabled, $label, $help);
+		$input = self::get(Input::TYPE__SELECT_GROUP, $name, $default, $multiple, $disabled, $label, $help);
 		$input['options'] = $options;
 
 		return $input;
@@ -226,7 +242,7 @@ class Input
      */
 	public static function getRadio($name, array $options = array(), $default = null, $disabled = false, $label = null, $help = null)
 	{
-		$input = self::get(InputAbstract::TYPE__RADIO, $name, $default, false, $disabled, $label, $help);
+		$input = self::get(Input::TYPE__RADIO, $name, $default, false, $disabled, $label, $help);
 		$input['options'] = $options;
 
 		return $input;
@@ -240,7 +256,7 @@ class Input
 	public static function getHeader($label)
 	{
 		return array(
-			'type'  => InputAbstract::TYPE__HEADER,
+			'type'  => Input::TYPE__HEADER,
 			'label' => $label,
         );
 	}
@@ -255,7 +271,7 @@ class Input
      */
 	public static function getCustom($name, $label = null, $help = null)
 	{
-		return self::get(InputAbstract::TYPE__CUSTOM, $name, null, false, false, $label, $help);
+		return self::get(Input::TYPE__CUSTOM, $name, null, false, false, $label, $help);
 	}
 
     /**
@@ -271,25 +287,46 @@ class Input
      */
 	public static function getIblock($name, $multiple = false, $default = null, $disabled = false, $label = null, $help = null)
 	{
-		return self::get(InputAbstract::TYPE__IBLOCK, $name, $default, $multiple, $disabled, $label, $help);
+		return self::get(Input::TYPE__IBLOCK, $name, $default, $multiple, $disabled, $label, $help);
 	}
 
     /**
-     * @param        $label
+     * @param string $name
      * @param string $default
+     * @param bool   $disabled
+     * @param string $label
      * @param string $help
      * @return array
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getLabel($label, $default = '', $help = '')
+	public static function getLabel($name = '', $default = '', $disabled = false, $label = '', $help = '')
 	{
 		return array(
-			'type'      => InputAbstract::TYPE__LABEL,
+		    'name'      => $name ? : Input::TYPE__LABEL,
+			'type'      => Input::TYPE__LABEL,
 			'label'     => $label,
 			'default'   => $default,
+            'disabled'  => $disabled,
             'help'      => $help
         );
 	}
+
+    /**
+     * @param        $label
+     * @param string $help
+     * @param string $default
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getLabelShort($label, $help = '', $default = '')
+    {
+        return array(
+            'type'      => Input::TYPE__LABEL,
+            'label'     => $label,
+            'default'   => $default,
+            'help'      => $help
+        );
+    }
 
     /**
      * @param        $name
@@ -303,7 +340,7 @@ class Input
      */
 	public static function getClock($name, $default = '0:00', $disabled = false, $label = null, $help = null)
     {
-        return self::get(InputAbstract::TYPE__CLOCK, $name, $default, false, $disabled, $label, $help);
+        return self::get(Input::TYPE__CLOCK, $name, $default, false, $disabled, $label, $help);
     }
 
     /**
@@ -324,7 +361,7 @@ class Input
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 
-		$submit = self::get(InputAbstract::TYPE__SUBMIT, $name, $default, false, $disabled, $label, $help);
+		$submit = self::get(Input::TYPE__SUBMIT, $name, $default, false, $disabled, $label, $help);
 		$submit['popup'] = $popup;
 
 		return $submit;
@@ -334,20 +371,22 @@ class Input
      * @param      $name
      * @param      $default
      * @param bool $popup
+     * @param bool $disabled
+     * @param null $label
+     * @param null $help
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getAddPreset($name, $default, $popup = false)
+	public static function getAddPreset($name, $default, $popup = false, $disabled = false, $label = null, $help = null)
 	{
-		$result = self::get(InputAbstract::TYPE__ADD_PRESET, $name);
+		$result = self::get(Input::TYPE__ADD_PRESET, $name, $default, false, $disabled, $label, $help);
 
 		$default = trim($default);
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 
 		$result['id']       = $name;
-		$result['default']  = $default;
 		$result['popup']    = $popup;
 
 		return $result;
@@ -367,7 +406,7 @@ class Input
             throw new ArgumentNullException('name');
 
         return array(
-            'type'      => InputAbstract::TYPE__HIDDEN,
+            'type'      => Input::TYPE__HIDDEN,
             'name'      => $name,
             'default'   => $default
         );

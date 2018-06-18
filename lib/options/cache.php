@@ -20,14 +20,10 @@ use Rover\Fadmin\Options;
  */
 class Cache
 {
-    /**
-     * @var Options
-     */
+    /** @var Options */
     protected $options;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $cache;
 
     /**

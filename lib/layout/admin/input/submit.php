@@ -115,7 +115,7 @@ class Submit extends Input
         </style>
 
         <button type='submit'
-        <?=$this->input->getDisabled() ? 'disabled="disabled"': '';?>
+        <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
                 id="<?=$this->input->getValueId()?>"
                 name="<?=$name?>"
                 value="<?=urlencode($value)?>"><?=$this->input->getLabel()?></button><?php
