@@ -87,6 +87,19 @@ class Tabcontrol extends Input
      */
     public function getTabs($reload = false)
     {
+        return $this->getChildren($reload);
+    }
+
+    /**
+     * @param bool $reload
+     * @return mixed|null|Input[]
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getChildren($reload = false)
+    {
         if (is_null($this->children) || $reload)
             $this->reloadTabs();
 
@@ -181,33 +194,6 @@ class Tabcontrol extends Input
     }
 
     /**
-     * @param array $filter
-     * @param bool  $reload
-     * @return array
-     * @throws ArgumentNullException
-     * @throws ArgumentOutOfRangeException
-     * @throws SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function searchByFilter(array $filter, $reload = false)
-    {
-        $result = array();
-        $tabs   = $this->getTabs($reload);
-        $tabsCnt= count($tabs);
-
-        for ($i = 0; $i < $tabsCnt; ++$i) {
-            /** @var Tab $tab */
-            $tab        = $tabs[$i];
-            $tabResult  = $tab->searchByFilter($filter, $reload);
-
-            if (count($tabResult))
-                $result = array_merge($result, $tabResult);
-        }
-
-        return $result;
-    }
-
-    /**
      * @param        $name
      * @param string $presetId
      * @param string $siteId
@@ -238,33 +224,6 @@ class Tabcontrol extends Input
                 continue;
 
             return $tab;
-        }
-
-        return null;
-    }
-
-    /**
-     * @param        $name
-     * @param string $presetId
-     * @param string $siteId
-     * @param bool   $reload
-     * @return mixed|null
-     * @throws ArgumentNullException
-     * @throws ArgumentOutOfRangeException
-     * @throws SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function searchOneByName($name, $presetId = '', $siteId = '', $reload = false)
-    {
-        $tabs       = $this->getTabs($reload);
-        $tabsCnt    = count($tabs);
-
-        for ($i = 0; $i < $tabsCnt; ++$i) {
-            /** @var Tab $tab */
-            $tab = $tabs[$i];
-            $result = $tab->searchOneByName($name, $presetId, $siteId, $reload);
-            if ($result instanceof Input)
-                return $result;
         }
 
         return null;

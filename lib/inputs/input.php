@@ -481,4 +481,85 @@ abstract class Input
 
         $this->children = $newChildren;
     }
+
+    /**
+     * @param array $filter
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function checkByFilter(array $filter)
+    {
+        $found = true;
+
+        if (isset($filter['id']) && strlen($filter['id']))
+            $found = $found && ($filter['id'] == $this->getId());
+
+        if (isset($filter['name']) && strlen($filter['name']))
+            $found = $found && ($filter['name'] == $this->getName());
+
+        if (isset($filter['siteId']) && strlen($filter['siteId']))
+            $found = $found && ($filter['siteId'] == $this->getSiteId());
+
+        if (isset($filter['presetId']) && strlen($filter['presetId']))
+            $found = $found && ($filter['presetId'] == $this->getPresetId());
+
+       return $found;
+    }
+
+    /**
+     * @param $filter
+     * @return array
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function searchByFilter($filter)
+    {
+        $children       = static::getChildren();
+        $childrenCnt    = count($children);
+        $result         = array();
+
+        for ($i = 0; $i < $childrenCnt; ++$i) {
+            /** @var Input $child */
+            $child  = $children[$i];
+            if ($child->checkByFilter($filter))
+                $result[] = $child;
+
+            $childrenLevel2 = $child->getChildren();
+            if (!is_array($childrenLevel2) || !count($childrenLevel2))
+                continue;
+
+            $childResult = $child->searchByFilter($filter);
+            if (count($childResult))
+                $result = array_merge($result, $childResult);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param        $name
+     * @param string $presetId
+     * @param string $siteId
+     * @return mixed|null
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function searchOneByName($name, $presetId = '', $siteId = '')
+    {
+        $filter= array(
+            'name'      => $name,
+            'siteId'    => $siteId,
+            'presetId'  => $presetId
+        );
+
+        // allows to make search in tabcontrol also
+        $searchResult = static::searchByFilter($filter);
+
+        if (count($searchResult) == 1)
+            return reset($searchResult);
+
+        if (!count($searchResult))
+            return null;
+
+        throw new Main\ArgumentOutOfRangeException('name');
+    }
 }

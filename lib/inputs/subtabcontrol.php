@@ -50,6 +50,18 @@ class SubTabControl extends Input
      */
     public function getSubTabs($reload = false)
     {
+       return $this->getChildren($reload);
+    }
+
+    /**
+     * @param bool $reload
+     * @return Input[]
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getChildren($reload = false)
+    {
         if (is_null($this->children) || $reload)
             $this->loadSubTabs();
 
@@ -122,16 +134,6 @@ class SubTabControl extends Input
             $subTab = $subTabs[$i];
             $subTab->sort();
         }
-    }
-
-    /**
-     * @throws \Bitrix\Main\SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function __clone()
-    {
-        $this->loadSubTabs();
-        parent::__clone();
     }
 
     /**

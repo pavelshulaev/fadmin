@@ -14,8 +14,5 @@ if (!Loader::includeModule($mid)
 Loc::loadMessages(__FILE__);
 Loc::loadMessages($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/options.php");
 
-$options = TestOptions::getInstance();
-$options->message->addOk('Минимальная поддерживаемая версия php будет 5.6, позаботьтесь о переходе заранее.');
-
 $form = new Form(TestOptions::getInstance());
 $form->show();

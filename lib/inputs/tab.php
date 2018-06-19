@@ -63,6 +63,17 @@ class Tab extends \Rover\Fadmin\Tab
      */
     public function getInputs($reload = false)
     {
+        return $this->getChildren($reload);
+    }
+
+    /**
+     * @param bool $reload
+     * @return Input[]
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getChildren($reload = false)
+    {
         if (is_null($this->children) || $reload)
             $this->loadInputs();
 
@@ -89,43 +100,6 @@ class Tab extends \Rover\Fadmin\Tab
 
             $this->children[] = self::build($inputParams, $this->optionsEngine, $this);
         }
-    }
-
-    /**
-     * @param array $filter
-     * @param bool  $reload
-     * @return null
-     * @throws \Bitrix\Main\SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function searchByFilter(array $filter, $reload = false)
-    {
-        $inputs     = $this->getInputs($reload);
-        $inputsCnt  = count($inputs);
-        $result     = array();
-
-        // @TODO: search in subtabs
-        for ($i = 0; $i < $inputsCnt; ++$i) {
-            /** @var Input $input */
-            $input  = $inputs[$i];
-            $found  = true;
-
-            if (isset($filter['id']) && strlen($filter['id']))
-                $found = $found && ($filter['id'] == $input->getId());
-
-            if (isset($filter['name']) && strlen($filter['name']))
-                $found = $found && ($filter['name'] == $input->getName());
-
-            if (isset($filter['siteId']) && strlen($filter['siteId']))
-                $found = $found && ($filter['siteId'] == $input->getSiteId());
-
-            if (isset($filter['presetId']) && strlen($filter['presetId']))
-                $found = $found && ($filter['presetId'] == $input->getPresetId());
-
-            if ($found) $result[] = $input;
-        }
-
-        return $result;
     }
 
     /**
@@ -218,35 +192,6 @@ class Tab extends \Rover\Fadmin\Tab
     }
 
     /**
-     * @param        $name
-     * @param string $presetId
-     * @param string $siteId
-     * @param bool   $reload
-     * @return mixed|null
-     * @throws \Bitrix\Main\SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function searchOneByName($name, $presetId = '', $siteId = '', $reload = false)
-    {
-        $filter= array(
-            'name'      => $name,
-            'siteId'    => $siteId,
-            'presetId'  => $presetId
-        );
-
-        // allows to make search in tabcontrol also
-        $searchResult = static::searchByFilter($filter, $reload);
-
-        if (count($searchResult) == 1)
-            return reset($searchResult);
-
-        if (!count($searchResult))
-            return null;
-
-        throw new ArgumentOutOfRangeException('name');
-    }
-
-    /**
      * @param Input $input
      * @return Input
      * @author Pavel Shulaev (https://rover-it.me)
@@ -289,9 +234,9 @@ class Tab extends \Rover\Fadmin\Tab
      * @param      $inputName
      * @param bool $reload
      * @return array|null|string
+     * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\SystemException
+     * @throws \Rover\Fadmin\Inputs\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getInputValue($inputName, $reload = false)
@@ -308,6 +253,7 @@ class Tab extends \Rover\Fadmin\Tab
      * @param $name
      * @param $value
      * @return bool
+     * @throws ArgumentOutOfRangeException
      * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */

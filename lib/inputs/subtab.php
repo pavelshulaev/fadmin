@@ -48,8 +48,19 @@ class SubTab extends Input
      */
     public function getInputs($reload = false)
     {
+        return $this->getChildren($reload);
+    }
+
+    /**
+     * @param bool $reload
+     * @return Input[]
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getChildren($reload = false)
+    {
         if (is_null($this->children) || $reload)
-           $this->loadInputs();
+            $this->loadInputs();
 
         return $this->children;
     }
@@ -139,16 +150,6 @@ class SubTab extends Input
             $input = $inputs[$i];
             $input->clear();
         }
-    }
-
-    /**
-     * @throws \Bitrix\Main\SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function __clone()
-    {
-        $this->loadInputs();
-        parent::__clone();
     }
 
     /**

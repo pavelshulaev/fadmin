@@ -279,7 +279,7 @@ abstract class Options
 		$key = md5($inputName . $presetId . $siteId);
 
 		if (!$this->cache->check($key) || $reload) {
-            $input = $this->getTabControl()->searchOneByName($inputName, $presetId, $siteId, $reload);
+            $input = $this->getTabControl()->searchOneByName($inputName, $presetId, $siteId);
 
             if ($input instanceof Input)
                 $this->cache->set($key, $input->getValue());
@@ -294,16 +294,15 @@ abstract class Options
      * @param        $inputName
      * @param string $presetId
      * @param string $siteId
-     * @param bool   $reload
      * @return mixed
      * @throws ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getDefaultValue($inputName, $presetId = '', $siteId = '', $reload = false)
+	public function getDefaultValue($inputName, $presetId = '', $siteId = '')
 	{
-		$input = $this->getTabControl()->searchOneByName($inputName, $presetId, $siteId, $reload);
+		$input = $this->getTabControl()->searchOneByName($inputName, $presetId, $siteId);
 
 		if ($input instanceof Input)
 			return $input->getDefault();

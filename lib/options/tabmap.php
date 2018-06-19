@@ -125,7 +125,7 @@ class TabMap
      */
     public function searchInputByName($inputName, $presetId = '', $siteId = '', $reload = false)
     {
-        return $this->options->getTabControl()->searchOneByName($inputName, $presetId, $siteId, $reload);
+        return $this->options->getTabControl()->searchOneByName($inputName, $presetId, $siteId);
     }
 
     /**
