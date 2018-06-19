@@ -128,6 +128,18 @@ abstract class Input
 	}
 
     /**
+     * @param array $params
+     * @param Tab   $tab
+     * @return mixed
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function factory(array $params, Tab $tab)
+	{
+		return self::build($params, $tab->getOptionsEngine(), $tab);
+	}
+
+    /**
      * @param array      $params
      * @param Options    $options
      * @param Input|null $parent
@@ -135,23 +147,23 @@ abstract class Input
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function factory(array $params, Options $options, Input $parent = null)
-	{
-		$className = '\Rover\Fadmin\Inputs\\' . ucfirst($params['type']);
+	public static function build(array $params, Options $options, Input $parent = null)
+    {
+        $className = '\Rover\Fadmin\Inputs\\' . ucfirst($params['type']);
 
-		if (!class_exists($className))
-			throw new Main\SystemException('Class "' . $className . '" not found!');
+        if (!class_exists($className))
+            throw new Main\SystemException('Class "' . $className . '" not found!');
 
-		if ($className == '\Rover\Fadmin\Inputs\Input')
-			throw new Main\SystemException('Can\'t create "' . $className . '" instance');
+        if ($className == '\Rover\Fadmin\Inputs\Input')
+            throw new Main\SystemException('Can\'t create "' . $className . '" instance');
 
-		$input = new $className($params, $options, $parent);
+        $input = new $className($params, $options, $parent);
 
-		if ($input instanceof Input === false)
-			throw new Main\SystemException('"' . $className . '" is not "\Rover\Fadmin\Inputs\Input" instance');
+        if ($input instanceof Input === false)
+            throw new Main\SystemException('"' . $className . '" is not "\Rover\Fadmin\Inputs\Input" instance');
 
-		return $input;
-	}
+        return $input;
+    }
 
     /**
      * @param $value

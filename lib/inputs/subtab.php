@@ -64,7 +64,7 @@ class SubTab extends Input
         $inputsCnt      = count($this->inputsConfig);
 
         for ($i = 0; $i < $inputsCnt; ++$i)
-            $this->children[] = self::factory($this->inputsConfig[$i], $this->optionsEngine, $this);
+            $this->children[] = self::build($this->inputsConfig[$i], $this->optionsEngine, $this);
     }
 
     /**

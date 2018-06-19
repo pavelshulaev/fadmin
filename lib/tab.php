@@ -55,22 +55,17 @@ class Tab extends \Rover\Fadmin\Inputs\Input
     /**
      * @param bool $inputName
      * @param bool $reload
-     * @return array|null|string
-     * @throws ArgumentNullException
-     * @throws Main\ArgumentOutOfRangeException
-     * @throws Main\SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @deprecated
-     */
-    /**
-     * @param bool $inputName
-     * @param bool $reload
      * @return array|string
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated
      */
-	public function getValue($inputName, $reload = false)
+	public function getValue($inputName = false, $reload = false)
 	{
+	    $inputName = trim($inputName);
+	    if (!strlen($inputName))
+            throw new ArgumentNullException('inputName');
+
 	    return $this->getInputValue($inputName, $reload);
 	}
 

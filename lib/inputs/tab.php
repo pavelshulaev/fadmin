@@ -87,7 +87,7 @@ class Tab extends \Rover\Fadmin\Tab
             if (!isset($inputParams['presetId']))
                 $inputParams['presetId'] = $this->getPresetId();
 
-            $this->children[] = self::factory($inputParams, $this->optionsEngine, $this);
+            $this->children[] = self::build($inputParams, $this->optionsEngine, $this);
         }
     }
 
@@ -311,7 +311,7 @@ class Tab extends \Rover\Fadmin\Tab
         if ($this->isPreset())
             $input['presetId'] = $this->getPresetId();
 
-        $input = self::factory($input, $this->optionsEngine, $this);
+        $input = self::build($input, $this->optionsEngine, $this);
         $this->children[] = $input;
 
         return $input;

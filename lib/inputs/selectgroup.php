@@ -50,7 +50,7 @@ class Selectgroup extends Selectbox
             'type' => Hidden::getType()
         );
 
-        return self::factory($params, $this->optionsEngine);
+        return self::build($params, $this->optionsEngine, $this->parent);
     }
 
     /**
