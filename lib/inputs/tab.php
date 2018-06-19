@@ -256,6 +256,30 @@ class Tab extends \Rover\Fadmin\Tab
         if ($this->isPreset())
             $input->setPresetId($this->getPresetId());
 
+        if ($this->getSiteId())
+            $input->setSiteId($this->getSiteId());
+
+        $this->children[] = $input;
+
+        return $input;
+    }
+
+
+    /**
+     * @param array $input
+     * @return array|mixed
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function addInputArray(array $input)
+    {
+        if ($this->isPreset())
+            $input['presetId'] = $this->getPresetId();
+
+        if ($this->getSiteId())
+            $input['siteId'] = $this->getSiteId();
+
+        $input = self::build($input, $this->optionsEngine, $this);
         $this->children[] = $input;
 
         return $input;
@@ -297,24 +321,6 @@ class Tab extends \Rover\Fadmin\Tab
         $input->setValue($value);
 
         return true;
-    }
-
-
-    /**
-     * @param array $input
-     * @return array|mixed
-     * @throws \Bitrix\Main\SystemException
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function addInputArray(array $input)
-    {
-        if ($this->isPreset())
-            $input['presetId'] = $this->getPresetId();
-
-        $input = self::build($input, $this->optionsEngine, $this);
-        $this->children[] = $input;
-
-        return $input;
     }
 
     /**

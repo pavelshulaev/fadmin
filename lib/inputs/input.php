@@ -136,6 +136,12 @@ abstract class Input
      */
 	public static function factory(array $params, Tab $tab)
 	{
+	    if ($tab->isPreset())
+	        $params['presetId'] = $tab->getPresetId();
+
+        if ($tab->getSiteId())
+            $params['siteId'] = $tab->getSiteId();
+
 		return self::build($params, $tab->getOptionsEngine(), $tab);
 	}
 
@@ -292,7 +298,7 @@ abstract class Input
         if (empty($this->value) || $reload)
             $this->loadValue();
 
-        if (!static::beforeGetValue($this->value))
+        if (false === static::beforeGetValue($this->value))
             $this->value = null;
 
         return $this->value;

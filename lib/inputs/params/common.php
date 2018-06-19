@@ -147,6 +147,15 @@ trait Common
     {
         $this->siteId = $siteId;
 
+        $childrenCnt = count($this->children);
+        if (!$childrenCnt)
+            return $this;
+
+        for ($i = 0; $i < $childrenCnt; ++$i){
+            $child = $this->children[$i];
+            $child->setSiteId($siteId);
+        }
+
         return $this;
     }
 
@@ -221,6 +230,15 @@ trait Common
     public function setPresetId($presetId)
     {
         $this->presetId = $presetId;
+
+        $childrenCnt = count($this->children);
+        if (!$childrenCnt)
+            return $this;
+
+        for ($i = 0; $i < $childrenCnt; ++$i){
+            $child = $this->children[$i];
+            $child->setPresetId($presetId);
+        }
 
         return $this;
     }

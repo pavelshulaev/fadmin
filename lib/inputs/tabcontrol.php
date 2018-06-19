@@ -10,6 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\NotImplementedException;
 use Rover\Fadmin\Layout\Form;
 use Rover\Fadmin\Options;
 use Bitrix\Main\ArgumentOutOfRangeException;
@@ -333,6 +334,28 @@ class Tabcontrol extends Input
             $tab = $tabs[$i];
             $tab->sort();
         }
+    }
+
+    /**
+     * @param $siteId
+     * @return $this|void
+     * @throws NotImplementedException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setSiteId($siteId)
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * @param $presetId
+     * @return $this|void
+     * @throws NotImplementedException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setPresetId($presetId)
+    {
+        throw new NotImplementedException();
     }
 
     /**
