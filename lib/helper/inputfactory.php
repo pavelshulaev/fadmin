@@ -26,6 +26,7 @@ use Rover\Fadmin\Inputs\Removepreset;
 use Rover\Fadmin\Inputs\Selectbox;
 use Rover\Fadmin\Inputs\Selectgroup;
 use Rover\Fadmin\Inputs\Submit;
+use Rover\Fadmin\Inputs\SubTab;
 use Rover\Fadmin\Inputs\Text;
 use Rover\Fadmin\Inputs\Textarea;
 use Bitrix\Main\Localization\Loc;
@@ -244,6 +245,26 @@ class InputFactory
 
 		return $input;
 	}
+
+    /**
+     * @param       $name
+     * @param array $inputs
+     * @param null  $default
+     * @param bool  $multiple
+     * @param bool  $disabled
+     * @param null  $label
+     * @param null  $help
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getSubTab($name, array $inputs = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null)
+    {
+        $input = self::get(SubTab::getType(), $name, $default, $multiple, $disabled, $label, $help);
+        $input['inputs'] = $inputs;
+
+        return $input;
+    }
 
     /**
      * @param       $name

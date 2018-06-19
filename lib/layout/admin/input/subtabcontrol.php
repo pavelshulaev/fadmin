@@ -30,8 +30,16 @@ class SubTabControl extends Input
      */
     public function draw()
     {
-        ?><tr>
+        ?>
+        <style>
+            #bx-admin-prefix .adm-detail-subtabs-block{
+                white-space: normal!important;
+            }
+        </style>
+        <tr>
             <td valign="top" colspan="2" align="center"><?php
+
+            echo '<h3>' . $this->input->getLabel() . '</h3>';
 
             $this->showInput();
 

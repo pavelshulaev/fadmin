@@ -10,6 +10,7 @@
 
 namespace Rover\Fadmin\Inputs\Params;
 use Rover\Fadmin\Inputs\Input;
+use Rover\Fadmin\Inputs\Tab;
 use Rover\Fadmin\Options;
 /**
  * Trait MaxLength
@@ -135,7 +136,17 @@ trait Common
      */
     public function getSiteId()
     {
-        return $this->siteId;
+        if (strlen($this->siteId))
+            return $this->siteId;
+
+        if ($this instanceof Tab)
+            return null;
+
+        $tab = $this->getTab();
+        if ($tab instanceof Tab)
+            return $tab->getSiteId();
+
+        return null;
     }
 
     /**
@@ -210,7 +221,31 @@ trait Common
      */
     public function getPresetId()
     {
-        return $this->presetId;
+        if (!is_null($this->presetId))
+            return $this->presetId;
+
+        if ($this instanceof Tab)
+            return null;
+
+        $tab = $this->getTab();
+        if ($tab instanceof Tab)
+            return $tab->getPresetId();
+
+        return null;
+    }
+
+    /**
+     * @return null|Input
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getTab()
+    {
+        $input = $this;
+        do {
+            $input = $input->getParent();
+        } while (!is_null($input) && ($input->getClassName() != Tab::getClassName()));
+
+        return $input;
     }
 
     /**

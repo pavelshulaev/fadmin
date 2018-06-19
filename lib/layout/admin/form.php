@@ -10,6 +10,7 @@
 
 namespace Rover\Fadmin\Layout\Admin;
 
+use Rover\Fadmin\Layout\Admin\Input\TabControl;
 use \Rover\Fadmin\Layout\Form as FromAbstract;
 use Bitrix\Main\Localization\Loc;
 use \Rover\Fadmin\Options;
@@ -24,7 +25,7 @@ Loc::loadMessages(__FILE__);
  */
 class Form extends FromAbstract
 {
-    /** @var \CAdminTabControl */
+    /** @var TabControl */
     protected $tabControlLayout;
 
     /**

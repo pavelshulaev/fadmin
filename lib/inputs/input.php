@@ -103,9 +103,13 @@ abstract class Input
 
         if (isset($params['presetId']))
             $this->presetId = $params['presetId'];
+        elseif (($this->parent instanceof Input) && ($this->parent->isPreset()))
+            $this->presetId = $this->parent->getPresetId();
 
         if (isset($params['siteId']))
             $this->siteId = $params['siteId'];
+        elseif (($this->parent instanceof Input))
+            $this->siteId = $this->parent->getSiteId();
 
 		if (isset($params['multiple']))
 			$this->multiple = (bool)$params['multiple'];
@@ -445,20 +449,6 @@ abstract class Input
     protected function beforeSaveValue(&$value)
     {
         return true;
-    }
-
-    /**
-     * @return null|Input
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function getTab()
-    {
-        $input = $this;
-        do {
-            $input = $input->getParent();
-        } while (!is_null($input) && ($input->getClassName() != Tab::getClassName()));
-
-        return $input;
     }
 
     /**
