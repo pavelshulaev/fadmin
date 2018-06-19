@@ -11,7 +11,23 @@
 namespace Rover\Fadmin\Helper;
 
 use Bitrix\Main\ArgumentNullException;
-use Rover\Fadmin\Inputs\Input;
+use Rover\Fadmin\Inputs\Addpreset;
+use Rover\Fadmin\Inputs\Checkbox;
+use Rover\Fadmin\Inputs\Clock;
+use Rover\Fadmin\Inputs\Custom;
+use Rover\Fadmin\Inputs\Header;
+use Rover\Fadmin\Inputs\Hidden;
+use Rover\Fadmin\Inputs\Iblock;
+use Rover\Fadmin\Inputs\Label;
+use Rover\Fadmin\Inputs\Number;
+use Rover\Fadmin\Inputs\PresetName;
+use Rover\Fadmin\Inputs\Radio;
+use Rover\Fadmin\Inputs\Removepreset;
+use Rover\Fadmin\Inputs\Selectbox;
+use Rover\Fadmin\Inputs\Selectgroup;
+use Rover\Fadmin\Inputs\Submit;
+use Rover\Fadmin\Inputs\Text;
+use Rover\Fadmin\Inputs\Textarea;
 use Bitrix\Main\Localization\Loc;
 /**
  * Class Input
@@ -96,7 +112,7 @@ class InputFactory
      */
 	public static function getText($name, $default = '', $disabled = false, $label = null, $help = null)
 	{
-		return self::get(Input::TYPE__TEXT, $name, $default, false, $disabled, $label, $help);
+		return self::get(Text::getType(), $name, $default, false, $disabled, $label, $help);
 	}
 
     /**
@@ -113,7 +129,7 @@ class InputFactory
      */
 	public static function getTextarea($name, $default = '', $cols = null, $rows = null, $disabled = false, $label = null, $help = null)
 	{
-		$textarea = self::get(Input::TYPE__TEXTAREA, $name, $default, false, $disabled, $label, $help);
+		$textarea = self::get(Textarea::getType(), $name, $default, false, $disabled, $label, $help);
 
         $cols = intval($cols);
         $rows = intval($rows);
@@ -136,7 +152,7 @@ class InputFactory
      */
 	public static function getNumber($name, $default = null, $disabled = false, $label = null, $help = null)
 	{
-	    return self::get(Input::TYPE__NUMBER, $name, $default, false, $disabled, $label, $help);
+	    return self::get(Number::getType(), $name, $default, false, $disabled, $label, $help);
 	}
 
     /**
@@ -151,7 +167,7 @@ class InputFactory
      */
 	public static function getCheckbox($name, $default = 'Y', $disabled = false, $label = null, $help = null)
 	{
-		return self::get(Input::TYPE__CHECKBOX, $name, $default == 'Y' ? 'Y' : 'N', false, $disabled, $label, $help);
+		return self::get(Checkbox::getType(), $name, $default == 'Y' ? 'Y' : 'N', false, $disabled, $label, $help);
 	}
 
     /**
@@ -166,7 +182,7 @@ class InputFactory
      */
 	public static function getPresetName($name, $default = null, $disabled = false, $label = null, $help = null)
 	{
-		return self::get(Input::TYPE__PRESET_NAME, $name, $default, false, $disabled, $label, $help);
+		return self::get(PresetName::getType(), $name, $default, false, $disabled, $label, $help);
 	}
 
     /**
@@ -182,7 +198,7 @@ class InputFactory
      */
 	public static function getRemovePreset($name, $popup = false, $default = null, $disabled = false, $label = null, $help = null)
 	{
-		$input = self::get(Input::TYPE__REMOVE_PRESET, $name, $default, false, $disabled, $label, $help);
+		$input = self::get(Removepreset::getType(), $name, $default, false, $disabled, $label, $help);
 		if ($popup !== false)
 		    $input['popup'] = $popup;
 
@@ -203,7 +219,7 @@ class InputFactory
      */
 	public static function getSelect($name, array $options = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null)
 	{
-		$input = self::get(Input::TYPE__SELECTBOX, $name, $default, $multiple, $disabled, $label, $help);
+		$input = self::get(Selectbox::getType(), $name, $default, $multiple, $disabled, $label, $help);
 		$input['options'] = $options;
 
 		return $input;
@@ -223,7 +239,7 @@ class InputFactory
      */
 	public static function getSelectGroup($name, array $options = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null)
 	{
-		$input = self::get(Input::TYPE__SELECT_GROUP, $name, $default, $multiple, $disabled, $label, $help);
+		$input = self::get(Selectgroup::getType(), $name, $default, $multiple, $disabled, $label, $help);
 		$input['options'] = $options;
 
 		return $input;
@@ -242,7 +258,7 @@ class InputFactory
      */
 	public static function getRadio($name, array $options = array(), $default = null, $disabled = false, $label = null, $help = null)
 	{
-		$input = self::get(Input::TYPE__RADIO, $name, $default, false, $disabled, $label, $help);
+		$input = self::get(Radio::getType(), $name, $default, false, $disabled, $label, $help);
 		$input['options'] = $options;
 
 		return $input;
@@ -256,7 +272,7 @@ class InputFactory
 	public static function getHeader($label)
 	{
 		return array(
-			'type'  => Input::TYPE__HEADER,
+			'type'  => Header::getType(),
 			'label' => $label,
         );
 	}
@@ -271,7 +287,7 @@ class InputFactory
      */
 	public static function getCustom($name, $label = null, $help = null)
 	{
-		return self::get(Input::TYPE__CUSTOM, $name, null, false, false, $label, $help);
+		return self::get(Custom::getType(), $name, null, false, false, $label, $help);
 	}
 
     /**
@@ -287,7 +303,7 @@ class InputFactory
      */
 	public static function getIblock($name, $multiple = false, $default = null, $disabled = false, $label = null, $help = null)
 	{
-		return self::get(Input::TYPE__IBLOCK, $name, $default, $multiple, $disabled, $label, $help);
+		return self::get(Iblock::getType(), $name, $default, $multiple, $disabled, $label, $help);
 	}
 
     /**
@@ -302,8 +318,8 @@ class InputFactory
 	public static function getLabel($name = '', $default = '', $disabled = false, $label = '', $help = '')
 	{
 		return array(
-		    'name'      => $name ? : Input::TYPE__LABEL,
-			'type'      => Input::TYPE__LABEL,
+		    'name'      => $name ? : Label::getType(),
+			'type'      => Label::getType(),
 			'label'     => $label,
 			'default'   => $default,
             'disabled'  => $disabled,
@@ -321,7 +337,7 @@ class InputFactory
 	public static function getLabelShort($label, $help = '', $default = '')
     {
         return array(
-            'type'      => Input::TYPE__LABEL,
+            'type'      => Label::getType(),
             'label'     => $label,
             'default'   => $default,
             'help'      => $help
@@ -340,7 +356,7 @@ class InputFactory
      */
 	public static function getClock($name, $default = '0:00', $disabled = false, $label = null, $help = null)
     {
-        return self::get(Input::TYPE__CLOCK, $name, $default, false, $disabled, $label, $help);
+        return self::get(Clock::getType(), $name, $default, false, $disabled, $label, $help);
     }
 
     /**
@@ -361,7 +377,7 @@ class InputFactory
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 
-		$submit = self::get(Input::TYPE__SUBMIT, $name, $default, false, $disabled, $label, $help);
+		$submit = self::get(Submit::getType(), $name, $default, false, $disabled, $label, $help);
 		$submit['popup'] = $popup;
 
 		return $submit;
@@ -380,7 +396,7 @@ class InputFactory
      */
 	public static function getAddPreset($name, $default, $popup = false, $disabled = false, $label = null, $help = null)
 	{
-		$result = self::get(Input::TYPE__ADD_PRESET, $name, $default, false, $disabled, $label, $help);
+		$result = self::get(Addpreset::getType(), $name, $default, false, $disabled, $label, $help);
 
 		$default = trim($default);
 		if (!strlen($default))
@@ -406,7 +422,7 @@ class InputFactory
             throw new ArgumentNullException('name');
 
         return array(
-            'type'      => Input::TYPE__HIDDEN,
+            'type'      => Hidden::getType(),
             'name'      => $name,
             'default'   => $default
         );

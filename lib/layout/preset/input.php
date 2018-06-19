@@ -19,14 +19,10 @@ use Rover\Fadmin\Inputs\Input as InputEngine;
  */
 abstract class Input extends InputAbstract
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public static $type = 'Preset';
 
-    /**
-     * @var InputAbstract
-     */
+    /** @var InputAbstract */
     protected $adminInput;
 
     /**
@@ -44,7 +40,9 @@ abstract class Input extends InputAbstract
     }
 
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function draw()
     {
@@ -55,6 +53,7 @@ abstract class Input extends InputAbstract
 
     /**
      * @param bool $empty
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showLabel($empty = false)
@@ -65,6 +64,7 @@ abstract class Input extends InputAbstract
     }
 
     /**
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showMultiLabel()

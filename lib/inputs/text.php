@@ -28,14 +28,15 @@ class Text extends Input
     /**
      * Text constructor.
      *
-     * @param array   $params
-     * @param Options $options
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Options $options)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
-		parent::__construct($params, $options);
+		parent::__construct($params, $options, $parent);
 
 		if (isset($params['maxLength']) && intval($params['maxLength']))
 			$this->maxLength = intval($params['maxLength']);

@@ -41,6 +41,7 @@ class Textarea extends Input
 
     /**
      * @param bool $empty
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showLabel($empty = false)

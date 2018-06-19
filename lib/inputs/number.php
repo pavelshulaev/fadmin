@@ -9,9 +9,7 @@
  */
 
 namespace Rover\Fadmin\Inputs;
-
-use Rover\Fadmin\Inputs\Params\Options;
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Options;
 
 /**
  * Class Number

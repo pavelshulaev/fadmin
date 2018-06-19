@@ -20,24 +20,21 @@ use Rover\Fadmin\Options;
  */
 class SubTab extends Input
 {
-    /** @var Input[] */
-    protected $inputs;
-
     /** @var array  */
     protected $inputsConfig = array();
 
     /**
      * SubTab constructor.
      *
-     * @param array   $params
-     * @param Options $options
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
      */
-    public function __construct(array $params, Options $options)
+    public function __construct(array $params, Options $options, Input $parent = null)
     {
-        parent::__construct($params, $options);
+        parent::__construct($params, $options, $parent);
 
         if (isset($params['inputs']) && is_array($params['inputs']))
             $this->inputsConfig = $params['inputs'];
@@ -51,14 +48,23 @@ class SubTab extends Input
      */
     public function getInputs($reload = false)
     {
-        if (is_null($this->inputs) || $reload) {
-            $this->inputs   = array();
-            $inputsCnt      = count($this->inputsConfig);
-            for ($i = 0; $i < $inputsCnt; ++$i)
-                $this->inputs[] = self::factory($this->inputs[$i], $this->optionsEngine);
-        }
+        if (is_null($this->children) || $reload)
+           $this->loadInputs();
 
-        return $this->inputs;
+        return $this->children;
+    }
+
+    /**
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function loadInputs()
+    {
+        $this->children = array();
+        $inputsCnt      = count($this->inputsConfig);
+
+        for ($i = 0; $i < $inputsCnt; ++$i)
+            $this->children[] = self::factory($this->inputsConfig[$i], $this->optionsEngine, $this);
     }
 
     /**
@@ -68,6 +74,15 @@ class SubTab extends Input
      * @internal
      */
     public function beforeSaveValue(&$value)
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function beforeLoadValue()
     {
         return false;
     }
@@ -107,15 +122,42 @@ class SubTab extends Input
             else return 0;
         });
 
-        $this->setInputs($inputs);
+        $this->children = $inputs;
+    }
+
+    /**
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function clear()
+    {
+        $inputs     = $this->getInputs();
+        $inputsCnt  = count($inputs);
+
+        for ($i = 0; $i < $inputsCnt; ++$i){
+            /** @var Input $input */
+            $input = $inputs[$i];
+            $input->clear();
+        }
+    }
+
+    /**
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function __clone()
+    {
+        $this->loadInputs();
+        parent::__clone();
     }
 
     /**
      * @param array $inputs
      * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated
      */
     public function setInputs(array $inputs)
     {
-        $this->inputs = $inputs;
+        $this->children = $inputs;
     }
 }

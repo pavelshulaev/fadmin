@@ -80,6 +80,10 @@ abstract class Form
         }
     }
 
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
     abstract public function show();
 
     /**

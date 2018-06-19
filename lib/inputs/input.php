@@ -68,18 +68,16 @@ abstract class Input
 
     const SEPARATOR = '__';
 
-	/** @var Options */
-	protected $optionsEngine;
-
     /**
      * Input constructor.
      *
-     * @param array   $params
-     * @param Options $options
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws Main\ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Options $options)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
 		if (is_null($params['name']))
 			throw new Main\ArgumentNullException('name');
@@ -96,6 +94,9 @@ abstract class Input
 		$this->optionsEngine= $options;
 		$this->id           = htmlspecialcharsbx($params['id']);
 		$this->name         = htmlspecialcharsbx($params['name']);
+
+		if ($parent instanceof Input)
+		    $this->setParent($parent);
 
 		$this->setLabel($params['label']);
 		$this->setDefault($params['default']);
@@ -127,13 +128,14 @@ abstract class Input
 	}
 
     /**
-     * @param array   $params
-     * @param Options $options
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @return mixed
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function factory(array $params, Options $options)
+	public static function factory(array $params, Options $options, Input $parent = null)
 	{
 		$className = '\Rover\Fadmin\Inputs\\' . ucfirst($params['type']);
 
@@ -143,7 +145,7 @@ abstract class Input
 		if ($className == '\Rover\Fadmin\Inputs\Input')
 			throw new Main\SystemException('Can\'t create "' . $className . '" instance');
 
-		$input = new $className($params, $options);
+		$input = new $className($params, $options, $parent);
 
 		if ($input instanceof Input === false)
 			throw new Main\SystemException('"' . $className . '" is not "\Rover\Fadmin\Inputs\Input" instance');
@@ -215,36 +217,16 @@ abstract class Input
     }
 
     /**
-     * @return Options
-     * @author Pavel Shulaev (http://rover-it.me)
-     */
-    protected function getOptionsEngine()
-    {
-        return $this->optionsEngine;
-    }
-
-    /**
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function getModuleId()
-    {
-        return $this->optionsEngine->getModuleId();
-    }
-
-    /**
      * @throws Main\ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function loadValue()
     {
-        $this->value = Option::get(
-            $this->getModuleId(),
-            $this->getValueName(),
-            $this->default,
-            $this->getSiteId()
-        );
+        $this->value = (false === static::beforeLoadValue())
+            ? null
+            : Option::get($this->getModuleId(), $this->getValueName(),
+                $this->getDefault(), $this->getSiteId());
 
         if ($this->multiple) {
             if (!is_array($this->value))
@@ -332,6 +314,8 @@ abstract class Input
             $value = serialize($value);
 
         $this->setValue($value);
+
+        return true;
     }
 
     /**
@@ -422,6 +406,12 @@ abstract class Input
     }
 
     /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeLoadValue() {}
+
+    /**
      * @param $value
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
@@ -437,5 +427,40 @@ abstract class Input
     protected function beforeSaveValue(&$value)
     {
         return true;
+    }
+
+    /**
+     * @return null|Input
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getTab()
+    {
+        $input = $this;
+        do {
+            $input = $input->getParent();
+        } while (!is_null($input) && ($input->getClassName() != Tab::getClassName()));
+
+        return $input;
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function __clone()
+    {
+        $children       = $this->getChildren();
+        if (is_null($children))
+            return;
+
+        $newChildren    = array();
+        $childrenCnt    = count($children);
+
+        for ($i = 0; $i < $childrenCnt; ++$i) {
+            /** @var Input $input */
+            $child          = $children[$i];
+            $newChildren[]  = clone $child;
+        }
+
+        $this->children = $newChildren;
     }
 }

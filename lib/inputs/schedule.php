@@ -37,17 +37,18 @@ class Schedule extends Input
     /**
      * Schedule constructor.
      *
-     * @param array   $params
-     * @param Options $options
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Options $options)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
 		// for automatic serialize/unserialize
 		$params['multiple'] = true;
 
-		parent::__construct($params, $options);
+		parent::__construct($params, $options, $parent);
 
 		$this->periodLabel = isset($params['periodLabel'])
 			? $params['periodLabel']

@@ -21,18 +21,18 @@ class Radio extends Input
 {
     use Options;
 
-
     /**
      * Radio constructor.
      *
      * @param array                 $params
      * @param \Rover\Fadmin\Options $optionsEngine
+     * @param Input|null            $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, \Rover\Fadmin\Options $optionsEngine)
+	public function __construct(array $params, \Rover\Fadmin\Options $optionsEngine, Input $parent = null)
 	{
-		parent::__construct($params, $optionsEngine);
+		parent::__construct($params, $optionsEngine, $parent);
 
 		if (isset($params['options']))
 			$this->options = $params['options'];

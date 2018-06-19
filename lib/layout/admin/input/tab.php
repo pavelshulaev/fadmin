@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: lenovo
- * Date: 14.06.2018
- * Time: 8:11
+ * Date: 19.06.2018
+ * Time: 9:32
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
@@ -11,14 +11,15 @@
 namespace Rover\Fadmin\Layout\Admin\Input;
 
 use Rover\Fadmin\Layout\Admin\Input;
-use \Rover\Fadmin\Inputs;
+use \Rover\Fadmin\Inputs\Input as InputEngine;
+
 /**
- * Class SubTab
+ * Class Tab
  *
  * @package Rover\Fadmin\Layout\Admin\Input
  * @author  Pavel Shulaev (https://rover-it.me)
  */
-class SubTab extends Input
+class Tab extends Input
 {
     /**
      * @return mixed|void
@@ -29,9 +30,7 @@ class SubTab extends Input
      */
     public function draw()
     {
-        ?><table class="adm-detail-content-table edit-table"><?php
-            $this->showInput();
-        ?></table><?php
+        $this->showInput();
     }
 
     /**
@@ -43,19 +42,16 @@ class SubTab extends Input
      */
     public function showInput()
     {
-        if (!$this->input instanceof Inputs\SubTab)
+        if (!$this->input instanceof \Rover\Fadmin\Inputs\Tab)
             return;
 
+        /** @var InputEngine[] $inputs */
         $inputs     = $this->input->getInputs();
         $inputsCnt  = count($inputs);
 
-        for ($i = 0; $i < $inputsCnt; ++$i) {
-            /** @var \Rover\Fadmin\Inputs\Input $input */
+        for ($i = 0; $i < $inputsCnt; ++$i){
             $input = $inputs[$i];
-
-            if (($input instanceof Inputs\SubTab)
-                || ($input instanceof Inputs\SubTabControl))
-                continue;
+            $input->loadValue();
 
             if (!$input->isHidden())
                 self::drawStatic($input);

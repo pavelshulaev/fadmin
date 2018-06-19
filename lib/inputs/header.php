@@ -22,17 +22,18 @@ class Header extends Input
     /**
      * Header constructor.
      *
-     * @param array   $params
-     * @param Options $options
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Options $options)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
 		if (!isset($params['name']))
 			$params['name'] = self::getType();
 
-		parent::__construct($params, $options);
+		parent::__construct($params, $options, $parent);
 	}
 
     /**
@@ -45,4 +46,13 @@ class Header extends Input
 	{
 		return false;
 	}
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function beforeLoadValue()
+    {
+        return false;
+    }
+
 }

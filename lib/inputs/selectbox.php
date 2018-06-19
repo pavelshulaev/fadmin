@@ -32,12 +32,13 @@ class Selectbox extends Input
      *
      * @param array         $params
      * @param OptionsEngine $optionsEngine
+     * @param Input|null    $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, OptionsEngine $optionsEngine)
+	public function __construct(array $params, OptionsEngine $optionsEngine, Input $parent = null)
 	{
-		parent::__construct($params, $optionsEngine);
+		parent::__construct($params, $optionsEngine, $parent);
 
 		if (isset($params['options']))
 			$this->options = $params['options'];

@@ -1,14 +1,10 @@
 <?php
-/**
- * This is a demo of module options file
- */
+/** This is the demo of module options file */
 use \Bitrix\Main\Localization\Loc;
 use \Bitrix\Main\SystemException;
 use \Bitrix\Main\Loader;
 use \Rover\Fadmin\Layout\Admin\Form;
-/**
- * Name of your child from \Rover\Fadmin\Options
- */
+/** Name of your child from \Rover\Fadmin\Options */
 use \Rover\Fadmin\TestOptions;
 
 if (!Loader::includeModule($mid)
@@ -19,7 +15,7 @@ Loc::loadMessages(__FILE__);
 Loc::loadMessages($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/options.php");
 
 $options = TestOptions::getInstance();
-$options->message->addOk('С 1-го сенятбря минимальная поддерживаемая версия php будет 5.6, позаботьтесь о переходе заранее.');
+$options->message->addOk('Минимальная поддерживаемая версия php будет 5.6, позаботьтесь о переходе заранее.');
 
 $form = new Form(TestOptions::getInstance());
 $form->show();

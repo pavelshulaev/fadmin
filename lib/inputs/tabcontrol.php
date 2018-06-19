@@ -10,6 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Rover\Fadmin\Layout\Form;
 use Rover\Fadmin\Options;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\ArgumentNullException;
@@ -23,9 +24,6 @@ use Bitrix\Main\SystemException;
  */
 class Tabcontrol extends Input
 {
-    /** @var array */
-    protected $tabs = array();
-
     /** @var array */
     protected $tabsConfig = array();
 
@@ -43,13 +41,39 @@ class Tabcontrol extends Input
     public function __construct(array $tabsConfig = array(), Options $options)
     {
         $params = array(
-            'name'  => $this->getModuleId() . '_' . self::getType(),
-            'label' => $this->getModuleId() . '_' . self::getType(),
+            'name'  => str_replace('.', '-', $options->getModuleId() . '_' . self::getType()),
+            'label' => $options->getModuleId() . '_' . self::getType(),
         );
 
         parent::__construct($params, $options);
 
         $this->tabsConfig = $tabsConfig;
+    }
+
+    /**
+     * @param bool $reload
+     * @return Tab[]
+     * @throws ArgumentNullException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getAdminTabs($reload = false)
+    {
+        $result = array();
+        $tabs   = $this->getTabs($reload);
+        $tabsCnt= count($tabs);
+
+        for ($i = 0; $i < $tabsCnt; ++$i){
+            /** @var Tab $tab */
+            $tab = $tabs[$i];
+            if (!$this->optionsEngine->settings->getShowAdminPresets()
+                && $tab->isPreset())
+                continue;
+
+            $result[] = $tab;
+        }
+
+        return $result;
     }
 
     /**
@@ -62,11 +86,11 @@ class Tabcontrol extends Input
      */
     public function getTabs($reload = false)
     {
-        if (!count($this->tabs) || $reload)
+        if (is_null($this->children) || $reload)
             $this->reloadTabs();
 
         return $this->optionsEngine->event
-            ->handle(Options\Event::AFTER_GET_TABS, array('tabs' => $this->tabs))
+            ->handle(Options\Event::AFTER_GET_TABS, array('tabs' => $this->children))
             ->getParameter('tabs');
     }
 
@@ -78,7 +102,7 @@ class Tabcontrol extends Input
      */
     public function reloadTabs()
     {
-        $this->tabs      = array();
+        $this->children  = array();
         $this->presetMap = array();
 
         foreach ($this->tabsConfig as $tabParams) {
@@ -113,16 +137,16 @@ class Tabcontrol extends Input
                         $resultTabParams['presetId']= $this->optionsEngine->event->getParameter('presetId');
                         $resultTabParams['label']   = $this->optionsEngine->event->getParameter('presetName');
 
-                        $tab = new Tab($resultTabParams, $this->optionsEngine);
+                        $tab = new Tab($resultTabParams, $this->optionsEngine, $this);
 
-                        $this->tabs[] = $this->optionsEngine->event
+                        $this->children[] = $this->optionsEngine->event
                             ->handle(Options\Event::AFTER_MAKE_PRESET_TAB, compact('tab'))
                             ->getParameter('tab');
                     }
                 }
 
             } else {
-                $this->tabs[] = new Tab($tabParams, $this->optionsEngine);
+                $this->children[] = new Tab($tabParams, $this->optionsEngine, $this);
             }
         }
     }
@@ -157,32 +181,177 @@ class Tabcontrol extends Input
 
     /**
      * @param array $filter
-     * @return array|mixed|null
+     * @param bool  $reload
+     * @return array
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function search(array $filter)
+    public function searchByFilter(array $filter, $reload = false)
     {
         $result = array();
-        $tabs   = $this->getTabs();
+        $tabs   = $this->getTabs($reload);
         $tabsCnt= count($tabs);
 
         for ($i = 0; $i < $tabsCnt; ++$i) {
             /** @var Tab $tab */
-            $tab = $tabs[$i];
-            $result[] = $tab->search($filter);
+            $tab        = $tabs[$i];
+            $tabResult  = $tab->searchByFilter($filter, $reload);
+
+            if (count($tabResult))
+                $result = array_merge($result, $tabResult);
         }
 
-        $resultCnt = count($result);
+        return $result;
+    }
 
-        if ($resultCnt == 1)
-            return reset($result);
+    /**
+     * @param        $name
+     * @param string $presetId
+     * @param string $siteId
+     * @param bool   $reload
+     * @return null|Tab
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function searchTabByName($name, $siteId = '', $presetId = '', $reload = false)
+    {
+        $tabs       = $this->getTabs($reload);
+        $siteId     = trim($siteId);
+        $presetId   = trim($presetId);
+        $tabsCnt    = count($tabs);
 
-        if ($resultCnt > 1)
-            return $result;
+        for ($i = 0; $i < $tabsCnt; ++$i) {
+            /** @var Tab $tab */
+            $tab = $tabs[$i];
+            if ($tab->getValueName() != $name)
+                continue;
+
+            if (strlen($siteId) && ($siteId != $tab->getSiteId()))
+                continue;
+
+            if (strlen($presetId) && ($presetId != $tab->getPresetId()))
+                continue;
+
+            return $tab;
+        }
 
         return null;
+    }
+
+    /**
+     * @param        $name
+     * @param string $presetId
+     * @param string $siteId
+     * @param bool   $reload
+     * @return mixed|null
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function searchOneByName($name, $presetId = '', $siteId = '', $reload = false)
+    {
+        $tabs       = $this->getTabs($reload);
+        $tabsCnt    = count($tabs);
+
+        for ($i = 0; $i < $tabsCnt; ++$i) {
+            /** @var Tab $tab */
+            $tab = $tabs[$i];
+            $result = $tab->searchOneByName($name, $presetId, $siteId, $reload);
+            if ($result instanceof Input)
+                return $result;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param bool $admin
+     * @return bool
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setValueFromRequest($admin = false)
+    {
+        if (!$this->optionsEngine->event
+            ->handle(Options\Event::BEFORE_ADD_VALUES_FROM_REQUEST)
+            ->isSuccess())
+            return false;
+
+        $tabs = $admin
+            ? $this->getAdminTabs()
+            : $this->getTabs();
+
+        foreach ($tabs as $tab)
+            /** @var Tab $tab */
+            $tab->setValueFromRequest();
+
+        // handle group rights tab
+        if ($this->optionsEngine->settings->getGroupRights()) {
+            ob_start();
+            Form::includeGroupRightsTab();
+            ob_clean();
+        }
+
+        if (!$this->optionsEngine->event
+            ->handle(Options\Event::AFTER_ADD_VALUES_FROM_REQUEST, compact('tabs'))
+            ->isSuccess())
+            return false;
+
+        return true;
+    }
+
+    /**
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function __clone()
+    {
+        $this->reloadTabs();
+        parent::__clone();
+    }
+
+    /**
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function sort()
+    {
+        $tabs       = $this->getTabs();
+        $tabsCnt    = count($tabs);
+
+        for ($i = 0; $i < $tabsCnt; ++$i){
+            /** @var Tab $tab */
+            $tab = $tabs[$i];
+            $tab->sort();
+        }
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    public function beforeSaveValue(&$value)
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function beforeLoadValue()
+    {
+        return false;
     }
 }

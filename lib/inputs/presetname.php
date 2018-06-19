@@ -11,7 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Localization\Loc;
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Options;
 
 Loc::loadMessages(__FILE__);
 
@@ -26,15 +26,16 @@ class PresetName extends Text
     /**
      * PresetName constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @throws \Bitrix\Main\SystemException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options, $parent);
 
 		if (!$this->isPreset())
 			return;

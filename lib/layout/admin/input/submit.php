@@ -19,24 +19,16 @@ use Rover\Fadmin\Layout\Admin\Input;
  */
 class Submit extends Input
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $customInputName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $customInputValue;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $customInputId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $customPopup;
 
     /**
@@ -60,6 +52,8 @@ class Submit extends Input
     }
 
     /**
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()

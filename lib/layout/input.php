@@ -22,14 +22,10 @@ use Rover\Fadmin\Inputs\Input as InputEngine;
  */
 abstract class Input
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public static $type;
 
-    /**
-     * @var InputEngine
-     */
+    /** @var InputEngine */
     protected $input;
 
     /**
@@ -49,7 +45,7 @@ abstract class Input
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function factory(InputEngine $input)
+    public static function build(InputEngine $input)
     {
         if (!strlen(static::$type))
             throw new ArgumentNullException('type');
@@ -76,7 +72,7 @@ abstract class Input
      */
     public static function drawStatic(InputEngine $input)
     {
-        $layoutDriver = self::factory($input);
+        $layoutDriver = self::build($input);
         $layoutDriver->draw();
     }
 

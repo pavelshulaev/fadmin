@@ -28,4 +28,13 @@ class Custom extends Input
 	{
 		return false;
 	}
+
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function beforeLoadValue()
+    {
+        return false;
+    }
 }

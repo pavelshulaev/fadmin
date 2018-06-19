@@ -9,7 +9,8 @@
  */
 
 namespace Rover\Fadmin\Inputs\Params;
-
+use Rover\Fadmin\Inputs\Input;
+use Rover\Fadmin\Options;
 /**
  * Trait MaxLength
  *
@@ -52,6 +53,15 @@ trait Common
 
     /** @var bool */
     protected $disabled = false;
+
+    /** @var Input|null */
+    protected $parent;
+
+    /** @var Input[] */
+    protected $children;
+
+    /** @var Options */
+    protected $optionsEngine;
 
     /**
      * @param $display
@@ -267,6 +277,16 @@ trait Common
     }
 
     /**
+     * @return bool
+     * @author Pavel Shulaev (http://rover-it.me)
+     * @deprecated
+     */
+    public function getDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
      * @return mixed
      * @author Pavel Shulaev (http://rover-it.me)
      */
@@ -274,4 +294,72 @@ trait Common
     {
         return $this->name;
     }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $id
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return null|Input
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param Input $parent
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setParent(Input $parent)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Options
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getOptionsEngine()
+    {
+        return $this->optionsEngine;
+    }
+
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getModuleId()
+    {
+        return $this->getOptionsEngine()->getModuleId();
+    }
+
+    /**
+     * @return Input[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+
 }
