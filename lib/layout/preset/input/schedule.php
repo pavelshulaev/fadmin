@@ -11,9 +11,6 @@
 namespace Rover\Fadmin\Layout\Preset\Input;
 
 use Rover\Fadmin\Layout\Preset\Input;
-use Bitrix\Main\Localization\Loc;
-
-Loc::loadMessages(__FILE__);
 
 /**
  * Class Schedule

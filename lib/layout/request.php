@@ -58,9 +58,9 @@ abstract class Request
         if (!$this->options->event->handle(Event::BEFORE_GET_REQUEST)->isSuccess())
             return;
 
-        if ($this->request->get(Addpreset::$type)) {
+        if ($this->request->get(Addpreset::getType())) {
             $this->addPreset();
-        } elseif ($this->request->get(Removepreset::$type)) {
+        } elseif ($this->request->get(Removepreset::getType())) {
             $this->removePreset();
         } else {
             $this->setValues();
@@ -83,9 +83,9 @@ abstract class Request
     protected function addPreset()
     {
         list($siteId, $value) = explode(Addpreset::SEPARATOR,
-            $this->request->get(Addpreset::$type));
+            $this->request->get(Addpreset::getType()));
 
-        return intval($this->options->tabMap->addPreset($value, $siteId));
+        return intval($this->options->preset->add($value, $siteId));
     }
 
     /**
@@ -98,9 +98,9 @@ abstract class Request
     protected function removePreset()
     {
         list($siteId, $id) = explode(Removepreset::SEPARATOR,
-            $this->request->get(Removepreset::$type));
+            $this->request->get(Removepreset::getType()));
 
-        return $this->options->tabMap->removePreset($id, $siteId);
+        return $this->options->preset->remove($id, $siteId);
     }
 
     /**

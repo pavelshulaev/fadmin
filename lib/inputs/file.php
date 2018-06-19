@@ -11,7 +11,8 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Application;
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Inputs\Params\Size;
+use Rover\Fadmin\Options;
 
 /**
  * Class File
@@ -21,42 +22,28 @@ use Rover\Fadmin\Tab;
  */
 class File extends Input
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__FILE;
+    use Size;
 
-	/**
-	 * @var bool
-	 */
+	/** @var bool */
 	protected $isImage = true;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $mimeType;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $maxSize = 0;
-
-    /**
-     * @var
-     */
-    protected $size;
 
     /**
      * File constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array   $params
+     * @param Options $options
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options)
 	{
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options);
 
 		if (isset($params['isImage']))
 			$this->isImage  = (bool)$params['isImage'];
@@ -139,7 +126,7 @@ class File extends Input
 			if (!empty($this->mimeType) && $_FILES[$valueId]['type'] != $this->mimeType)
 				throw new \Bitrix\Main\ArgumentException('incorrect file mime type');
 
-			$value = \CFile::SaveFile($_FILES[$valueId], $this->tab->getModuleId());
+			$value = \CFile::SaveFile($_FILES[$valueId], $this->getModuleId());
 
 		} elseif ($request->get($valueId . '_del') == 'Y') {
 			// del old value

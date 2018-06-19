@@ -10,7 +10,10 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Inputs\Params\Options;
+use Rover\Fadmin\Inputs\Params\Size;
+use Rover\Fadmin\Options as OptionsEngine;
+
 
 /**
  * Class Selectbox
@@ -20,33 +23,22 @@ use Rover\Fadmin\Tab;
  */
 class Selectbox extends Input
 {
-    /**
-     * @var string
-     */
-	public static $type = self::TYPE__SELECTBOX;
-
-    /**
-     * @var array
-     */
-    protected $options = array();
-    /**
-     * @var
-     */
-    protected $size;
+    use Options, Size;
 
 	const MAX_MULTI_SIZE = 7;
 
     /**
      * Selectbox constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array         $params
+     * @param OptionsEngine $optionsEngine
+     * @param Input|null    $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, OptionsEngine $optionsEngine, Input $parent = null)
 	{
-		parent::__construct($params, $tab);
+		parent::__construct($params, $optionsEngine, $parent);
 
 		if (isset($params['options']))
 			$this->options = $params['options'];
@@ -60,49 +52,4 @@ class Selectbox extends Input
 		else
 			$this->size = 1;
 	}
-
-
-    /**
-     * @param array $options
-     * @return $this
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function setOptions(array $options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     * @author Pavel Shulaev (http://rover-it.me)
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-
-
-    /**
-     * @return int
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    /**
-     * @param $size
-     * @return $this
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function setSize($size)
-    {
-        $this->size = intval($size);
-
-        return $this;
-    }
 }

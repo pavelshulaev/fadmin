@@ -25,7 +25,9 @@ abstract class Input extends InputAbstract
     public static $type = 'Admin';
 
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function draw()
     {
@@ -36,6 +38,7 @@ abstract class Input extends InputAbstract
 
     /**
      * @param bool $empty
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showLabel($empty = false)
@@ -57,6 +60,7 @@ abstract class Input extends InputAbstract
     }
 
     /**
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function showMultiLabel()

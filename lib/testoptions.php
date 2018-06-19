@@ -10,7 +10,22 @@
 
 namespace Rover\Fadmin;
 
-use Rover\Fadmin\Inputs\Input;
+use Rover\Fadmin\Inputs\Addpreset;
+use Rover\Fadmin\Inputs\Checkbox;
+use Rover\Fadmin\Inputs\Clock;
+use Rover\Fadmin\Inputs\Color;
+use Rover\Fadmin\Inputs\File;
+use Rover\Fadmin\Inputs\Header;
+use Rover\Fadmin\Inputs\Iblock;
+use Rover\Fadmin\Inputs\Number;
+use Rover\Fadmin\Inputs\PresetName;
+use Rover\Fadmin\Inputs\Removepreset;
+use Rover\Fadmin\Inputs\Selectbox;
+use Rover\Fadmin\Inputs\Selectgroup;
+use Rover\Fadmin\Inputs\SubTab;
+use Rover\Fadmin\Inputs\SubTabControl;
+use Rover\Fadmin\Inputs\Text;
+use Rover\Fadmin\Inputs\Textarea;
 use Rover\Fadmin\Options\Settings;
 
 /**
@@ -64,12 +79,12 @@ class TestOptions extends Options
                 'siteId'        => 's1',
                 'inputs'        => array(
                     array(
-                        'type'      => Input::TYPE__HEADER,
+                        'type'      => Header::getType(),
                         'label'     => 'First tab header',
                         'sort'      => 100,
                     ),
                     array(
-                        'type'      => Input::TYPE__TEXT,
+                        'type'      => Text::getType(),
                         'name'      => 'text',
                         'label'     => 'text input (maxlength 50)',
                         'default'   => 'default text',
@@ -77,7 +92,7 @@ class TestOptions extends Options
                         'sort'      => '200'
                     ),
                     array(
-                        'type'      => Input::TYPE__NUMBER,
+                        'type'      => Number::getType(),
                         'name'      => 'number',
                         'label'     => 'number input (min 0, max 100)',
                         'default'   => 50,
@@ -86,7 +101,7 @@ class TestOptions extends Options
                         'sort'      => '300'
                     ),
                     array(
-                        'type'      => Input::TYPE__TEXTAREA,
+                        'type'      => Textarea::getType(),
                         'name'      => 'input_textarea',
                         'label'     => 'input textarea (3 rows 20 cols)',
                         'default'   => 'default text',
@@ -96,27 +111,27 @@ class TestOptions extends Options
                         'sort'      => '500'
                     ),
                     array(
-                        'type'      => Input::TYPE__CLOCK,
+                        'type'      => Clock::getType(),
                         'name'      => 'clock',
                         'label'     => 'This is a clock',
                         'default'   => '15:15',
                         'sort'      => 400
                     ),
                     array(
-                        'type'      => Input::TYPE__SUBTABCONTROL,
+                        'type'      => SubTabControl::getType(),
                         'name'      => 'subtabcontrol',
                         'label'     => 'subtabcontrol label',
                         'default'   => 'subtabcontrol default',
                         'sort'      => 550,
                         'subTabs'   => array(
                             array(
-                                'type'      => Input::TYPE__SUBTAB,
+                                'type'      => SubTab::getType(),
                                 'name'      => 'subtab_1',
                                 'label'     => 'subtab 1 label',
                                 'default'   => 'subtab 1 default',
                                 'inputs'    => array(
                                     array(
-                                        'type'      => Input::TYPE__COLOR,
+                                        'type'      => Color::getType(),
                                         'name'      => 'color',
                                         'label'     => 'This is a color',
                                         'default'   => '15:15',
@@ -124,7 +139,7 @@ class TestOptions extends Options
                                         'sort'      => '600'
                                     ),
                                     array(
-                                        'type'      => Input::TYPE__CHECKBOX,
+                                        'type'      => Checkbox::getType(),
                                         'name'      => 'checkbox',
                                         'label'     => 'This is a checkbox',
                                         'default'   => '#FFFF00',
@@ -134,13 +149,13 @@ class TestOptions extends Options
                                 )
                             ),
                             array(
-                                'type'      => Input::TYPE__SUBTAB,
+                                'type'      => SubTab::getType(),
                                 'name'      => 'subtab_2',
                                 'label'     => 'subtab 2 label',
                                 'default'   => 'subtab 2 default',
                                 'inputs'    => array(
                                     array(
-                                        'type'      => Input::TYPE__FILE,
+                                        'type'      => File::getType(),
                                         'name'      => 'file',
                                         'label'     => 'This is a file',
                                         'default'   => '',
@@ -150,14 +165,14 @@ class TestOptions extends Options
                                         'sort'      => '800'
                                     ),
                                     array(
-                                        'type'      => Input::TYPE__IBLOCK,
+                                        'type'      => Iblock::getType(),
                                         'name'      => 'iblock',
                                         'label'     => 'This is a hidden single iblock',
                                         'sort'      => '900',
                                         'hidden'    => true
                                     ),
                                     array(
-                                        'type'      => Input::TYPE__IBLOCK,
+                                        'type'      => Iblock::getType(),
                                         'name'      => 'multiple_iblock',
                                         'multiple'  => true,
                                         'label'     => 'This is a multiple iblock',
@@ -169,7 +184,7 @@ class TestOptions extends Options
                     ),
 
                     array(
-                        'type'      => Input::TYPE__ADD_PRESET,
+                        'type'      => Addpreset::getType(),
                         'label'     => 'add preset s1',
                         'default'   => 'new preset default name',
                         'popup'     => 'add preset popup', // false - not show
@@ -185,23 +200,23 @@ class TestOptions extends Options
                 'siteId'        => 's1',
                 'inputs'        => array(
                     array(
-                        'type'      => Input::TYPE__HEADER,
+                        'type'      => Header::getType(),
                         'label'     => 'Preset header',
                     ),
                     array(
-                        'type'      => Input::TYPE__PRESET_NAME,
+                        'type'      => PresetName::getType(),
                         'name'      => 'presetName',
                         'label'     => 'preset name',
                     ),
                     array(
-                        'type'      => Input::TYPE__COLOR,
+                        'type'      => Color::getType(),
                         'name'      => 'preset_color',
                         'label'     => 'preset color',
                         'default'   => '#FFAA00',
                         'help'      => 'color help',
                     ),
                     array(
-                        'type'      => Input::TYPE__REMOVE_PRESET,
+                        'type'      => Removepreset::getType(),
                         'label'     => 'remove_preset',
                         'popup'     => 'Are you sure?',
                     )
@@ -214,7 +229,7 @@ class TestOptions extends Options
                 'siteId'        => 'm',
                 'inputs'        => array(
                     array(
-                        'type'      => Input::TYPE__SELECTBOX,
+                        'type'      => Selectbox::getType(),
                         'name'      => 'selectbox',
                         'label'     => 'single selectbox',
                         'options'   => array(
@@ -224,7 +239,7 @@ class TestOptions extends Options
                         )
                     ),
                     array(
-                        'type'      => Input::TYPE__SELECTBOX,
+                        'type'      => Selectbox::getType(),
                         'name'      => 'multiple_selectbox',
                         'label'     => 'Multiple selectbox',
                         'multiple'  => true,
@@ -235,7 +250,7 @@ class TestOptions extends Options
                         )
                     ),
                     array(
-                        'type'      => Input::TYPE__SELECT_GROUP,
+                        'type'      => Selectgroup::getType(),
                         'name'      => 'select_group',
                         'label'     => 'select_group',
                         'options'   => array(
@@ -266,7 +281,7 @@ class TestOptions extends Options
                         )
                     ),
                     array(
-                        'type'      => Input::TYPE__ADD_PRESET,
+                        'type'      => Addpreset::getType(),
                         'label'     => 'add preset',
                         'default'   => 'new preset default name',
                         'popup'     => 'add preset popup 2' // false - not show
@@ -281,18 +296,18 @@ class TestOptions extends Options
                 'siteId'        => 'm',
                 'inputs'        => array(
                     array(
-                        'type'      => Input::TYPE__HEADER,
+                        'type'      => Header::getType(),
                         'label'     => 'Preset header',
                     ),
                     array(
-                        'type'      => Input::TYPE__COLOR,
+                        'type'      => Color::getType(),
                         'name'      => 'preset_color',
                         'label'     => 'preset color',
                         'default'   => '#FFAA00',
                         'help'      => 'color help',
                     ),
                     array(
-                        'type'      => Input::TYPE__REMOVE_PRESET,
+                        'type'      => Removepreset::getType(),
                         'label'     => 'remove_preset',
                         'popup'     => 'Are you sure?',
                     )

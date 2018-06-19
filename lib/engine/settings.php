@@ -16,7 +16,4 @@ namespace Rover\Fadmin\Engine;
  * @author  Pavel Shulaev (https://rover-it.me)
  * @deprecated
  */
-class Settings extends \Rover\Fadmin\Options\Settings
-{
-
-}
+class Settings extends \Rover\Fadmin\Options\Settings{}

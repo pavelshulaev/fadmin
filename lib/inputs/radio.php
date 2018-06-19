@@ -10,7 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Inputs\Params\Options;
 /**
  * Class Selectbox
  *
@@ -19,50 +19,22 @@ use Rover\Fadmin\Tab;
  */
 class Radio extends Input
 {
-    /**
-     * @var array
-     */
-    protected $options = array();
-
-    /**
-     * @var string
-     */
-	public static $type = self::TYPE__RADIO;
+    use Options;
 
     /**
      * Radio constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array                 $params
+     * @param \Rover\Fadmin\Options $optionsEngine
+     * @param Input|null            $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, \Rover\Fadmin\Options $optionsEngine, Input $parent = null)
 	{
-		parent::__construct($params, $tab);
+		parent::__construct($params, $optionsEngine, $parent);
 
 		if (isset($params['options']))
 			$this->options = $params['options'];
 	}
-
-    /**
-     * @param array $options
-     * @return $this
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function setOptions(array $options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     * @author Pavel Shulaev (http://rover-it.me)
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
 }

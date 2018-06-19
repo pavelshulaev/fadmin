@@ -11,13 +11,13 @@ namespace Rover\Fadmin\Layout\Preset;
 
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
+use Rover\Fadmin\Inputs\Custom;
+use Rover\Fadmin\Inputs\Header;
+use Rover\Fadmin\Inputs\Label;
 use \Rover\Fadmin\Layout\Form as FromAbstract;
-use Bitrix\Main\Localization\Loc;
 use \Rover\Fadmin\Options;
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Inputs\Tab;
 use \Rover\Fadmin\Inputs\Input;
-
-Loc::loadMessages(__FILE__);
 
 /**
  * Class Form
@@ -89,7 +89,7 @@ class Form extends FromAbstract
     {
         $this->getRequest()->process();
         $this->showMessages();
-        $this->showForm();
+        $this->draw();
     }
 
     /**
@@ -97,6 +97,7 @@ class Form extends FromAbstract
      * @return array
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function getData(Tab $tab)
@@ -118,6 +119,7 @@ class Form extends FromAbstract
      * @return array
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function getFormTabs(Tab $tab)
@@ -130,7 +132,7 @@ class Form extends FromAbstract
         $inputs     = $tab->getInputs();
 
         foreach ($inputs as $input) {
-            if ($input::$type == \Rover\Fadmin\Inputs\Input::TYPE__HEADER) {
+            if ($input::getType() == Header::getType()) {
                 if (!empty($formTab))
                     $formTabs[] = $formTab;
 
@@ -177,9 +179,9 @@ class Form extends FromAbstract
     protected function getType(Input $input)
     {
         switch ($input->getType()) {
-            case Input::TYPE__LABEL:
+            case Label::getType():
                 return 'label';
-            case Input::TYPE__CUSTOM:
+            case Custom::getType():
                 return 'section';
             default:
                 return 'custom';
@@ -196,7 +198,7 @@ class Form extends FromAbstract
     protected function getValue(Input $input)
     {
         /** @var \Rover\Fadmin\Layout\Preset\Input $layout */
-        $layout = \Rover\Fadmin\Layout\Preset\Input::factory($input);
+        $layout = \Rover\Fadmin\Layout\Preset\Input::build($input);
 
         ob_start();
 
@@ -212,9 +214,9 @@ class Form extends FromAbstract
      * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showForm()
+    public function draw()
     {
-        $tab        = $this->options->tabMap->getTabByPresetId($this->params['preset_id']);
+        $tab        = $this->options->getTabControl()->getTabByPresetId($this->params['preset_id']);
         $formTabs   = $this->getFormTabs($tab);
         $data       = $this->getData($tab);
 
@@ -223,7 +225,6 @@ class Form extends FromAbstract
             "bitrix:main.interface.form",
             "",
             array(
-
                 "FORM_ID"   =>  $this->params['form_id'],   //идентификатор формы
                 "TABS"      =>  $formTabs,                  //описание вкладок формы
                 "BUTTONS"   =>  array(                      //кнопки формы, возможны кастомные кнопки в виде html в "custom_html"

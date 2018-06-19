@@ -18,11 +18,6 @@ namespace Rover\Fadmin\Inputs;
  */
 class Checkbox extends Input
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__CHECKBOX;
-
     /**
      * @param $value
      * @return bool|mixed
@@ -56,7 +51,7 @@ class Checkbox extends Input
      */
 	protected function beforeGetValue(&$value)
 	{
-		if ($this->tab->options->settings->getBoolCheckbox())
+		if ($this->optionsEngine->settings->getBoolCheckbox())
             $value = $value == 'Y';
 
 		return true;

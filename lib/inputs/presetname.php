@@ -11,7 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Localization\Loc;
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Options;
 
 Loc::loadMessages(__FILE__);
 
@@ -23,33 +23,32 @@ Loc::loadMessages(__FILE__);
  */
 class PresetName extends Text
 {
-	public static $type = self::TYPE__PRESET_NAME;
-
     /**
      * PresetName constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @throws \Bitrix\Main\SystemException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options, $parent);
 
-		if (!$this->tab->isPreset())
+		if (!$this->isPreset())
 			return;
 
-		$presetId = $this->tab->getPresetId();
+		$presetId = $this->getPresetId();
 
 		if (!$presetId)
 			return;
 
 		$value = $this->getValue();
 		if (empty($value))
-			$this->setValue($this->tab->options
-				->preset->getNameById($presetId, $this->tab->getSiteId()));
+			$this->setValue($this->optionsEngine
+				->preset->getNameById($presetId, $this->getSiteId()));
 	}
 
     /**
@@ -62,24 +61,24 @@ class PresetName extends Text
      */
 	public function beforeSaveRequest(&$value)
 	{
-		if (!$this->tab->isPreset())
+		if (!$this->isPreset())
 			return true;
 
-		$presetId = $this->tab->getPresetId();
+		$presetId = $this->getPresetId();
 
 		if (!$presetId)
 			return true;
 
 		if (empty($value)){
-			$this->tab->options->message->addError(
+			$this->optionsEngine->message->addError(
 				Loc::getMessage('rover-fa__presetname-no-name',
                     array('#last-preset-name#' => $this->getValue())));
 
 			return false;
 		}
 
-		$this->tab->options->preset->updateName($presetId, $value,
-			$this->tab->getSiteId());
+		$this->optionsEngine->preset->updateName($presetId, $value,
+			$this->getSiteId());
 
 		return true;
 	}

@@ -18,8 +18,5 @@ namespace Rover\Fadmin\Inputs;
  */
 class Iblock extends Input
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__IBLOCK;
+
 }

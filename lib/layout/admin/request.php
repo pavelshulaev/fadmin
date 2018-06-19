@@ -16,7 +16,7 @@ use Bitrix\Main\SystemException;
 use Rover\Fadmin\Inputs\Addpreset;
 use Rover\Fadmin\Layout\Request as RequestAbstract;
 use Rover\Fadmin\Options;
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Inputs\Tab;
 
 /**
  * Class Request
@@ -92,7 +92,7 @@ class Request extends RequestAbstract
             $this->restoreDefaults();
         else
             try {
-                if ($this->options->tabMap->setValuesFromRequest(true))
+                if ($this->options->getTabControl()->setValueFromRequest(true))
                     $this->redirect();
             } catch (\Exception $e) {
                 $this->options->handleException($e);
@@ -134,12 +134,12 @@ class Request extends RequestAbstract
     protected function addPreset()
     {
         list($siteId, $value) = explode(Addpreset::SEPARATOR,
-            $this->request->get(Addpreset::$type));
+            $this->request->get(Addpreset::getType()));
 
-        $presetId = intval($this->options->tabMap->addPreset($value, $siteId));
+        $presetId = intval($this->options->preset->add($value, $siteId));
 
         if ($presetId){
-            $presetTab = $this->options->tabMap->getTabByPresetId($presetId, $siteId, true);
+            $presetTab = $this->options->getTabControl()->getTabByPresetId($presetId, $siteId, true);
             if (!$presetTab instanceof Tab)
                 throw new ArgumentOutOfRangeException('presetId');
 

@@ -24,7 +24,9 @@ Loc::loadMessages(__FILE__);
 class Removepreset extends Submit
 {
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function draw()
     {
@@ -42,6 +44,8 @@ class Removepreset extends Submit
     }
 
     /**
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()
@@ -49,7 +53,7 @@ class Removepreset extends Submit
         if (!$this->input instanceof RemovePresetInput)
             return;
 
-        $presetId = $this->input->getTab()->getPresetId();
+        $presetId = $this->input->getPresetId();
 
         if (!$presetId)
             return;
@@ -59,8 +63,8 @@ class Removepreset extends Submit
         if (($popup !== false) && !strlen($popup))
             $popup = Loc::getMessage('rover-fa__REMOVEPRESET_CONFIRM');
 
-        $this->customInputName  = \Rover\Fadmin\Inputs\Removepreset::$type;
-        $this->customInputValue = $this->input->getTab()->getSiteId() . RemovePresetInput::SEPARATOR . $presetId;
+        $this->customInputName  = RemovePresetInput::getType();
+        $this->customInputValue = $this->input->getSiteId() . RemovePresetInput::SEPARATOR . $presetId;
         $this->customInputId    = $this->input->getValueId();
         $this->customPopup      = $popup;
 

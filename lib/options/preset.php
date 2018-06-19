@@ -4,6 +4,7 @@ namespace Rover\Fadmin\Options;
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use \Bitrix\Main\Config\Option;
+use Rover\Fadmin\Inputs\Tab;
 use Rover\Fadmin\Options;
 /**
  * Class Presets
@@ -125,39 +126,59 @@ class Preset
 	}
 
     /**
-     * @param        $name
+     * @param        $value
      * @param string $siteId
-     * @return int|mixed
+     * @return bool
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function add($name, $siteId = '')
+	public function add($value, $siteId = '')
 	{
-        $name       = trim($name);
-		$presets    = $this->getList($siteId, true);
+        if (!$this->options->event
+            ->handle(Event::BEFORE_ADD_PRESET, compact('siteId', 'value'))
+            ->isSuccess())
+            return false;
+
+        $params = $this->options->event->getParameters();
+
+        if (!isset($params['name']))
+            $params['name'] = $params['value'];
+
+        $name       = trim($params['name']);
+		$presets    = $this->getList($params['siteId'], true);
 
 		if (!count($presets)){
 			$presets    = array();
-			$presetId   = 1;
+			$id   = 1;
 		} else
-			$presetId   = max(array_keys($presets)) + 1;
+            $id   = max(array_keys($presets)) + 1;
 
-		$presets[$presetId] = array(
-			'id'    => $presetId,
+		$presets[$id] = array(
+			'id'    => $id,
 			'name'  => htmlspecialcharsbx($name)
         );
 
 		$this->update($presets, $siteId);
 
-		return $presetId;
+        $params = $this->options->event
+            ->handle(Event::AFTER_ADD_PRESET, compact('id'))
+            ->getParameters();
+
+        // reload tabs after event!!!
+        $this->options->getTabControl()->reloadTabs();
+
+		return $params['id'];
 	}
 
     /**
      * @param        $id
      * @param string $siteId
+     * @return bool
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function remove($id, $siteId = '')
@@ -166,15 +187,36 @@ class Preset
         if (!$id)
             throw new ArgumentNullException('id');
 
+        // action beforeRemovePreset
+        if (!$this->options->event
+            ->handle(Event::BEFORE_REMOVE_PRESET, compact('siteId', 'id'))
+            ->isSuccess())
+            return false;
+
+        $params     = $this->options->event->getParameters();
+        /** @var Tab $presetTab */
+        $presetTab  = $this->options->getTabControl()
+            ->getTabByPresetId($params['id'], $params['siteId']);
+
+        if ($presetTab instanceof Tab === false)
+            throw new ArgumentOutOfRangeException('tab');
+
+        $presetTab->clear();
+
 		$presets = $this->getList($siteId, true);
 
 		foreach ($presets as $num => $preset){
-			if ($id == $preset['id']) {
+			if ($params['id'] == $preset['id']) {
 				unset($presets[$num]);
 				$this->update($presets, $siteId);
 				break;
 			}
 		}
+
+        // action afterRemovePreset
+        $this->options->event->handle(Event::AFTER_REMOVE_PRESET, $params);
+
+        return true;
 	}
 
     /**

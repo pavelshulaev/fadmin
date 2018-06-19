@@ -10,8 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Tab;
-
+use Rover\Fadmin\Options;
 /**
  * Class Submit
  *
@@ -20,27 +19,21 @@ use Rover\Fadmin\Tab;
  */
 class Submit extends Input
 {
-    /** @var string  */
-	public static $type = self::TYPE__SUBMIT;
-
-    const SEPARATOR = '__';
-
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $popup;
 
     /**
      * Submit constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options, $parent);
 
 		if (isset($params['popup']))
 			$this->popup = $params['popup'];
@@ -56,6 +49,15 @@ class Submit extends Input
 	{
 		return false;
 	}
+
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function beforeLoadValue()
+    {
+        return false;
+    }
 
     /**
      * @param $value

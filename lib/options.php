@@ -15,6 +15,7 @@ use \Bitrix\Main;
 use \Bitrix\Main\ArgumentNullException;
 use \Rover\Fadmin\Inputs\Input;
 use \Bitrix\Main\Application;
+use Rover\Fadmin\Inputs\Tabcontrol;
 use Rover\Fadmin\Options\Cache;
 use \Rover\Fadmin\Options\Message;
 use \Rover\Fadmin\Options\Settings;
@@ -32,13 +33,20 @@ Loc::LoadMessages(__FILE__);
  */
 abstract class Options
 {
-	const SEPARATOR = '__';
+    /** @deprecated  */
+    const SEPARATOR = '__';
 
 	/** @var string */
 	protected $moduleId;
 
-	/** @var TabMap */
+    /**
+     * @var TabMap
+     * @deprecated
+     */
 	public $tabMap;
+
+	/** @var Tabcontrol */
+	public $tabControl;
 
 	/** @var Message */
 	public $message;
@@ -57,6 +65,25 @@ abstract class Options
 
 	/** @var array */
 	protected static $instances = array();
+
+    /**
+     * @param $moduleId
+     * @throws Main\ArgumentNullException
+     */
+    protected function __construct($moduleId)
+    {
+        if (!strlen($moduleId))
+            throw new ArgumentNullException('moduleId');
+
+        $this->moduleId = $moduleId;
+
+        $this->message  = new Message();
+        $this->event    = new Event($this);
+        $this->preset   = new Preset($this);
+        $this->tabMap   = new TabMap($this);
+        $this->settings = new Settings($this);
+        $this->cache    = new Cache($this);
+    }
 
     /**
      * @param $moduleId
@@ -106,24 +133,23 @@ abstract class Options
 			: $this->getNormalValue(constant($constName), $arguments[0], $arguments[1]);
 	}
 
-	/**
-	 * @param $moduleId
-	 * @throws Main\ArgumentNullException
-	 */
-	protected function __construct($moduleId)
-	{
-		if (!strlen($moduleId))
-			throw new ArgumentNullException('moduleId');
+    /**
+     * @param bool $reload
+     * @return Tabcontrol
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getTabControl($reload = false)
+    {
+        if (is_null($this->tabControl) || $reload) {
+            $config = $this->getConfigCache($reload);
+            $tabs   = isset($config['tabs'])? $config['tabs'] : array();
+            $this->tabControl = new Tabcontrol($tabs, $this);
+        }
 
-		$this->moduleId = $moduleId;
-
-		$this->message  = new Message();
-		$this->event    = new Event($this);
-		$this->preset   = new Preset($this);
-		$this->tabMap   = new TabMap($this);
-		$this->settings = new Settings($this);
-		$this->cache    = new Cache($this);
-	}
+        return $this->tabControl;
+    }
 
     /**
      * @param       $name
@@ -192,14 +218,15 @@ abstract class Options
 	 * @param string $siteId
 	 * @return string
 	 * @author Pavel Shulaev (http://rover-it.me)
+     * @deprecated
 	 */
 	public static function getFullName($name, $presetId = '', $siteId = '')
 	{
 		if (strlen($presetId))
-			$name = htmlspecialcharsbx($presetId) . self::SEPARATOR . $name;
+			$name = htmlspecialcharsbx($presetId) . Input::SEPARATOR . $name;
 
 		if (strlen($siteId))
-			$name = htmlspecialcharsbx($siteId) . self::SEPARATOR . $name;
+			$name = htmlspecialcharsbx($siteId) . Input::SEPARATOR . $name;
 
 		return $name;
 	}
@@ -252,29 +279,31 @@ abstract class Options
 		$key = md5($inputName . $presetId . $siteId);
 
 		if (!$this->cache->check($key) || $reload) {
+            $input = $this->getTabControl()->searchOneByName($inputName, $presetId, $siteId, $reload);
 
-			$input = $this->tabMap->searchInputByName($inputName, $presetId, $siteId, $reload);
-
-			if ($input instanceof Input)
+            if ($input instanceof Input)
                 $this->cache->set($key, $input->getValue());
-			else
-				throw new Main\SystemException('input "' . $inputName . '" not found');
+            else
+                throw new Main\SystemException('input "' . $inputName . '" not found');
 		}
 
 		return $this->cache->get($key);
 	}
 
-	/**
-	 * @param        $inputName
-	 * @param string $presetId
-	 * @param string $siteId
-	 * @return mixed
-	 * @throws Main\SystemException
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	public function getDefaultValue($inputName, $presetId = '', $siteId = '')
+    /**
+     * @param        $inputName
+     * @param string $presetId
+     * @param string $siteId
+     * @param bool   $reload
+     * @return mixed
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getDefaultValue($inputName, $presetId = '', $siteId = '', $reload = false)
 	{
-		$input = $this->tabMap->searchInputByName($inputName, $presetId, $siteId);
+		$input = $this->getTabControl()->searchOneByName($inputName, $presetId, $siteId, $reload);
 
 		if ($input instanceof Input)
 			return $input->getDefault();

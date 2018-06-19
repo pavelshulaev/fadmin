@@ -13,7 +13,7 @@ namespace Rover\Fadmin\Inputs;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Localization\Loc;
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Options;
 
 Loc::loadMessages(__FILE__);
 /**
@@ -24,24 +24,21 @@ Loc::loadMessages(__FILE__);
  */
 class Addpreset extends Submit
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__ADD_PRESET;
-
     /**
      * Addpreset constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
-		$params['name'] = self::$type;
+	    if (!isset($params['name']))
+		    $params['name'] = self::getType();
 
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options, $parent);
 	}
 
     /**
@@ -54,6 +51,15 @@ class Addpreset extends Submit
 	{
 		return false;
 	}
+
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function beforeLoadValue()
+    {
+        return false;
+    }
 
     /**
      * @param Event $value

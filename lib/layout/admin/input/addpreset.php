@@ -23,7 +23,9 @@ Loc::loadMessages(__FILE__);
 class Addpreset extends Submit
 {
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function draw()
     {
@@ -33,6 +35,8 @@ class Addpreset extends Submit
     }
 
     /**
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()
@@ -40,8 +44,8 @@ class Addpreset extends Submit
         if (!$this->input instanceof AddPresetInput)
             return;
 
-        $this->customInputName  = \Rover\Fadmin\Inputs\Addpreset::$type;
-        $this->customInputValue = $this->input->getTab()->getSiteId() . AddPresetInput::SEPARATOR . $this->input->getDefault();
+        $this->customInputName  = AddPresetInput::getType();
+        $this->customInputValue = $this->input->getSiteId() . AddPresetInput::SEPARATOR . $this->input->getDefault();
 
         parent::showInput();
 
@@ -69,7 +73,7 @@ class Addpreset extends Submit
                         return false;
                     }
 
-                    this.setAttribute('value', '<?=$this->input->getTab()->getSiteId() . AddPresetInput::SEPARATOR?>' + presetName);
+                    this.setAttribute('value', '<?=$this->input->getSiteId() . AddPresetInput::SEPARATOR?>' + presetName);
                     return true;
                 }
             })();

@@ -9,8 +9,4 @@ namespace Rover\Fadmin\Inputs;
  */
 class Clock extends Input
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__CLOCK;
 }

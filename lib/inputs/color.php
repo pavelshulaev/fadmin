@@ -17,8 +17,4 @@ namespace Rover\Fadmin\Inputs;
  */
 class Color extends Input
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__COLOR;
 }

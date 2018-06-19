@@ -10,7 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Options;
 /**
  * Class Textarea
  *
@@ -19,32 +19,24 @@ use Rover\Fadmin\Tab;
  */
 class Textarea extends Input
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__TEXTAREA;
-
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $rows = 3;
 
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	protected $cols = 50;
 
     /**
      * Textarea constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options, $parent);
 
 		if (isset($params['rows']))
 			$this->rows = htmlspecialcharsbx($params['rows']);

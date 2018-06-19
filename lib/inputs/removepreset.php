@@ -11,7 +11,7 @@
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main\Localization\Loc;
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Options;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 
@@ -24,24 +24,21 @@ Loc::loadMessages(__FILE__);
  */
 class Removepreset extends Submit
 {
-	/**
-	 * @var string
-	 */
-	public static $type = self::TYPE__REMOVE_PRESET;
-
     /**
      * Removepreset constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      */
-	public function __construct(array $params, Tab $tab)
+	public function __construct(array $params, Options $options, Input $parent = null)
 	{
-		$params['name'] = self::$type;
+	    if (!isset($params['name']))
+		    $params['name'] = self::getType();
 
-		parent::__construct($params, $tab);
+		parent::__construct($params, $options, $parent);
     }
 
     /**
@@ -54,6 +51,15 @@ class Removepreset extends Submit
 	{
 		return false;
 	}
+
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function beforeLoadValue()
+    {
+        return false;
+    }
 
     /**
      * @param Event $value

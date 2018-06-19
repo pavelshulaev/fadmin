@@ -10,7 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Options;
 
 /**
  * Class SubTabControl
@@ -20,36 +20,53 @@ use Rover\Fadmin\Tab;
  */
 class SubTabControl extends Input
 {
-    /** @var SubTab[] */
-    protected $subTabs = array();
+    /** @var array  */
+    protected $subTabsConfig = array();
 
     /**
-     * Subtabcontrol constructor.
+     * SubTabControl constructor.
      *
-     * @param array $params
-     * @param Tab   $tab
+     * @param array      $params
+     * @param Options    $options
+     * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
      */
-    public function __construct(array $params, Tab $tab)
+    public function __construct(array $params, Options $options, Input $parent = null)
     {
-        parent::__construct($params, $tab);
+        parent::__construct($params, $options, $parent);
 
-        if (isset($params['subTabs']) && is_array($params['subTabs'])){
-            $subTabsCnt = count($params['subTabs']);
-            for ($i = 0; $i < $subTabsCnt; ++$i)
-                $this->subTabs[] = new SubTab($params['subTabs'][$i], $tab);
-        }
+        if (isset($params['subTabs']) && is_array($params['subTabs']))
+            $this->subTabsConfig = $params['subTabs'];
     }
 
     /**
-     * @return SubTab[]
+     * @param bool $reload
+     * @return array|SubTab[]
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getSubTabs()
+    public function getSubTabs($reload = false)
     {
-        return $this->subTabs;
+        if (is_null($this->children) || $reload)
+            $this->loadSubTabs();
+
+        return $this->children;
+    }
+
+    /**
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function loadSubTabs()
+    {
+        $this->children  = array();
+        $subTabsCnt     = count($this->subTabsConfig);
+        for ($i = 0; $i < $subTabsCnt; ++$i)
+            $this->children[] = new SubTab($this->subTabsConfig[$i], $this->optionsEngine, $this);
     }
 
     /**
@@ -59,6 +76,15 @@ class SubTabControl extends Input
      * @internal
      */
     public function beforeSaveValue(&$value)
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function beforeLoadValue()
     {
         return false;
     }
@@ -81,6 +107,9 @@ class SubTabControl extends Input
     }
 
     /**
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function sort()
@@ -92,6 +121,34 @@ class SubTabControl extends Input
             /** @var SubTab $subTab */
             $subTab = $subTabs[$i];
             $subTab->sort();
+        }
+    }
+
+    /**
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function __clone()
+    {
+        $this->loadSubTabs();
+        parent::__clone();
+    }
+
+    /**
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function clear()
+    {
+        $subTabs    = $this->getSubTabs();
+        $subTabsCnt = count($subTabs);
+
+        for ($i = 0; $i < $subTabsCnt; ++$i){
+            /** @var SubTab $subTab */
+            $subTab = $subTabs[$i];
+            $subTab->clear();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Rover\Fadmin\Layout\Preset;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Rover\Fadmin\Layout\Request as RequestAbstract;
 use Rover\Fadmin\Options;
-use Rover\Fadmin\Tab;
+use Rover\Fadmin\Inputs\Tab;
 
 /**
  * Class Request
@@ -100,11 +100,11 @@ class Request extends RequestAbstract
             return;
 
         try {
-            $tab = $this->options->tabMap->getTabByPresetId($this->params['preset_id']);
+            $tab = $this->options->getTabControl()->getTabByPresetId($this->params['preset_id']);
             if (!$tab instanceof Tab)
                 throw new ArgumentOutOfRangeException('preset_id');
 
-            $tab->setValuesFromRequest();
+            $tab->setValueFromRequest();
             $redirectUrl = $this->request->get(self::INPUT__SAVE) && strlen($this->params['back_url'])
                 ? $this->params['back_url']
                 : $this->params['this_url'];
