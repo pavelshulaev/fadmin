@@ -79,16 +79,16 @@ abstract class Input
      */
 	public function __construct(array $params, Options $options, Input $parent = null)
 	{
-		if (is_null($params['name']))
+		if (empty($params['name']))
 			throw new Main\ArgumentNullException('name');
 
 		if (preg_match('#[.]#usi', $params['name']))
 		    throw new Main\ArgumentOutOfRangeException('name');
 
-		if (is_null($params['label']))
+		if (empty($params['label']))
 			throw new Main\ArgumentNullException('label');
 
-		if (is_null($params['id']))
+		if (empty($params['id']))
 			$params['id'] = $params['name'];
 
 		$this->optionsEngine= $options;
@@ -99,7 +99,9 @@ abstract class Input
 		    $this->setParent($parent);
 
 		$this->setLabel($params['label']);
-		$this->setDefault($params['default']);
+
+		if (!empty($params['default']))
+		    $this->setDefault($params['default']);
 
         if (isset($params['presetId']))
             $this->presetId = $params['presetId'];
