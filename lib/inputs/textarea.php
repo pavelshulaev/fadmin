@@ -28,6 +28,9 @@ class Textarea extends Input
 	/** @var bool */
 	protected $htmlEditor = false;
 
+	/** @var bool */
+	protected $htmlEditorBB = false;
+
     /**
      * Textarea constructor.
      *
@@ -49,6 +52,9 @@ class Textarea extends Input
 
 		if (isset($params['htmlEditor']))
 		    $this->setHtmlEditor($params['htmlEditor']);
+
+		if (isset($params['htmlEditorBB']))
+		    $this->setHtmlEditorBB($params['htmlEditorBB']);
 	}
 
     /**
@@ -100,11 +106,35 @@ class Textarea extends Input
     }
 
     /**
-     * @param bool $htmlEditor
+     * @param $htmlEditor
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setHtmlEditor($htmlEditor)
     {
         $this->htmlEditor = (boolean)$htmlEditor;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHtmlEditorBB()
+    {
+        return $this->htmlEditorBB;
+    }
+
+    /**
+     * @param $htmlEditorBB
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setHtmlEditorBB($htmlEditorBB)
+    {
+        $this->htmlEditorBB = (boolean)$htmlEditorBB;
+
+        return $this;
     }
 
 

@@ -49,7 +49,7 @@ class Textarea extends Input
                     'showTaskbars' => false,
                     'showNodeNavi' => false,
                     'askBeforeUnloadPage' => true,
-                    'bbCode' => false,
+                    'bbCode' => $this->input->isHtmlEditorBB(),
                     'siteId' => SITE_ID,
                     'autoResize' => true,
                     'autoResizeOffset' => 40,
