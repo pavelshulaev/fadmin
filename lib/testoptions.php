@@ -111,6 +111,15 @@ class TestOptions extends Options
                         'sort'      => '500'
                     ),
                     array(
+                        'type'      => Textarea::getType(),
+                        'name'      => 'input_textarea_2',
+                        'label'     => 'Visual Editor',
+                        'default'   => 'Visual Editor default text',
+                        'help'      => 'textarea help',
+                        'sort'      => '550',
+                        'htmlEditor'=> true
+                    ),
+                    array(
                         'type'      => Clock::getType(),
                         'name'      => 'clock',
                         'label'     => 'This is a clock',
