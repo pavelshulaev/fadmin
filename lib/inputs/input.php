@@ -159,18 +159,18 @@ abstract class Input
      */
 	public static function build(array $params, Options $options, Input $parent = null)
     {
-        $className = '\Rover\Fadmin\Inputs\\' . ucfirst($params['type']);
+        $className = __NAMESPACE__ . '\\' . ucfirst($params['type']);
 
         if (!class_exists($className))
             throw new Main\SystemException('Class "' . $className . '" not found!');
 
-        if ($className == '\Rover\Fadmin\Inputs\Input')
+        if ($className == __CLASS__)
             throw new Main\SystemException('Can\'t create "' . $className . '" instance');
 
         $input = new $className($params, $options, $parent);
 
         if ($input instanceof Input === false)
-            throw new Main\SystemException('"' . $className . '" is not "\Rover\Fadmin\Inputs\Input" instance');
+            throw new Main\SystemException('"' . $className . '" is not a child of "' . __CLASS__ . '"');
 
         return $input;
     }
@@ -200,17 +200,30 @@ abstract class Input
      */
     private function saveValue($value)
     {
-        if (!static::beforeSaveValue($value))
+        if (false === static::beforeSaveValue($value))
             return false;
 
-        Option::set(
-            $this->getModuleId(),
-            $this->getValueName(),
-            $value,
-            $this->getSiteId()
-        );
+        Option::set($this->getModuleId(), $this->getOptionName(),
+            $value, $this->getSiteId());
+
+        // remove old format value
+        if ($this->getFormName() != $this->getOptionName())
+            Option::delete($this->getModuleId(), [
+                'name'      => $this->getFormName(),
+                'site_id'   => $this->getSiteId(),
+            ]);
 
         return true;
+    }
+
+    /**
+     * @return string
+     * @throws Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getOptionName()
+    {
+        return self::getFullPath($this->name, $this->getPresetId());
     }
 
     /**
@@ -230,12 +243,18 @@ abstract class Input
     public function clear()
     {
         $this->value = null;
-        $filter      = array(
-            'name'      => $this->getValueName(),
-            'site_id'   => $this->getSiteId()
-        );
 
-        Option::delete($this->getModuleId(), $filter);
+        Option::delete($this->getModuleId(), array(
+            'name'      => $this->getOptionName(),
+            'site_id'   => $this->getSiteId()
+        ));
+
+        // old format
+        if ($this->getFormName() != $this->getOptionName())
+            Option::delete($this->getModuleId(),  array(
+                'name'      => $this->getFormName(),
+                'site_id'   => $this->getSiteId()
+            ));
     }
 
     /**
@@ -245,10 +264,25 @@ abstract class Input
      */
     public function loadValue()
     {
-        $this->value = (false === static::beforeLoadValue())
-            ? null
-            : Option::get($this->getModuleId(), $this->getValueName(),
-                $this->getDefault(), $this->getSiteId());
+        if (false === static::beforeLoadValue())
+            $this->value = null;
+        else {
+            if ($this->getFormName() == $this->getOptionName()){
+
+                $this->value = Option::get($this->getModuleId(), $this->getOptionName(),
+                    $this->getDefault(), $this->getSiteId());
+
+            } else {
+                // trying to load from new format
+                $this->value = Option::get($this->getModuleId(), $this->getOptionName(),
+                    "~value_not_found", $this->getSiteId());
+
+                // trying to load from old format
+                if ($this->value == '~value_not_found')
+                    $this->value = Option::get($this->getModuleId(),
+                        $this->getFormName(), $this->getDefault(), $this->getSiteId());
+            }
+        }
 
         if ($this->multiple) {
             if (!is_array($this->value))
@@ -283,6 +317,27 @@ abstract class Input
         if (!isset($params['default']))
             $params['default'] = null;
 
+        $formName   = self::getFullPath($params['name'], $presetId, $siteId);
+        $optionName = self::getFullPath($params['name'], $presetId);
+
+        if ($formName == $optionName)
+            return Option::get(
+                $moduleId,
+                self::getFullPath($params['name'], $presetId),
+                $params['default'],
+                $siteId);
+
+        // search value in formats...
+        $value = Option::get(
+            $moduleId,
+            self::getFullPath($params['name'], $presetId),
+            '~value_not_found',
+            $siteId);
+
+        if ($value != '~value_not_found')
+            return $value;
+
+        // old format
         return Option::get(
             $moduleId,
             self::getFullPath($params['name'], $presetId, $siteId),
@@ -322,14 +377,14 @@ abstract class Input
             ->getContext()
             ->getRequest();
 
-		if (!$request->offsetExists($this->getValueName())
+		if (!$request->offsetExists($this->getFormName())
 			&& (static::getType() != Checkbox::getType())
             && (static::getType() != File::getType()))
 			return false;
 
-        $value = $request->get($this->getValueName());
+        $value = $request->get($this->getFormName());
 
-        if (!static::beforeSaveRequest($value))
+        if (false === static::beforeSaveRequest($value))
             return false;
 
         if ($this->multiple && is_array($value))
@@ -374,8 +429,19 @@ abstract class Input
      * @return string
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated use getFormName()
      */
     public function getValueName()
+    {
+        return $this->getFormName();
+    }
+
+    /**
+     * @return string
+     * @throws Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getFormName()
     {
         return self::getFullPath($this->name, $this->getPresetId(), $this->getSiteId());
     }
@@ -403,52 +469,6 @@ abstract class Input
             $result = htmlspecialcharsbx($siteId) . self::SEPARATOR . $result;
 
         return $result;
-    }
-
-    /**
-     * @param $value
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @internal
-     */
-    protected function beforeSaveRequest(&$value)
-    {
-        return true;
-    }
-
-    /**
-     * @param $value
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @internal
-     */
-    protected function beforeGetValue(&$value)
-    {
-        return true;
-    }
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @internal
-     */
-    protected function beforeLoadValue() {}
-
-    /**
-     * @param $value
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @internal
-     */
-    protected function afterLoadValue(&$value) {}
-
-    /**
-     * @param $value
-     * @return bool
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @internal
-     */
-    protected function beforeSaveValue(&$value)
-    {
-        return true;
     }
 
     /**
@@ -551,5 +571,51 @@ abstract class Input
             return null;
 
         throw new Main\ArgumentOutOfRangeException('name');
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeSaveRequest(&$value)
+    {
+        return true;
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeGetValue(&$value)
+    {
+        return true;
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeLoadValue() {}
+
+    /**
+     * @param $value
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function afterLoadValue(&$value) {}
+
+    /**
+     * @param $value
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeSaveValue(&$value)
+    {
+        return true;
     }
 }
