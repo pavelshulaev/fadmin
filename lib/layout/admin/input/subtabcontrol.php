@@ -39,7 +39,7 @@ class SubTabControl extends Input
         <tr>
             <td valign="top" colspan="2" align="center"><?php
 
-            echo '<h3>' . $this->input->getLabel() . '</h3>';
+            echo '<h3 style="text-align: left">' . $this->input->getLabel() . '</h3>';
 
             $this->showInput();
 

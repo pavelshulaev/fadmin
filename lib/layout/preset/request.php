@@ -105,6 +105,7 @@ class Request extends RequestAbstract
                 throw new ArgumentOutOfRangeException('preset_id');
 
             $tab->setValueFromRequest();
+
             $redirectUrl = $this->request->get(self::INPUT__SAVE) && strlen($this->params['back_url'])
                 ? $this->params['back_url']
                 : $this->params['this_url'];
