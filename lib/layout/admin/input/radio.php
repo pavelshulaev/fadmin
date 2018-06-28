@@ -35,12 +35,12 @@ class Radio extends Input
 
         foreach ($this->input->getOptions() as $optionValue => $optionName):
 
-            ?><input type="radio" <?php
+            ?><label><input type="radio" <?php
                 echo $this->input->isDisabled() ? ' disabled="disabled" ': '';
                 ?> name="<?=$this->input->getValueName()
                 ?>" id="<?=$this->input->getValueId()?>_<?=$value
                 ?>" <?=$value == $optionValue ? ' checked="checked" ' : ''
-                ?> value="<?=$optionValue?>"> <?=$optionName?><br><?php
+                ?> value="<?=$optionValue?>"> <?=$optionName?></label><br><?php
 
         endforeach;
     }
