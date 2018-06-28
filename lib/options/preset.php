@@ -163,7 +163,7 @@ class Preset
 		$this->update($presets, $siteId);
 
         $params = $this->options->event
-            ->handle(Event::AFTER_ADD_PRESET, compact('id'))
+            ->handle(Event::AFTER_ADD_PRESET, compact('id', 'value'))
             ->getParameters();
 
         // reload tabs after event!!!
