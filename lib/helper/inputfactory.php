@@ -128,11 +128,12 @@ class InputFactory
      * @param null   $label
      * @param null   $help
      * @param string $siteId
+     * @param bool   $htmlEditor
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getTextarea($name, $default = '', $cols = null, $rows = null, $disabled = false, $label = null, $help = null, $siteId = '')
+	public static function getTextarea($name, $default = '', $cols = null, $rows = null, $disabled = false, $label = null, $help = null, $siteId = '', $htmlEditor = false)
 	{
 		$textarea = self::get(Textarea::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 
@@ -141,6 +142,7 @@ class InputFactory
 
 		if ($cols) $textarea['cols'] = $cols;
 		if ($rows) $textarea['rows'] = $rows;
+		if ($htmlEditor) $textarea['htmlEditor'] = true;
 
 		return $textarea;
 	}

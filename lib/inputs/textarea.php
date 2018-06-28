@@ -25,6 +25,9 @@ class Textarea extends Input
 	/** @var int */
 	protected $cols = 50;
 
+	/** @var bool */
+	protected $htmlEditor = false;
+
     /**
      * Textarea constructor.
      *
@@ -39,10 +42,13 @@ class Textarea extends Input
 		parent::__construct($params, $options, $parent);
 
 		if (isset($params['rows']))
-			$this->rows = htmlspecialcharsbx($params['rows']);
+		    $this->setRows($params['rows']);
 
 		if (isset($params['cols']))
-			$this->cols = htmlspecialcharsbx($params['cols']);
+		    $this->setCols($params['cols']);
+
+		if (isset($params['htmlEditor']))
+		    $this->setHtmlEditor($params['htmlEditor']);
 	}
 
     /**
@@ -60,7 +66,7 @@ class Textarea extends Input
      */
     public function setRows($rows)
     {
-        $this->rows = $rows;
+        $this->rows = htmlspecialcharsbx($rows);
 
         return $this;
     }
@@ -80,8 +86,26 @@ class Textarea extends Input
      */
     public function setCols($cols)
     {
-        $this->cols = $cols;
+        $this->cols = htmlspecialcharsbx($cols);
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isHtmlEditor()
+    {
+        return $this->htmlEditor;
+    }
+
+    /**
+     * @param bool $htmlEditor
+     */
+    public function setHtmlEditor($htmlEditor)
+    {
+        $this->htmlEditor = (boolean)$htmlEditor;
+    }
+
+
 }

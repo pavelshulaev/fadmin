@@ -207,9 +207,9 @@ abstract class Input
             $value, $this->getSiteId());
 
         // remove old format value
-        if ($this->getFormName() != $this->getOptionName())
+        if ($this->getFieldName() != $this->getOptionName())
             Option::delete($this->getModuleId(), [
-                'name'      => $this->getFormName(),
+                'name'      => $this->getFieldName(),
                 'site_id'   => $this->getSiteId(),
             ]);
 
@@ -250,9 +250,9 @@ abstract class Input
         ));
 
         // old format
-        if ($this->getFormName() != $this->getOptionName())
+        if ($this->getFieldName() != $this->getOptionName())
             Option::delete($this->getModuleId(),  array(
-                'name'      => $this->getFormName(),
+                'name'      => $this->getFieldName(),
                 'site_id'   => $this->getSiteId()
             ));
     }
@@ -267,20 +267,30 @@ abstract class Input
         if (false === static::beforeLoadValue())
             $this->value = null;
         else {
-            if ($this->getFormName() == $this->getOptionName()){
-
-                $this->value = Option::get($this->getModuleId(), $this->getOptionName(),
-                    $this->getDefault(), $this->getSiteId());
-
+            if ($this->getFieldName() == $this->getOptionName()){
+                $this->value = Option::get(
+                    $this->getModuleId(),
+                    $this->getOptionName(),
+                    $this->getDefault(),
+                    $this->getSiteId()
+                );
             } else {
                 // trying to load from new format
-                $this->value = Option::get($this->getModuleId(), $this->getOptionName(),
-                    "~value_not_found", $this->getSiteId());
+                $this->value = Option::get(
+                    $this->getModuleId(),
+                    $this->getOptionName(),
+                    "~value_not_found",
+                    $this->getSiteId()
+                );
 
                 // trying to load from old format
                 if ($this->value == '~value_not_found')
-                    $this->value = Option::get($this->getModuleId(),
-                        $this->getFormName(), $this->getDefault(), $this->getSiteId());
+                    $this->value = Option::get(
+                        $this->getModuleId(),
+                        $this->getFieldName(),
+                        $this->getDefault(),
+                        $this->getSiteId()
+                    );
             }
         }
 
@@ -377,12 +387,12 @@ abstract class Input
             ->getContext()
             ->getRequest();
 
-		if (!$request->offsetExists($this->getFormName())
+		if (!$request->offsetExists($this->getFieldName())
 			&& (static::getType() != Checkbox::getType())
             && (static::getType() != File::getType()))
 			return false;
 
-        $value = $request->get($this->getFormName());
+        $value = $request->get($this->getFieldName());
 
         if (false === static::beforeSaveRequest($value))
             return false;
@@ -415,12 +425,24 @@ abstract class Input
         return strtolower(substr($className, strrpos($className, '\\') + 1));
     }
 
+
+    /**
+     * @return string
+     * @throws Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated use getFormId()
+     */
+    public function getValueId()
+    {
+        return $this->getFieldId();
+    }
+
     /**
      * @return string
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getValueId()
+    public function getFieldId()
     {
         return self::getFullPath($this->id, $this->getPresetId(), $this->getSiteId());
     }
@@ -429,11 +451,22 @@ abstract class Input
      * @return string
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
-     * @deprecated use getFormName()
+     * @deprecated use getFieldName()
      */
     public function getValueName()
     {
-        return $this->getFormName();
+        return $this->getFieldName();
+    }
+
+    /**
+     * @return string
+     * @throws Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated use getFieldName()
+     */
+    public function getFormName()
+    {
+        return $this->getFieldName();
     }
 
     /**
@@ -441,7 +474,7 @@ abstract class Input
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getFormName()
+    public function getFieldName()
     {
         return self::getFullPath($this->name, $this->getPresetId(), $this->getSiteId());
     }
