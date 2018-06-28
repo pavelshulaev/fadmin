@@ -71,18 +71,19 @@ class InputFactory
 	}
 
     /**
-     * @param      $type
-     * @param      $name
-     * @param null $default
-     * @param bool $multiple
-     * @param bool $disabled
-     * @param null $label
-     * @param null $help
+     * @param        $type
+     * @param        $name
+     * @param null   $default
+     * @param bool   $multiple
+     * @param bool   $disabled
+     * @param null   $label
+     * @param null   $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function get($type, $name, $default = null, $multiple = false, $disabled = false, $label = null, $help = null)
+	public static function get($type, $name, $default = null, $multiple = false, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
 		if (!isset($type))
 			throw new ArgumentNullException('type');
@@ -97,7 +98,8 @@ class InputFactory
 			'multiple'  => $multiple,
 			'disabled'  => $disabled,
             'label'     => $label,
-            'help'      => $help
+            'help'      => $help,
+            'siteId'    => $siteId
         ));
 	}
 
@@ -107,13 +109,14 @@ class InputFactory
      * @param null   $label
      * @param bool   $disabled
      * @param null   $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getText($name, $default = '', $disabled = false, $label = null, $help = null)
+	public static function getText($name, $default = '', $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		return self::get(Text::getType(), $name, $default, false, $disabled, $label, $help);
+		return self::get(Text::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 	}
 
     /**
@@ -124,13 +127,14 @@ class InputFactory
      * @param bool   $disabled
      * @param null   $label
      * @param null   $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getTextarea($name, $default = '', $cols = null, $rows = null, $disabled = false, $label = null, $help = null)
+	public static function getTextarea($name, $default = '', $cols = null, $rows = null, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		$textarea = self::get(Textarea::getType(), $name, $default, false, $disabled, $label, $help);
+		$textarea = self::get(Textarea::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 
         $cols = intval($cols);
         $rows = intval($rows);
@@ -147,13 +151,14 @@ class InputFactory
      * @param null $label
      * @param bool $disabled
      * @param null $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getNumber($name, $default = null, $disabled = false, $label = null, $help = null)
+	public static function getNumber($name, $default = null, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-	    return self::get(Number::getType(), $name, $default, false, $disabled, $label, $help);
+	    return self::get(Number::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 	}
 
     /**
@@ -162,13 +167,14 @@ class InputFactory
      * @param bool   $disabled
      * @param null   $label
      * @param null   $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getCheckbox($name, $default = 'Y', $disabled = false, $label = null, $help = null)
+	public static function getCheckbox($name, $default = 'Y', $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		return self::get(Checkbox::getType(), $name, $default == 'Y' ? 'Y' : 'N', false, $disabled, $label, $help);
+		return self::get(Checkbox::getType(), $name, $default == 'Y' ? 'Y' : 'N', false, $disabled, $label, $help, $siteId);
 	}
 
     /**
@@ -177,13 +183,14 @@ class InputFactory
      * @param bool $disabled
      * @param null $label
      * @param null $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getPresetName($name, $default = null, $disabled = false, $label = null, $help = null)
+	public static function getPresetName($name, $default = null, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		return self::get(PresetName::getType(), $name, $default, false, $disabled, $label, $help);
+		return self::get(PresetName::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 	}
 
     /**
@@ -193,13 +200,14 @@ class InputFactory
      * @param bool $disabled
      * @param null $label
      * @param null $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getRemovePreset($name, $popup = false, $default = null, $disabled = false, $label = null, $help = null)
+	public static function getRemovePreset($name, $popup = false, $default = null, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		$input = self::get(Removepreset::getType(), $name, $default, false, $disabled, $label, $help);
+		$input = self::get(Removepreset::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 		if ($popup !== false)
 		    $input['popup'] = $popup;
 
@@ -214,13 +222,14 @@ class InputFactory
      * @param null  $label
      * @param bool  $disabled
      * @param null  $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getSelect($name, array $options = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null)
+	public static function getSelect($name, array $options = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		$input = self::get(Selectbox::getType(), $name, $default, $multiple, $disabled, $label, $help);
+		$input = self::get(Selectbox::getType(), $name, $default, $multiple, $disabled, $label, $help, $siteId);
 		$input['options'] = $options;
 
 		return $input;
@@ -234,13 +243,14 @@ class InputFactory
      * @param null  $label
      * @param bool  $disabled
      * @param null  $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getSelectGroup($name, array $options = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null)
+	public static function getSelectGroup($name, array $options = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		$input = self::get(Selectgroup::getType(), $name, $default, $multiple, $disabled, $label, $help);
+		$input = self::get(Selectgroup::getType(), $name, $default, $multiple, $disabled, $label, $help, $siteId);
 		$input['options'] = $options;
 
 		return $input;
@@ -254,13 +264,14 @@ class InputFactory
      * @param bool  $disabled
      * @param null  $label
      * @param null  $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getSubTab($name, array $inputs = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null)
+	public static function getSubTab($name, array $inputs = array(), $default = null, $multiple = false, $disabled = false, $label = null, $help = null, $siteId = '')
     {
-        $input = self::get(SubTab::getType(), $name, $default, $multiple, $disabled, $label, $help);
+        $input = self::get(SubTab::getType(), $name, $default, $multiple, $disabled, $label, $help, $siteId);
         $input['inputs'] = $inputs;
 
         return $input;
@@ -273,13 +284,14 @@ class InputFactory
      * @param bool  $disabled
      * @param null  $label
      * @param null  $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getRadio($name, array $options = array(), $default = null, $disabled = false, $label = null, $help = null)
+	public static function getRadio($name, array $options = array(), $default = null, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		$input = self::get(Radio::getType(), $name, $default, false, $disabled, $label, $help);
+		$input = self::get(Radio::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 		$input['options'] = $options;
 
 		return $input;
@@ -287,14 +299,16 @@ class InputFactory
 
 	/**
 	 * @param $label
+     * @param string $siteId
 	 * @return array
 	 * @author Pavel Shulaev (http://rover-it.me)
 	 */
-	public static function getHeader($label)
+	public static function getHeader($label, $siteId = '')
 	{
 		return array(
 			'type'  => Header::getType(),
 			'label' => $label,
+            'siteId'=> $siteId
         );
 	}
 
@@ -302,13 +316,14 @@ class InputFactory
      * @param      $name
      * @param null $label
      * @param null $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getCustom($name, $label = null, $help = null)
+	public static function getCustom($name, $label = null, $help = null, $siteId = '')
 	{
-		return self::get(Custom::getType(), $name, null, false, false, $label, $help);
+		return self::get(Custom::getType(), $name, null, false, false, $label, $help, $siteId);
 	}
 
     /**
@@ -318,13 +333,14 @@ class InputFactory
      * @param bool $disabled
      * @param null $label
      * @param null $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getIblock($name, $multiple = false, $default = null, $disabled = false, $label = null, $help = null)
+	public static function getIblock($name, $multiple = false, $default = null, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		return self::get(Iblock::getType(), $name, $default, $multiple, $disabled, $label, $help);
+		return self::get(Iblock::getType(), $name, $default, $multiple, $disabled, $label, $help, $siteId);
 	}
 
     /**
@@ -333,10 +349,11 @@ class InputFactory
      * @param bool   $disabled
      * @param string $label
      * @param string $help
+     * @param string $siteId
      * @return array
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getLabel($name = '', $default = '', $disabled = false, $label = '', $help = '')
+	public static function getLabel($name = '', $default = '', $disabled = false, $label = '', $help = '', $siteId = '')
 	{
 		return array(
 		    'name'      => $name ? : Label::getType(),
@@ -344,7 +361,8 @@ class InputFactory
 			'label'     => $label,
 			'default'   => $default,
             'disabled'  => $disabled,
-            'help'      => $help
+            'help'      => $help,
+            'siteId'    => $siteId
         );
 	}
 
@@ -352,16 +370,18 @@ class InputFactory
      * @param        $label
      * @param string $help
      * @param string $default
+     * @param string $siteId
      * @return array
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getLabelShort($label, $help = '', $default = '')
+	public static function getLabelShort($label, $help = '', $default = '', $siteId = '')
     {
         return array(
             'type'      => Label::getType(),
             'label'     => $label,
             'default'   => $default,
-            'help'      => $help
+            'help'      => $help,
+            'siteId'    => $siteId
         );
     }
 
@@ -371,13 +391,14 @@ class InputFactory
      * @param bool   $disabled
      * @param null   $label
      * @param null   $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getClock($name, $default = '0:00', $disabled = false, $label = null, $help = null)
+	public static function getClock($name, $default = '0:00', $disabled = false, $label = null, $help = null, $siteId = '')
     {
-        return self::get(Clock::getType(), $name, $default, false, $disabled, $label, $help);
+        return self::get(Clock::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
     }
 
     /**
@@ -387,18 +408,19 @@ class InputFactory
      * @param bool $disabled
      * @param null $label
      * @param null $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getSubmit($name, $default, $popup = false, $disabled = false, $label = null, $help = null)
+	public static function getSubmit($name, $default, $popup = false, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
 		// button's name
 		$default = trim($default);
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 
-		$submit = self::get(Submit::getType(), $name, $default, false, $disabled, $label, $help);
+		$submit = self::get(Submit::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 		$submit['popup'] = $popup;
 
 		return $submit;
@@ -411,13 +433,14 @@ class InputFactory
      * @param bool $disabled
      * @param null $label
      * @param null $help
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getAddPreset($name, $default, $popup = false, $disabled = false, $label = null, $help = null)
+	public static function getAddPreset($name, $default, $popup = false, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		$result = self::get(Addpreset::getType(), $name, $default, false, $disabled, $label, $help);
+		$result = self::get(Addpreset::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 
 		$default = trim($default);
 		if (!strlen($default))
@@ -432,11 +455,12 @@ class InputFactory
     /**
      * @param        $name
      * @param string $default
+     * @param string $siteId
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (http://rover-it.me)
      */
-	public static function getHidden($name, $default = '')
+	public static function getHidden($name, $default = '', $siteId = '')
     {
         $name = trim($name);
         if (!$name)
@@ -445,7 +469,8 @@ class InputFactory
         return array(
             'type'      => Hidden::getType(),
             'name'      => $name,
-            'default'   => $default
+            'default'   => $default,
+            'siteId'    => $siteId
         );
     }
 }
