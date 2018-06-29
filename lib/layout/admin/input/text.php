@@ -36,10 +36,11 @@ class Text extends Input
         ?><input
             type="text"
             <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
-            id="<?=$this->input->getValueId()?>"
+            id="<?=$this->input->getFieldId()?>"
             size="<?=$this->input->getSize()?>"
             maxlength="<?=$this->input->getMaxLength()?>"
             value="<?=$this->input->getValue()?>"
-            name="<?=$this->input->getValueName()?>"><?php
+            <?=strlen($this->input->getPlaceholder()) ? " placeholder='{$this->input->getPlaceholder()}' " : ''?>
+            name="<?=$this->input->getFieldName()?>"><?php
     }
 }

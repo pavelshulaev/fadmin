@@ -236,7 +236,6 @@ class Tab extends \Rover\Fadmin\Tab
      * @return array|null|string
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
-     * @throws \Rover\Fadmin\Inputs\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getInputValue($inputName, $reload = false)

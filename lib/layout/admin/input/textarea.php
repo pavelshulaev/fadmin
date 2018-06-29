@@ -86,7 +86,7 @@ class Textarea extends Input
                     'inputName'     => $this->input->getFieldName(),
                     'id'            => $fieldId,
                     'width'         => '100%',
-                    'placeholder'   => '', //@TODO: add placeholder
+                    'placeholder'   => $this->input->getPlaceholder(),
                     'content'       => htmlspecialcharsBack($this->input->getValue()),
                 )
             );
@@ -97,6 +97,7 @@ class Textarea extends Input
             id="<?=$this->input->getFieldId()?>"
             rows="<?=$this->input->getRows()?>"
             cols="<?=$this->input->getCols()?>"
+            <?=strlen($this->input->getPlaceholder()) ? " placeholder='{$this->input->getPlaceholder()}' " : ''?>
             name="<?=$this->input->getFieldName()?>"><?=$this->input->getValue()?></textarea><?php
         }
     }

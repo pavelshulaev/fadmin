@@ -214,7 +214,7 @@ class Tabcontrol extends Input
         for ($i = 0; $i < $tabsCnt; ++$i) {
             /** @var Tab $tab */
             $tab = $tabs[$i];
-            if ($tab->getValueName() != $name)
+            if ($tab->getFieldName() != $name)
                 continue;
 
             if (strlen($siteId) && ($siteId != $tab->getSiteId()))

@@ -87,9 +87,10 @@ class TestOptions extends Options
                         'type'      => Text::getType(),
                         'name'      => 'text',
                         'label'     => 'text input (maxlength 50)',
-                        'default'   => 'default text',
+                        'default'   => '',
                         'maxLength' => 50,
-                        'sort'      => '200'
+                        'sort'      => '200',
+                        'placeholder' => 'enter a text here'
                     ),
                     array(
                         'type'      => Number::getType(),
@@ -98,7 +99,8 @@ class TestOptions extends Options
                         'default'   => 50,
                         'max'       => 100,
                         'min'       => 0,
-                        'sort'      => '300'
+                        'sort'      => '300',
+                        'placeholder' => 'enter a number here'
                     ),
                     array(
                         'type'      => Textarea::getType(),
@@ -108,7 +110,8 @@ class TestOptions extends Options
                         'rows'      => 3,
                         'cols'      => 20,
                         'help'      => 'textarea help',
-                        'sort'      => '500'
+                        'sort'      => '500',
+                        'placeholder' => 'enter a big text here'
                     ),
                     array(
                         'type'      => Textarea::getType(),
@@ -117,7 +120,9 @@ class TestOptions extends Options
                         'default'   => 'Visual Editor default text',
                         'help'      => 'textarea help',
                         'sort'      => '550',
-                        'htmlEditor'=> true
+                        'htmlEditor'=> true,
+                        'htmlEditorBB'=> true,
+                        'placeholder' => 'enter a big text with bb-codes here'
                     ),
                     array(
                         'type'      => Clock::getType(),
