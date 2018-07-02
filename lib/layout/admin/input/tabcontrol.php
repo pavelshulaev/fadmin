@@ -170,20 +170,24 @@ class Tabcontrol extends Input
         $label  = strlen($tab->getSiteId())
             ? $tab->getLabel() . ' [' . $tab->getSiteId() . ']'
             : $tab->getLabel();
-        $description = strlen($tab->getSiteId())
-            ? $tab->getDescription() . ' [' . $tab->getSiteId() . ']'
-            : $tab->getDescription();
+
+        /** @deprecated $description */
+        $default = $description = strlen($tab->getSiteId())
+            ? $tab->getDefault() . ' [' . $tab->getSiteId() . ']'
+            : $tab->getDefault();
 
         $params = $this->input->getOptionsEngine()->event
             ->handle(Event::BEFORE_GET_TAB_INFO,
-                compact('tab', 'name', 'icon', 'label', 'description'))
+                compact('tab', 'name', 'icon', 'label', 'description', 'default'))
             ->getParameters();
 
         return array(
             'DIV'   => $params['name'],
             'TAB'   => $params['label'],
             'ICON'  => $params['icon'],
-            'TITLE' => $params['description']
+            'TITLE' => $params['description'] != $description
+                ? $params['description']
+                : $params['default']
         );
     }
 

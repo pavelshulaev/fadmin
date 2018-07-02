@@ -6,12 +6,12 @@
 	'tabs' => 
 		...
 		[
-			'name'          => 'presetTab',
-			'label'         => 'Preset',
-			'preset'        => true,
-			'description'   => 'This is a description of preset tab',
-			'siteId'        => 's1',
-			'inputs'        => [
+			'name'      => 'presetTab',
+			'label'     => 'Preset',
+			'preset'    => true,
+			'default'   => 'This is a description of preset tab',
+			'siteId'    => 's1',
+			'inputs'    => [
 			    ...
             ]
 		],
