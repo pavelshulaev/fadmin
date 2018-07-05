@@ -91,6 +91,7 @@ class Textarea extends Input
                 )
             );
             $editor->show($res);
+
         } else {
             ?><textarea
             <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
