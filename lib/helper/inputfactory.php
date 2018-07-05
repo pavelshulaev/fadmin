@@ -58,7 +58,7 @@ class InputFactory
 		if (empty($input['help']))
 			$input['help'] = Loc::getMessage($input['name'] . '_help');
 
-		if (is_null($input['default']))
+		if (empty($input['default']))
 			$input['default'] = Loc::getMessage($input['name'] . '_default');
 
 		if (empty($input['multiple']))
@@ -133,7 +133,7 @@ class InputFactory
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getTextarea($name, $default = '', $cols = null, $rows = null, $disabled = false, $label = null, $help = null, $siteId = '', $htmlEditor = false, $htmlEditorBB = false)
+	public static function getTextarea($name, $default = null, $cols = null, $rows = null, $disabled = false, $label = null, $help = null, $siteId = '', $htmlEditor = false, $htmlEditorBB = false)
 	{
 		$textarea = self::get(Textarea::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 
@@ -416,14 +416,9 @@ class InputFactory
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getSubmit($name, $default, $popup = false, $disabled = false, $label = null, $help = null, $siteId = '')
+	public static function getSubmit($name, $default = null, $popup = false, $disabled = false, $label = null, $help = null, $siteId = '')
 	{
-		// button's name
-		$default = trim($default);
-		if (!strlen($default))
-			throw new ArgumentNullException('default');
-
-		$submit = self::get(Submit::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
+		$submit     = self::get(Submit::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 		$submit['popup'] = $popup;
 
 		return $submit;
