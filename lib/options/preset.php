@@ -15,19 +15,13 @@ class Preset
 {
 	const OPTION_ID = 'rover-op-presets';
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $options;
 
-    /**
-     * @var array
-     */
+    /** @var array */
 	protected $presets;
 
-	/**
-	 * @param Options $options
-	 */
+	/** @param Options $options */
 	public function __construct(Options $options)
 	{
 		$this->options = $options;
@@ -43,9 +37,15 @@ class Preset
      */
 	public function getList($siteId = '', $reload = false)
 	{
-	    if (is_null($this->presets[$siteId]) || $reload)
-	        $this->presets[$siteId] = unserialize(Option::get($this->options->getModuleId(),
+	    if (is_null($this->presets[$siteId]) || $reload){
+	        $presets = unserialize(Option::get($this->options->getModuleId(),
                 self::OPTION_ID, '', $siteId));
+
+	        if (empty($presets))
+	            $presets = [];
+
+	        $this->presets[$siteId] = $presets;
+        }
 
 		return $this->presets[$siteId];
 	}
