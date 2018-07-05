@@ -139,6 +139,7 @@ abstract class Input
      * @return mixed
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated
      */
 	public static function factory(array $params, Tab $tab)
 	{
@@ -511,7 +512,7 @@ abstract class Input
      */
     public function __clone()
     {
-        $children       = $this->getChildren();
+        $children = $this->getChildren();
         if (is_null($children))
             return;
 

@@ -26,9 +26,6 @@ class Tab extends \Rover\Fadmin\Tab
     /** @var array|mixed  */
     protected $inputsConfig = array();
 
-    /** @var string */
-    protected $description;
-
     /** @var bool */
     protected $preset;
     /**
@@ -52,7 +49,7 @@ class Tab extends \Rover\Fadmin\Tab
             $this->inputsConfig = $params['inputs'];
 
         if (isset($params['description']))
-            $this->setDescription($params['description']);
+            $this->setDefault($params['description']);
     }
 
     /**
@@ -167,19 +164,22 @@ class Tab extends \Rover\Fadmin\Tab
     /**
      * @return mixed
      * @author Pavel Shulaev (http://rover-it.me)
+     * @deprecated
      */
     public function getDescription()
     {
-        return $this->description;
+        return $this->getDefault();
     }
 
     /**
-     * @param $description
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @param string $description
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated
      */
     public function setDescription($description = '')
     {
-        $this->description = trim($description);
+        return $this->setDefault($description);
     }
 
     /**

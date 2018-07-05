@@ -73,11 +73,11 @@ class TestOptions extends Options
     {
         return array(
             array(
-                'name'          => 'test_tab',
-                'label'         => 'test tab',
-                'description'   => 'test tab description',
-                'siteId'        => 's1',
-                'inputs'        => array(
+                'name'      => 'test_tab',
+                'label'     => 'test tab',
+                'default'   => 'test tab description',
+                'siteId'    => 's1',
+                'inputs'    => array(
                     array(
                         'type'      => Header::getType(),
                         'label'     => 'First tab header',
@@ -207,12 +207,12 @@ class TestOptions extends Options
                 )
             ),
             array(
-                'name'          => 'presetTab',
-                'label'         => 'Preset',
-                'preset'        => true,
-                'description'   => 'This is a description of preset tab',
-                'siteId'        => 's1',
-                'inputs'        => array(
+                'name'      => 'presetTab',
+                'label'     => 'Preset',
+                'preset'    => true,
+                'default'   => 'This is a description of preset tab',
+                'siteId'    => 's1',
+                'inputs'    => array(
                     array(
                         'type'      => Header::getType(),
                         'label'     => 'Preset header',
@@ -237,11 +237,11 @@ class TestOptions extends Options
                 ),
             ),
             array(
-                'name'          => 'tab_22',
-                'label'         => '2 normal tab',
-                'description'   => 'This is a description of second normal tab',
-                'siteId'        => 'm',
-                'inputs'        => array(
+                'name'      => 'tab_22',
+                'label'     => '2 normal tab',
+                'default'   => 'This is a description of second normal tab',
+                'siteId'    => 'm',
+                'inputs'    => array(
                     array(
                         'type'      => Selectbox::getType(),
                         'name'      => 'selectbox',
@@ -303,12 +303,12 @@ class TestOptions extends Options
                 )
             ),
             array(
-                'name'          => 'presetTab2',
-                'label'         => 'Preset2',
-                'preset'        => true,
-                'description'   => 'This is a description of preset tab 2',
-                'siteId'        => 'm',
-                'inputs'        => array(
+                'name'      => 'presetTab2',
+                'label'     => 'Preset2',
+                'preset'    => true,
+                'default'   => 'This is a description of preset tab 2',
+                'siteId'    => 'm',
+                'inputs'    => array(
                     array(
                         'type'      => Header::getType(),
                         'label'     => 'Preset header',
