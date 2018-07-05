@@ -38,6 +38,8 @@ class TestOptions extends Options
 {
 	const MODULE_ID = 'rover.fadmin';
 
+	const OPTION__PRESET_COLOR  = 'preset_color';
+	const OPTION__TEXTAREA      = 'input_textarea';
     /**
      * @param string $moduleId
      * @return static
@@ -59,8 +61,8 @@ class TestOptions extends Options
 			'tabs' => self::getTabs(),
             'settings' => array(
                 Settings::BOOL_CHECKBOX => true,
-                Settings::USE_SORT => true,
-                Settings::GROUP_RIGHTS => true,
+                Settings::USE_SORT      => true,
+                Settings::GROUP_RIGHTS  => true,
             )
         );
 	}
@@ -104,7 +106,7 @@ class TestOptions extends Options
                     ),
                     array(
                         'type'      => Textarea::getType(),
-                        'name'      => 'input_textarea',
+                        'name'      => self::OPTION__TEXTAREA,
                         'label'     => 'input textarea (3 rows 20 cols)',
                         'default'   => 'default text',
                         'rows'      => 3,
@@ -224,7 +226,7 @@ class TestOptions extends Options
                     ),
                     array(
                         'type'      => Color::getType(),
-                        'name'      => 'preset_color',
+                        'name'      => self::OPTION__PRESET_COLOR,
                         'label'     => 'preset color',
                         'default'   => '#FFAA00',
                         'help'      => 'color help',
@@ -315,7 +317,7 @@ class TestOptions extends Options
                     ),
                     array(
                         'type'      => Color::getType(),
-                        'name'      => 'preset_color',
+                        'name'      => 'preset_color_2',
                         'label'     => 'preset color',
                         'default'   => '#FFAA00',
                         'help'      => 'color help',
@@ -338,7 +340,7 @@ class TestOptions extends Options
      */
 	public function getTextareaValueS1($reload = false)
 	{
-		return $this->getNormalValue('input_textarea', 's1', $reload);
+		return $this->getNormalValue(self::OPTION__TEXTAREA, 's1', $reload);
 	}
 
     /**
@@ -351,6 +353,6 @@ class TestOptions extends Options
      */
 	public function getS1PresetColor($presetId, $reload = false)
 	{
-		return $this->getPresetValue('preset_color', $presetId, 's1', $reload);
+		return $this->getPresetValue(self::OPTION__PRESET_COLOR, $presetId, 's1', $reload);
 	}
 }

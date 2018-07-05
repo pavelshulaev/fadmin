@@ -211,24 +211,18 @@ abstract class Options
 		return $this->moduleId;
 	}
 
-	/**
-	 * generate param string
-	 * @param        $name
-	 * @param string $presetId
-	 * @param string $siteId
-	 * @return string
-	 * @author Pavel Shulaev (http://rover-it.me)
+    /**
+     * @param        $name
+     * @param string $presetId
+     * @param string $siteId
+     * @return string
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated
-	 */
+     */
 	public static function getFullName($name, $presetId = '', $siteId = '')
 	{
-		if (strlen($presetId))
-			$name = htmlspecialcharsbx($presetId) . Input::SEPARATOR . $name;
-
-		if (strlen($siteId))
-			$name = htmlspecialcharsbx($siteId) . Input::SEPARATOR . $name;
-
-		return $name;
+	    return Input::getFullPath($name, $presetId, $siteId);
 	}
 
     /**
@@ -339,6 +333,14 @@ abstract class Options
         return Input::getValueStatic($params, $moduleId, $presetId, $siteId);
     }
 
+    /**
+     * @return Preset
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getPreset()
+    {
+        return $this->preset;
+    }
 
     /**
      * @return mixed
