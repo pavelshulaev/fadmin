@@ -30,6 +30,11 @@ class SubTab extends Input
     public function draw()
     {
         ?><table class="adm-detail-content-table edit-table"><?php
+
+            if (strlen($this->input->getDefault())): ?>
+            <h4><?=$this->input->getDefault()?></h4>
+            <?php endif;
+
             $this->showInput();
         ?></table><?php
     }

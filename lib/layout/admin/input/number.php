@@ -10,6 +10,12 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+/**
+ * Class Number
+ *
+ * @package Rover\Fadmin\Layout\Admin\Input
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
 class Number extends Text
 {
     /**
@@ -36,13 +42,14 @@ class Number extends Text
         ?><input
             <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
             type="number"
-            id="<?=$this->input->getValueId()?>"
+            id="<?=$this->input->getFieldId()?>"
             value="<?=$this->input->getValue()?>"
-            name="<?=$this->input->getValueName()?>"
+            name="<?=$this->input->getFieldName()?>"
             <?=is_numeric($this->input->getSize()) ? " size='{$this->input->getSize()}' " : ''?>
             <?=is_numeric($this->input->getMaxLength()) ? " maxlength='{$this->input->getMaxLength()}' " : ''?>
             <?=is_numeric($this->input->getMax()) ? " max='{$this->input->getMax()}' " : ''?>
             <?=is_numeric($this->input->getMin()) ? " min='{$this->input->getMin()}' " : ''?>
+            <?=strlen($this->input->getPlaceholder()) ? " placeholder='{$this->input->getPlaceholder()}' " : ''?>
             ><?php
     }
 

@@ -73,11 +73,11 @@ class TestOptions extends Options
     {
         return array(
             array(
-                'name'          => 'test_tab',
-                'label'         => 'test tab',
-                'description'   => 'test tab description',
-                'siteId'        => 's1',
-                'inputs'        => array(
+                'name'      => 'test_tab',
+                'label'     => 'test tab',
+                'default'   => 'test tab description',
+                'siteId'    => 's1',
+                'inputs'    => array(
                     array(
                         'type'      => Header::getType(),
                         'label'     => 'First tab header',
@@ -87,9 +87,10 @@ class TestOptions extends Options
                         'type'      => Text::getType(),
                         'name'      => 'text',
                         'label'     => 'text input (maxlength 50)',
-                        'default'   => 'default text',
+                        'default'   => '',
                         'maxLength' => 50,
-                        'sort'      => '200'
+                        'sort'      => '200',
+                        'placeholder' => 'enter a text here'
                     ),
                     array(
                         'type'      => Number::getType(),
@@ -98,7 +99,8 @@ class TestOptions extends Options
                         'default'   => 50,
                         'max'       => 100,
                         'min'       => 0,
-                        'sort'      => '300'
+                        'sort'      => '300',
+                        'placeholder' => 'enter a number here'
                     ),
                     array(
                         'type'      => Textarea::getType(),
@@ -108,7 +110,8 @@ class TestOptions extends Options
                         'rows'      => 3,
                         'cols'      => 20,
                         'help'      => 'textarea help',
-                        'sort'      => '500'
+                        'sort'      => '500',
+                        'placeholder' => 'enter a big text here'
                     ),
                     array(
                         'type'      => Textarea::getType(),
@@ -117,7 +120,9 @@ class TestOptions extends Options
                         'default'   => 'Visual Editor default text',
                         'help'      => 'textarea help',
                         'sort'      => '550',
-                        'htmlEditor'=> true
+                        'htmlEditor'=> true,
+                        'htmlEditorBB'=> true,
+                        'placeholder' => 'enter a big text with bb-codes here'
                     ),
                     array(
                         'type'      => Clock::getType(),
@@ -202,12 +207,12 @@ class TestOptions extends Options
                 )
             ),
             array(
-                'name'          => 'presetTab',
-                'label'         => 'Preset',
-                'preset'        => true,
-                'description'   => 'This is a description of preset tab',
-                'siteId'        => 's1',
-                'inputs'        => array(
+                'name'      => 'presetTab',
+                'label'     => 'Preset',
+                'preset'    => true,
+                'default'   => 'This is a description of preset tab',
+                'siteId'    => 's1',
+                'inputs'    => array(
                     array(
                         'type'      => Header::getType(),
                         'label'     => 'Preset header',
@@ -232,11 +237,11 @@ class TestOptions extends Options
                 ),
             ),
             array(
-                'name'          => 'tab_22',
-                'label'         => '2 normal tab',
-                'description'   => 'This is a description of second normal tab',
-                'siteId'        => 'm',
-                'inputs'        => array(
+                'name'      => 'tab_22',
+                'label'     => '2 normal tab',
+                'default'   => 'This is a description of second normal tab',
+                'siteId'    => 'm',
+                'inputs'    => array(
                     array(
                         'type'      => Selectbox::getType(),
                         'name'      => 'selectbox',
@@ -298,12 +303,12 @@ class TestOptions extends Options
                 )
             ),
             array(
-                'name'          => 'presetTab2',
-                'label'         => 'Preset2',
-                'preset'        => true,
-                'description'   => 'This is a description of preset tab 2',
-                'siteId'        => 'm',
-                'inputs'        => array(
+                'name'      => 'presetTab2',
+                'label'     => 'Preset2',
+                'preset'    => true,
+                'default'   => 'This is a description of preset tab 2',
+                'siteId'    => 'm',
+                'inputs'    => array(
                     array(
                         'type'      => Header::getType(),
                         'label'     => 'Preset header',

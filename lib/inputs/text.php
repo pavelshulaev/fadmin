@@ -12,6 +12,7 @@ namespace Rover\Fadmin\Inputs;
 
 use Rover\Fadmin\Inputs\Params\MaxLength;
 
+use Rover\Fadmin\Inputs\Params\Placeholder;
 use Rover\Fadmin\Inputs\Params\Size;
 use Rover\Fadmin\Options;
 
@@ -23,7 +24,7 @@ use Rover\Fadmin\Options;
  */
 class Text extends Input
 {
-    use MaxLength, Size;
+    use MaxLength, Size, Placeholder;
 
     /**
      * Text constructor.
@@ -39,13 +40,16 @@ class Text extends Input
 		parent::__construct($params, $options, $parent);
 
 		if (isset($params['maxLength']) && intval($params['maxLength']))
-			$this->maxLength = intval($params['maxLength']);
+		    $this->setMaxLength($params['maxLength']);
 		else
-		    $this->maxLength = 255;
+            $this->setMaxLength(255);
 
 		if (isset($params['size']) && intval($params['size']))
-			$this->size = intval(htmlspecialcharsbx($params['size']));
+		    $this->setSize(htmlspecialcharsbx($params['size']));
 		else
-		    $this->size = 50;
+            $this->setSize(50);
+
+        if (isset($params['placeholder']))
+            $this->setPlaceholder($params['placeholder']);
 	}
 }

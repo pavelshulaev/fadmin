@@ -61,9 +61,9 @@ class Submit extends Input
         if (!$this->input instanceof \Rover\Fadmin\Inputs\Submit)
             return;
 
-        $name   = $this->customInputName ?: $this->input->getValueName();
+        $name   = $this->customInputName ?: $this->input->getFieldName();
         $value  = $this->customInputValue ?: $this->input->getDefault();
-        $id     = $this->customInputId ?: $this->input->getValueId();
+        $id     = $this->customInputId ?: $this->input->getFieldId();
         $popup  = $this->customPopup !== null ? $this->customPopup : $this->input->getPopup();
 
         ?>
@@ -110,7 +110,7 @@ class Submit extends Input
 
         <button type='submit'
         <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
-                id="<?=$this->input->getValueId()?>"
+                id="<?=$this->input->getFieldId()?>"
                 name="<?=$name?>"
                 value="<?=urlencode($value)?>"><?=$this->input->getLabel()?></button><?php
 

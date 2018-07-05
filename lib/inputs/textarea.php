@@ -10,6 +10,7 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Rover\Fadmin\Inputs\Params\Placeholder;
 use Rover\Fadmin\Options;
 /**
  * Class Textarea
@@ -19,6 +20,8 @@ use Rover\Fadmin\Options;
  */
 class Textarea extends Input
 {
+    use Placeholder;
+
 	/** @var int */
 	protected $rows = 3;
 
@@ -55,6 +58,9 @@ class Textarea extends Input
 
 		if (isset($params['htmlEditorBB']))
 		    $this->setHtmlEditorBB($params['htmlEditorBB']);
+
+        if (isset($params['placeholder']))
+            $this->setPlaceholder($params['placeholder']);
 	}
 
     /**

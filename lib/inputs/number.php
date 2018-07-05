@@ -9,6 +9,7 @@
  */
 
 namespace Rover\Fadmin\Inputs;
+use Rover\Fadmin\Inputs\Params\Placeholder;
 use Rover\Fadmin\Options;
 
 /**
@@ -19,6 +20,8 @@ use Rover\Fadmin\Options;
  */
 class Number extends Text
 {
+    use Placeholder;
+
 	/** @var int */
 	protected $min;
 
@@ -42,6 +45,9 @@ class Number extends Text
 
 		if (isset($params['max']))
 			$this->max = (int)$params['max'];
+
+		if (isset($params['placeholder']))
+		    $this->setPlaceholder($params['placeholder']);
 	}
 
     /**
@@ -98,5 +104,4 @@ class Number extends Text
     {
         $this->max = $max;
     }
-
 }
