@@ -47,7 +47,9 @@ abstract class Input extends InputAbstract
     public function draw()
     {
         $this->showLabel();
+        $this->showPreInput();
         $this->showInput();
+        $this->showPostInput();
         $this->showHelp();
     }
 
@@ -59,7 +61,7 @@ abstract class Input extends InputAbstract
     public function showLabel($empty = false)
     {
        if (!$empty) : ?>
-            <label for="<?=$this->input->getValueId()?>"><?=$this->input->getLabel()?>:</label>
+            <label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:</label>
         <?php endif;
     }
 
@@ -70,7 +72,7 @@ abstract class Input extends InputAbstract
     public function showMultiLabel()
     {
         ?>
-            <label for="<?=$this->input->getValueId()?>"><?=$this->input->getLabel()?>:<br>
+            <label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:<br>
                 <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
             </label>
         <?php
@@ -86,5 +88,24 @@ abstract class Input extends InputAbstract
         if (strlen($help)):
             ?><br><small style="color: #777;"><?=$help?></small><?php
         endif;
+    }
+
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function showPreInput()
+    {
+        $preInput = $this->input->getPreInput();
+        if (strlen($preInput)) echo $preInput;
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function showPostInput()
+    {
+        $postInput = $this->input->getPostInput();
+        if (strlen($postInput)) echo $postInput;
     }
 }

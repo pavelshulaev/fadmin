@@ -75,9 +75,9 @@ class TestOptions extends Options
     {
         return array(
             array(
-                'name'      => 'test_tab',
-                'label'     => 'test tab',
-                'default'   => 'test tab description',
+                'name'      => 'first_tab',
+                'label'     => 'First Tab',
+                'default'   => 'First tab description',
                 'siteId'    => 's1',
                 'inputs'    => array(
                     array(
@@ -93,6 +93,19 @@ class TestOptions extends Options
                         'maxLength' => 50,
                         'sort'      => '200',
                         'placeholder' => 'enter a text here'
+                    ),
+                    array(
+                        'type'      => Text::getType(),
+                        'preInput'  => 'https://',
+                        'postInput' => '.domain.com',
+                        'name'      => 'subdimain',
+                        'label'     => 'Please, enter you subdomain here',
+                        'help'      => 'format: https://<strong><u>subdomain</u></strong>.domain.com',
+                        'default'   => 'subdomain',
+                        'maxLength' => 255,
+                        'size'      => 10,
+                        'sort'      => '250',
+                        'placeholder' => 'subdomain'
                     ),
                     array(
                         'type'      => Number::getType(),
@@ -223,6 +236,7 @@ class TestOptions extends Options
                         'type'      => PresetName::getType(),
                         'name'      => 'presetName',
                         'label'     => 'preset name',
+                        'help'      => 'Enter a new name of preset here'
                     ),
                     array(
                         'type'      => Color::getType(),
@@ -240,7 +254,7 @@ class TestOptions extends Options
             ),
             array(
                 'name'      => 'tab_22',
-                'label'     => '2 normal tab',
+                'label'     => 'Second Tab',
                 'default'   => 'This is a description of second normal tab',
                 'siteId'    => 'm',
                 'inputs'    => array(

@@ -86,7 +86,7 @@ class Selectgroup extends Selectbox
 			';
 
         $groupValue     = $this->input->getGroupValue() ?: $this->input->calcGroupValue();
-        $valueName      = $this->input->getValueName();
+        $valueName      = $this->input->getFieldName();
         $valueGroupName = $this->input->getGroupValueName();
         $onChangeGroup  = 'OnType_'.$optionsId.'_Changed(this, \''.\CUtil::JSEscape($valueName).'\');';
 

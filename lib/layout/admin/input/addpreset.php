@@ -30,7 +30,9 @@ class Addpreset extends Submit
     public function draw()
     {
         $this->showLabel(true);
+        $this->showPreInput();
         $this->showInput();
+        $this->showPostInput();
         $this->showHelp();
     }
 

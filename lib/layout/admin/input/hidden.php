@@ -42,10 +42,10 @@ class Hidden extends Text
 
         ?><input
         <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
-        id="<?=$this->input->getValueId()?>"
+        id="<?=$this->input->getFieldId()?>"
         maxlength="<?=$this->input->getMaxLength()?>"
         type="hidden"
         value="<?=$this->input->getValue()?>"
-        name="<?=$this->input->getValueName()?>"><?php
+        name="<?=$this->input->getFieldName()?>"><?php
     }
 }

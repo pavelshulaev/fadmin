@@ -32,7 +32,9 @@ abstract class Input extends InputAbstract
     public function draw()
     {
         $this->showLabel();
+        $this->showPreInput();
         $this->showInput();
+        $this->showPostInput();
         $this->showHelp();
     }
 
@@ -95,5 +97,23 @@ abstract class Input extends InputAbstract
         ?></td>
         </tr>
         <?php
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function showPreInput()
+    {
+        $preInput = $this->input->getPreInput();
+        if (strlen($preInput)) echo $preInput;
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function showPostInput()
+    {
+        $postInput = $this->input->getPostInput();
+        if (strlen($postInput)) echo $postInput;
     }
 }

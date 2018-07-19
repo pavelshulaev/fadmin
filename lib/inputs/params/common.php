@@ -41,6 +41,12 @@ trait Common
     protected $help;
 
     /** @var string */
+    protected $preInput;
+
+    /** @var string */
+    protected $postInput;
+
+    /** @var string */
     protected $siteId;
 
     /** @var int|null */
@@ -156,6 +162,8 @@ trait Common
      */
     public function setSiteId($siteId)
     {
+        $siteId = trim($siteId);
+
         $this->siteId = $siteId;
 
         $childrenCnt = count($this->children);
@@ -287,6 +295,20 @@ trait Common
         return $this->multiple;
     }
 
+
+    /**
+     * @param $value
+     * @return $this
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    public function setMultiple($value)
+    {
+        $this->multiple = (bool)$value;
+
+        return $this;
+    }
+
+
     /**
      * @param $value
      * @return $this
@@ -294,7 +316,7 @@ trait Common
      */
     public function setHelp($value)
     {
-        $this->help = $value;
+        $this->help = trim($value);
 
         return $this;
     }
@@ -412,6 +434,44 @@ trait Common
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreInput()
+    {
+        return $this->preInput;
+    }
+
+    /**
+     * @param string $preInput
+     * @return Common
+     */
+    public function setPreInput($preInput)
+    {
+        $this->preInput = trim($preInput);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostInput()
+    {
+        return $this->postInput;
+    }
+
+    /**
+     * @param string $postInput
+     * @return Common
+     */
+    public function setPostInput($postInput)
+    {
+        $this->postInput = trim($postInput);
+
+        return $this;
     }
 
 
