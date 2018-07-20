@@ -269,14 +269,6 @@ class TestOptions extends Options
                             '2' => 'option 2'
                         )
                     ),
-                    [
-                        'type'      => Schedule::getType(),
-                        'name'      => 'schedule_demo',
-                        'label'     => 'demo schedule',
-                        'periodLabel'   => 'period label',
-                        'width'     => 400,
-                        'height'    => 300
-                    ],
                     array(
                         'type'      => Selectbox::getType(),
                         'name'      => 'multiple_selectbox',
@@ -319,6 +311,14 @@ class TestOptions extends Options
                             )
                         )
                     ),
+                    [
+                        'type'      => Schedule::getType(),
+                        'name'      => 'schedule_demo',
+                        'label'     => 'demo schedule',
+                        'periodLabel'   => 'period label',
+                        'width'     => 400,
+                        'height'    => 300
+                    ],
                     array(
                         'type'      => Addpreset::getType(),
                         'label'     => 'add preset',
