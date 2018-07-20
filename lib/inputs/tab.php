@@ -28,14 +28,16 @@ class Tab extends \Rover\Fadmin\Tab
 
     /** @var bool */
     protected $preset;
+
     /**
      * Tab constructor.
      *
      * @param array      $params
      * @param Options    $options
      * @param Input|null $parent
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      */
     public function __construct(array $params, Options $options, Input $parent = null)
     {

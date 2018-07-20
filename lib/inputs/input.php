@@ -440,7 +440,7 @@ abstract class Input
      * @return string
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
-     * @deprecated use getFormId()
+     * @deprecated use getFieldId()
      */
     public function getValueId()
     {
@@ -642,7 +642,10 @@ abstract class Input
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-    protected function beforeLoadValue() {}
+    protected function beforeLoadValue()
+    {
+        return true;
+    }
 
     /**
      * @param $value

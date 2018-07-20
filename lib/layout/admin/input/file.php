@@ -31,7 +31,7 @@ class File extends Input
         if (!$this->input instanceof \Rover\Fadmin\Inputs\File)
             return;
 
-        $valueName  = $this->input->getValueName();
+        $valueName  = $this->input->getFieldName();
         $isImage    = $this->input->isImage();
         $value      = intval($this->input->getValue());
 

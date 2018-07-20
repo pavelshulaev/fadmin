@@ -55,7 +55,7 @@ class DateTime extends Input
         $APPLICATION->IncludeComponent("bitrix:main.calendar", "", array(
             "SHOW_INPUT"    => "Y",
             "FORM_NAME"     => "",
-            "INPUT_NAME"    => $this->input->getValueName(),
+            "INPUT_NAME"    => $this->input->getFieldName(),
             "INPUT_NAME_FINISH" => "",
             "INPUT_VALUE"   => $this->input->getValue(),
             "INPUT_VALUE_FINISH" => '',

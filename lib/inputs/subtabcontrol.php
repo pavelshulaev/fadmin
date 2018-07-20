@@ -31,6 +31,7 @@ class SubTabControl extends Input
      * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      */
     public function __construct(array $params, Options $options, Input $parent = null)
     {
@@ -58,6 +59,7 @@ class SubTabControl extends Input
      * @return Input[]
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getChildren($reload = false)
@@ -71,6 +73,7 @@ class SubTabControl extends Input
     /**
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function loadSubTabs()

@@ -109,7 +109,7 @@ class Form extends FromAbstract
         $inputs = $tab->getInputs();
 
         foreach ($inputs as $input)
-            $data[$input->getValueName()] = $input->getValue();
+            $data[$input->getFieldName()] = $input->getValue();
 
         return $data;
     }
@@ -137,7 +137,7 @@ class Form extends FromAbstract
                     $formTabs[] = $formTab;
 
                 $formTab = array(
-                    'id'    => (count($formTabs) + 1) . '_' . $input->getValueName(),
+                    'id'    => (count($formTabs) + 1) . '_' . $input->getFieldName(),
                     'name'  => $input->getLabel(),
                     //'title'  => $input->getLabel(),
                     'title' => $input->getHelp(),
@@ -148,7 +148,7 @@ class Form extends FromAbstract
             }
 
             $field = array(
-                'id'    => $input->getValueId(),
+                'id'    => $input->getFieldId(),
                 'name'  => strip_tags($input->getLabel()),
                 'type'  => $this->getType($input),
             );

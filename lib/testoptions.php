@@ -20,6 +20,7 @@ use Rover\Fadmin\Inputs\Iblock;
 use Rover\Fadmin\Inputs\Number;
 use Rover\Fadmin\Inputs\PresetName;
 use Rover\Fadmin\Inputs\Removepreset;
+use Rover\Fadmin\Inputs\Schedule;
 use Rover\Fadmin\Inputs\Selectbox;
 use Rover\Fadmin\Inputs\Selectgroup;
 use Rover\Fadmin\Inputs\SubTab;
@@ -268,6 +269,14 @@ class TestOptions extends Options
                             '2' => 'option 2'
                         )
                     ),
+                    [
+                        'type'      => Schedule::getType(),
+                        'name'      => 'schedule_demo',
+                        'label'     => 'demo schedule',
+                        'periodLabel'   => 'period label',
+                        'width'     => 400,
+                        'height'    => 300
+                    ],
                     array(
                         'type'      => Selectbox::getType(),
                         'name'      => 'multiple_selectbox',

@@ -37,8 +37,8 @@ class Radio extends Input
 
             ?><label><input type="radio" <?php
                 echo $this->input->isDisabled() ? ' disabled="disabled" ': '';
-                ?> name="<?=$this->input->getValueName()
-                ?>" id="<?=$this->input->getValueId()?>_<?=$value
+                ?> name="<?=$this->input->getFieldName()
+                ?>" id="<?=$this->input->getFieldId()?>_<?=$value
                 ?>" <?=$value == $optionValue ? ' checked="checked" ' : ''
                 ?> value="<?=$optionValue?>"> <?=$optionName?></label><br><?php
 

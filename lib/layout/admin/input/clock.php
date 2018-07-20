@@ -32,7 +32,7 @@ class Clock extends Input
 
         $APPLICATION->IncludeComponent("bitrix:main.clock", "", array(
             "INPUT_ID"      => "",
-            "INPUT_NAME"    => $this->input->getValueName(),
+            "INPUT_NAME"    => $this->input->getFieldName(),
             "INPUT_TITLE"   => $this->input->getLabel(),
             "INIT_TIME"     => $this->input->getValue(),
             "STEP"          => "5"

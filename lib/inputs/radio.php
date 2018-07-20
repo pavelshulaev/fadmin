@@ -29,12 +29,13 @@ class Radio extends Input
      * @param Input|null            $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      */
 	public function __construct(array $params, \Rover\Fadmin\Options $optionsEngine, Input $parent = null)
 	{
 		parent::__construct($params, $optionsEngine, $parent);
 
 		if (isset($params['options']))
-			$this->options = $params['options'];
+		    $this->setOptions($params['options']);
 	}
 }

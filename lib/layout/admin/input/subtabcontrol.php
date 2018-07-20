@@ -69,13 +69,13 @@ class SubTabControl extends Input
 
             if (($subTab instanceof SubTab) && !$subTab->isHidden())
                 $initTabs[] = array(
-                    "DIV"   => "opt_site_" . $subTab->getValueName(),
+                    "DIV"   => "opt_site_" . $subTab->getFieldName(),
                     "TAB"   => $subTab->getLabel(),
                     'TITLE' => $subTab->getDefault()
                 );
         }
 
-        $subTabControl = new \CAdminViewTabControl("subTabControl_" . $this->input->getValueName(), $initTabs);
+        $subTabControl = new \CAdminViewTabControl("subTabControl_" . $this->input->getFieldName(), $initTabs);
         $subTabControl->Begin();
 
         for ($i = 0; $i < $subTabsCnt; ++$i) {

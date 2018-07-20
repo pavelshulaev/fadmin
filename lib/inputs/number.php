@@ -35,16 +35,17 @@ class Number extends Text
      * @param Options $options
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      */
 	public function __construct(array $params, Options $options)
 	{
 		parent::__construct($params, $options);
 
 		if (isset($params['min']))
-			$this->min = (int)$params['min'];
+		    $this->setMin($params['min']);
 
 		if (isset($params['max']))
-			$this->max = (int)$params['max'];
+		    $this->setMax($params['max']);
 
 		if (isset($params['placeholder']))
 		    $this->setPlaceholder($params['placeholder']);
@@ -82,11 +83,15 @@ class Number extends Text
     }
 
     /**
-     * @param int $min
+     * @param $min
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setMin($min)
     {
-        $this->min = $min;
+        $this->min = intval($min);
+
+        return $this;
     }
 
     /**
@@ -98,10 +103,14 @@ class Number extends Text
     }
 
     /**
-     * @param int $max
+     * @param $max
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setMax($max)
     {
-        $this->max = $max;
+        $this->max = intval($max);
+
+        return $this;
     }
 }

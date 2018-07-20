@@ -30,9 +30,9 @@ class Color extends Input
     {
         ?><input
         <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
-        id="<?=$this->input->getValueId()?>"
+        id="<?=$this->input->getFieldId()?>"
         type="color"
         value="<?=$this->input->getValue()?>"
-        name="<?=$this->input->getValueName()?>"><?php
+        name="<?=$this->input->getFieldName()?>"><?php
     }
 }

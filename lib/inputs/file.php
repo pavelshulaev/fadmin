@@ -40,6 +40,7 @@ class File extends Input
      * @param Options $options
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      */
 	public function __construct(array $params, Options $options)
 	{
@@ -49,15 +50,15 @@ class File extends Input
 			$this->isImage  = (bool)$params['isImage'];
 
 		if (isset($params['maxSize']))
-			$this->maxSize  = htmlspecialcharsbx($params['maxSize']);
+		    $this->setMaxSize($params['maxSize']);
 
 		if (isset($params['mimeType']))
-			$this->mimeType = htmlspecialcharsbx($params['mimeType']);
+		    $this->setMimeType($params['mimeType']);
 
 		if (isset($params['size']) && intval($params['size']))
-			$this->size = intval(htmlspecialcharsbx($params['size']));
+		    $this->setSize(htmlspecialcharsbx($params['size']));
 		else
-		    $this->size = 20;
+            $this->setSize(20);
 	}
 
     /**
@@ -78,11 +79,15 @@ class File extends Input
     }
 
     /**
-     * @param string $mimeType
+     * @param $mimeType
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setMimeType($mimeType)
     {
-        $this->mimeType = $mimeType;
+        $this->mimeType = htmlspecialcharsbx($mimeType);
+
+        return $this;
     }
 
     /**
@@ -94,11 +99,15 @@ class File extends Input
     }
 
     /**
-     * @param int $maxSize
+     * @param $maxSize
+     * @return $this
+     * @author Pavel Shulaev (https://rover-it.me)
      */
     public function setMaxSize($maxSize)
     {
-        $this->maxSize = $maxSize;
+        $this->maxSize = htmlspecialcharsbx($maxSize);
+
+        return $this;
     }
 
     /**
@@ -118,7 +127,7 @@ class File extends Input
 			->getRequest();
 
 		$value      = null;
-		$valueId    = $this->getValueId();
+		$valueId    = $this->getFieldId();
 
 		if (!empty($_FILES[$valueId]) && $_FILES[$valueId]['error'] == 0){
 
@@ -158,25 +167,4 @@ class File extends Input
 
 		return true;
 	}
-
-    /**
-     * @return int
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    /**
-     * @param $size
-     * @return $this
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function setSize($size)
-    {
-        $this->size = intval($size);
-
-        return $this;
-    }
 }
