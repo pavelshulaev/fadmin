@@ -86,6 +86,24 @@ abstract class Input
      * @return string
      * @author Pavel Shulaev (https://rover-it.me)
      */
+    public function showPreInput()
+    {
+        return '';
+    }
+
+    /**
+     * @return string
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showPostInput()
+    {
+        return '';
+    }
+
+    /**
+     * @return string
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
     public function getInputLayout()
     {
         ob_start();

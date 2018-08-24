@@ -94,7 +94,7 @@ abstract class Input extends InputAbstract
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function showPreInput()
+    public function showPreInput()
     {
         $preInput = $this->input->getPreInput();
         if (strlen($preInput)) echo $preInput;
@@ -103,7 +103,7 @@ abstract class Input extends InputAbstract
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function showPostInput()
+    public function showPostInput()
     {
         $postInput = $this->input->getPostInput();
         if (strlen($postInput)) echo $postInput;

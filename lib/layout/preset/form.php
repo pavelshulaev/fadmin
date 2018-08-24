@@ -202,7 +202,9 @@ class Form extends FromAbstract
 
         ob_start();
 
+        $layout->showPreInput();
         $layout->showInput();
+        $layout->showPostInput();
         $layout->showHelp();
 
         return ob_get_clean();
