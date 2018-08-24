@@ -18,6 +18,7 @@ use Rover\Fadmin\Inputs\File;
 use Rover\Fadmin\Inputs\Header;
 use Rover\Fadmin\Inputs\Iblock;
 use Rover\Fadmin\Inputs\Number;
+use Rover\Fadmin\Inputs\Password;
 use Rover\Fadmin\Inputs\PresetName;
 use Rover\Fadmin\Inputs\Removepreset;
 use Rover\Fadmin\Inputs\Schedule;
@@ -107,6 +108,15 @@ class TestOptions extends Options
                         'size'      => 10,
                         'sort'      => '250',
                         'placeholder' => 'subdomain'
+                    ),
+                    array(
+                        'type'      => Password::getType(),
+                        'name'      => 'password',
+                        'label'     => 'Please, enter password here',
+                        'default'   => 'qwerty',
+                        'maxLength' => 255,
+                        'sort'      => '260',
+                        'placeholder' => 'enter password here'
                     ),
                     array(
                         'type'      => Number::getType(),
