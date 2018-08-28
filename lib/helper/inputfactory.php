@@ -399,9 +399,13 @@ class InputFactory
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function getClock($name, $default = '0:00', $disabled = false, $label = null, $help = null, $siteId = '')
+	public static function getClock($name, $default = null, $disabled = false, $label = null, $help = null, $siteId = '')
     {
-        return self::get(Clock::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
+        $clock = self::get(Clock::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
+        if (empty($clock['default']))
+            $clock['default'] = '0:00';
+
+        return $clock;
     }
 
     /**
@@ -440,7 +444,7 @@ class InputFactory
 	{
 		$result = self::get(Addpreset::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 
-		$default = trim($default);
+		$default = trim($result['default']);
 		if (!strlen($default))
 			throw new ArgumentNullException('default');
 

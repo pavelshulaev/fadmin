@@ -39,6 +39,7 @@ class Removepreset extends Submit
             return;
 
         $this->showLabel(true);
+        $this->showPreInput();
         $this->showInput();
         $this->showHelp();
     }
@@ -65,7 +66,7 @@ class Removepreset extends Submit
 
         $this->customInputName  = RemovePresetInput::getType();
         $this->customInputValue = $this->input->getSiteId() . RemovePresetInput::SEPARATOR . $presetId;
-        $this->customInputId    = $this->input->getValueId();
+        $this->customInputId    = $this->input->getFieldId();
         $this->customPopup      = $popup;
 
         parent::showInput();

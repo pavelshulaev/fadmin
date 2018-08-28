@@ -98,5 +98,16 @@ abstract class Input
      * @return mixed
      * @author Pavel Shulaev (https://rover-it.me)
      */
+    public function getType()
+    {
+        $input = $this->input;
+
+        return $input::getType();
+    }
+
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
     abstract public function draw();
 }

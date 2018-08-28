@@ -37,6 +37,22 @@ abstract class Input extends InputAbstract
     }
 
     /**
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function getCommonAttributes()
+    {
+        return
+            ' id="' . $this->input->getFieldId() . '" '.
+            ' type="' . $this->getType() . '" '.
+            ' value="' . $this->input->getValue() . '" ' .
+            ' name="' . $this->input->getFieldName() . '" ' .
+            ($this->input->isRequired() ? ' required="required" ': '') .
+            ($this->input->isDisabled() ? ' disabled="disabled" ': '');
+    }
+
+    /**
      * @param bool $empty
      * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)

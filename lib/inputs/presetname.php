@@ -46,7 +46,8 @@ class PresetName extends Text
 			return;
 
 		$value = $this->getValue();
-		if (empty($value))
+
+		if (empty($value) || ($value == $this->getDefault()))
 			$this->setValue($this->optionsEngine
 				->preset->getNameById($presetId, $this->getSiteId()));
 	}

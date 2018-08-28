@@ -104,33 +104,36 @@ abstract class Input
 		    $this->setDefault($params['default']);
 
         if (isset($params['presetId']))
-            $this->presetId = $params['presetId'];
+            $this->setPresetId($params['presetId']);
         elseif (($this->parent instanceof Input) && ($this->parent->isPreset()))
-            $this->presetId = $this->parent->getPresetId();
+            $this->setPresetId($this->parent->getPresetId());
 
         if (isset($params['siteId']))
-            $this->siteId = $params['siteId'];
+            $this->setSiteId($params['siteId']);
         elseif (($this->parent instanceof Input))
-            $this->siteId = $this->parent->getSiteId();
+            $this->setSiteId($this->parent->getSiteId());
 
 		if (isset($params['multiple']))
 			$this->multiple = (bool)$params['multiple'];
 
 		if (isset($params['disabled']))
-			$this->disabled = (bool)$params['disabled'];
+		    $this->setDisabled($params['disabled']);
 
 		if (isset($params['help']))
-			$this->help = $params['help'];
+		    $this->setHelp($params['help']);
 
-		if (isset($params['sort']) && intval($params['sort']))
-			$this->sort = intval($params['sort']);
+		if (isset($params['sort']))
+		    $this->setSort($params['sort']);
+
+        if (array_key_exists('required', $params))
+            $this->setRequired($params['required']);
 
         if (array_key_exists('hidden', $params))
-            $this->hidden = (bool)$params['hidden'];
+            $this->setHidden($params['hidden']);
 
-		// @TODO: deprecated
+		// @TODO: deprecated flag
 		if (array_key_exists('display', $params))
-			$this->hidden = !(bool)$params['display'];
+		    $this->setHidden(!$params['display']);
 	}
 
     /**
@@ -428,7 +431,6 @@ abstract class Input
         return strtolower(substr($className, strrpos($className, '\\') + 1));
     }
 
-
     /**
      * @return string
      * @throws Main\ArgumentNullException
@@ -582,19 +584,24 @@ abstract class Input
     }
 
     /**
-     * @param        $name
-     * @param string $presetId
-     * @param string $siteId
+     * @param      $name
+     * @param null $presetId
+     * @param null $siteId
      * @return mixed|null
+     * @throws Main\ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function searchOneByName($name, $presetId = '', $siteId = '')
+    public function searchOneByName($name, $presetId = null, $siteId = null)
     {
+        $name = trim($name);
+        if (!strlen($name))
+            throw new Main\ArgumentNullException('name');
+
         $filter= array(
             'name'      => $name,
-            'siteId'    => $siteId,
-            'presetId'  => $presetId
+            'siteId'    => is_null($siteId) ? $this->getSiteId() : $siteId,
+            'presetId'  => is_null($presetId) ? $this->getPresetId() : $presetId
         );
 
         // allows to make search in tabcontrol also

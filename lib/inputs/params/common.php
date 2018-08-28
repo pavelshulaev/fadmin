@@ -55,6 +55,9 @@ trait Common
     /** @var bool */
     protected $disabled = false;
 
+    /** @var bool */
+    protected $required = false;
+
     /** @var Input|null */
     protected $parent;
 
@@ -414,5 +417,22 @@ trait Common
         return $this->children;
     }
 
+    /**
+     * @return bool
+     */
+    public function isRequired()
+    {
+        return $this->required;
+    }
 
+    /**
+     * @param bool $required
+     * @return Common
+     */
+    public function setRequired($required)
+    {
+        $this->required = (bool)$required;
+
+        return $this;
+    }
 }

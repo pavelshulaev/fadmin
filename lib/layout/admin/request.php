@@ -136,14 +136,14 @@ class Request extends RequestAbstract
         list($siteId, $value) = explode(Addpreset::SEPARATOR,
             $this->request->get(Addpreset::getType()));
 
-        $presetId = intval($this->options->preset->add($value, $siteId));
+        $presetId = intval($this->options->preset->add(urldecode($value), urldecode($siteId)));
 
         if ($presetId){
             $presetTab = $this->options->getTabControl()->getTabByPresetId($presetId, $siteId, true);
             if (!$presetTab instanceof Tab)
                 throw new ArgumentOutOfRangeException('presetId');
 
-            $this->redirect($presetTab->getName());
+            $this->redirect($presetTab->getFieldName());
         }
     }
 

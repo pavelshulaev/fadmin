@@ -39,6 +39,9 @@ abstract class Options
 	/** @var string */
 	protected $moduleId;
 
+    /** @var string */
+    protected static $curSiteId;
+
     /**
      * @var TabMap
      * @deprecated
@@ -275,10 +278,10 @@ abstract class Options
 		if (!$this->cache->check($key) || $reload) {
             $input = $this->getTabControl()->searchOneByName($inputName, $presetId, $siteId);
 
-            if ($input instanceof Input)
-                $this->cache->set($key, $input->getValue());
-            else
+            if (false === $input instanceof Input)
                 throw new Main\SystemException('input "' . $inputName . '" not found');
+
+            $this->cache->set($key, $input->getValue());
 		}
 
 		return $this->cache->get($key);
@@ -340,6 +343,21 @@ abstract class Options
     public function getPreset()
     {
         return $this->preset;
+    }
+
+    /**
+     * @return bool|string
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public static function getCurSiteId()
+    {
+        if (empty(self::$curSiteId)) {
+            require_once(Application::getDocumentRoot() . "/bitrix/modules/main/include/mainpage.php");
+            $mainPage = new \CMainPage();
+            self::$curSiteId = $mainPage->GetSiteByHost();
+        }
+
+        return self::$curSiteId;
     }
 
     /**

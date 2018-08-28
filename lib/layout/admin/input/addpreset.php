@@ -61,7 +61,7 @@ class Addpreset extends Submit
         <script>
             (function()
             {
-                document.getElementById('<?=$this->input->getValueId()?>').onclick = function()
+                document.getElementById('<?=$this->input->getFieldId()?>').onclick = function()
                 {
                     var presetName = prompt('<?=$text ?>', '<?=$default?>');
 
