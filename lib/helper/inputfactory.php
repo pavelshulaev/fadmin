@@ -20,6 +20,7 @@ use Rover\Fadmin\Inputs\Hidden;
 use Rover\Fadmin\Inputs\Iblock;
 use Rover\Fadmin\Inputs\Label;
 use Rover\Fadmin\Inputs\Number;
+use Rover\Fadmin\Inputs\Password;
 use Rover\Fadmin\Inputs\PresetName;
 use Rover\Fadmin\Inputs\Radio;
 use Rover\Fadmin\Inputs\Removepreset;
@@ -117,6 +118,22 @@ class InputFactory
 	public static function getText($name, $default = '', $disabled = false, $label = null, $help = null, $siteId = '')
 	{
 		return self::get(Text::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
+	}
+
+    /**
+     * @param        $name
+     * @param string $default
+     * @param null   $label
+     * @param bool   $disabled
+     * @param null   $help
+     * @param string $siteId
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public static function getPassword($name, $default = '', $disabled = false, $label = null, $help = null, $siteId = '')
+	{
+		return self::get(Password::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 	}
 
     /**

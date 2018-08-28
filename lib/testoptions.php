@@ -18,8 +18,11 @@ use Rover\Fadmin\Inputs\File;
 use Rover\Fadmin\Inputs\Header;
 use Rover\Fadmin\Inputs\Iblock;
 use Rover\Fadmin\Inputs\Number;
+use Rover\Fadmin\Inputs\Password;
 use Rover\Fadmin\Inputs\PresetName;
+use Rover\Fadmin\Inputs\Radio;
 use Rover\Fadmin\Inputs\Removepreset;
+use Rover\Fadmin\Inputs\Schedule;
 use Rover\Fadmin\Inputs\Selectbox;
 use Rover\Fadmin\Inputs\Selectgroup;
 use Rover\Fadmin\Inputs\SubTab;
@@ -75,9 +78,9 @@ class TestOptions extends Options
     {
         return array(
             array(
-                'name'      => 'test_tab',
-                'label'     => 'test tab',
-                'default'   => 'test tab description',
+                'name'      => 'first_tab',
+                'label'     => 'First Tab',
+                'default'   => 'First tab description',
                 'siteId'    => 's1',
                 'inputs'    => array(
                     array(
@@ -93,6 +96,28 @@ class TestOptions extends Options
                         'maxLength' => 50,
                         'sort'      => '200',
                         'placeholder' => 'enter a text here'
+                    ),
+                    array(
+                        'type'      => Text::getType(),
+                        'preInput'  => 'https://',
+                        'postInput' => '.domain.com',
+                        'name'      => 'subdimain',
+                        'label'     => 'Please, enter you subdomain here',
+                        'help'      => 'format: https://<strong><u>subdomain</u></strong>.domain.com',
+                        'default'   => 'subdomain',
+                        'maxLength' => 255,
+                        'size'      => 10,
+                        'sort'      => '250',
+                        'placeholder' => 'subdomain'
+                    ),
+                    array(
+                        'type'      => Password::getType(),
+                        'name'      => 'password',
+                        'label'     => 'Please, enter password here',
+                        'default'   => 'qwerty',
+                        'maxLength' => 255,
+                        'sort'      => '260',
+                        'placeholder' => 'enter password here'
                     ),
                     array(
                         'type'      => Number::getType(),
@@ -120,7 +145,7 @@ class TestOptions extends Options
                         'name'      => 'input_textarea_2',
                         'label'     => 'Visual Editor',
                         'default'   => 'Visual Editor default text',
-                        'help'      => 'textarea help',
+                        'help'      => 'visual editor help',
                         'sort'      => '550',
                         'htmlEditor'=> true,
                         'htmlEditorBB'=> true,
@@ -223,6 +248,7 @@ class TestOptions extends Options
                         'type'      => PresetName::getType(),
                         'name'      => 'presetName',
                         'label'     => 'preset name',
+                        'help'      => 'Enter a new name of preset here'
                     ),
                     array(
                         'type'      => Color::getType(),
@@ -240,7 +266,7 @@ class TestOptions extends Options
             ),
             array(
                 'name'      => 'tab_22',
-                'label'     => '2 normal tab',
+                'label'     => 'Second Tab',
                 'default'   => 'This is a description of second normal tab',
                 'siteId'    => 'm',
                 'inputs'    => array(
@@ -296,6 +322,24 @@ class TestOptions extends Options
                             )
                         )
                     ),
+                    [
+                        'type'      => Radio::getType(),
+                        'name'      => 'radio_demo',
+                        'label'     => 'radio',
+                        'options'   => [
+                            '1' => 'v1',
+                            '2' => 'v2',
+                            '3' => 'v3'
+                        ]
+                    ],
+                    [
+                        'type'      => Schedule::getType(),
+                        'name'      => 'schedule_demo',
+                        'label'     => 'demo schedule',
+                        'periodLabel'   => 'period label',
+                        'width'     => 400,
+                        'height'    => 300
+                    ],
                     array(
                         'type'      => Addpreset::getType(),
                         'label'     => 'add preset',

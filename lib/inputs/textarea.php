@@ -34,7 +34,7 @@ class Textarea extends Input
 	/** @var bool */
 	protected $htmlEditorBB = false;
 
-    /**
+	/**
      * Textarea constructor.
      *
      * @param array      $params
@@ -42,6 +42,7 @@ class Textarea extends Input
      * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      */
 	public function __construct(array $params, Options $options, Input $parent = null)
 	{

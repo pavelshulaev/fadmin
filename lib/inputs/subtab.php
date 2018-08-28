@@ -31,6 +31,7 @@ class SubTab extends Input
      * @param Input|null $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      */
     public function __construct(array $params, Options $options, Input $parent = null)
     {

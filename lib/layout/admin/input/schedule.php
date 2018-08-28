@@ -23,9 +23,7 @@ Loc::loadMessages(__FILE__);
  */
 class Schedule extends Input
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected static $assetsAdded = false;
 
     /**
@@ -83,12 +81,12 @@ class Schedule extends Input
 
         $this->addAssets();
 
-        $valueId = $this->input->getValueId();
+        $valueId = $this->input->getFieldId();
 
         ?><input type="hidden"
                  id="<?=$valueId?>"
                  value='<?=json_encode($this->input->getInputValue())?>'
-                 name="<?=$this->input->getValueName()?>">
+                 name="<?=$this->input->getFieldName()?>">
         <div id="scheduler-<?=$valueId?>"></div>
         <style>
             .jqx-scheduler-all-day-cell span{

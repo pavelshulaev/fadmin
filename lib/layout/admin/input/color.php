@@ -28,6 +28,7 @@ class Color extends Input
      */
     public function showInput()
     {
+
         ?><input <?=$this->getCommonAttributes()?>><?php
     }
 }

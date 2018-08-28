@@ -36,8 +36,9 @@ class Tabcontrol extends Input
      *
      * @param array   $tabsConfig
      * @param Options $options
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      */
     public function __construct(array $tabsConfig = array(), Options $options)
     {

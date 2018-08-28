@@ -35,21 +35,25 @@ class Selectbox extends Input
      * @param Input|null    $parent
      * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
      */
 	public function __construct(array $params, OptionsEngine $optionsEngine, Input $parent = null)
 	{
 		parent::__construct($params, $optionsEngine, $parent);
 
 		if (isset($params['options']))
-			$this->options = $params['options'];
+		    $this->setOptions($params['options']);
+
 
 		if (isset($params['size']) && intval($params['size']))
-			$this->size = intval($params['size']);
-		elseif ($params['multiple'])
-			$this->size = count($this->options) > self::MAX_MULTI_SIZE
-				? self::MAX_MULTI_SIZE
-				: count($this->options);
+		    $this->setSize($params['size']);
+		elseif ($params['multiple']){
+		    $size = count($this->options) > self::MAX_MULTI_SIZE
+                ? self::MAX_MULTI_SIZE
+                : count($this->options);
+		    $this->setSize($size);
+        }
 		else
-			$this->size = 1;
+		    $this->setSize(1);
 	}
 }

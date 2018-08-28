@@ -86,7 +86,7 @@ class Selectgroup extends Selectbox
 			';
 
         $groupValue     = $this->input->getGroupValue() ?: $this->input->calcGroupValue();
-        $valueName      = $this->input->getValueName();
+        $valueName      = $this->input->getFieldName();
         $valueGroupName = $this->input->getGroupValueName();
         $onChangeGroup  = 'OnType_'.$optionsId.'_Changed(this, \''.\CUtil::JSEscape($valueName).'\');';
 
@@ -104,7 +104,8 @@ class Selectgroup extends Selectbox
         $html .= "</select>\n";
         $html .= "&nbsp;\n";
         $html .= '<select
-                    ' . ($this->input->isDisabled() ? 'disabled="disabled"': '') . ' 
+                    ' . ($this->input->isDisabled() ? ' disabled="disabled" ': '') . ' 
+                    ' . ($this->input->isRequired() ? ' required="required" ': '') . ' 
                     name="' . $valueName . ($this->input->isMultiple()
                 ? '[]" multiple="multiple" size="' . $this->input->getSize() . '" '
                 : '"')

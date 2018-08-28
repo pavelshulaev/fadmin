@@ -22,6 +22,7 @@ class Selectbox extends Input
 {
     /**
      * @param bool $empty
+     * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showLabel($empty = false)
@@ -44,12 +45,13 @@ class Selectbox extends Input
             return;
 
         $value      = $this->input->getValue();
-        $valueId    = $this->input->getValueId();
-        $valueName  = $this->input->getValueName();
+        $valueId    = $this->input->getFieldId();
+        $valueName  = $this->input->getFieldName();
         $multiple   = $this->input->isMultiple();
 
         ?><select
-        <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
+        <?=$this->input->isDisabled() ? ' disabled="disabled" ': '';?>
+        <?=$this->input->isRequired() ? ' required="required" ': '';?>
         name="<?=$valueName . ($multiple ? '[]' : '')?>"
         id="<?=$valueId?>"
         size="<?=$this->input->getSize()?>"

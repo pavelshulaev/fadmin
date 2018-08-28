@@ -12,6 +12,12 @@ namespace Rover\Fadmin\Layout\Preset\Input;
 
 use Rover\Fadmin\Layout\Preset\Input;
 
+/**
+ * Class Header
+ *
+ * @package Rover\Fadmin\Layout\Preset\Input
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
 class Header extends Input
 {
     /**
@@ -27,5 +33,4 @@ class Header extends Input
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput(){}
-
 }

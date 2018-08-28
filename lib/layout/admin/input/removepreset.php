@@ -41,6 +41,7 @@ class Removepreset extends Submit
         $this->showLabel(true);
         $this->showPreInput();
         $this->showInput();
+        $this->showPostInput();
         $this->showHelp();
     }
 

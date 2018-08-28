@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lenovo
  * Date: 12.09.2017
- * Time: 15:43
+ * Time: 14:31
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
@@ -11,12 +11,20 @@
 namespace Rover\Fadmin\Layout\Preset\Input;
 
 /**
- * Class Presetname
+ * Class Text
  *
  * @package Rover\Fadmin\Layout\Preset\Input
  * @author  Pavel Shulaev (https://rover-it.me)
+ *
+ * @param \Rover\Fadmin\Inputs\Text $input
  */
-class Presetname extends Text
+class Password extends Text
 {
-
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showInput()
+    {
+        $this->adminInput->showInput();
+    }
 }

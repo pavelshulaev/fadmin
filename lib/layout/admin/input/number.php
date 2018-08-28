@@ -18,9 +18,7 @@ namespace Rover\Fadmin\Layout\Admin\Input;
  */
 class Number extends Text
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public static $cssPrinted = false;
 
     /**

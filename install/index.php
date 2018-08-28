@@ -96,7 +96,7 @@ class rover_fadmin extends CModule
     {
         global $fadminErrors;
 
-        if (PHP_VERSION_ID < 50306)
+        if (PHP_VERSION_ID < 50600)
             $fadminErrors[] = Loc::getMessage('rover_fa__php_version_error');
 
         $this->copyFiles();

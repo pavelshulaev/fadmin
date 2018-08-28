@@ -35,30 +35,32 @@ class Iblock extends Input
             return;
         }
 
-        $valueName      = $this->input->getValueName();
-        $additionsHtml  = $this->input->isDisabled() ? 'disabled="disabled"': '';
-        $value          = $this->input->getValue();
-        $name           = $this->input->getName();
+        $additionsHtml  = '';
+        $additionsHtml  .= $this->input->isRequired() ? ' required="required" ': '';
+        $additionsHtml  .= $this->input->isDisabled() ? ' disabled="disabled" ': '';
 
         if ($this->input->isMultiple())
-            echo self::getIBlockDropDownListMultiple($value, $valueName . '_type', $valueName, false, '', '', $additionsHtml);
+            echo $this->getIBlockDropDownListMultiple(false, '', '', $additionsHtml);
         else
-            echo GetIBlockDropDownList($value, $valueName . '_type', $valueName, false, '', $additionsHtml);
+            echo GetIBlockDropDownList(
+                $this->input->getValue(),
+                $this->input->getFieldName() . '_type',
+                $this->input->getFieldName(),
+                false, '', $additionsHtml);
     }
 
     /**
-     * @param array      $iblockIds
-     * @param            $strTypeName
-     * @param            $strIBlockName
-     * @param bool|false $arFilter
-     * @param string     $onChangeType
-     * @param string     $onChangeIBlock
-     * @param string     $strAddType
-     * @param string     $strAddIBlock
+     * @param bool   $arFilter
+     * @param string $onChangeType
+     * @param string $onChangeIBlock
+     * @param string $strAddType
+     * @param string $strAddIBlock
      * @return string
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected static function getIBlockDropDownListMultiple(array $iblockIds, $strTypeName, $strIBlockName, $arFilter = false, $onChangeType = '', $onChangeIBlock = '', $strAddType = '', $strAddIBlock = '')
+    protected function getIBlockDropDownListMultiple($arFilter = false, $onChangeType = '', $onChangeIBlock = '', $strAddType = '', $strAddIBlock = '')
     {
         $html = '';
 
@@ -115,7 +117,9 @@ class Iblock extends Input
 			';
         }
 
-        $IBLOCK_TYPE = false;
+        $IBLOCK_TYPE    = false;
+        $iblockIds      = $this->input->getValue();
+
         if(count($iblockIds) > 0)
         {
             foreach($arIBlocks[$filterId] as $iblock_type_id => $iblocks)
@@ -128,9 +132,9 @@ class Iblock extends Input
             }
         }
 
-        $htmlTypeName   = htmlspecialcharsbx($strTypeName);
-        $htmlIBlockName = htmlspecialcharsbx($strIBlockName);
-        $onChangeType   = 'OnType_'.$filterId.'_Changed(this, \''.\CUtil::JSEscape($strIBlockName).'\');'.$onChangeType.';';
+        $htmlTypeName   = htmlspecialcharsbx($this->input->getFieldName() . '_type');
+        $htmlIBlockName = htmlspecialcharsbx($this->input->getFieldName());
+        $onChangeType   = 'OnType_'.$filterId.'_Changed(this, \''.\CUtil::JSEscape($this->input->getFieldName()).'\');'.$onChangeType.';';
         $onChangeIBlock = trim($onChangeIBlock);
 
         $html .= '<select name="'.$htmlTypeName.'" id="'.$htmlTypeName.'" onchange="'.htmlspecialcharsbx($onChangeType).'" '.$strAddType.'>'."\n";
@@ -142,7 +146,12 @@ class Iblock extends Input
         }
         $html .= "</select>\n";
         $html .= "&nbsp;\n";
-        $html .= '<select multiple="multiple" size="' . (count($arIBlocks[$filterId][$IBLOCK_TYPE]) > 5 ? '8' : '3') .'"  name="'.$htmlIBlockName.'[]" id="'.$htmlIBlockName.'"'.($onChangeIBlock != ''? ' onchange="'.htmlspecialcharsbx($onChangeIBlock).'"': '').' '.$strAddIBlock.'>'."\n";
+        $html .= '<select multiple="multiple" '
+            . ' size="' . (count($arIBlocks[$filterId][$IBLOCK_TYPE]) > 5 ? '8' : '3') .'" '
+            . ' name="' . $htmlIBlockName.'[]" '
+            . ' id="' . $htmlIBlockName . '" '
+            . ($this->input->isRequired() ? ' required="required" ': '')
+            . ($onChangeIBlock != ''? ' onchange="'.htmlspecialcharsbx($onChangeIBlock).'"': '').' '.$strAddIBlock.'>'."\n";
 
         foreach($arIBlocks[$filterId][$IBLOCK_TYPE] as $key => $value)
             $html .= '<option value="'.htmlspecialcharsbx($key).'"'.(in_array($key, $iblockIds)? ' selected': '').'>'.htmlspecialcharsEx($value).'</option>'."\n";
