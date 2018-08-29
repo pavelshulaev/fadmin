@@ -141,6 +141,7 @@ abstract class Options
      * @return Tabcontrol
      * @throws ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
+     * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public function getTabControl($reload = false)
