@@ -86,12 +86,41 @@ abstract class Input
      * @return string
      * @author Pavel Shulaev (https://rover-it.me)
      */
+    public function showPreInput()
+    {
+        return '';
+    }
+
+    /**
+     * @return string
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showPostInput()
+    {
+        return '';
+    }
+
+    /**
+     * @return string
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
     public function getInputLayout()
     {
         ob_start();
         $this->showInput();
 
         return ob_get_clean();
+    }
+
+    /**
+     * @return mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getType()
+    {
+        $input = $this->input;
+
+        return $input::getType();
     }
 
     /**

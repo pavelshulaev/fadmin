@@ -18,9 +18,7 @@ namespace Rover\Fadmin\Layout\Admin\Input;
  */
 class Number extends Text
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public static $cssPrinted = false;
 
     /**
@@ -40,11 +38,7 @@ class Number extends Text
         }
 
         ?><input
-            <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
-            type="number"
-            id="<?=$this->input->getFieldId()?>"
-            value="<?=$this->input->getValue()?>"
-            name="<?=$this->input->getFieldName()?>"
+            <?=$this->getCommonAttributes()?>
             <?=is_numeric($this->input->getSize()) ? " size='{$this->input->getSize()}' " : ''?>
             <?=is_numeric($this->input->getMaxLength()) ? " maxlength='{$this->input->getMaxLength()}' " : ''?>
             <?=is_numeric($this->input->getMax()) ? " max='{$this->input->getMax()}' " : ''?>

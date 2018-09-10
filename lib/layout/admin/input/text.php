@@ -34,13 +34,10 @@ class Text extends Input
             return;
 
         ?><input
-            type="text"
-            <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
-            id="<?=$this->input->getFieldId()?>"
+            <?=$this->getCommonAttributes()?>
             size="<?=$this->input->getSize()?>"
             maxlength="<?=$this->input->getMaxLength()?>"
-            value="<?=$this->input->getValue()?>"
             <?=strlen($this->input->getPlaceholder()) ? " placeholder='{$this->input->getPlaceholder()}' " : ''?>
-            name="<?=$this->input->getFieldName()?>"><?php
+            ><?php
     }
 }

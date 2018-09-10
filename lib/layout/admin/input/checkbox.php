@@ -28,11 +28,20 @@ class Checkbox extends Input
      */
     public function showInput()
     {
-        ?><input
-            type="checkbox"
-            <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
-            id="<?=$this->input->getValueId()?>"
-            name="<?=$this->input->getValueName()?>"
-            value="Y"<?=($this->input->getValue() == "Y")?" checked=\"checked\"":'';?>/><?php
+        ?><input <?=$this->getCommonAttributes()?>><?php
+    }
+
+    /**
+     * @return string
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function getValue()
+    {
+        $value      = $this->input->getValue() == "Y";
+        $checked    = ($value == 'Y') || ($value === true);
+
+        return ' value="Y" ' . ($checked ? " checked=\"checked\""  : '');
     }
 }

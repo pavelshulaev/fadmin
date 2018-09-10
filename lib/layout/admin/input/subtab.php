@@ -31,9 +31,9 @@ class SubTab extends Input
     {
         ?><table class="adm-detail-content-table edit-table"><?php
 
-            if (strlen($this->input->getDefault())): ?>
+           /* if (strlen($this->input->getDefault())): ?>
             <h4><?=$this->input->getDefault()?></h4>
-            <?php endif;
+            <?php endif;*/
 
             $this->showInput();
         ?></table><?php

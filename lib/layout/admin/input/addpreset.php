@@ -30,7 +30,9 @@ class Addpreset extends Submit
     public function draw()
     {
         $this->showLabel(true);
+        $this->showPreInput();
         $this->showInput();
+        $this->showPostInput();
         $this->showHelp();
     }
 
@@ -61,7 +63,7 @@ class Addpreset extends Submit
         <script>
             (function()
             {
-                document.getElementById('<?=$this->input->getValueId()?>').onclick = function()
+                document.getElementById('<?=$this->input->getFieldId()?>').onclick = function()
                 {
                     var presetName = prompt('<?=$text ?>', '<?=$default?>');
 

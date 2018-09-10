@@ -40,12 +40,7 @@ class Hidden extends Text
         if (!$this->input instanceof \Rover\Fadmin\Inputs\Hidden)
             return;
 
-        ?><input
-        <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
-        id="<?=$this->input->getValueId()?>"
-        maxlength="<?=$this->input->getMaxLength()?>"
-        type="hidden"
-        value="<?=$this->input->getValue()?>"
-        name="<?=$this->input->getValueName()?>"><?php
+        ?><input <?=$this->getCommonAttributes()?>
+            maxlength="<?=$this->input->getMaxLength()?>"><?php
     }
 }

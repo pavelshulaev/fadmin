@@ -32,8 +32,37 @@ abstract class Input extends InputAbstract
     public function draw()
     {
         $this->showLabel();
+        $this->showPreInput();
         $this->showInput();
+        $this->showPostInput();
         $this->showHelp();
+    }
+
+    /**
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function getCommonAttributes()
+    {
+        return
+            ' id="' . $this->input->getFieldId() . '" '.
+            ' type="' . $this->getType() . '" '.
+            static::getValue() .
+            ' name="' . $this->input->getFieldName() . '" ' .
+            ($this->input->isRequired() ? ' required="required" ': '') .
+            ($this->input->isDisabled() ? ' disabled="disabled" ': '');
+    }
+
+    /**
+     * @return string
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    protected function getValue()
+    {
+        return ' value="' . $this->input->getValue() . '" ';
     }
 
     /**
@@ -50,7 +79,7 @@ abstract class Input extends InputAbstract
             class="adm-detail-content-cell-l"
             style="vertical-align: top; padding-top: 7px;">
             <?php if (!$empty) : ?>
-                <label for="<?=$this->input->getValueId()?>"><?=$this->input->getLabel()?>:</label>
+                <label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:</label>
             <?php endif; ?>
         </td>
         <td
@@ -71,7 +100,7 @@ abstract class Input extends InputAbstract
             width="50%"
             class="adm-detail-content-cell-l"
             style="vertical-align: top; padding-top: 7px;">
-            <label for="<?=$this->input->getValueId()?>"><?=$this->input->getLabel()?>:<br>
+            <label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:<br>
                 <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
             </label>
         </td>
@@ -95,5 +124,23 @@ abstract class Input extends InputAbstract
         ?></td>
         </tr>
         <?php
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showPreInput()
+    {
+        $preInput = $this->input->getPreInput();
+        if (strlen($preInput)) echo $preInput;
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showPostInput()
+    {
+        $postInput = $this->input->getPostInput();
+        if (strlen($postInput)) echo $postInput;
     }
 }

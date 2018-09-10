@@ -165,7 +165,7 @@ class Tabcontrol extends Input
      */
     protected function getTabInfo(Tab $tab)
     {
-        $name   = $tab->getValueName();
+        $name   = $tab->getFieldName();
         $icon   = "ib_settings";
         $label  = strlen($tab->getSiteId())
             ? $tab->getLabel() . ' [' . $tab->getSiteId() . ']'

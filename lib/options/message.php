@@ -76,4 +76,12 @@ class Message
     {
         return $this->messages;
     }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function clear()
+    {
+        $this->messages = [];
+    }
 }

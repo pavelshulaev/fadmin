@@ -12,6 +12,12 @@ namespace Rover\Fadmin\Layout\Admin\Input;
 
 use Rover\Fadmin\Layout\Admin\Input;
 
+/**
+ * Class Header
+ *
+ * @package Rover\Fadmin\Layout\Admin\Input
+ * @author  Pavel Shulaev (https://rover-it.me)
+ */
 class Header extends Input
 {
     /**

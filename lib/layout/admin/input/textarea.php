@@ -94,7 +94,8 @@ class Textarea extends Input
 
         } else {
             ?><textarea
-            <?=$this->input->isDisabled() ? 'disabled="disabled"': '';?>
+            <?=$this->input->isDisabled() ? ' disabled="disabled" ': '';?>
+            <?=$this->input->isRequired() ? ' required="required" ': '';?>
             id="<?=$this->input->getFieldId()?>"
             rows="<?=$this->input->getRows()?>"
             cols="<?=$this->input->getCols()?>"
