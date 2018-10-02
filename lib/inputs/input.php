@@ -597,7 +597,7 @@ abstract class Input
      * @param      $name
      * @param null $presetId
      * @param null $siteId
-     * @return mixed|null
+     * @return Input|null
      * @throws Main\ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
