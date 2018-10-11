@@ -88,7 +88,7 @@ class Form extends FromAbstract
     public function show()
     {
         $this->getRequest()->process();
-        $this->showMessages();
+        $this->options->message->showAdmin();
         $this->draw();
     }
 

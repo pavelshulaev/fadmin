@@ -63,24 +63,6 @@ abstract class Form
     }
 
     /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    protected function showMessages()
-    {
-        $messages       = $this->options->message->get();
-        $messagesCnt    = count($messages);
-
-        if (!$messagesCnt)
-            return;
-
-        for ($i = 0; $i < $messagesCnt; ++$i)
-        {
-            $message = new \CAdminMessage($messages[$i]);
-            echo $message->Show();
-        }
-    }
-
-    /**
      * @return mixed
      * @author Pavel Shulaev (https://rover-it.me)
      */
