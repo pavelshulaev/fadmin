@@ -9,4 +9,37 @@ namespace Rover\Fadmin\Inputs;
  */
 class Clock extends Input
 {
+    /**
+     * @param $value
+     * @return bool|mixed
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeSaveRequest(&$value)
+    {
+        if (!self::isValid($value))
+            $value = $this->getDefault();
+
+        return true;
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public static function isValid($value)
+    {
+        if (!preg_match('#^(\d{1,2}):(\d{2})$#uUsi', $value))
+            return false;
+
+        list($hours, $minutes) = explode(':', $value);
+        $hours      = intval($hours);
+        $minutes    = intval($minutes);
+
+        return ($hours >= 0)
+            && ($hours <= 23)
+            && ($minutes >= 0)
+            && ($minutes <= 59);
+    }
 }

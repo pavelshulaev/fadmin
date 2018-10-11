@@ -371,19 +371,14 @@ class InputFactory
      * @param string $help
      * @param string $siteId
      * @return array
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getLabel($name = '', $default = '', $disabled = false, $label = '', $help = '', $siteId = '')
 	{
-		return array(
-		    'name'      => $name ? : Label::getType(),
-			'type'      => Label::getType(),
-			'label'     => $label,
-			'default'   => $default,
-            'disabled'  => $disabled,
-            'help'      => $help,
-            'siteId'    => $siteId
-        );
+	    $name = $name ? : Label::getType();
+
+	    return self::get(Label::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 	}
 
     /**

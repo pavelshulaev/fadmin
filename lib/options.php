@@ -305,6 +305,29 @@ abstract class Options
 
     /**
      * @param        $inputName
+     * @param        $value
+     * @param string $presetId
+     * @param string $siteId
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function setValue($inputName, $value, $presetId = '', $siteId = '')
+    {
+        if (is_null($inputName))
+            throw new ArgumentNullException('inputName');
+
+        $input = $this->getTabControl()->searchOneByName($inputName, $presetId, $siteId);
+
+        if (false === $input instanceof Input)
+            throw new Main\SystemException('input "' . $inputName . '" not found');
+
+        $input->setValue($value);
+    }
+
+    /**
+     * @param        $inputName
      * @param string $presetId
      * @param string $siteId
      * @return mixed
