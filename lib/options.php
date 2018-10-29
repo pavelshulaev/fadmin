@@ -89,6 +89,21 @@ abstract class Options
     }
 
     /**
+     * @param        $name
+     * @param null   $default
+     * @param string $presetId
+     * @param string $siteId
+     * @return string
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getDirectValue($name, $default = null, $presetId = '', $siteId = '')
+    {
+        return Main\Config\Option::get($this->moduleId, Input::getFullPath($name, $presetId, $siteId), $default);
+    }
+
+    /**
      * @param $moduleId
      * @return mixed
      * @throws ArgumentNullException
