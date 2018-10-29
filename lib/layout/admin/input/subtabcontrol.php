@@ -71,7 +71,8 @@ class SubTabControl extends Input
                 $initTabs[] = array(
                     "DIV"   => "opt_site_" . $subTab->getFieldName(),
                     "TAB"   => $subTab->getLabel(),
-                    'TITLE' => $subTab->getDefault()
+                    'TITLE' => $subTab->getDefault(),
+                    //'DESCRIPTION' => $subTab
                 );
         }
 
