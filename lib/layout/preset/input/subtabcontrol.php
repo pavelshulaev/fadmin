@@ -26,7 +26,8 @@ class SubTabControl extends Input
      */
     public function draw()
     {
-        $this->showInput();
+        //$this->showInput();
+        $this->adminInput->showInput();
     }
 
     /**
@@ -34,6 +35,8 @@ class SubTabControl extends Input
      */
     public function showInput()
     {
+        ?><style>#bx-admin-prefix .adm-detail-subtabs-block{white-space: normal}</style><?php
         $this->adminInput->showInput();
+
     }
 }

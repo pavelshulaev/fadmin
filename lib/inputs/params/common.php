@@ -67,7 +67,10 @@ trait Common
     /** @var Input|null */
     protected $parent;
 
-    /** @var Input[] */
+    /**
+     * @var Input[]
+     * @internal
+     */
     protected $children;
 
     /** @var Options */

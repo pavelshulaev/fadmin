@@ -59,7 +59,7 @@ class SubTabControl extends Input
         if (!$this->input instanceof \Rover\Fadmin\Inputs\SubTabControl)
             return;
 
-        $subTabs    = $this->input->getSubTabs();
+        $subTabs    = $this->input->getSubTabs(true);
         $subTabsCnt = count($subTabs);
         $initTabs   = array();
 
@@ -69,7 +69,7 @@ class SubTabControl extends Input
 
             if (($subTab instanceof SubTab) && !$subTab->isHidden())
                 $initTabs[] = array(
-                    "DIV"   => "opt_site_" . $subTab->getFieldName(),
+                    "DIV"   => "opt_site_" . $this->input->getFieldName() . '_' . $subTab->getFieldName(),
                     "TAB"   => $subTab->getLabel(),
                     'TITLE' => $subTab->getDefault(),
                     //'DESCRIPTION' => $subTab

@@ -38,7 +38,25 @@ class SubTabControl extends Input
         parent::__construct($params, $options, $parent);
 
         if (isset($params['subTabs']) && is_array($params['subTabs']))
-            $this->subTabsConfig = $params['subTabs'];
+            $this->setSubTabsArray($params['subTabs']);
+    }
+
+    /**
+     * @param array $subTabArray
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function addSubTabArray(array $subTabArray)
+    {
+        $this->subTabsConfig[] = $subTabArray;
+    }
+
+    /**
+     * @param array $subTabsArray
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function setSubTabsArray(array $subTabsArray)
+    {
+        $this->subTabsConfig = $subTabsArray;
     }
 
     /**

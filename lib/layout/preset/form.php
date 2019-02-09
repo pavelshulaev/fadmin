@@ -15,6 +15,7 @@ use Rover\Fadmin\Inputs\Custom;
 use Rover\Fadmin\Inputs\Header;
 use Rover\Fadmin\Inputs\Label;
 use \Rover\Fadmin\Layout\Form as FromAbstract;
+use \Rover\Fadmin\Inputs\SubTabControl;
 use \Rover\Fadmin\Options;
 use Rover\Fadmin\Inputs\Tab;
 use \Rover\Fadmin\Inputs\Input;
@@ -153,7 +154,7 @@ class Form extends FromAbstract
                 'type'  => $this->getType($input),
             );
 
-            if ($field['type'] == 'custom')
+           // if ($field['type'] == 'custom')
                 $field['value'] = $this->getValue($input);
 
             $formTab['fields'][] = $field;

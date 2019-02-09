@@ -32,33 +32,8 @@
 * [Методы](#Методы)
 
 ## Константы
-Класс содержит константы, определяющие типы поддерживаемых инпутов
 
-    const TYPE__ADD_PRESET      = 'addpreset';
-	const TYPE__CHECKBOX        = 'checkbox';
-    const TYPE__CLOCK           = 'clock';
-	const TYPE__COLOR           = 'color';
-    const TYPE__CUSTOM          = 'custom';
-    const TYPE__DATE            = 'date';
-	const TYPE__DATETIME        = 'datetime';
-    const TYPE__FILE            = 'file';
-	const TYPE__HEADER          = 'header';
-    const TYPE__HIDDEN          = 'hidden';
-    const TYPE__IBLOCK          = 'iblock';
-    const TYPE__LABEL           = 'label';
-    const TYPE__NUMBER          = 'number';
-    const TYPE__PRESET_NAME     = 'presetname';
-    const TYPE__RADIO           = 'radio';
-    const TYPE__REMOVE_PRESET   = 'removepreset';
-    const TYPE__SELECTBOX       = 'selectbox';
-    const TYPE__SELECT_GROUP    = 'selectgroup';
-    const TYPE__SCHEDULE        = 'schedule';
-    const TYPE__SUBMIT          = 'submit';
-    const TYPE__SUBTABCONTROL   = 'subtabcontrol';
-    const TYPE__SUBTAB          = 'subtab';
-    const TYPE__TEXT            = 'text';
-	const TYPE__TEXTAREA        = 'textarea';
-
+    const SEPARATOR = '__'; // разделитель ид сайта, номера пресета и имени инпута в полном наименовании
 ## Поля
 ### `public static $type`
 Содержит тип инпута. Тип должен соотвествовать одной из констант, описанной выше

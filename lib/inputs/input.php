@@ -129,9 +129,6 @@ abstract class Input
         if (array_key_exists('required', $params))
             $this->setRequired($params['required']);
 
-        if (array_key_exists('hidden', $params))
-            $this->setHidden($params['hidden']);
-
 		// @TODO: deprecated flag
 		if (array_key_exists('display', $params))
 		    $this->setHidden(!$params['display']);
