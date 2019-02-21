@@ -47,7 +47,8 @@ class SubTabControl extends Input
      */
     public function addSubTabArray(array $subTabArray)
     {
-        $this->subTabsConfig[] = $subTabArray;
+        $this->subTabsConfig[]  = $subTabArray;
+        $this->children         = null;
     }
 
     /**
@@ -56,7 +57,8 @@ class SubTabControl extends Input
      */
     public function setSubTabsArray(array $subTabsArray)
     {
-        $this->subTabsConfig = $subTabsArray;
+        $this->subTabsConfig    = $subTabsArray;
+        $this->children         = null;
     }
 
     /**
@@ -165,7 +167,7 @@ class SubTabControl extends Input
      */
     public function clear()
     {
-        $subTabs    = $this->getSubTabs();
+        $subTabs    = $this->getChildren();
         $subTabsCnt = count($subTabs);
 
         for ($i = 0; $i < $subTabsCnt; ++$i){
