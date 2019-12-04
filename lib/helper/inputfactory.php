@@ -15,6 +15,8 @@ use Rover\Fadmin\Inputs\Addpreset;
 use Rover\Fadmin\Inputs\Checkbox;
 use Rover\Fadmin\Inputs\Clock;
 use Rover\Fadmin\Inputs\Custom;
+use Rover\Fadmin\Inputs\Date;
+use Rover\Fadmin\Inputs\DateTime;
 use Rover\Fadmin\Inputs\Header;
 use Rover\Fadmin\Inputs\Hidden;
 use Rover\Fadmin\Inputs\Iblock;
@@ -509,5 +511,37 @@ class InputFactory
             'default'   => $default,
             'siteId'    => $siteId
         );
+    }
+
+    /**
+     * @param        $name
+     * @param string $default
+     * @param bool   $disabled
+     * @param null   $label
+     * @param null   $help
+     * @param string $siteId
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public static function getDateTime($name, $default = '', $disabled = false, $label = null, $help = null, $siteId = '')
+    {
+        return self::get(DateTime::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
+    }
+
+    /**
+     * @param        $name
+     * @param string $default
+     * @param bool   $disabled
+     * @param null   $label
+     * @param null   $help
+     * @param string $siteId
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public static function getDate($name, $default = '', $disabled = false, $label = null, $help = null, $siteId = '')
+    {
+        return self::get(Date::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
     }
 }
