@@ -129,9 +129,6 @@ abstract class Input
         if (array_key_exists('required', $params))
             $this->setRequired($params['required']);
 
-        if (array_key_exists('hidden', $params))
-            $this->setHidden($params['hidden']);
-
 		// @TODO: deprecated flag
 		if (array_key_exists('display', $params))
 		    $this->setHidden(!$params['display']);
@@ -597,7 +594,7 @@ abstract class Input
      * @param      $name
      * @param null $presetId
      * @param null $siteId
-     * @return mixed|null
+     * @return Input|null
      * @throws Main\ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)

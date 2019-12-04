@@ -89,6 +89,21 @@ abstract class Options
     }
 
     /**
+     * @param        $name
+     * @param null   $default
+     * @param string $presetId
+     * @param string $siteId
+     * @return string
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function getDirectValue($name, $default = null, $presetId = '', $siteId = '')
+    {
+        return Main\Config\Option::get($this->moduleId, Input::getFullPath($name, $presetId, $siteId), $default);
+    }
+
+    /**
      * @param $moduleId
      * @return mixed
      * @throws ArgumentNullException
@@ -287,6 +302,29 @@ abstract class Options
 
 		return $this->cache->get($key);
 	}
+
+    /**
+     * @param        $inputName
+     * @param        $value
+     * @param string $presetId
+     * @param string $siteId
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
+     * @throws Main\SystemException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function setValue($inputName, $value, $presetId = '', $siteId = '')
+    {
+        if (is_null($inputName))
+            throw new ArgumentNullException('inputName');
+
+        $input = $this->getTabControl()->searchOneByName($inputName, $presetId, $siteId);
+
+        if (false === $input instanceof Input)
+            throw new Main\SystemException('input "' . $inputName . '" not found');
+
+        $input->setValue($value);
+    }
 
     /**
      * @param        $inputName

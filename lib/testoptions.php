@@ -95,7 +95,8 @@ class TestOptions extends Options
                         'default'   => '',
                         'maxLength' => 50,
                         'sort'      => '200',
-                        'placeholder' => 'enter a text here'
+                        'placeholder' => 'enter a text here',
+                        'disabled'  => true
                     ),
                     array(
                         'type'      => Text::getType(),
@@ -177,7 +178,8 @@ class TestOptions extends Options
                                         'label'     => 'This is a color',
                                         'default'   => '15:15',
                                         'help'      => 'Please, select a color',
-                                        'sort'      => '600'
+                                        'sort'      => '600',
+
                                     ),
                                     array(
                                         'type'      => Checkbox::getType(),

@@ -28,6 +28,7 @@ use Rover\Fadmin\Inputs\Selectbox;
 use Rover\Fadmin\Inputs\Selectgroup;
 use Rover\Fadmin\Inputs\Submit;
 use Rover\Fadmin\Inputs\SubTab;
+use Rover\Fadmin\Inputs\SubTabControl;
 use Rover\Fadmin\Inputs\Text;
 use Rover\Fadmin\Inputs\Textarea;
 use Bitrix\Main\Localization\Loc;
@@ -138,7 +139,7 @@ class InputFactory
 
     /**
      * @param        $name
-     * @param string $default
+     * @param null   $default
      * @param null   $cols
      * @param null   $rows
      * @param bool   $disabled
@@ -146,6 +147,7 @@ class InputFactory
      * @param null   $help
      * @param string $siteId
      * @param bool   $htmlEditor
+     * @param bool   $htmlEditorBB
      * @return array
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
@@ -298,6 +300,27 @@ class InputFactory
     }
 
     /**
+     * @param        $name
+     * @param array  $subTabs
+     * @param null   $default
+     * @param bool   $multiple
+     * @param bool   $disabled
+     * @param null   $label
+     * @param null   $help
+     * @param string $siteId
+     * @return array
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public static function getSubTabControl($name, array $subTabs = [], $default = null, $multiple = false, $disabled = false, $label = null, $help = null, $siteId = '')
+    {
+        $input = self::get(SubTabControl::getType(), $name, $default, $multiple, $disabled, $label, $help, $siteId);
+        $input['subTabs'] = $subTabs;
+
+        return $input;
+    }
+
+    /**
      * @param       $name
      * @param array $options
      * @param null  $default
@@ -371,19 +394,14 @@ class InputFactory
      * @param string $help
      * @param string $siteId
      * @return array
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
 	public static function getLabel($name = '', $default = '', $disabled = false, $label = '', $help = '', $siteId = '')
 	{
-		return array(
-		    'name'      => $name ? : Label::getType(),
-			'type'      => Label::getType(),
-			'label'     => $label,
-			'default'   => $default,
-            'disabled'  => $disabled,
-            'help'      => $help,
-            'siteId'    => $siteId
-        );
+	    $name = $name ? : Label::getType();
+
+	    return self::get(Label::getType(), $name, $default, false, $disabled, $label, $help, $siteId);
 	}
 
     /**

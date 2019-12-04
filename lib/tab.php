@@ -41,11 +41,11 @@ class Tab extends \Rover\Fadmin\Inputs\Input
 			$input = $inputs[$i];
 
 			if (isset($filter['id']) && strlen($filter['id'])
-				&& $filter['id'] == $input->getValueId())
+				&& $filter['id'] == $input->getFieldId())
 				return $input;
 
 			if (isset($filter['name']) && strlen($filter['name'])
-				&& $filter['name'] == $input->getValueName())
+				&& $filter['name'] == $input->getFieldName())
 				return $input;
 		}
 
@@ -79,26 +79,17 @@ class Tab extends \Rover\Fadmin\Inputs\Input
      */
 	public function searchByName($name)
 	{
-        $valueName  = self::getFullPath($name, $this->getPresetId(), $this->getSiteId());
-        $inputs     = $this->getInputs();
-        $inputsCnt  = count($inputs);
-
-        for ($i = 0; $i < $inputsCnt; ++$i) {
-            /** @var Input $input */
-            $input = $inputs[$i];
-            if ($input->getValueName() == $valueName)
-                return $input;
-        }
-
-		return null;
+	    return $this->searchOneByName($name);
 	}
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-     * @deprecated use getValueName
-	 */
+    /**
+     * @return mixed|string
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @deprecated
+     */
 	public function getName()
 	{
-		return self::getFullPath($this->name, $this->presetId, $this->siteId);
+	    return $this->getFieldName();
 	}
 }
