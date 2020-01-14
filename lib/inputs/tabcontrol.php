@@ -80,7 +80,7 @@ class Tabcontrol extends Input
 
     /**
      * @param bool $reload
-     * @return mixed|null
+     * @return Tab[]|null
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @throws SystemException
@@ -184,12 +184,14 @@ class Tabcontrol extends Input
 
         $tabs = $this->getTabs($reload);
 
-        foreach ($tabs as $tab)
+        foreach ($tabs as $tab) {
             /** @var Tab $tab */
             if ($tab->isPreset()
                 && ($tab->getPresetId() == $presetId)
                 && ($tab->getSiteId() == $siteId))
                 return $tab;
+        }
+
 
         return null;
     }

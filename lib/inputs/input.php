@@ -574,7 +574,10 @@ abstract class Input
 
         for ($i = 0; $i < $childrenCnt; ++$i) {
             /** @var Input $child */
-            $child  = $children[$i];
+            $child = $children[$i];
+            if (!$child instanceof self)
+                continue;
+
             if ($child->checkByFilter($filter))
                 $result[] = $child;
 
