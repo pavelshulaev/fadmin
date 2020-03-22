@@ -136,7 +136,7 @@ class Request extends RequestAbstract
         list($siteId, $value) = explode(Addpreset::SEPARATOR,
             $this->request->get(Addpreset::getType()));
 
-        $presetId = intval($this->options->preset->add(urldecode($value), urldecode($siteId)));
+        $presetId = intval($this->options->getPreset()->add(urldecode($value), urldecode($siteId)));
 
         if ($presetId){
             $presetTab = $this->options->getTabControl()->getTabByPresetId($presetId, $siteId, true);

@@ -36,15 +36,15 @@ class SubTabControl extends Input
                 white-space: normal!important;
             }
         </style>
-        <tr>
+        <?php $this->showRowStart(); ?>
             <td valign="top" colspan="2" align="center"><?php
 
             echo '<h3 style="text-align: left">' . $this->input->getLabel() . '</h3>';
 
             $this->showInput();
 
-            ?></td>
-        </tr><?php
+            ?></td><?php
+        $this->showRowEnd();
     }
 
     /**

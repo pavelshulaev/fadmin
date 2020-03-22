@@ -47,7 +47,7 @@ class Preset
         if (!$id)
             throw new ArgumentNullException('id');
 
-        $preset = $options->preset->getById($id);
+        $preset = $options->getPreset()->getById($id);
         if (!$preset)
             throw new ArgumentOutOfRangeException('id');
 

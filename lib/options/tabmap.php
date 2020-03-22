@@ -154,7 +154,7 @@ class TabMap
      */
     public function addPreset($value, $siteId = '')
     {
-        return $this->options->preset->add($value, $siteId);
+        return $this->options->getPreset()->add($value, $siteId);
     }
 
     /**
@@ -169,6 +169,6 @@ class TabMap
      */
     public function removePreset($id, $siteId = '')
     {
-        return $this->options->preset->remove($id, $siteId);
+        return $this->options->getPreset()->remove($id, $siteId);
     }
 }

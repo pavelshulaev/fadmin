@@ -25,9 +25,9 @@ class Custom extends Input
      */
     public function draw()
     {
-        ?><tr>
-            <td colspan="2"><?=$this->input->getLabel()?></td>
-        </tr><?php
+        $this->showRowStart();
+        ?><td colspan="2"><?=$this->input->getLabel()?></td><?php
+        $this->showRowEnd();
     }
 
     /**

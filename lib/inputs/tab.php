@@ -27,7 +27,7 @@ class Tab extends \Rover\Fadmin\Tab
     protected $inputsConfig = array();
 
     /** @var bool */
-    protected $preset;
+    protected $isPreset = false;
 
     /**
      * Tab constructor.
@@ -43,7 +43,7 @@ class Tab extends \Rover\Fadmin\Tab
     {
         parent::__construct($params, $options, $parent);
 
-        $this->preset = isset($params['preset'])
+        $this->isPreset = isset($params['preset'])
             ? (bool)$params['preset']
             : false;
 
@@ -190,7 +190,7 @@ class Tab extends \Rover\Fadmin\Tab
      */
     public function isPreset()
     {
-        return (bool)$this->preset;
+        return (bool)$this->isPreset;
     }
 
     /**
@@ -309,7 +309,7 @@ class Tab extends \Rover\Fadmin\Tab
         if (!$this->getPresetId())
             throw new ArgumentNullException('presetId');
 
-        return $this->optionsEngine->preset->getById(
+        return $this->optionsEngine->getPreset()->getById(
             $this->getPresetId(), $this->siteId, $reload);
     }
 
@@ -346,7 +346,7 @@ class Tab extends \Rover\Fadmin\Tab
         if (!strlen($name))
             throw new ArgumentNullException('name');
 
-        $this->optionsEngine->preset->updateName(
+        $this->optionsEngine->getPreset()->updateName(
             $this->getPresetId(),
             $name,
             $this->getSiteId()

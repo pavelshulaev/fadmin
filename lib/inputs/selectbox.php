@@ -44,7 +44,6 @@ class Selectbox extends Input
 		if (isset($params['options']))
 		    $this->setOptions($params['options']);
 
-
 		if (isset($params['size']) && intval($params['size']))
 		    $this->setSize($params['size']);
 		elseif ($params['multiple']){

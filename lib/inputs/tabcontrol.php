@@ -134,7 +134,7 @@ class Tabcontrol extends Input
 
                 $this->presetMap[$siteId] = true;
 
-                $presets = $this->optionsEngine->preset->getList($siteId);
+                $presets = $this->optionsEngine->getPreset()->getList($siteId);
 
                 if (is_array($presets) && count($presets)) {
                     foreach ($presets as $preset) {
@@ -185,13 +185,13 @@ class Tabcontrol extends Input
         $tabs = $this->getTabs($reload);
 
         foreach ($tabs as $tab) {
+
             /** @var Tab $tab */
             if ($tab->isPreset()
                 && ($tab->getPresetId() == $presetId)
                 && ($tab->getSiteId() == $siteId))
                 return $tab;
         }
-
 
         return null;
     }

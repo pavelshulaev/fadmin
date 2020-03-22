@@ -35,7 +35,7 @@ abstract class Input extends InputAbstract
         parent::__construct($input);
 
         $className          = get_called_class();
-        $inputClassName     = str_replace(self::$type, \Rover\Fadmin\Layout\Admin\Input::$type, $className);
+        $inputClassName     = str_replace('\\' . self::$type . '\\', '\\' . \Rover\Fadmin\Layout\Admin\Input::$type . '\\', $className);
         $this->adminInput   = new $inputClassName($input);
     }
 

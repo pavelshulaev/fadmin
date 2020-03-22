@@ -38,12 +38,21 @@ class Removepreset extends Submit
         if (!$presetId)
             return;
 
-        $this->showLabel(true);
-        $this->showPreInput();
-        $this->showInput();
-        $this->showPostInput();
-        $this->showHelp();
+        $this->showRowStart();
+        $this->showCells();
+        $this->showRowEnd();
     }
+
+    /**
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showCells()
+    {
+        $this->showLabelCell('width="50%" class="adm-detail-content-cell-l" style="vertical-align: top; padding-top: 7px;"', true);
+        $this->showInputCell('width="50%" class="adm-detail-content-cell-r"');
+    }
+
 
     /**
      * @return mixed|void

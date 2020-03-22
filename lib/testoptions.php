@@ -22,6 +22,7 @@ use Rover\Fadmin\Inputs\Password;
 use Rover\Fadmin\Inputs\PresetName;
 use Rover\Fadmin\Inputs\Radio;
 use Rover\Fadmin\Inputs\Removepreset;
+use Rover\Fadmin\Inputs\Row;
 use Rover\Fadmin\Inputs\Schedule;
 use Rover\Fadmin\Inputs\Selectbox;
 use Rover\Fadmin\Inputs\Selectgroup;
@@ -159,6 +160,31 @@ class TestOptions extends Options
                         'default'   => '15:15',
                         'sort'      => 400
                     ),
+                    [
+                        'type'      => Row::getType(),
+                        'inputs'    => [
+                            array(
+                                'type'      => Selectbox::getType(),
+                                'name'      => 'selectbox-row-1',
+                                'label'     => 'Mapping selectbox',
+                                'options'   => array(
+                                    '0' => 'option 0',
+                                    '1' => 'option 1',
+                                    '2' => 'option 2'
+                                )
+                            ),
+                            array(
+                                'type'      => Selectbox::getType(),
+                                'name'      => 'selectbox-row-2',
+                                'label'     => ' = ',
+                                'options'   => array(
+                                    '3' => 'option 3',
+                                    '4' => 'option 4',
+                                    '5' => 'option 5'
+                                )
+                            ),
+                        ]
+                    ],
                     array(
                         'type'      => SubTabControl::getType(),
                         'name'      => 'subtabcontrol',

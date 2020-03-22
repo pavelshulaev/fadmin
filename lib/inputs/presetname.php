@@ -49,7 +49,7 @@ class PresetName extends Text
 
 		if (empty($value) || ($value == $this->getDefault()))
 			$this->setValue($this->optionsEngine
-				->preset->getNameById($presetId, $this->getSiteId()));
+				->getPreset()->getNameById($presetId, $this->getSiteId()));
 	}
 
     /**
@@ -78,7 +78,7 @@ class PresetName extends Text
 			return false;
 		}
 
-		$this->optionsEngine->preset->updateName($presetId, $value,
+		$this->optionsEngine->getPreset()->updateName($presetId, $value,
 			$this->getSiteId());
 
 		return true;

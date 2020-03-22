@@ -85,7 +85,7 @@ abstract class Request
         list($siteId, $value) = explode(Addpreset::SEPARATOR,
             $this->request->get(Addpreset::getType()));
 
-        return intval($this->options->preset->add($value, $siteId));
+        return intval($this->options->getPreset()->add($value, $siteId));
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class Request
         list($siteId, $id) = explode(Removepreset::SEPARATOR,
             $this->request->get(Removepreset::getType()));
 
-        return $this->options->preset->remove($id, $siteId);
+        return $this->options->getPreset()->remove($id, $siteId);
     }
 
     /**

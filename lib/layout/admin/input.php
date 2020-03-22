@@ -31,11 +31,46 @@ abstract class Input extends InputAbstract
      */
     public function draw()
     {
-        $this->showLabel();
+        $this->showRowStart();
+        $this->showCells();
+        $this->showRowEnd();
+    }
+
+    /**
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showCells()
+    {
+        $this->showLabelCell('width="50%" class="adm-detail-content-cell-l" style="vertical-align: top; padding-top: 7px;"');
+        $this->showInputCell('width="50%" class="adm-detail-content-cell-r"');
+    }
+
+    /**
+     * @param      $cellParams
+     * @param bool $empty
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showLabelCell($cellParams, $empty = false)
+    {
+        $this->showCellStart($cellParams);
+        $this->showLabel($empty);
+        $this->showCellEnd();
+    }
+
+    /**
+     * @param $cellParams
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showInputCell($cellParams)
+    {
+        $this->showCellStart($cellParams);
         $this->showPreInput();
         $this->showInput();
         $this->showPostInput();
         $this->showHelp();
+        $this->showCellEnd();
     }
 
     /**
@@ -66,26 +101,48 @@ abstract class Input extends InputAbstract
     }
 
     /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showRowStart()
+    {
+        echo '<tr>';
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showRowEnd()
+    {
+        echo '</tr>';
+    }
+
+    /**
+     * @param $params
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showCellStart($params)
+    {
+        ?><td <?=trim($params)?>><?
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showCellEnd()
+    {
+        echo '</td>';
+    }
+
+    /**
      * @param bool $empty
      * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showLabel($empty = false)
     {
-        ?>
-        <tr>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-l"
-            style="vertical-align: top; padding-top: 7px;">
-            <?php if (!$empty) : ?>
-                <label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:</label>
-            <?php endif; ?>
-        </td>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-r"
-        ><?php
+       if ($empty) return;
+
+       ?><label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:</label><?php
     }
 
     /**
@@ -94,36 +151,23 @@ abstract class Input extends InputAbstract
      */
     protected function showMultiLabel()
     {
-        ?>
-        <tr>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-l"
-            style="vertical-align: top; padding-top: 7px;">
-            <label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:<br>
-                <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
-            </label>
-        </td>
-        <td
-            width="50%"
-            class="adm-detail-content-cell-r"
-        ><?php
+        ?><label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:<br>
+            <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
+        </label><?php
     }
 
     /**
-     * @author Pavel Shulaev (http://rover-it.me)
+     * @param bool $br
+     * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function showHelp()
+    protected function showHelp($br = true)
     {
         $help = trim($this->input->getHelp());
 
         if (strlen($help)):
-            ?><br><small style="color: #777;"><?=$help?></small><?php
+            if ($br) echo '<br>';
+            ?><small style="color: #777;"><?=$help?></small><?php
         endif;
-
-        ?></td>
-        </tr>
-        <?php
     }
 
     /**

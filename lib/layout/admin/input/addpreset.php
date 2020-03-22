@@ -23,17 +23,13 @@ Loc::loadMessages(__FILE__);
 class Addpreset extends Submit
 {
     /**
-     * @return mixed|void
      * @throws \Bitrix\Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function showCells()
     {
-        $this->showLabel(true);
-        $this->showPreInput();
-        $this->showInput();
-        $this->showPostInput();
-        $this->showHelp();
+        $this->showLabelCell('width="50%" class="adm-detail-content-cell-l" style="vertical-align: top; padding-top: 7px;"', true);
+        $this->showInputCell('width="50%" class="adm-detail-content-cell-r"');
     }
 
     /**

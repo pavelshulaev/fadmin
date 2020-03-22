@@ -402,6 +402,7 @@ abstract class Input
 
 		if (!$request->offsetExists($this->getFieldName())
 			&& (static::getType() != Checkbox::getType())
+			&& (static::getType() != Row::getType())
             && (static::getType() != File::getType()))
 			return false;
 

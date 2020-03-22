@@ -24,6 +24,19 @@ class Textarea extends Input
     /**
      * @return mixed|void
      * @throws \Bitrix\Main\ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function draw()
+    {
+        $this->showRowStart();
+        $this->showLabelCell('width="50%" style="vertical-align: top; padding-top: 7px;" class="adm-detail-valign-top"');
+        $this->showInputCell('width="50%" class="adm-detail-content-cell-r"');
+        $this->showRowEnd();
+    }
+
+    /**
+     * @return mixed|void
+     * @throws \Bitrix\Main\ArgumentNullException
      * @throws \Bitrix\Main\ArgumentOutOfRangeException
      * @throws \Bitrix\Main\LoaderException
      * @author Pavel Shulaev (https://rover-it.me)
@@ -105,24 +118,14 @@ class Textarea extends Input
     }
 
     /**
-     * @param bool $empty
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @param bool $br
+     * @throws \Bitrix\Main\LoaderException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showLabel($empty = false)
+    public function showHelp($br = true)
     {
-        $valueId = $this->input->getFieldId();
-        ?>
-        <tr>
-        <td
-            width="50%"
-            style="vertical-align: top; padding-top: 7px;"
-            class="adm-detail-valign-top">
-            <?php if (!$empty) : ?>
-                <label for="<?=$valueId?>"><?=$this->input->getLabel()?>:</label>
-            <?php endif; ?>
-        </td>
-        <td width="50%"><?php
-    }
+        $br = !($this->input->isHtmlEditor() && Loader::includeModule("fileman"));
 
+        parent::showHelp($br);
+    }
 }

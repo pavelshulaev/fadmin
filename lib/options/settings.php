@@ -10,6 +10,7 @@
 
 namespace Rover\Fadmin\Options;
 
+use Bitrix\Main\ArgumentNullException;
 use Rover\Fadmin\Options;
 
 /**
@@ -52,6 +53,22 @@ class Settings
 	{
 		$this->options  = $options;
 	}
+
+    /**
+     * @param $key
+     * @return mixed|null
+     * @throws ArgumentNullException
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+	public function getDefault($key)
+    {
+        $key = trim($key);
+        if (!strlen($key))
+            throw new ArgumentNullException('key');
+
+        return array_key_exists($key, $this->defaults)
+            ? $this->defaults[$key] : null;
+    }
 
     /**
      * @throws \Bitrix\Main\ArgumentNullException

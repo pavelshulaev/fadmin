@@ -82,10 +82,12 @@ abstract class Options
 
         $this->message  = new Message();
         $this->event    = new Event($this);
-        $this->preset   = new Preset($this);
         $this->tabMap   = new TabMap($this);
         $this->settings = new Settings($this);
         $this->cache    = new Cache($this);
+
+        // init preset, @TODO - remove;
+        $this->getPreset();
     }
 
     /**
@@ -377,10 +379,24 @@ abstract class Options
 
     /**
      * @return Preset
+     * @throws ArgumentNullException
+     * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getPreset()
     {
+        if (is_null($this->preset))
+        {
+            /*$presetClass    = $presetClass= $this->settings->getPresetClass();
+            $defaultClass   = $this->settings->getDefault(Settings::PRESET_CLASS);
+
+            if (($presetClass != $defaultClass) && !is_subclass_of($presetClass, $defaultClass))
+                throw new Main\ArgumentOutOfRangeException('presetClass');
+
+            $this->preset   = new $presetClass($this);*/
+            $this->preset   = new Preset($this);
+        }
+
         return $this->preset;
     }
 
