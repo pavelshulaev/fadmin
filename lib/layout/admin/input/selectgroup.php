@@ -10,6 +10,10 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
+
 /**
  * Class Selectgroup
  *
@@ -23,9 +27,9 @@ class Selectgroup extends Selectbox
 
     /**
      * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()
@@ -35,9 +39,9 @@ class Selectgroup extends Selectbox
 
     /**
      * @return string
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function getList()
@@ -62,23 +66,61 @@ class Selectgroup extends Selectbox
         $html = '';
 
         if(!isset(self::$idCache[$optionsId]))
+
+            $items = $this->input->getOptions();
+            $resultItems = [];
+
+            // for keeping sort
+            foreach ($items as $itemId => $itemValue)
+            {
+                $item = [
+                    'id' => $itemId,
+                    'name' => $itemValue['name']
+                ];
+
+
+                if (isset($itemValue['options']))
+                {
+                    $itemOptions = [];
+                    foreach ($itemValue['options'] as $optionId => $optionName)
+                        $itemOptions[] = ['id' => $optionId, 'name' => $optionName];
+
+                    $item['options'] = $itemOptions;
+                }
+
+                $resultItems[] = $item;
+            }
+
             $html .= '
 			<script type="text/javascript">
                 function OnType_'.$optionsId.'_Changed(typeSelect, selectID)
                 {
-                    var items       = '.\CUtil::PhpToJSObject($this->input->getOptions()).';
-                    var selected    = BX(selectID);
-                    
+                    var items       = '.\CUtil::PhpToJSObject($resultItems).';
+                    var selected    = BX(selectID), options;
+                    console.log(typeSelect);
+                    console.log(items);
                     if(!!selected)
                     {
                         for(var i=selected.length-1; i >= 0; i--){
                             selected.remove(i);
                         }
-                            
-                        for(var j in items[typeSelect.value]["options"])
+                        
+                        // search selected group
+                        for(var k in items)
                         {
-                            var newOption = new Option(items[typeSelect.value]["options"][j], j, false, false);
-                            selected.options.add(newOption);
+                            if ((items[k]["id"] == typeSelect.value)
+                                && (items[k]["options"]))
+                            {
+                                options = items[k]["options"];
+                            }
+                        }
+                        
+                        if (!!options) {
+                            for(var j in options)
+                            {
+                                var newOption = new Option(options[j]["name"], options[j]["id"], false, false);
+                                selected.options.add(newOption);
+                            }
                         }
                     }
                 }
