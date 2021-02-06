@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Rover\Fadmin\Layout\Admin\Input;
 
 /**
@@ -22,8 +24,8 @@ class Radio extends Input
 {
     /**
      * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function showInput()
@@ -35,7 +37,11 @@ class Radio extends Input
 
         foreach ($this->input->getOptions() as $optionValue => $optionName):
 
-            ?><label><input <?=$this->getCommonAttributes()?>
+            ?><label><input
+                id="<?=$this->input->getFieldId()?>_<?=$optionValue?>"
+                type="<?=$this->getType()?>"
+                value="<?=$optionValue?>"
+                name="<?=$this->input->getFieldName()?>"
                 <?=$value == $optionValue ? ' checked="checked" ' : ''
                 ?>> <?=$optionName?></label><br><?php
 

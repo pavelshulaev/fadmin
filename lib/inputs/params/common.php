@@ -172,6 +172,9 @@ trait Common
 
         $this->siteId = $siteId;
 
+        if (is_null($this->children))
+            return $this;
+
         $childrenCnt = count($this->children);
         if (!$childrenCnt)
             return $this;
