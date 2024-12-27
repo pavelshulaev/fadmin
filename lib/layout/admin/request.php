@@ -11,6 +11,7 @@
 namespace Rover\Fadmin\Layout\Admin;
 
 use Bitrix\Main\Application;
+use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\SystemException;
 use Rover\Fadmin\Inputs\Addpreset;
@@ -26,90 +27,78 @@ use Rover\Fadmin\Inputs\Tab;
  */
 class Request extends RequestAbstract
 {
-    /** @var mixed|string */
-    protected $moduleId;
-
-    /** @var string */
-    protected $activeTab;
-
-    /** @var mixed|string */
-    protected $requestMethod = 'POST';
-
-    /** @var bool */
-    protected $update;
-
-    /** @var bool */
-    protected $apply;
-
-    /** @var bool */
-    protected $restoreDefaults;
+    protected string $moduleId;
+    protected string $activeTab;
+    protected string $requestMethod = 'POST';
+    protected bool   $update;
+    protected bool   $apply;
+    protected bool   $restoreDefaults;
 
     /**
      * Request constructor.
      *
      * @param Options $options
-     * @param array   $params
+     * @param array $params
      * @throws SystemException
      */
-    public function __construct(Options $options, array $params = array())
+    public function __construct(Options $options, array $params = [])
     {
         parent::__construct($options, $params);
 
         $this->moduleId = htmlspecialcharsbx($this->options->getModuleId());
 
-        if (!empty($this->params['request_method']))
+        if (!empty($this->params['request_method'])) {
             $this->requestMethod = htmlspecialcharsbx($this->params['request_method']);
+        }
 
         $this->activeTab = isset($this->params['active_tab'])
             ? trim($this->params['active_tab'])
             : null;
 
-        $this->update = isset($this->params['update'])
-            ? (bool)$this->params['update']
-            : false;
+        $this->update = isset($this->params['update']) && $this->params['update'];
 
-        $this->apply = isset($this->params['apply'])
-            ? (bool)$this->params['apply']
-            : false;
+        $this->apply = isset($this->params['apply']) && $this->params['apply'];
 
-        $this->restoreDefaults  = isset($this->params['restore_defaults'])
-            ? (bool)$this->params['restore_defaults']
-            : false;
+        $this->restoreDefaults = isset($this->params['restore_defaults']) && $this->params['restore_defaults'];
     }
 
     /**
-     * @return mixed|void
+     * @return void
      * @throws SystemException
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setValues()
+    public function setValues(): void
     {
-        if (!$this->check())
+        if (!$this->check()) {
             return;
+        }
 
-        if(strlen($this->restoreDefaults) > 0)
+        if (strlen($this->restoreDefaults) > 0) {
             $this->restoreDefaults();
-        else
+        } else {
             try {
-                if ($this->options->getTabControl()->setValueFromRequest(true))
+                if ($this->options->getTabControl()->setValueFromRequest(true)) {
                     $this->redirect();
+                }
             } catch (\Exception $e) {
                 $this->options->handleException($e);
             }
+        }
     }
 
     /**
-     * @param null $activeTab
+     * @param string|null $activeTab
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function redirect($activeTab = null)
+    protected function redirect($activeTab = null): void
     {
         $request = Application::getInstance()->getContext()->getRequest();
 
-        if (strlen($this->update) && strlen($request["back_url_settings"]))
+        if (strlen($this->update) && strlen($request["back_url_settings"])) {
             parent::redirect($request["back_url_settings"]);
+        }
 
         $activeTab = $activeTab
             ? 'tabControl_active_tab=' . $activeTab
@@ -125,23 +114,24 @@ class Request extends RequestAbstract
     }
 
     /**
-     * @return int|void
+     * @return int
      * @throws ArgumentOutOfRangeException
      * @throws SystemException
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function addPreset()
     {
-        list($siteId, $value) = explode(Addpreset::SEPARATOR,
+        [$siteId, $value] = explode(Addpreset::SEPARATOR,
             $this->request->get(Addpreset::getType()));
 
         $presetId = intval($this->options->getPreset()->add(urldecode($value), urldecode($siteId)));
 
-        if ($presetId){
+        if ($presetId) {
             $presetTab = $this->options->getTabControl()->getTabByPresetId($presetId, $siteId, true);
-            if (!$presetTab instanceof Tab)
+            if (!$presetTab instanceof Tab) {
                 throw new ArgumentOutOfRangeException('presetId');
+            }
 
             $this->redirect($presetTab->getFieldName());
         }
@@ -151,11 +141,12 @@ class Request extends RequestAbstract
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function removePreset()
+    protected function removePreset(): void
     {
-        try{
-            if (parent::removePreset())
+        try {
+            if (parent::removePreset()) {
                 $this->redirect();
+            }
         } catch (\Exception $e) {
             throw new SystemException($e->getMessage());
         }
@@ -165,19 +156,19 @@ class Request extends RequestAbstract
      * @return bool
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    protected function check()
+    protected function check(): bool
     {
         return (($this->requestMethod === 'POST')
-            && (strlen($this->update.$this->apply.$this->restoreDefaults) > 0)
+            && (strlen($this->update . $this->apply . $this->restoreDefaults) > 0)
             && check_bitrix_sessid());
     }
 
     /**
      * @throws SystemException
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function restoreDefaults()
+    protected function restoreDefaults(): void
     {
         parent::restoreDefaults();
         $this->redirect();

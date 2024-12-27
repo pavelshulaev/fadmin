@@ -10,10 +10,14 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Options;
 use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
+
 /**
  * Class Schedule
  *
@@ -22,266 +26,262 @@ Loc::loadMessages(__FILE__);
  */
 class Schedule extends Input
 {
-	/** @var string*/
-	protected $periodLabel;
-
-	/** @var int */
-	protected $height = 300;
-
-	/** @var int */
-	protected $width = 500;
-
-    /** @var array */
-	protected $inputValue = array();
+    protected string $periodLabel;
+    protected int    $height     = 300;
+    protected int    $width      = 500;
+    protected array  $inputValue = [];
 
     /**
      * Schedule constructor.
      *
-     * @param array      $params
-     * @param Options    $options
+     * @param array $params
+     * @param Options $options
      * @param Input|null $parent
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      */
-	public function __construct(array $params, Options $options, Input $parent = null)
-	{
-		// for automatic serialize/unserialize
-		$params['multiple'] = true;
+    public function __construct(array $params, Options $options, Input $parent = null)
+    {
+        // for automatic serialize/unserialize
+        $params['multiple'] = true;
 
-		parent::__construct($params, $options, $parent);
+        parent::__construct($params, $options, $parent);
 
-		$this->periodLabel = isset($params['periodLabel'])
-			? $params['periodLabel']
-			: Loc::getMessage('rover-fa__schedule-default-period');
+        $this->periodLabel = $params['periodLabel'] ?? Loc::getMessage('rover-fa__schedule-default-period');
 
-		if (isset($params['width']) && intval($params['width']))
-			$this->width = $params['width'];
+        if (isset($params['width']) && intval($params['width'])) {
+            $this->width = $params['width'];
+        }
 
-		if (isset($params['height']) && intval($params['height']))
-			$this->height = $params['height'];
-	}
+        if (isset($params['height']) && intval($params['height'])) {
+            $this->height = $params['height'];
+        }
+    }
 
     /**
      * @param $value
-     * @return bool|mixed
+     * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function beforeSaveRequest(&$value)
-	{
-		$periods    = json_decode($value, true);
+    public function beforeSaveRequest(&$value): bool
+    {
+        $periods = json_decode($value, true);
 
-		if (is_array($periods)){
+        if (is_array($periods)) {
 
-			$value = $this->preparePeriodsDates($periods);
-			$value = $this->pastePeriodsTogether($value);
-			$value = $this->markWeekDays($value);
+            $value = $this->preparePeriodsDates($periods);
+            $value = $this->pastePeriodsTogether($value);
+            $value = $this->markWeekDays($value);
 
-		} else
-			$value = array();
+        } else {
+            $value = [];
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * @param $periods
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function markWeekDays($periods)
-	{
-		$result = array();
+    /**
+     * @param array $periods
+     * @return array
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    protected function markWeekDays(array $periods): array
+    {
+        $result = [];
 
-		foreach ($periods as $period)
-		{
-		    $dateStartObj   = new \DateTime();
-		    $dateEndObj     = new \DateTime();
+        foreach ($periods as $period) {
+            $dateStartObj = new \DateTime();
+            $dateEndObj   = new \DateTime();
 
-			$dateStart  = $dateStartObj->setTimestamp($period['start']);
-			$dateEnd    = $dateEndObj->setTimestamp($period['end']);
+            $dateStart = $dateStartObj->setTimestamp($period['start']);
+            $dateEnd   = $dateEndObj->setTimestamp($period['end']);
 
-			$result[] = array(
-				'startWeekDay'  => $dateStart->format('l'),
-				'startTime'     => $dateStart->format('H:i:s'),
-				'endWeekDay'    => $dateEnd->format('l'),
-				'endTime'       => $dateEnd->format('H:i:s'),
-            );
-		}
+            $result[] = [
+                'startWeekDay' => $dateStart->format('l'),
+                'startTime'    => $dateStart->format('H:i:s'),
+                'endWeekDay'   => $dateEnd->format('l'),
+                'endTime'      => $dateEnd->format('H:i:s'),
+            ];
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * make timestamps from periods` dates, remove invalid periods
-	 * @param array $periods
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function preparePeriodsDates(array $periods)
-	{
-		$result = array();
+    /**
+     * make timestamps from periods` dates, remove invalid periods
+     * @param array $periods
+     * @return array
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    protected function preparePeriodsDates(array $periods): array
+    {
+        $result = [];
 
-		$minTimestamp = $this->getMinTimestamp();
-		$maxTimestamp = $this->getMaxTimestamp();
+        $minTimestamp = $this->getMinTimestamp();
+        $maxTimestamp = $this->getMaxTimestamp();
 
-		foreach ($periods as $period)
-		{
-			$period['start']    = $this->createTimestamp($period['start']);
-			$period['end']      = $this->createTimestamp($period['end']);
+        foreach ($periods as $period) {
+            $period['start'] = $this->createTimestamp($period['start']);
+            $period['end']   = $this->createTimestamp($period['end']);
 
-			if ($period['start'] < $minTimestamp)
-				$period['start'] = $minTimestamp;
+            if ($period['start'] < $minTimestamp) {
+                $period['start'] = $minTimestamp;
+            }
 
-			if ($period['end'] > $maxTimestamp)
-				$period['end'] = $maxTimestamp;
+            if ($period['end'] > $maxTimestamp) {
+                $period['end'] = $maxTimestamp;
+            }
 
-			if (intval($period['start']) && intval($period['end'])
-				&& ($period['start'] < $period['end']))
-				$result[] = $period;
-		}
+            if (intval($period['start']) && intval($period['end'])
+                && ($period['start'] < $period['end'])) {
+                $result[] = $period;
+            }
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * @param $periods
-	 * @return array
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function pastePeriodsTogether(array $periods)
-	{
-		do {
-			$result = array();
-			$pasted = false;
+    /**
+     * @param array $periods
+     * @return array
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    protected function pastePeriodsTogether(array $periods): array
+    {
+        do {
+            $result = [];
+            $pasted = false;
 
-			foreach ($periods as $periodNum => $period){
+            foreach ($periods as $periodNum => $period) {
 
-				// first value
-				if (!count($result)) {
-					$result[] = $period;
-					continue;
-				}
+                // first value
+                if (!count($result)) {
+                    $result[] = $period;
+                    continue;
+                }
 
-				$periodInResult = false;
+                $periodInResult = false;
 
-				foreach ($result as &$resultPeriod){
+                foreach ($result as &$resultPeriod) {
 
-					if (($period['start'] >= $resultPeriod['start'])
-						&& ($period['start'] <= $resultPeriod['end']))
-					{
-						if ($period['end'] > $resultPeriod['end']){
-							$resultPeriod['end'] = $period['end'];
-							$pasted = true;
-						}
+                    if (($period['start'] >= $resultPeriod['start'])
+                        && ($period['start'] <= $resultPeriod['end'])) {
+                        if ($period['end'] > $resultPeriod['end']) {
+                            $resultPeriod['end'] = $period['end'];
+                            $pasted              = true;
+                        }
 
-						$periodInResult = true;
+                        $periodInResult = true;
 
-						break;
-					}
+                        break;
+                    }
 
-					if (($period['end'] <= $resultPeriod['end'])
-						&& ($period['end'] >= $resultPeriod['start']))
-					{
-						if ($period['start'] < $resultPeriod['start']){
-							$resultPeriod['start'] = $period['start'];
-							$pasted = true;
-						}
+                    if (($period['end'] <= $resultPeriod['end'])
+                        && ($period['end'] >= $resultPeriod['start'])) {
+                        if ($period['start'] < $resultPeriod['start']) {
+                            $resultPeriod['start'] = $period['start'];
+                            $pasted                = true;
+                        }
 
-						$periodInResult = true;
+                        $periodInResult = true;
 
-						break;
-					}
-				}
+                        break;
+                    }
+                }
 
-				if (!$periodInResult)
-					$result[] = $period;
-			}
+                if (!$periodInResult) {
+                    $result[] = $period;
+                }
+            }
 
-			$periods = $result;
+            $periods = $result;
 
-		} while ($pasted);
+        } while ($pasted);
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * @param $time
-	 * @return int|null
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function createTimestamp($time)
-	{
-		$dateTime = \DateTime::createFromFormat('Y-m-d\TH:i:s', $time);
+    /**
+     * @param $time
+     * @return int|null
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    protected function createTimestamp($time): ?int
+    {
+        $dateTime = \DateTime::createFromFormat('Y-m-d\TH:i:s', $time);
 
-		if (false === $dateTime instanceof \DateTime)
-			return null;
+        if (false === $dateTime instanceof \DateTime) {
+            return null;
+        }
 
-		return $dateTime->getTimestamp();
-	}
+        return $dateTime->getTimestamp();
+    }
 
-	/**
-	 * @return int
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function getMinTimestamp()
-	{
-	    $dateTime = new \DateTime('Monday this week');
+    /**
+     * @return int
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    protected function getMinTimestamp(): int
+    {
+        $dateTime = new \DateTime('Monday this week');
 
-		return $dateTime->getTimestamp();
-	}
+        return $dateTime->getTimestamp();
+    }
 
-	/**
-	 * @return int
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function getMaxTimestamp()
-	{
-	    $dateTime = new \DateTime('Monday next week');
+    /**
+     * @return int
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    protected function getMaxTimestamp(): int
+    {
+        $dateTime = new \DateTime('Monday next week');
 
-		return $dateTime->getTimestamp() - 1;
-	}
+        return $dateTime->getTimestamp() - 1;
+    }
 
     /**
      * @param $value
-     * @author Pavel Shulaev (https://rover-it.me)
+     * @throws \Exception
      * @internal
+     * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function afterLoadValue(&$value)
-	{
-		foreach ($value as &$period)
-		{
-			$period['start']    = $this->getDateByWeekDayTime($period['startWeekDay'], $period['startTime']);
-			$period['end']      = $this->getDateByWeekDayTime($period['endWeekDay'], $period['endTime']);
+    public function afterLoadValue(&$value): void
+    {
+        foreach ($value as &$period) {
+            $period['start'] = $this->getDateByWeekDayTime($period['startWeekDay'], $period['startTime']);
+            $period['end']   = $this->getDateByWeekDayTime($period['endWeekDay'], $period['endTime']);
 
-			$period['jqwStartMonth']    = $period['start']->format('m') - 1;
-			$period['jqwEndMonth']      = $period['end']->format('m') - 1;
+            $period['jqwStartMonth'] = $period['start']->format('m') - 1;
+            $period['jqwEndMonth']   = $period['end']->format('m') - 1;
 
-			$this->inputValue[] = array(
-				'start' => $period['start']->format('Y-m-d\TH:i:s'),
-				'end'   => $period['end']->format('Y-m-d\TH:i:s')
-            );
-		}
-	}
+            $this->inputValue[] = [
+                'start' => $period['start']->format('Y-m-d\TH:i:s'),
+                'end'   => $period['end']->format('Y-m-d\TH:i:s')
+            ];
+        }
+    }
 
-	/**
-	 * @param $weekDay
-	 * @param $time
-	 * @return \DateTime
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	protected function getDateByWeekDayTime($weekDay, $time)
-	{
-		$date = new \DateTime($weekDay . ' this week');
-		$time = explode(':', $time);
-		$date->setTime($time[0], $time[1], $time[2]);
+    /**
+     * @param $weekDay
+     * @param $time
+     * @return \DateTime
+     * @throws \Exception
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    protected function getDateByWeekDayTime($weekDay, $time): \DateTime
+    {
+        $date = new \DateTime($weekDay . ' this week');
+        $time = explode(':', $time);
+        $date->setTime($time[0], $time[1], $time[2]);
 
-		return $date;
-	}
+        return $date;
+    }
 
     /**
      * @return string
      */
-    public function getPeriodLabel()
+    public function getPeriodLabel(): string
     {
         return $this->periodLabel;
     }
@@ -289,7 +289,7 @@ class Schedule extends Input
     /**
      * @param string $periodLabel
      */
-    public function setPeriodLabel($periodLabel)
+    public function setPeriodLabel(string $periodLabel): void
     {
         $this->periodLabel = $periodLabel;
     }
@@ -297,7 +297,7 @@ class Schedule extends Input
     /**
      * @return int
      */
-    public function getHeight()
+    public function getHeight(): int
     {
         return $this->height;
     }
@@ -305,7 +305,7 @@ class Schedule extends Input
     /**
      * @param int $height
      */
-    public function setHeight($height)
+    public function setHeight(int $height): void
     {
         $this->height = $height;
     }
@@ -313,7 +313,7 @@ class Schedule extends Input
     /**
      * @return int
      */
-    public function getWidth()
+    public function getWidth(): int
     {
         return $this->width;
     }
@@ -321,7 +321,7 @@ class Schedule extends Input
     /**
      * @param int $width
      */
-    public function setWidth($width)
+    public function setWidth(int $width): void
     {
         $this->width = $width;
     }
@@ -329,7 +329,7 @@ class Schedule extends Input
     /**
      * @return array
      */
-    public function getInputValue()
+    public function getInputValue(): array
     {
         return $this->inputValue;
     }
@@ -337,7 +337,7 @@ class Schedule extends Input
     /**
      * @param array $inputValue
      */
-    public function setInputValue($inputValue)
+    public function setInputValue($inputValue): void
     {
         $this->inputValue = $inputValue;
     }

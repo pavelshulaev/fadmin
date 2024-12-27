@@ -23,16 +23,16 @@ use Bitrix\Main\SystemException;
 class Selectgroup extends Selectbox
 {
     /** @var array */
-    protected static $idCache = array();
+    protected static array $idCache = [];
 
     /**
-     * @return mixed|void
+     * @return void
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         echo $this->getList();
     }
@@ -44,69 +44,69 @@ class Selectgroup extends Selectbox
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function getList()
+    protected function getList(): string
     {
-        if (!$this->input instanceof \Rover\Fadmin\Inputs\Selectgroup)
+        if (!$this->input instanceof \Rover\Fadmin\Inputs\Selectgroup) {
             return '';
+        }
 
         $options = $this->input->getOptions();
 
-        if (empty($options))
+        if (empty($options)) {
             return '-';
+        }
 
-        $optionsId  = md5(serialize($options));
+        $optionsId = md5(serialize($options));
 
         $value = $this->input->getValue();
-        $value = empty($value) ? array() : $value;
+        $value = empty($value) ? [] : $value;
 
-        if (!is_array($value))
-            $value = array($value);
+        if (!is_array($value)) {
+            $value = [$value];
+        }
 
         // change group script
         $html = '';
 
-        if(!isset(self::$idCache[$optionsId]))
-
-            $items = $this->input->getOptions();
+        if (!isset(self::$idCache[$optionsId])) {
             $resultItems = [];
+        }
 
-            // for keeping sort
-            foreach ($items as $itemId => $itemValue)
-            {
-                $item = [
-                    'id' => $itemId,
-                    'name' => $itemValue['name']
-                ];
+        // for keeping sort
+        foreach ($options as $itemId => $itemValue) {
+            $item = [
+                'id'   => $itemId,
+                'name' => $itemValue['name']
+            ];
 
 
-                if (isset($itemValue['options']))
-                {
-                    $itemOptions = [];
-                    foreach ($itemValue['options'] as $optionId => $optionName)
-                        $itemOptions[] = ['id' => $optionId, 'name' => $optionName];
-
-                    $item['options'] = $itemOptions;
+            if (isset($itemValue['options'])) {
+                $itemOptions = [];
+                foreach ($itemValue['options'] as $optionId => $optionName) {
+                    $itemOptions[] = ['id' => $optionId, 'name' => $optionName];
                 }
 
-                $resultItems[] = $item;
+                $item['options'] = $itemOptions;
             }
 
-            $html .= '
+            $resultItems[] = $item;
+        }
+
+        $html .= '
 			<script type="text/javascript">
-                function OnType_'.$optionsId.'_Changed(typeSelect, selectID)
+                function OnType_' . $optionsId . '_Changed(typeSelect, selectID)
                 {
-                    var items       = '.\CUtil::PhpToJSObject($resultItems).';
-                    var selected    = BX(selectID), options;
-                    console.log(typeSelect);
-                    console.log(items);
+                    let items       = ' . \CUtil::PhpToJSObject($resultItems) . ';
+                    let selected    = BX(selectID), options;
+                  
                     if(!!selected)
                     {
-                        for(var i=selected.length-1; i >= 0; i--){
+                        for(let i=selected.length-1; i >= 0; i--){
                             selected.remove(i);
                         }
                         
                         // search selected group
-                        for(var k in items)
+                        for(let k in items)
                         {
                             if ((items[k]["id"] == typeSelect.value)
                                 && (items[k]["options"]))
@@ -116,9 +116,9 @@ class Selectgroup extends Selectbox
                         }
                         
                         if (!!options) {
-                            for(var j in options)
+                            for(let j in options)
                             {
-                                var newOption = new Option(options[j]["name"], options[j]["id"], false, false);
+                                let newOption = new Option(options[j]["name"], options[j]["id"], false, false);
                                 selected.options.add(newOption);
                             }
                         }
@@ -130,34 +130,38 @@ class Selectgroup extends Selectbox
         $groupValue     = $this->input->getGroupValue() ?: $this->input->calcGroupValue();
         $valueName      = $this->input->getFieldName();
         $valueGroupName = $this->input->getGroupValueName();
-        $onChangeGroup  = 'OnType_'.$optionsId.'_Changed(this, \''.\CUtil::JSEscape($valueName).'\');';
+        $onChangeGroup  = 'OnType_' . $optionsId . '_Changed(this, \'' . \CUtil::JSEscape($valueName) . '\');';
 
         $html .= '<select 
-                ' . ($this->input->isDisabled() ? 'disabled="disabled"': '') . '
+                ' . ($this->input->isDisabled() ? 'disabled="disabled"' : '') . '
                 name="' . $valueGroupName . '"
                 id="' . $valueGroupName . '"
-                onchange="'.htmlspecialcharsbx($onChangeGroup).'">'."\n";
+                onchange="' . htmlspecialcharsbx($onChangeGroup) . '">' . "\n";
 
-        foreach($options as $key => $optionValue)
-            $html .= '<option value="' . htmlspecialcharsbx($key) . '"' . ($groupValue == $key? ' selected': '') . '>'
-                . htmlspecialcharsEx(isset($optionValue['name']) ? $optionValue['name'] : $key)
-                . '</option>'."\n";
+        foreach ($options as $key => $optionValue) {
+            $html .= '<option value="' . htmlspecialcharsbx($key) . '"' . ($groupValue == $key ? ' selected' : '') . '>'
+                . htmlspecialcharsEx($optionValue['name'] ?? $key)
+                . '</option>' . "\n";
+        }
 
         $html .= "</select>\n";
         $html .= "&nbsp;\n";
         $html .= '<select
-                    ' . ($this->input->isDisabled() ? ' disabled="disabled" ': '') . ' 
-                    ' . ($this->input->isRequired() ? ' required="required" ': '') . ' 
+                    ' . ($this->input->isDisabled() ? ' disabled="disabled" ' : '') . ' 
+                    ' . ($this->input->isRequired() ? ' required="required" ' : '') . ' 
                     name="' . $valueName . ($this->input->isMultiple()
                 ? '[]" multiple="multiple" size="' . $this->input->getSize() . '" '
                 : '"')
-            . ' id="' . $valueName . '">'."\n";
+            . ' id="' . $valueName . '">' . "\n";
 
-        if (!is_null($groupValue))
-            foreach($options[$groupValue]['options'] as $key => $optionValue)
-                $html .= '<option value="' . htmlspecialcharsbx($key) . '"' . (in_array($key, $value)? ' selected': '').'>'
+        if ($groupValue) {
+            foreach ($options[$groupValue]['options'] as $key => $optionValue) {
+                $html .= '<option value="' . htmlspecialcharsbx($key) . '"' . (in_array($key,
+                        $value) ? ' selected' : '') . '>'
                     . htmlspecialcharsEx($optionValue)
-                    . '</option>'."\n";
+                    . '</option>' . "\n";
+            }
+        }
 
         $html .= "</select>\n";
 

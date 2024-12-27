@@ -24,14 +24,14 @@ class Tab extends \Rover\Fadmin\Inputs\Input
 {
     /**
      * @param array $filter
-     * @param bool  $reload
+     * @param bool $reload
      * @return null|Input
      * @throws ArgumentNullException
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated
      */
-	public function search(array $filter, $reload = false)
+	public function search(array $filter, bool $reload = false)
 	{
 	    $inputs     = $this->getInputs($reload);
 	    $inputsCnt  = count($inputs);
@@ -53,20 +53,19 @@ class Tab extends \Rover\Fadmin\Inputs\Input
 	}
 
     /**
-     * @param bool $inputName
      * @param bool $reload
      * @return array|string
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated
      */
-	public function getValue($inputName = false, $reload = false)
+	public function getValue(bool $reload = false)
 	{
-	    $inputName = trim($inputName);
-	    if (!strlen($inputName))
+	    $reload = trim($reload);
+	    if (!strlen($reload))
             throw new ArgumentNullException('inputName');
 
-	    return $this->getInputValue($inputName, $reload);
+	    return $this->getInputValue($reload, $reload);
 	}
 
     /**
@@ -83,13 +82,13 @@ class Tab extends \Rover\Fadmin\Inputs\Input
 	}
 
     /**
-     * @return mixed|string
+     * @return string
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated
      */
-	public function getName()
-	{
+	public function getName(): string
+    {
 	    return $this->getFieldName();
 	}
 }

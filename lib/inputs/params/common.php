@@ -9,9 +9,11 @@
  */
 
 namespace Rover\Fadmin\Inputs\Params;
+
 use Rover\Fadmin\Inputs\Input;
 use Rover\Fadmin\Inputs\Tab;
 use Rover\Fadmin\Options;
+
 /**
  * Trait MaxLength
  *
@@ -19,84 +21,47 @@ use Rover\Fadmin\Options;
  */
 trait Common
 {
-    /** @var string */
-    protected $id;
+    protected string $id;
+    protected string $name;
+    protected string $label;
+    protected mixed  $value;
+    protected mixed  $default;
+    protected bool   $multiple  = false;
+    protected string $help      = '';
+    protected string $preInput  = '';
+    protected string $postInput = '';
+    protected string $siteId;
+    protected int    $presetId;
+    protected int    $sort      = 500;
+    protected bool   $hidden    = false;
+    protected bool   $disabled  = false;
+    protected bool   $required  = false;
+    protected Input  $parent;
 
-    /** @var string */
-    protected $name;
-
-    /** @var string */
-    protected $label;
-
-    /** @var string|array */
-    protected $value;
-
-    /** @var string|array */
-    protected $default;
-
-    /** @var bool */
-    protected $multiple = false;
-
-    /** @var string */
-    protected $help;
-
-    /** @var string */
-    protected $preInput;
-
-    /** @var string */
-    protected $postInput;
-
-    /** @var string */
-    protected $siteId;
-
-    /** @var int|null */
-    protected $presetId;
-
-    /** @var int */
-    protected $sort = 500;
-
-    /** @var bool */
-    protected $hidden = false;
-
-    /** @var bool */
-    protected $disabled = false;
-
-    /** @var bool */
-    protected $required = false;
-
-    /** @var Input|null */
-    protected $parent;
+    protected array   $children;
+    protected Options $optionsEngine;
 
     /**
-     * @var Input[]
-     * @internal
-     */
-    protected $children;
-
-    /** @var Options */
-    protected $optionsEngine;
-
-    /**
-     * @param $display
+     * @param bool $display
      * @return $this
      * @author Pavel Shulaev (http://rover-it.me)
      * @deprecated use setHidden()
      */
-    public function setDisplay($display)
+    public function setDisplay(bool $display): static
     {
-        $this->hidden = !(bool)$display;
+        $this->hidden = !$display;
 
         return $this;
     }
 
     /**
-     * @param $hidden
+     * @param bool $hidden
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setHidden($hidden)
+    public function setHidden(bool $hidden): static
     {
-        $this->hidden = (bool)$hidden;
+        $this->hidden = $hidden;
 
         return $this;
     }
@@ -105,7 +70,7 @@ trait Common
      * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function isHidden()
+    public function isHidden(): bool
     {
         return $this->hidden;
     }
@@ -115,7 +80,7 @@ trait Common
      * @author Pavel Shulaev (http://rover-it.me)
      * @deprecated use isHidden()
      */
-    public function getDisplay()
+    public function getDisplay(): bool
     {
         return !$this->hidden;
     }
@@ -125,61 +90,65 @@ trait Common
      * @return int
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function getSort()
+    public function getSort(): int
     {
         return $this->sort;
     }
 
     /**
-     * @param $sort
+     * @param int $sort
      * @return $this
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function setSort($sort)
+    public function setSort(int $sort): static
     {
-        $this->sort = intval($sort);
+        $this->sort = $sort;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return string|null
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function getSiteId()
+    public function getSiteId(): ?string
     {
-        if (strlen($this->siteId))
+        if (!empty($this->siteId)) {
             return $this->siteId;
+        }
 
-        if ($this instanceof Tab)
+        if ($this instanceof Tab) {
             return null;
+        }
 
         $tab = $this->getTab();
-        if ($tab instanceof Tab)
+        if ($tab instanceof Tab) {
             return $tab->getSiteId();
+        }
 
         return null;
     }
 
     /**
-     * @param $siteId
+     * @param string $siteId
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setSiteId($siteId)
+    public function setSiteId(string $siteId): static
     {
         $siteId = trim($siteId);
 
         $this->siteId = $siteId;
-
-        if (is_null($this->children))
+        if (!isset($this->children)) {
             return $this;
+        }
 
         $childrenCnt = count($this->children);
-        if (!$childrenCnt)
+        if (!$childrenCnt) {
             return $this;
+        }
 
-        for ($i = 0; $i < $childrenCnt; ++$i){
+        for ($i = 0; $i < $childrenCnt; ++$i) {
             $child = $this->children[$i];
             $child->setSiteId($siteId);
         }
@@ -188,20 +157,20 @@ trait Common
     }
 
     /**
-     * @return mixed
+     * @return string
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->label;
     }
 
     /**
-     * @param $label
+     * @param string $label
      * @return $this
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function setLabel($label)
+    public function setLabel(string $label): static
     {
         $this->label = trim($label);
 
@@ -212,9 +181,9 @@ trait Common
      * @return mixed
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function getDefault()
+    public function getDefault(): mixed
     {
-        return $this->default;
+        return $this->default ?? null;
     }
 
     /**
@@ -222,10 +191,11 @@ trait Common
      * @return $this
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function setDefault($default)
+    public function setDefault($default): static
     {
-        if (is_array($default))
+        if (is_array($default)) {
             $default = serialize($default);
+        }
 
         $this->default = trim($default);
 
@@ -236,17 +206,20 @@ trait Common
      * @return int|null
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getPresetId()
+    public function getPresetId(): ?int
     {
-        if (!is_null($this->presetId))
+        if (isset($this->presetId)) {
             return $this->presetId;
+        }
 
-        if ($this instanceof Tab)
+        if ($this instanceof Tab) {
             return null;
+        }
 
         $tab = $this->getTab();
-        if ($tab instanceof Tab)
+        if ($tab instanceof Tab) {
             return $tab->getPresetId();
+        }
 
         return null;
     }
@@ -255,12 +228,12 @@ trait Common
      * @return null|Input
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getTab()
+    public function getTab(): ?Input
     {
         $input = $this;
         do {
             $input = $input->getParent();
-        } while (!is_null($input) && ($input->getClassName() != Tab::getClassName()));
+        } while ($input && ($input->getClassName() != Tab::getClassName()));
 
         return $input;
     }
@@ -269,25 +242,29 @@ trait Common
      * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function isPreset()
+    public function isPreset(): bool
     {
         return (bool)$this->getPresetId();
     }
 
     /**
-     * @param $presetId
+     * @param int $presetId
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setPresetId($presetId)
+    public function setPresetId(int $presetId): static
     {
         $this->presetId = $presetId;
+        if (!isset($this->children)) {
+            return $this;
+        }
 
         $childrenCnt = count($this->children);
-        if (!$childrenCnt)
+        if (!$childrenCnt) {
             return $this;
+        }
 
-        for ($i = 0; $i < $childrenCnt; ++$i){
+        for ($i = 0; $i < $childrenCnt; ++$i) {
             $child = $this->children[$i];
             $child->setPresetId($presetId);
         }
@@ -299,7 +276,7 @@ trait Common
      * @return bool
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function isMultiple()
+    public function isMultiple(): bool
     {
         return $this->multiple;
     }
@@ -310,7 +287,7 @@ trait Common
      * @return $this
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function setMultiple($value)
+    public function setMultiple($value): static
     {
         $this->multiple = (bool)$value;
 
@@ -319,11 +296,11 @@ trait Common
 
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function setHelp($value)
+    public function setHelp(string $value): static
     {
         $this->help = trim($value);
 
@@ -334,19 +311,19 @@ trait Common
      * @return string
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function getHelp()
+    public function getHelp(): string
     {
         return $this->help;
     }
 
     /**
-     * @param $value
+     * @param bool $value
      * @return $this
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function setDisabled($value)
+    public function setDisabled(bool $value): static
     {
-        $this->disabled = (bool)$value;
+        $this->disabled = $value;
 
         return $this;
     }
@@ -355,7 +332,7 @@ trait Common
      * @return bool
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function isDisabled()
+    public function isDisabled(): bool
     {
         return $this->disabled;
     }
@@ -365,16 +342,16 @@ trait Common
      * @author Pavel Shulaev (http://rover-it.me)
      * @deprecated
      */
-    public function getDisabled()
+    public function getDisabled(): bool
     {
         return $this->disabled;
     }
 
     /**
-     * @return mixed
+     * @return string
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -382,17 +359,17 @@ trait Common
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param $id
+     * @param string $id
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setId($id)
+    public function setId(string $id): static
     {
         $this->id = $id;
 
@@ -402,9 +379,9 @@ trait Common
     /**
      * @return null|Input
      */
-    public function getParent()
+    public function getParent(): ?Input
     {
-        return $this->parent;
+        return $this->parent ?? null;
     }
 
     /**
@@ -412,7 +389,7 @@ trait Common
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setParent(Input $parent)
+    public function setParent(Input $parent): static
     {
         $this->parent = $parent;
 
@@ -423,16 +400,16 @@ trait Common
      * @return Options
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getOptionsEngine()
+    public function getOptionsEngine(): Options
     {
         return $this->optionsEngine;
     }
 
     /**
-     * @return mixed
+     * @return string
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getModuleId()
+    public function getModuleId(): string
     {
         return $this->getOptionsEngine()->getModuleId();
     }
@@ -440,15 +417,15 @@ trait Common
     /**
      * @return Input[]
      */
-    public function getChildren()
+    public function getChildren(): array
     {
-        return $this->children;
+        return $this->children ?? [];
     }
 
     /**
      * @return bool
      */
-    public function isRequired()
+    public function isRequired(): bool
     {
         return $this->required;
     }
@@ -456,7 +433,7 @@ trait Common
     /**
      * @return string
      */
-    public function getPreInput()
+    public function getPreInput(): string
     {
         return $this->preInput;
     }
@@ -465,7 +442,7 @@ trait Common
      * @param string $preInput
      * @return Common
      */
-    public function setPreInput($preInput)
+    public function setPreInput(string $preInput): static
     {
         $this->preInput = trim($preInput);
 
@@ -475,7 +452,7 @@ trait Common
     /**
      * @return string
      */
-    public function getPostInput()
+    public function getPostInput(): string
     {
         return $this->postInput;
     }
@@ -484,7 +461,7 @@ trait Common
      * @param string $postInput
      * @return Common
      */
-    public function setPostInput($postInput)
+    public function setPostInput(string $postInput): static
     {
         $this->postInput = trim($postInput);
 
@@ -495,9 +472,9 @@ trait Common
      * @param bool $required
      * @return Common
      */
-    public function setRequired($required)
+    public function setRequired(bool $required): static
     {
-        $this->required = (bool)$required;
+        $this->required = $required;
 
         return $this;
     }

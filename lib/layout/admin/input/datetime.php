@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Rover\Fadmin\Layout\Admin\Input;
 
 /**
@@ -24,12 +26,12 @@ class DateTime extends Input
      * show time flag
      * @var bool
      */
-    protected $showTime = true;
+    protected bool $showTime = true;
 
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function hideTime()
+    public function hideTime(): void
     {
         $this->showTime = false;
     }
@@ -37,18 +39,18 @@ class DateTime extends Input
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showTime()
+    public function showTime(): void
     {
         $this->showTime = true;
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         global $APPLICATION;
 

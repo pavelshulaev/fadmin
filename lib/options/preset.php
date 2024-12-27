@@ -1,11 +1,14 @@
 <?php
+
 namespace Rover\Fadmin\Options;
 
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
-use \Bitrix\Main\Config\Option;
+use Bitrix\Main\Config\Option;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Inputs\Tab;
 use Rover\Fadmin\Options;
+
 /**
  * Class Presets
  * @package Fadmin
@@ -13,62 +16,64 @@ use Rover\Fadmin\Options;
  */
 class Preset
 {
-	const OPTION_ID = 'rover-op-presets';
+    const OPTION_ID = 'rover-op-presets';
 
-	/** @var string */
-	protected $options;
+    protected Options $options;
 
-    /** @var array */
-	protected $presets;
+    protected array $presets;
 
-	/** @param Options $options */
-	public function __construct(Options $options)
-	{
-		$this->options = $options;
-	}
+    /** @param Options $options */
+    public function __construct(Options $options)
+    {
+        $this->options = $options;
+    }
 
     /**
-     * @param string $siteId
-     * @param bool   $reload
+     * @param string|null $siteId
+     * @param bool $reload
      * @return mixed
-     * @throws ArgumentNullException
-     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getList($siteId = '', $reload = false)
-	{
-	    if (is_null($this->presets[$siteId]) || $reload){
-	        $presets = unserialize(Option::get($this->options->getModuleId(),
-                self::OPTION_ID, '', $siteId));
-
-	        if (empty($presets))
-	            $presets = [];
-
-	        $this->presets[$siteId] = $presets;
+    public function getList(string $siteId = null, bool $reload = false): mixed
+    {
+        if (!isset($siteId)) {
+            $siteId = '';
         }
 
-		return $this->presets[$siteId];
-	}
+        if (!isset($this->presets[$siteId]) || $reload) {
+            $presets = unserialize(Option::get($this->options->getModuleId(),
+                self::OPTION_ID, '', $siteId));
+
+            if (empty($presets)) {
+                $presets = [];
+            }
+
+            $this->presets[$siteId] = $presets;
+        }
+
+        return $this->presets[$siteId];
+    }
 
     /**
-     * @param string $siteId
-     * @param bool   $reload
+     * @param string|null $siteId
+     * @param bool $reload
      * @return array
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getInstancesList($siteId = '', $reload = false)
+    public function getInstancesList(string $siteId = null, bool $reload = false): array
     {
-        $presets    = $this->getList($siteId);
-        $list       = array();
-        $presetClass= $this->options->settings->getPresetClass();
+        $presets     = $this->getList($siteId);
+        $list        = [];
+        $presetClass = $this->options->settings->getPresetClass();
 
-        foreach ($presets as $preset){
+        foreach ($presets as $preset) {
             $presetInstance = $presetClass::getInstance($preset['id'], $this->options, $reload);
 
-            if (!$presetInstance instanceof \Rover\Fadmin\Preset)
+            if (!$presetInstance instanceof \Rover\Fadmin\Preset) {
                 throw new ArgumentOutOfRangeException('presetInstance');
+            }
 
             $list[$preset['id']] = $presetInstance;
         }
@@ -77,53 +82,49 @@ class Preset
     }
 
     /**
-     * @param string $siteId
-     * @param bool   $reload
+     * @param string|null $siteId
+     * @param bool $reload
      * @return array
-     * @throws ArgumentNullException
-     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getIds($siteId = '', $reload = false)
-	{
-		return array_keys($this->getList($siteId, $reload));
-	}
+    public function getIds(string $siteId = null, bool $reload = false): array
+    {
+        return array_keys($this->getList($siteId, $reload));
+    }
 
     /**
-     * @param        $id
-     * @param string $siteId
-     * @param bool   $reload
+     * @param int $id
+     * @param string|null $siteId
+     * @param bool $reload
      * @return null
      * @throws ArgumentNullException
-     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getById($id, $siteId = '', $reload = false)
-	{
-        $id = intval($id);
-        if (!$id)
+    public function getById(int $id, string $siteId = null, bool $reload = false)
+    {
+        if (!$id) {
             throw new ArgumentNullException('id');
+        }
 
-		$presets = $this->getList($siteId, $reload);
+        $presets = $this->getList($siteId, $reload);
 
-		if (isset($presets[$id]))
-			return $presets[$id];
+        if (isset($presets[$id])) {
+            return $presets[$id];
+        }
 
-		return null;
-	}
+        return null;
+    }
 
     /**
-     * @param string $siteId
-     * @param bool   $reload
+     * @param string|null $siteId
+     * @param bool $reload
      * @return int
-     * @throws ArgumentNullException
-     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getCount($siteId = '', $reload = false)
-	{
-		return count($this->getList($siteId, $reload));
-	}
+    public function getCount(string $siteId = null, bool $reload = false): int
+    {
+        return count($this->getList($siteId, $reload));
+    }
 
     /**
      * @param        $value
@@ -131,36 +132,39 @@ class Preset
      * @return bool
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function add($value, $siteId = '')
-	{
+    public function add($value, string $siteId = ''): bool
+    {
         if (!$this->options->event
             ->handle(Event::BEFORE_ADD_PRESET, compact('siteId', 'value'))
-            ->isSuccess())
+            ->isSuccess()) {
             return false;
+        }
 
         $params = $this->options->event->getParameters();
 
-        if (!isset($params['name']))
+        if (!isset($params['name'])) {
             $params['name'] = $params['value'];
+        }
 
-        $name       = trim($params['name']);
-		$presets    = $this->getList($params['siteId'], true);
+        $name    = trim($params['name']);
+        $presets = $this->getList($params['siteId'], true);
 
-		if (!count($presets)){
-			$presets    = array();
-			$id   = 1;
-		} else
-            $id   = max(array_keys($presets)) + 1;
+        if (!count($presets)) {
+            $presets = [];
+            $id      = 1;
+        } else {
+            $id = max(array_keys($presets)) + 1;
+        }
 
-		$presets[$id] = array(
-			'id'    => $id,
-			'name'  => htmlspecialcharsbx($name)
-        );
+        $presets[$id] = [
+            'id'   => $id,
+            'name' => htmlspecialcharsbx($name)
+        ];
 
-		$this->update($presets, $siteId);
+        $this->update($presets, $siteId);
 
         $params = $this->options->event
             ->handle(Event::AFTER_ADD_PRESET, compact('id', 'value'))
@@ -169,149 +173,150 @@ class Preset
         // reload tabs after event!!!
         $this->options->getTabControl()->reloadTabs();
 
-		return $params['id'];
-	}
+        return $params['id'];
+    }
 
     /**
-     * @param        $id
+     * @param int $id
      * @param string $siteId
      * @return bool
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function remove($id, $siteId = '')
-	{
-        $id = intval($id);
-        if (!$id)
+    public function remove(int $id, string $siteId = ''): bool
+    {
+        if (!$id) {
             throw new ArgumentNullException('id');
+        }
 
         // action beforeRemovePreset
         if (!$this->options->event
             ->handle(Event::BEFORE_REMOVE_PRESET, compact('siteId', 'id'))
-            ->isSuccess())
+            ->isSuccess()) {
             return false;
+        }
 
-        $params     = $this->options->event->getParameters();
+        $params = $this->options->event->getParameters();
         /** @var Tab $presetTab */
-        $presetTab  = $this->options->getTabControl()
+        $presetTab = $this->options->getTabControl()
             ->getTabByPresetId($params['id'], $params['siteId']);
 
-        if ($presetTab instanceof Tab === false)
+        if ($presetTab instanceof Tab === false) {
             throw new ArgumentOutOfRangeException('tab');
+        }
 
         $presetTab->clear();
 
-		$presets = $this->getList($siteId, true);
+        $presets = $this->getList($siteId, true);
 
-		foreach ($presets as $num => $preset){
-			if ($params['id'] == $preset['id']) {
-				unset($presets[$num]);
-				$this->update($presets, $siteId);
-				break;
-			}
-		}
+        foreach ($presets as $num => $preset) {
+            if ($params['id'] == $preset['id']) {
+                unset($presets[$num]);
+                $this->update($presets, $siteId);
+                break;
+            }
+        }
 
         // action afterRemovePreset
         $this->options->event->handle(Event::AFTER_REMOVE_PRESET, $params);
 
         return true;
-	}
+    }
 
     /**
-     * @param        $presets
+     * @param array $presets
      * @param string $siteId
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	protected function update($presets, $siteId = '')
-	{
-		Option::set($this->options->getModuleId(),
-			self::OPTION_ID, serialize($presets), $siteId);
+    protected function update(array $presets, string $siteId = ''): void
+    {
+        Option::set($this->options->getModuleId(),
+            self::OPTION_ID, serialize($presets), $siteId);
 
-		// reset cache
-		$this->presets = null;
-	}
+        // reset cache
+        unset($this->presets);
+    }
 
     /**
      * @param        $sortFunc
      * @param string $siteId
-     * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function sort($sortFunc, $siteId = '')
-	{
-		$presets = $this->getList($siteId, true);
-		usort($presets, $sortFunc);
-		$this->update($presets, $siteId);
-	}
+    public function sort($sortFunc, string $siteId = ''): void
+    {
+        $presets = $this->getList($siteId, true);
+        usort($presets, $sortFunc);
+        $this->update($presets, $siteId);
+    }
 
     /**
-     * @param        $id
+     * @param int $id
      * @param string $siteId
-     * @param bool   $reload
+     * @param bool $reload
      * @return bool
-     * @throws ArgumentNullException
-     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function isExists($id, $siteId = '', $reload = false)
-	{
-        $id = intval($id);
-        if (!$id)
+    public function isExists(int $id, string $siteId = '', bool $reload = false): bool
+    {
+        if (!$id) {
             return false;
+        }
 
-		return in_array($id, $this->getIds($siteId, $reload));
-	}
+        return in_array($id, $this->getIds($siteId, $reload));
+    }
 
     /**
-     * @param        $id
-     * @param        $name
+     * @param int $id
+     * @param string $name
      * @param string $siteId
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function updateName($id, $name, $siteId = '')
-	{
-        $id = intval($id);
-		if (!$id)
-			throw new ArgumentNullException('id');
+    public function updateName(int $id, string $name, string $siteId = ''): void
+    {
+        if (!$id) {
+            throw new ArgumentNullException('id');
+        }
 
-		$name = trim($name);
-		if (!$name)
-			throw new ArgumentNullException('name');
+        $name = trim($name);
+        if (!$name) {
+            throw new ArgumentNullException('name');
+        }
 
-		$presets = $this->getList($siteId, true);
+        $presets = $this->getList($siteId, true);
 
-		foreach ($presets as $num => &$preset){
-			if ($preset['id'] != $id)
-				continue;
+        foreach ($presets as &$preset) {
+            if ($preset['id'] != $id) {
+                continue;
+            }
 
-			$preset['name'] = $name;
-			break;
-		}
+            $preset['name'] = $name;
+            break;
+        }
 
-		$this->update($presets, $siteId);
-	}
+        $this->update($presets, $siteId);
+    }
 
     /**
-     * @param        $id
+     * @param int $id
      * @param string $siteId
-     * @param bool   $reload
+     * @param bool $reload
      * @return null
      * @throws ArgumentNullException
-     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getNameById($id, $siteId = '', $reload = false)
-	{
-		$preset = $this->getById($id, $siteId, $reload);
-		if (isset($preset['name']))
-			return $preset['name'];
+    public function getNameById(int $id, string $siteId = '', bool $reload = false)
+    {
+        $preset = $this->getById($id, $siteId, $reload);
+        if (isset($preset['name'])) {
+            return $preset['name'];
+        }
 
-		return null;
-	}
+        return null;
+    }
 } 

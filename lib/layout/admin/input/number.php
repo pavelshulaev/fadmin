@@ -10,6 +10,9 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+
 /**
  * Class Number
  *
@@ -19,15 +22,15 @@ namespace Rover\Fadmin\Layout\Admin\Input;
 class Number extends Text
 {
     /** @var bool */
-    public static $cssPrinted = false;
+    public static bool $cssPrinted = false;
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         if (!$this->input instanceof \Rover\Fadmin\Inputs\Number)
             return;
@@ -50,7 +53,7 @@ class Number extends Text
     /**
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    protected function printCss()
+    protected function printCss(): void
     {
         ?>
         <style>

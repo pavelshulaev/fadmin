@@ -25,27 +25,24 @@ use Bitrix\Main\SystemException;
  */
 class Tabcontrol extends Input
 {
-    /** @var array */
-    protected $tabsConfig = array();
-
-    /** @var array */
-    protected $presetMap = array();
+    protected array $tabsConfig;
+    protected array $presetMap;
 
     /**
      * Tabcontrol constructor.
      *
-     * @param array   $tabsConfig
+     * @param array $tabsConfig
      * @param Options $options
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @throws SystemException
      */
-    public function __construct(array $tabsConfig = array(), Options $options)
+    public function __construct(array $tabsConfig, Options $options)
     {
-        $params = array(
+        $params = [
             'name'  => str_replace('.', '-', $options->getModuleId() . '_' . self::getType()),
             'label' => $options->getModuleId() . '_' . self::getType(),
-        );
+        ];
 
         parent::__construct($params, $options);
 
@@ -56,21 +53,22 @@ class Tabcontrol extends Input
      * @param bool $reload
      * @return Tab[]
      * @throws ArgumentNullException
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getAdminTabs($reload = false)
+    public function getAdminTabs(bool $reload = false): array
     {
-        $result = array();
-        $tabs   = $this->getTabs($reload);
-        $tabsCnt= count($tabs);
+        $result  = [];
+        $tabs    = $this->getTabs($reload);
+        $tabsCnt = count($tabs);
 
-        for ($i = 0; $i < $tabsCnt; ++$i){
+        for ($i = 0; $i < $tabsCnt; ++$i) {
             /** @var Tab $tab */
             $tab = $tabs[$i];
             if (!$this->optionsEngine->settings->getShowAdminPresets()
-                && $tab->isPreset())
+                && $tab->isPreset()) {
                 continue;
+            }
 
             $result[] = $tab;
         }
@@ -86,26 +84,27 @@ class Tabcontrol extends Input
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getTabs($reload = false)
+    public function getTabs(bool $reload = false): ?array
     {
         return $this->getChildren($reload);
     }
 
     /**
      * @param bool $reload
-     * @return mixed|null|Input[]
+     * @return array
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getChildren($reload = false)
+    public function getChildren(bool $reload = false): array
     {
-        if (is_null($this->children) || $reload)
+        if (!isset($this->children) || $reload) {
             $this->reloadTabs();
+        }
 
         return $this->optionsEngine->event
-            ->handle(Options\Event::AFTER_GET_TABS, array('tabs' => $this->children))
+            ->handle(Options\Event::AFTER_GET_TABS, ['tabs' => $this->children])
             ->getParameter('tabs');
     }
 
@@ -115,22 +114,24 @@ class Tabcontrol extends Input
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function reloadTabs()
+    public function reloadTabs(): void
     {
-        $this->children  = array();
-        $this->presetMap = array();
+        $this->children  = [];
+        $this->presetMap = [];
 
         foreach ($this->tabsConfig as $tabParams) {
 
-            if (empty($tabParams))
+            if (empty($tabParams)) {
                 continue;
+            }
 
             if (isset($tabParams['preset']) && $tabParams['preset']) {
 
                 $siteId = $tabParams['siteId'] ?: '';
                 // preset tab can be only one on current site
-                if (isset($this->presetMap[$siteId]))
+                if (isset($this->presetMap[$siteId])) {
                     continue;
+                }
 
                 $this->presetMap[$siteId] = true;
 
@@ -141,16 +142,17 @@ class Tabcontrol extends Input
 
                         // event before create preset tab
                         if (!$this->optionsEngine->event
-                            ->handle(Options\Event::BEFORE_MAKE_PRESET_TAB, array(
-                                'tabParams' => $tabParams,
-                                'presetId'  => $preset['id'],
-                                'presetName'=> $preset['name']
-                            ))->isSuccess())
+                            ->handle(Options\Event::BEFORE_MAKE_PRESET_TAB, [
+                                'tabParams'  => $tabParams,
+                                'presetId'   => $preset['id'],
+                                'presetName' => $preset['name']
+                            ])->isSuccess()) {
                             continue;
+                        }
 
-                        $resultTabParams            = $this->optionsEngine->event->getParameter('tabParams');
-                        $resultTabParams['presetId']= $this->optionsEngine->event->getParameter('presetId');
-                        $resultTabParams['label']   = $this->optionsEngine->event->getParameter('presetName');
+                        $resultTabParams             = $this->optionsEngine->event->getParameter('tabParams');
+                        $resultTabParams['presetId'] = $this->optionsEngine->event->getParameter('presetId');
+                        $resultTabParams['label']    = $this->optionsEngine->event->getParameter('presetName');
 
                         $tab = new Tab($resultTabParams, $this->optionsEngine, $this);
 
@@ -167,20 +169,21 @@ class Tabcontrol extends Input
     }
 
     /**
-     * @param        $presetId
+     * @param string $presetId
      * @param string $siteId
-     * @param bool   $reload
-     * @return mixed|null|Tab
+     * @param bool $reload
+     * @return Input|Tab|null
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getTabByPresetId($presetId, $siteId = '', $reload = false)
+    public function getTabByPresetId(string $presetId, string $siteId = '', bool $reload = false)
     {
         $presetId = intval($presetId);
-        if (!$presetId)
+        if (!$presetId) {
             throw new ArgumentNullException('presetId');
+        }
 
         $tabs = $this->getTabs($reload);
 
@@ -189,42 +192,47 @@ class Tabcontrol extends Input
             /** @var Tab $tab */
             if ($tab->isPreset()
                 && ($tab->getPresetId() == $presetId)
-                && ($tab->getSiteId() == $siteId))
+                && ($tab->getSiteId() == $siteId)) {
                 return $tab;
+            }
         }
 
         return null;
     }
 
     /**
-     * @param        $name
-     * @param string $presetId
+     * @param string $name
      * @param string $siteId
-     * @param bool   $reload
+     * @param string $presetId
+     * @param bool $reload
      * @return null|Tab
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function searchTabByName($name, $siteId = '', $presetId = '', $reload = false)
+    public function searchTabByName(string $name, string $siteId = '', string $presetId = '',
+        bool $reload = false): ?Tab
     {
-        $tabs       = $this->getTabs($reload);
-        $siteId     = trim($siteId);
-        $presetId   = trim($presetId);
-        $tabsCnt    = count($tabs);
+        $tabs     = $this->getTabs($reload);
+        $siteId   = trim($siteId);
+        $presetId = trim($presetId);
+        $tabsCnt  = count($tabs);
 
         for ($i = 0; $i < $tabsCnt; ++$i) {
             /** @var Tab $tab */
             $tab = $tabs[$i];
-            if ($tab->getFieldName() != $name)
+            if ($tab->getFieldName() != $name) {
                 continue;
+            }
 
-            if (strlen($siteId) && ($siteId != $tab->getSiteId()))
+            if (strlen($siteId) && ($siteId != $tab->getSiteId())) {
                 continue;
+            }
 
-            if (strlen($presetId) && ($presetId != $tab->getPresetId()))
+            if (strlen($presetId) && ($presetId != $tab->getPresetId())) {
                 continue;
+            }
 
             return $tab;
         }
@@ -237,23 +245,24 @@ class Tabcontrol extends Input
      * @return bool
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setValueFromRequest($admin = false)
+    public function setValueFromRequest(bool $admin = false): bool
     {
         if (!$this->optionsEngine->event
             ->handle(Options\Event::BEFORE_ADD_VALUES_FROM_REQUEST)
-            ->isSuccess())
+            ->isSuccess()) {
             return false;
+        }
 
         $tabs = $admin
             ? $this->getAdminTabs()
             : $this->getTabs();
 
-        foreach ($tabs as $tab)
-            /** @var Tab $tab */
+        foreach ($tabs as $tab) /** @var Tab $tab */ {
             $tab->setValueFromRequest();
+        }
 
         // handle group rights tab
         if ($this->optionsEngine->settings->getGroupRights()) {
@@ -264,14 +273,15 @@ class Tabcontrol extends Input
 
         if (!$this->optionsEngine->event
             ->handle(Options\Event::AFTER_ADD_VALUES_FROM_REQUEST, compact('tabs'))
-            ->isSuccess())
+            ->isSuccess()) {
             return false;
+        }
 
         return true;
     }
 
     /**
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function __clone()
@@ -286,12 +296,12 @@ class Tabcontrol extends Input
      * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function sort()
+    public function sort(): void
     {
-        $tabs       = $this->getTabs();
-        $tabsCnt    = count($tabs);
+        $tabs    = $this->getTabs();
+        $tabsCnt = count($tabs);
 
-        for ($i = 0; $i < $tabsCnt; ++$i){
+        for ($i = 0; $i < $tabsCnt; ++$i) {
             /** @var Tab $tab */
             $tab = $tabs[$i];
             $tab->sort();
@@ -300,11 +310,11 @@ class Tabcontrol extends Input
 
     /**
      * @param $siteId
-     * @return $this|void
+     * @return Tabcontrol
      * @throws NotImplementedException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setSiteId($siteId)
+    public function setSiteId($siteId): static
     {
         throw new NotImplementedException();
     }
@@ -315,7 +325,7 @@ class Tabcontrol extends Input
      * @throws NotImplementedException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setPresetId($presetId)
+    public function setPresetId($presetId): static
     {
         throw new NotImplementedException();
     }
@@ -326,7 +336,7 @@ class Tabcontrol extends Input
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-    public function beforeSaveValue(&$value)
+    public function beforeSaveValue(&$value): bool
     {
         return false;
     }
@@ -335,7 +345,7 @@ class Tabcontrol extends Input
      * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function beforeLoadValue()
+    public function beforeLoadValue(): bool
     {
         return false;
     }

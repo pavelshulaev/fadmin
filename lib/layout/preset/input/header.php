@@ -23,7 +23,7 @@ class Header extends Input
     /**
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         echo $this->input->getLabel();
     }
@@ -32,5 +32,6 @@ class Header extends Input
      * for capability
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput(){}
+    public function showInput(): void
+    {}
 }

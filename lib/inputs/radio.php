@@ -10,7 +10,11 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Inputs\Params\Options;
+
 /**
  * Class Selectbox
  *
@@ -24,18 +28,19 @@ class Radio extends Input
     /**
      * Radio constructor.
      *
-     * @param array                 $params
+     * @param array $params
      * @param \Rover\Fadmin\Options $optionsEngine
-     * @param Input|null            $parent
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @param Input|null $parent
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      */
-	public function __construct(array $params, \Rover\Fadmin\Options $optionsEngine, Input $parent = null)
-	{
-		parent::__construct($params, $optionsEngine, $parent);
+    public function __construct(array $params, \Rover\Fadmin\Options $optionsEngine, Input $parent = null)
+    {
+        parent::__construct($params, $optionsEngine, $parent);
 
-		if (isset($params['options']))
-		    $this->setOptions($params['options']);
-	}
+        if (isset($params['options'])) {
+            $this->setOptions($params['options']);
+        }
+    }
 }

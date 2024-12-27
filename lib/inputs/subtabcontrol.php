@@ -10,6 +10,9 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Options;
 
 /**
@@ -20,88 +23,90 @@ use Rover\Fadmin\Options;
  */
 class SubTabControl extends Input
 {
-    /** @var array  */
-    protected $subTabsConfig = array();
+    protected array $subTabsConfig;
 
     /**
      * SubTabControl constructor.
      *
-     * @param array      $params
-     * @param Options    $options
+     * @param array $params
+     * @param Options $options
      * @param Input|null $parent
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      */
     public function __construct(array $params, Options $options, Input $parent = null)
     {
         parent::__construct($params, $options, $parent);
 
-        if (isset($params['subTabs']) && is_array($params['subTabs']))
+        if (isset($params['subTabs']) && is_array($params['subTabs'])) {
             $this->setSubTabsArray($params['subTabs']);
+        }
     }
 
     /**
      * @param array $subTabArray
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function addSubTabArray(array $subTabArray)
+    public function addSubTabArray(array $subTabArray): void
     {
-        $this->subTabsConfig[]  = $subTabArray;
-        $this->children         = null;
+        $this->subTabsConfig[] = $subTabArray;
+        unset($this->children);
     }
 
     /**
      * @param array $subTabsArray
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setSubTabsArray(array $subTabsArray)
+    public function setSubTabsArray(array $subTabsArray): void
     {
-        $this->subTabsConfig    = $subTabsArray;
-        $this->children         = null;
+        $this->subTabsConfig = $subTabsArray;
+        unset($this->children);
     }
 
     /**
      * @param bool $reload
      * @return array|SubTab[]
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getSubTabs($reload = false)
+    public function getSubTabs(bool $reload = false): array
     {
-       return $this->getChildren($reload);
+        return $this->getChildren($reload);
     }
 
     /**
      * @param bool $reload
      * @return Input[]
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getChildren($reload = false)
+    public function getChildren(bool $reload = false): array
     {
-        if (is_null($this->children) || $reload)
+        if (!isset($this->children) || $reload) {
             $this->loadSubTabs();
+        }
 
         return $this->children;
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function loadSubTabs()
+    protected function loadSubTabs(): void
     {
-        $this->children  = array();
+        $this->children = [];
         $subTabsCnt     = count($this->subTabsConfig);
-        for ($i = 0; $i < $subTabsCnt; ++$i)
+        for ($i = 0; $i < $subTabsCnt; ++$i) {
             $this->children[] = new SubTab($this->subTabsConfig[$i], $this->optionsEngine, $this);
+        }
     }
 
     /**
@@ -110,7 +115,7 @@ class SubTabControl extends Input
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-    public function beforeSaveValue(&$value)
+    public function beforeSaveValue(&$value): bool
     {
         return false;
     }
@@ -119,40 +124,44 @@ class SubTabControl extends Input
      * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function beforeLoadValue()
+    public function beforeLoadValue(): bool
     {
         return false;
     }
 
     /**
-     * @return bool|void
-     * @throws \Bitrix\Main\SystemException
+     * @return bool
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setValueFromRequest()
+    public function setValueFromRequest(): bool
     {
         $subTabs    = $this->getSubTabs();
         $subTabsCnt = count($subTabs);
 
-        for ($i = 0; $i < $subTabsCnt; ++$i){
+        for ($i = 0; $i < $subTabsCnt; ++$i) {
             /** @var Input $subTab */
             $subTab = $subTabs[$i];
             $subTab->setValueFromRequest();
         }
+
+        return true;
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function sort()
+    public function sort(): void
     {
         $subTabs    = $this->getSubTabs();
         $subTabsCnt = count($subTabs);
 
-        for ($i = 0; $i < $subTabsCnt; ++$i){
+        for ($i = 0; $i < $subTabsCnt; ++$i) {
             /** @var SubTab $subTab */
             $subTab = $subTabs[$i];
             $subTab->sort();
@@ -160,17 +169,17 @@ class SubTabControl extends Input
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function clear()
+    public function clear(): void
     {
         $subTabs    = $this->getChildren();
         $subTabsCnt = count($subTabs);
 
-        for ($i = 0; $i < $subTabsCnt; ++$i){
+        for ($i = 0; $i < $subTabsCnt; ++$i) {
             /** @var SubTab $subTab */
             $subTab = $subTabs[$i];
             $subTab->clear();

@@ -23,7 +23,7 @@ class Header extends Input
     /**
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         ?><tr class="heading">
             <td colspan="2"><?=$this->input->getLabel()?></td>
@@ -34,6 +34,7 @@ class Header extends Input
      * for capability
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput(){}
+    public function showInput(): void
+    {}
 
 }

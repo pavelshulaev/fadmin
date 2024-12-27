@@ -10,8 +10,11 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Layout\Admin\Input;
-use \Rover\Fadmin\Inputs;
+use Rover\Fadmin\Inputs;
 /**
  * Class SubTab
  *
@@ -21,13 +24,13 @@ use \Rover\Fadmin\Inputs;
 class SubTab extends Input
 {
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         ?><table class="adm-detail-content-table edit-table"><?php
 
@@ -40,13 +43,13 @@ class SubTab extends Input
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         if (!$this->input instanceof Inputs\SubTab)
             return;
@@ -55,7 +58,7 @@ class SubTab extends Input
         $inputsCnt  = count($inputs);
 
         for ($i = 0; $i < $inputsCnt; ++$i) {
-            /** @var \Rover\Fadmin\Inputs\Input $input */
+            /** @var Inputs\Input $input */
             $input = $inputs[$i];
 
             if (($input instanceof Inputs\SubTab)

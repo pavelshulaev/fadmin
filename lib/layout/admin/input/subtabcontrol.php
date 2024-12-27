@@ -10,6 +10,9 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Inputs\SubTab;
 use Rover\Fadmin\Layout\Admin\Input;
 
@@ -22,13 +25,13 @@ use Rover\Fadmin\Layout\Admin\Input;
 class SubTabControl extends Input
 {
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         ?>
         <style>
@@ -48,13 +51,13 @@ class SubTabControl extends Input
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         if (!$this->input instanceof \Rover\Fadmin\Inputs\SubTabControl)
             return;

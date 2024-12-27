@@ -7,9 +7,13 @@
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
+
 namespace Rover\Fadmin\Layout\Admin;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Rover\Fadmin\Layout\Input as InputAbstract;
+
 /**
  * Class Admin
  *
@@ -20,16 +24,15 @@ abstract class Input extends InputAbstract
 {
     /**
      * for factory
-     * @var string
      */
-    public static $type = 'Admin';
+    public static string $type = 'Admin';
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return void
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         $this->showRowStart();
         $this->showCells();
@@ -37,22 +40,22 @@ abstract class Input extends InputAbstract
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showCells()
+    public function showCells(): void
     {
         $this->showLabelCell('width="50%" class="adm-detail-content-cell-l" style="vertical-align: top; padding-top: 7px;"');
         $this->showInputCell('width="50%" class="adm-detail-content-cell-r"');
     }
 
     /**
-     * @param      $cellParams
+     * @param string $cellParams
      * @param bool $empty
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showLabelCell($cellParams, $empty = false)
+    public function showLabelCell(string $cellParams, bool $empty = false): void
     {
         $this->showCellStart($cellParams);
         $this->showLabel($empty);
@@ -63,7 +66,7 @@ abstract class Input extends InputAbstract
      * @param $cellParams
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInputCell($cellParams)
+    public function showInputCell($cellParams): void
     {
         $this->showCellStart($cellParams);
         $this->showPreInput();
@@ -74,28 +77,28 @@ abstract class Input extends InputAbstract
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function getCommonAttributes()
+    protected function getCommonAttributes(): string
     {
         return
-            ' id="' . $this->input->getFieldId() . '" '.
-            ' type="' . $this->getType() . '" '.
+            ' id="' . $this->input->getFieldId() . '" ' .
+            ' type="' . $this->getType() . '" ' .
             static::getValue() .
             ' name="' . $this->input->getFieldName() . '" ' .
-            ($this->input->isRequired() ? ' required="required" ': '') .
-            ($this->input->isDisabled() ? ' disabled="disabled" ': '');
+            ($this->input->isRequired() ? ' required="required" ' : '') .
+            ($this->input->isDisabled() ? ' disabled="disabled" ' : '');
     }
 
     /**
      * @return string
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function getValue()
+    protected function getValue(): string
     {
         return ' value="' . $this->input->getValue() . '" ';
     }
@@ -103,7 +106,7 @@ abstract class Input extends InputAbstract
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showRowStart()
+    public function showRowStart(): void
     {
         echo '<tr>';
     }
@@ -111,7 +114,7 @@ abstract class Input extends InputAbstract
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showRowEnd()
+    public function showRowEnd(): void
     {
         echo '</tr>';
     }
@@ -120,71 +123,79 @@ abstract class Input extends InputAbstract
      * @param $params
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showCellStart($params)
+    public function showCellStart($params): void
     {
-        ?><td <?=trim($params)?>><?
+        ?><td <?= trim($params) ?>><?
     }
 
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showCellEnd()
+    public function showCellEnd(): void
     {
         echo '</td>';
     }
 
     /**
      * @param bool $empty
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showLabel($empty = false)
+    public function showLabel(bool $empty = false): void
     {
-       if ($empty) return;
+        if ($empty) {
+            return;
+        }
 
-       ?><label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:</label><?php
+        ?><label for="<?= $this->input->getFieldId() ?>"><?= $this->input->getLabel() ?>:</label><?php
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function showMultiLabel()
+    protected function showMultiLabel(): void
     {
-        ?><label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:<br>
-            <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
+        ?><label for="<?= $this->input->getFieldId() ?>"><?= $this->input->getLabel() ?>:<br>
+        <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
         </label><?php
     }
 
     /**
-     * @param bool $br
+     * @param bool $addBr
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function showHelp($br = true)
+    protected function showHelp(bool $addBr = true): void
     {
         $help = trim($this->input->getHelp());
 
         if (strlen($help)):
-            if ($br) echo '<br>';
-            ?><small style="color: #777;"><?=$help?></small><?php
+            if ($addBr) {
+                echo '<br>';
+            }
+            ?><small style="color: #777;"><?= $help ?></small><?php
         endif;
     }
 
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showPreInput()
+    public function showPreInput(): void
     {
         $preInput = $this->input->getPreInput();
-        if (strlen($preInput)) echo $preInput;
+        if (strlen($preInput)) {
+            echo $preInput;
+        }
     }
 
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showPostInput()
+    public function showPostInput(): void
     {
         $postInput = $this->input->getPostInput();
-        if (strlen($postInput)) echo $postInput;
+        if (strlen($postInput)) {
+            echo $postInput;
+        }
     }
 }

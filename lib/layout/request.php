@@ -11,7 +11,11 @@
 namespace Rover\Fadmin\Layout;
 
 use Bitrix\Main\Application;
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\Config\Option;
+use Bitrix\Main\HttpRequest;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Inputs\Addpreset;
 use Rover\Fadmin\Inputs\Removepreset;
 use Rover\Fadmin\Options;
@@ -25,38 +29,33 @@ use Rover\Fadmin\Options\Event;
  */
 abstract class Request
 {
-    /** @var Options */
-    protected $options;
-
-    /** @var array */
-    protected $params;
-
-    /** @var \Bitrix\Main\HttpRequest */
-    protected $request;
+    protected Options     $options;
+    protected array       $params;
+    protected HttpRequest $request;
 
     /**
      * Request constructor.
      *
      * @param Options $options
-     * @param array   $params
-     * @throws \Bitrix\Main\SystemException
+     * @param array $params
      */
-    public function __construct(Options $options, array $params = array())
+    public function __construct(Options $options, array $params = [])
     {
-        $this->options  = $options;
-        $this->params   = $params;
-        $this->request  = Application::getInstance()->getContext()->getRequest();
+        $this->options = $options;
+        $this->params  = $params;
+        $this->request = Application::getInstance()->getContext()->getRequest();
     }
 
     /**
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function process()
+    public function process(): void
     {
         // action before
-        if (!$this->options->event->handle(Event::BEFORE_GET_REQUEST)->isSuccess())
+        if (!$this->options->event->handle(Event::BEFORE_GET_REQUEST)->isSuccess()) {
             return;
+        }
 
         if ($this->request->get(Addpreset::getType())) {
             $this->addPreset();
@@ -75,14 +74,14 @@ abstract class Request
 
     /**
      * @return int
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function addPreset()
     {
-        list($siteId, $value) = explode(Addpreset::SEPARATOR,
+        [$siteId, $value] = explode(Addpreset::SEPARATOR,
             $this->request->get(Addpreset::getType()));
 
         return intval($this->options->getPreset()->add($value, $siteId));
@@ -90,44 +89,46 @@ abstract class Request
 
     /**
      * @return bool
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     protected function removePreset()
     {
-        list($siteId, $id) = explode(Removepreset::SEPARATOR,
+        [$siteId, $id] = explode(Removepreset::SEPARATOR,
             $this->request->get(Removepreset::getType()));
 
         return $this->options->getPreset()->remove($id, $siteId);
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    protected function restoreDefaults()
+    protected function restoreDefaults(): void
     {
         Option::delete($this->options->getModuleId());
     }
 
     /**
      * @param $url
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function redirect($url)
+    protected function redirect($url): void
     {
         if (!$this->options->event
             ->handle(Event::BEFORE_REDIRECT_AFTER_REQUEST, compact('url'))
-            ->isSuccess())
+            ->isSuccess()) {
             return;
+        }
 
         $url = $this->options->event->getParameter('url');
 
-        if (empty($url))
+        if (empty($url)) {
             return;
+        }
 
         LocalRedirect($url);
     }

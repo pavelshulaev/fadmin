@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Rover\Fadmin\Layout\Admin\Input;
 
 /**
@@ -21,27 +23,28 @@ use Rover\Fadmin\Layout\Admin\Input;
 class Checkbox extends Input
 {
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
-        ?><input <?=$this->getCommonAttributes()?>><?php
+        ?>
+        <input type="hidden" name="<?= $this->input->getName() ?>" value="N">
+        <input <?= $this->getCommonAttributes() ?>>
+        <?php
     }
 
     /**
      * @return string
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function getValue()
+    protected function getValue(): string
     {
-        $value      = $this->input->getValue() == "Y";
-        $checked    = ($value == 'Y') || ($value === true);
+        $checked = in_array($this->input->getValue(), ['Y', true], true);
 
-        return ' value="Y" ' . ($checked ? " checked=\"checked\""  : '');
+        return ' value="Y" ' . ($checked ? " checked=\"checked\"" : '');
     }
 }

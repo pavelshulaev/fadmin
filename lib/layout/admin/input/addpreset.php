@@ -10,10 +10,12 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\Localization\Loc;
-use \Rover\Fadmin\Inputs\Addpreset as AddPresetInput;
+use Rover\Fadmin\Inputs\Addpreset as AddPresetInput;
 
 Loc::loadMessages(__FILE__);
+
 /**
  * Class Addpreset
  *
@@ -23,24 +25,26 @@ Loc::loadMessages(__FILE__);
 class Addpreset extends Submit
 {
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showCells()
+    public function showCells(): void
     {
-        $this->showLabelCell('width="50%" class="adm-detail-content-cell-l" style="vertical-align: top; padding-top: 7px;"', true);
+        $this->showLabelCell('width="50%" class="adm-detail-content-cell-l" style="vertical-align: top; padding-top: 7px;"',
+            true);
         $this->showInputCell('width="50%" class="adm-detail-content-cell-r"');
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return void
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
-        if (!$this->input instanceof AddPresetInput)
+        if (!$this->input instanceof AddPresetInput) {
             return;
+        }
 
         $this->customInputName  = AddPresetInput::getType();
         $this->customInputValue = $this->input->getSiteId() . AddPresetInput::SEPARATOR . $this->input->getDefault();
@@ -49,19 +53,18 @@ class Addpreset extends Submit
 
         $popup = $this->input->getPopup();
 
-        if ($popup === false)
+        if ($popup === false) {
             return;
+        }
 
-        $text       = $popup ? : Loc::getMessage('rover-fa__ADDPRESET_TEXT');
-        $default    = $this->input->getDefault() ?: Loc::getMessage('rover-fa__ADDPRESET_DEFAULT');
+        $text    = $popup ?: Loc::getMessage('rover-fa__ADDPRESET_TEXT');
+        $default = $this->input->getDefault() ?: Loc::getMessage('rover-fa__ADDPRESET_DEFAULT');
 
         ?>
         <script>
-            (function()
-            {
-                document.getElementById('<?=$this->input->getFieldId()?>').onclick = function()
-                {
-                    var presetName = prompt('<?=$text ?>', '<?=$default?>');
+            (function () {
+                document.getElementById('<?=$this->input->getFieldId()?>').onclick = function () {
+                    let presetName = prompt('<?=$text ?>', '<?=$default?>');
 
                     if (presetName == null)
                         return false;

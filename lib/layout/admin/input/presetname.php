@@ -13,10 +13,10 @@ namespace Rover\Fadmin\Layout\Admin\Input;
 class Presetname extends Text
 {
     /**
-     * @return mixed|void
+     * @return string
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getType()
+    public function getType(): string
     {
         return \Rover\Fadmin\Inputs\Text::getType();
     }

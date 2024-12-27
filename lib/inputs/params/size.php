@@ -17,26 +17,25 @@ namespace Rover\Fadmin\Inputs\Params;
  */
 trait Size
 {
-    /** @var int */
-    protected $size;
+    protected int $size;
 
     /**
      * @return int
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->size;
     }
 
     /**
-     * @param $size
+     * @param int $size
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setSize($size)
+    public function setSize(int $size): static
     {
-        $this->size = intval($size);
+        $this->size = $size;
 
         return $this;
     }

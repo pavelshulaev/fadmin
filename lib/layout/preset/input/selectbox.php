@@ -24,7 +24,7 @@ class Selectbox extends Input
      * @param bool $empty
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showLabel($empty = false)
+    public function showLabel(bool $empty = false): void
     {
         $this->adminInput->showLabel($empty);
     }
@@ -32,7 +32,7 @@ class Selectbox extends Input
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         $this->adminInput->showInput();
     }

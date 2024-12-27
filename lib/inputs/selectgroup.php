@@ -10,6 +10,10 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
+
 /**
  * Class Selectbox
  *
@@ -22,17 +26,17 @@ class Selectgroup extends Selectbox
      * @return string
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getGroupName()
+    public function getGroupName(): string
     {
         return $this->name . '_group';
     }
 
     /**
      * @return string
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getGroupValueName()
+    public function getGroupValueName(): string
     {
         return self::getFullPath($this->getGroupName(),
             $this->getPresetId(), $this->getSiteId());
@@ -40,10 +44,10 @@ class Selectgroup extends Selectbox
 
     /**
      * @return Input
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function getGroupInput()
+    protected function getGroupInput(): Input
     {
         $params = array(
             'name' => $this->getGroupName(),
@@ -55,9 +59,9 @@ class Selectgroup extends Selectbox
 
     /**
      * @return array|string
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function getGroupValue()
@@ -67,11 +71,11 @@ class Selectgroup extends Selectbox
 
     /**
      * @param $value
-     * @return $this|Input
-     * @throws \Bitrix\Main\SystemException
+     * @return Input
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setGroupValue($value)
+    public function setGroupValue($value): Input
     {
         return $this->getGroupInput()->setValue($value);
     }
@@ -103,11 +107,11 @@ class Selectgroup extends Selectbox
     /**
      * @param $value
      * @return bool
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-    public function beforeSaveValue(&$value)
+    public function beforeSaveValue(&$value): bool
     {
         $this->getGroupInput()->setValueFromRequest();
 

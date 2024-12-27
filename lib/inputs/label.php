@@ -10,6 +10,9 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Options;
 
 /**
@@ -26,9 +29,9 @@ class Label extends Input
      * @param array      $params
      * @param Options    $options
      * @param Input|null $parent
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      */
 	public function __construct(array $params, Options $options, Input $parent = null)
 	{
@@ -44,8 +47,8 @@ class Label extends Input
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-	public function beforeSaveValue(&$value)
-	{
+	public function beforeSaveValue(&$value): bool
+    {
 		return false;
 	}
 
@@ -53,7 +56,7 @@ class Label extends Input
      * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function beforeLoadValue()
+    public function beforeLoadValue(): bool
     {
         return false;
     }

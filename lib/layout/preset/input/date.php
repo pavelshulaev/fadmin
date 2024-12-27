@@ -21,7 +21,7 @@ class Date extends DateTime
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         $this->adminInput->showInput();
     }

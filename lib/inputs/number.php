@@ -9,6 +9,10 @@
  */
 
 namespace Rover\Fadmin\Inputs;
+
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Inputs\Params\Placeholder;
 use Rover\Fadmin\Options;
 
@@ -22,62 +26,65 @@ class Number extends Text
 {
     use Placeholder;
 
-	/** @var int */
-	protected $min;
-
-	/** @var int */
-	protected $max;
+    protected int $min;
+    protected int $max;
 
     /**
      * Number constructor.
      *
-     * @param array   $params
+     * @param array $params
      * @param Options $options
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      */
-	public function __construct(array $params, Options $options)
-	{
-		parent::__construct($params, $options);
+    public function __construct(array $params, Options $options)
+    {
+        parent::__construct($params, $options);
 
-		if (isset($params['min']))
-		    $this->setMin($params['min']);
+        if (isset($params['min'])) {
+            $this->setMin($params['min']);
+        }
 
-		if (isset($params['max']))
-		    $this->setMax($params['max']);
+        if (isset($params['max'])) {
+            $this->setMax($params['max']);
+        }
 
-		if (isset($params['placeholder']))
-		    $this->setPlaceholder($params['placeholder']);
-	}
+        if (isset($params['placeholder'])) {
+            $this->setPlaceholder($params['placeholder']);
+        }
+    }
 
     /**
      * @param $value
-     * @return bool|mixed
+     * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-	public function beforeSaveRequest(&$value)
-	{
-		// not integer
-		if ($value != intval($value))
-			$value = $this->default;
+    public function beforeSaveRequest(&$value): bool
+    {
+        // not integer
+        if ($value != intval($value)) {
+            $value = $this->default;
+        }
 
-		// min
-		if (!is_null($this->min) && $value < $this->min)
-			$value = $this->default;
+        // min
+        if (isset($this->min) && $value < $this->min) {
+            $value = $this->default;
+        }
 
-		// max
-		if (!is_null($this->max) && $value > $this->max)
-			$value = $this->default;
+        // max
+        if (isset($this->max) && $value > $this->max) {
+            $value = $this->default;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
     /**
      * @return int
      */
-    public function getMin()
+    public function getMin(): int
     {
         return $this->min;
     }
@@ -87,7 +94,7 @@ class Number extends Text
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setMin($min)
+    public function setMin($min): static
     {
         $this->min = intval($min);
 
@@ -97,7 +104,7 @@ class Number extends Text
     /**
      * @return int
      */
-    public function getMax()
+    public function getMax(): int
     {
         return $this->max;
     }
@@ -107,7 +114,7 @@ class Number extends Text
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setMax($max)
+    public function setMax($max): static
     {
         $this->max = intval($max);
 

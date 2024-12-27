@@ -20,10 +20,10 @@ use Rover\Fadmin\Layout\Preset\Input;
 class SubTab extends Input
 {
     /**
-     * @return mixed|void
+     * @return void
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         $this->showInput();
     }
@@ -31,7 +31,7 @@ class SubTab extends Input
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         $this->adminInput->showInput();
     }

@@ -22,11 +22,8 @@ use Rover\Fadmin\Inputs\Input as InputEngine;
  */
 abstract class Input
 {
-    /** @var string */
-    public static $type;
-
-    /** @var InputEngine */
-    protected $input;
+    public static string  $type;
+    protected InputEngine $input;
 
     /**
      * Layout constructor.
@@ -45,21 +42,24 @@ abstract class Input
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function build(InputEngine $input)
+    public static function build(InputEngine $input): Input
     {
-        if (!strlen(static::$type))
+        if (!strlen(static::$type)) {
             throw new ArgumentNullException('type');
+        }
 
         $inputClassName = $input::getClassName();
         $inputType      = substr($inputClassName, strripos($inputClassName, '\\') + 1);
         $namespace      = '\\Rover\\Fadmin\\Layout\\' . static::$type . '\\Input\\' . $inputType;
 
-        if (!class_exists($namespace))
+        if (!class_exists($namespace)) {
             throw new ArgumentOutOfRangeException($namespace);
+        }
 
         $layoutDriver = new $namespace($input);
-        if (!$layoutDriver instanceof self)
+        if (!$layoutDriver instanceof self) {
             throw new ArgumentOutOfRangeException($inputType);
+        }
 
         return $layoutDriver;
     }
@@ -70,41 +70,39 @@ abstract class Input
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function drawStatic(InputEngine $input)
+    public static function drawStatic(InputEngine $input): void
     {
         $layoutDriver = self::build($input);
         $layoutDriver->draw();
     }
 
     /**
-     * @return mixed
+     * @return void
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    abstract public function showInput();
+    abstract public function showInput(): void;
 
     /**
-     * @return string
+     * @return void
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showPreInput()
+    public function showPreInput(): void
     {
-        return '';
+    }
+
+    /**
+     * @return void
+     * @author Pavel Shulaev (https://rover-it.me)
+     */
+    public function showPostInput(): void
+    {
     }
 
     /**
      * @return string
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showPostInput()
-    {
-        return '';
-    }
-
-    /**
-     * @return string
-     * @author Pavel Shulaev (https://rover-it.me)
-     */
-    public function getInputLayout()
+    public function getInputLayout(): string
     {
         ob_start();
         $this->showInput();
@@ -116,7 +114,7 @@ abstract class Input
      * @return mixed
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getType()
+    public function getType(): string
     {
         $input = $this->input;
 
@@ -124,8 +122,8 @@ abstract class Input
     }
 
     /**
-     * @return mixed
+     * @return void
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    abstract public function draw();
+    abstract public function draw(): void;
 }

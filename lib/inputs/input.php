@@ -1,11 +1,13 @@
 <?php
+
 namespace Rover\Fadmin\Inputs;
 
 use Bitrix\Main;
 use Bitrix\Main\Application;
-use \Bitrix\Main\Config\Option;
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\Config\Option;
 use Rover\Fadmin\Inputs\Params\Common;
-use \Rover\Fadmin\Options;
+use Rover\Fadmin\Options;
 
 /**
  * Class Input
@@ -71,119 +73,141 @@ abstract class Input
     /**
      * Input constructor.
      *
-     * @param array      $params
-     * @param Options    $options
+     * @param array $params
+     * @param Options $options
      * @param Input|null $parent
      * @throws Main\ArgumentNullException
      * @throws Main\ArgumentOutOfRangeException
      * @throws Main\SystemException
      */
-	public function __construct(array $params, Options $options, Input $parent = null)
-	{
-		if (empty($params['name']))
-			throw new Main\ArgumentNullException('name');
+    public function __construct(array $params, Options $options, Input $parent = null)
+    {
+        if (empty($params['name'])) {
+            throw new Main\ArgumentNullException('name');
+        }
 
-		if (preg_match('#[.]#usi', $params['name']))
-		    throw new Main\ArgumentOutOfRangeException('name');
+        if (preg_match('#[.]#usi', $params['name'])) {
+            throw new Main\ArgumentOutOfRangeException('name');
+        }
 
-		if (empty($params['label']))
-			throw new Main\SystemException("Argument 'label' is null or empty (name '" . $params['name'] . "')");
+        if (empty($params['label'])) {
+            throw new Main\SystemException("Argument 'label' is null or empty (name '" . $params['name'] . "')");
+        }
 
-		if (empty($params['id']))
-			$params['id'] = $params['name'];
+        if (empty($params['id'])) {
+            $params['id'] = $params['name'];
+        }
 
-		$this->optionsEngine= $options;
-		$this->id           = htmlspecialcharsbx($params['id']);
-		$this->name         = htmlspecialcharsbx($params['name']);
+        $this->optionsEngine = $options;
+        $this->id            = htmlspecialcharsbx($params['id']);
+        $this->name          = htmlspecialcharsbx($params['name']);
 
-		if ($parent instanceof Input)
-		    $this->setParent($parent);
+        if ($parent instanceof Input) {
+            $this->setParent($parent);
+        }
 
-		$this->setLabel($params['label']);
+        $this->setLabel($params['label']);
 
-		if (array_key_exists('default', $params))
-		    $this->setDefault($params['default']);
+        if (array_key_exists('default', $params)) {
+            $this->setDefault($params['default']);
+        }
 
-        if (isset($params['presetId']))
+        if (isset($params['presetId'])) {
             $this->setPresetId($params['presetId']);
-        elseif (($this->parent instanceof Input) && ($this->parent->isPreset()))
+        } elseif (isset($this->parent) && ($this->parent->isPreset())) {
             $this->setPresetId($this->parent->getPresetId());
+        }
 
-        if (isset($params['siteId']))
+        if (isset($params['siteId'])) {
             $this->setSiteId($params['siteId']);
-        elseif (($this->parent instanceof Input))
+        } elseif (isset($this->parent) && $this->parent->getSiteId()) {
             $this->setSiteId($this->parent->getSiteId());
+        }
 
-		if (isset($params['multiple']))
-		    $this->setMultiple($params['multiple']);
+        if (isset($params['multiple'])) {
+            $this->setMultiple($params['multiple']);
+        }
 
-		if (isset($params['disabled']))
-		    $this->setDisabled($params['disabled']);
+        if (isset($params['disabled'])) {
+            $this->setDisabled($params['disabled']);
+        }
 
-		if (isset($params['help']))
-		    $this->setHelp($params['help']);
+        if (isset($params['help'])) {
+            $this->setHelp($params['help']);
+        }
 
-		if (isset($params['sort']) && intval($params['sort']))
-		    $this->setSort($params['sort']);
+        if (isset($params['sort']) && intval($params['sort'])) {
+            $this->setSort($params['sort']);
+        }
 
-        if (array_key_exists('required', $params))
+        if (array_key_exists('required', $params)) {
             $this->setRequired($params['required']);
+        }
 
-		// @TODO: deprecated flag
-		if (array_key_exists('display', $params))
-		    $this->setHidden(!$params['display']);
+        // @TODO: deprecated flag
+        if (array_key_exists('display', $params)) {
+            $this->setHidden(!$params['display']);
+        }
 
-        if (array_key_exists('hidden', $params))
+        if (array_key_exists('hidden', $params)) {
             $this->setHidden($params['hidden']);
+        }
 
-        if (isset($params['preInput']))
+        if (isset($params['preInput'])) {
             $this->setPreInput($params['preInput']);
+        }
 
-        if (isset($params['postInput']))
+        if (isset($params['postInput'])) {
             $this->setPostInput($params['postInput']);
+        }
     }
 
     /**
      * @param array $params
-     * @param Tab   $tab
-     * @return mixed
+     * @param Tab $tab
+     * @return Input
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated
      */
-	public static function factory(array $params, Tab $tab)
-	{
-	    if ($tab->isPreset())
-	        $params['presetId'] = $tab->getPresetId();
+    public static function factory(array $params, Tab $tab): Input
+    {
+        if ($tab->isPreset()) {
+            $params['presetId'] = $tab->getPresetId();
+        }
 
-        if ($tab->getSiteId())
+        if ($tab->getSiteId()) {
             $params['siteId'] = $tab->getSiteId();
+        }
 
-		return self::build($params, $tab->getOptionsEngine(), $tab);
-	}
+        return self::build($params, $tab->getOptionsEngine(), $tab);
+    }
 
     /**
-     * @param array      $params
-     * @param Options    $options
+     * @param array $params
+     * @param Options $options
      * @param Input|null $parent
-     * @return mixed
+     * @return Input
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public static function build(array $params, Options $options, Input $parent = null)
+    public static function build(array $params, Options $options, Input $parent = null): Input
     {
         $className = __NAMESPACE__ . '\\' . ucfirst($params['type']);
 
-        if (!class_exists($className))
+        if (!class_exists($className)) {
             throw new Main\SystemException('Class "' . $className . '" not found!');
+        }
 
-        if ($className == __CLASS__)
+        if ($className == __CLASS__) {
             throw new Main\SystemException('Can\'t create "' . $className . '" instance');
+        }
 
         $input = new $className($params, $options, $parent);
 
-        if ($input instanceof Input === false)
+        if ($input instanceof Input === false) {
             throw new Main\SystemException('"' . $className . '" is not a child of "' . __CLASS__ . '"');
+        }
 
         return $input;
     }
@@ -194,10 +218,11 @@ abstract class Input
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setValue($value)
+    public function setValue($value): static
     {
-        if ($this->disabled)
+        if ($this->disabled) {
             throw new Main\SystemException('input is disabled');
+        }
 
         $this->value = $this->saveValue($value) ? $value : null;
 
@@ -211,20 +236,22 @@ abstract class Input
      * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    private function saveValue($value)
+    private function saveValue($value): bool
     {
-        if (false === static::beforeSaveValue($value))
+        if (false === static::beforeSaveValue($value)) {
             return false;
+        }
 
         Option::set($this->getModuleId(), $this->getOptionName(),
             $value, $this->getSiteId());
 
         // remove old format value
-        if ($this->getFieldName() != $this->getOptionName())
+        if ($this->getFieldName() != $this->getOptionName()) {
             Option::delete($this->getModuleId(), [
-                'name'      => $this->getFieldName(),
-                'site_id'   => $this->getSiteId(),
+                'name'    => $this->getFieldName(),
+                'site_id' => $this->getSiteId(),
             ]);
+        }
 
         return true;
     }
@@ -234,7 +261,7 @@ abstract class Input
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getOptionName()
+    public function getOptionName(): string
     {
         return self::getFullPath($this->name, $this->getPresetId());
     }
@@ -244,7 +271,7 @@ abstract class Input
      * @author Pavel Shulaev (http://rover-it.me)
      * @deprecated
      */
-    public function removeValue()
+    public function removeValue(): void
     {
         $this->clear();
     }
@@ -253,34 +280,34 @@ abstract class Input
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function clear()
+    public function clear(): void
     {
         $this->value = null;
 
-        Option::delete($this->getModuleId(), array(
-            'name'      => $this->getOptionName(),
-            'site_id'   => $this->getSiteId()
-        ));
+        Option::delete($this->getModuleId(), [
+            'name'    => $this->getOptionName(),
+            'site_id' => $this->getSiteId()
+        ]);
 
         // old format
-        if ($this->getFieldName() != $this->getOptionName())
-            Option::delete($this->getModuleId(),  array(
-                'name'      => $this->getFieldName(),
-                'site_id'   => $this->getSiteId()
-            ));
+        if ($this->getFieldName() != $this->getOptionName()) {
+            Option::delete($this->getModuleId(), [
+                'name'    => $this->getFieldName(),
+                'site_id' => $this->getSiteId()
+            ]);
+        }
     }
 
     /**
      * @throws Main\ArgumentNullException
-     * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function loadValue()
+    public function loadValue(): void
     {
-        if (false === static::beforeLoadValue())
+        if (false === static::beforeLoadValue()) {
             $this->value = null;
-        else {
-            if ($this->getFieldName() == $this->getOptionName()){
+        } else {
+            if ($this->getFieldName() == $this->getOptionName()) {
                 $this->value = Option::get(
                     $this->getModuleId(),
                     $this->getOptionName(),
@@ -297,58 +324,65 @@ abstract class Input
                 );
 
                 // trying to load from old format
-                if ($this->value == '~value_not_found')
+                if ($this->value == '~value_not_found') {
                     $this->value = Option::get(
                         $this->getModuleId(),
                         $this->getFieldName(),
                         $this->getDefault(),
                         $this->getSiteId()
                     );
+                }
             }
         }
 
         if ($this->multiple) {
-            if (!is_array($this->value))
+            if (!is_array($this->value)) {
                 $this->value = unserialize($this->value);
+            }
 
-            if (empty($this->value))
-                $this->value = array();
+            if (empty($this->value)) {
+                $this->value = [];
+            }
         }
 
         static::afterLoadValue($this->value);
     }
 
     /**
-     * @param array  $params
-     * @param        $moduleId
-     * @param string $presetId
-     * @param string $siteId
+     * @param array $params
+     * @param string $moduleId
+     * @param string|null $presetId
+     * @param string|null $siteId
      * @return string
-     * @throws Main\ArgumentNullException
-     * @throws Main\ArgumentOutOfRangeException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function getValueStatic(array $params, $moduleId, $presetId = '', $siteId = '')
+    public static function getValueStatic(array $params, string $moduleId, string $presetId = null,
+        string $siteId = null): string
     {
-        if (!isset($params['name']))
+        if (!isset($params['name'])) {
             throw new Main\ArgumentNullException('name');
+        }
 
         $moduleId = trim($moduleId);
-        if (!strlen($moduleId))
+        if (!strlen($moduleId)) {
             throw new Main\ArgumentNullException('moduleId');
+        }
 
-        if (!isset($params['default']))
+        if (!isset($params['default'])) {
             $params['default'] = null;
+        }
 
         $formName   = self::getFullPath($params['name'], $presetId, $siteId);
         $optionName = self::getFullPath($params['name'], $presetId);
 
-        if ($formName == $optionName)
+        if ($formName == $optionName) {
             return Option::get(
                 $moduleId,
                 self::getFullPath($params['name'], $presetId),
                 $params['default'],
                 $siteId);
+        }
 
         // search value in formats...
         $value = Option::get(
@@ -357,8 +391,9 @@ abstract class Input
             '~value_not_found',
             $siteId);
 
-        if ($value != '~value_not_found')
+        if ($value != '~value_not_found') {
             return $value;
+        }
 
         // old format
         return Option::get(
@@ -372,16 +407,17 @@ abstract class Input
      * @param bool $reload
      * @return array|string
      * @throws Main\ArgumentNullException
-     * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getValue($reload = false)
+    public function getValue(bool $reload = false)
     {
-        if (empty($this->value) || $reload)
+        if (empty($this->value) || $reload) {
             $this->loadValue();
+        }
 
-        if (false === static::beforeGetValue($this->value))
+        if (false === static::beforeGetValue($this->value)) {
             $this->value = null;
+        }
 
         return $this->value;
     }
@@ -391,28 +427,32 @@ abstract class Input
      * @throws Main\SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function setValueFromRequest()
-	{
-	    if ($this->isDisabled())
-	        return false;
+    public function setValueFromRequest(): bool
+    {
+        if ($this->isDisabled()) {
+            return false;
+        }
 
         $request = Application::getInstance()
             ->getContext()
             ->getRequest();
 
-		if (!$request->offsetExists($this->getFieldName())
-			&& (static::getType() != Checkbox::getType())
-			&& (static::getType() != Row::getType())
-            && (static::getType() != File::getType()))
-			return false;
+        if (!$request->offsetExists($this->getFieldName())
+            && (static::getType() != Checkbox::getType())
+            && (static::getType() != Row::getType())
+            && (static::getType() != File::getType())) {
+            return false;
+        }
 
         $value = $request->get($this->getFieldName());
 
-        if (false === static::beforeSaveRequest($value))
+        if (false === static::beforeSaveRequest($value)) {
             return false;
+        }
 
-        if ($this->multiple && is_array($value))
+        if ($this->multiple && is_array($value)) {
             $value = serialize($value);
+        }
 
         $this->setValue($value);
 
@@ -423,7 +463,7 @@ abstract class Input
      * @return string
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function getClassName()
+    public static function getClassName(): string
     {
         return get_called_class();
     }
@@ -432,7 +472,7 @@ abstract class Input
      * @return mixed
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public static function getType()
+    public static function getType(): string
     {
         $className = static::getClassName();
 
@@ -445,7 +485,7 @@ abstract class Input
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated use getFieldId()
      */
-    public function getValueId()
+    public function getValueId(): string
     {
         return $this->getFieldId();
     }
@@ -455,7 +495,7 @@ abstract class Input
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getFieldId()
+    public function getFieldId(): string
     {
         return self::getFullPath($this->getId(), $this->getPresetId(), $this->getSiteId());
     }
@@ -466,7 +506,7 @@ abstract class Input
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated use getFieldName()
      */
-    public function getValueName()
+    public function getValueName(): string
     {
         return $this->getFieldName();
     }
@@ -477,7 +517,7 @@ abstract class Input
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated use getFieldName()
      */
-    public function getFormName()
+    public function getFormName(): string
     {
         return $this->getFieldName();
     }
@@ -487,32 +527,35 @@ abstract class Input
      * @throws Main\ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getFieldName()
+    public function getFieldName(): string
     {
         return self::getFullPath($this->name, $this->getPresetId(), $this->getSiteId());
     }
 
     /**
      * @param        $value
-     * @param string $presetId
-     * @param string $siteId
+     * @param string|null $presetId
+     * @param string|null $siteId
      * @return string
-     * @throws Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function getFullPath($value, $presetId = '', $siteId = '')
+    public static function getFullPath($value, string $presetId = null, string $siteId = null): string
     {
         $value = trim($value);
-        if (!strlen($value))
+        if (!strlen($value)) {
             throw new Main\ArgumentNullException('value');
+        }
 
         $result = $value;
 
-        if (strlen($presetId))
+        if ($presetId) {
             $result = htmlspecialcharsbx($presetId) . self::SEPARATOR . $result;
+        }
 
-        if (strlen($siteId))
+        if ($siteId) {
             $result = htmlspecialcharsbx($siteId) . self::SEPARATOR . $result;
+        }
 
         return $result;
     }
@@ -523,16 +566,17 @@ abstract class Input
     public function __clone()
     {
         $children = $this->getChildren();
-        if (is_null($children))
+        if (empty($children)) {
             return;
+        }
 
-        $newChildren    = array();
-        $childrenCnt    = count($children);
+        $newChildren = [];
+        $childrenCnt = count($children);
 
         for ($i = 0; $i < $childrenCnt; ++$i) {
             /** @var Input $input */
-            $child          = $children[$i];
-            $newChildren[]  = clone $child;
+            $child         = $children[$i];
+            $newChildren[] = clone $child;
         }
 
         $this->children = $newChildren;
@@ -543,23 +587,27 @@ abstract class Input
      * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function checkByFilter(array $filter)
+    public function checkByFilter(array $filter): bool
     {
         $found = true;
 
-        if (isset($filter['id']) && strlen($filter['id']))
-            $found = $found && ($filter['id'] == $this->getId());
+        if (isset($filter['id']) && strlen($filter['id'])) {
+            $found = ($filter['id'] == $this->getId());
+        }
 
-        if (isset($filter['name']) && strlen($filter['name']))
+        if (isset($filter['name']) && strlen($filter['name'])) {
             $found = $found && ($filter['name'] == $this->getName());
+        }
 
-        if (isset($filter['siteId']) && strlen($filter['siteId']))
+        if (isset($filter['siteId']) && strlen($filter['siteId'])) {
             $found = $found && ($filter['siteId'] == $this->getSiteId());
+        }
 
-        if (isset($filter['presetId']) && strlen($filter['presetId']))
+        if (isset($filter['presetId']) && strlen($filter['presetId'])) {
             $found = $found && ($filter['presetId'] == $this->getPresetId());
+        }
 
-       return $found;
+        return $found;
     }
 
     /**
@@ -567,28 +615,31 @@ abstract class Input
      * @return array
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function searchByFilter($filter)
+    public function searchByFilter($filter): array
     {
-        $children       = static::getChildren();
-        $childrenCnt    = count($children);
-        $result         = array();
+        $children    = static::getChildren();
+        $childrenCnt = count($children);
+        $result      = [];
 
         for ($i = 0; $i < $childrenCnt; ++$i) {
-            /** @var Input $child */
             $child = $children[$i];
-            if (!$child instanceof self)
+            if (!$child instanceof self) {
                 continue;
+            }
 
-            if ($child->checkByFilter($filter))
+            if ($child->checkByFilter($filter)) {
                 $result[] = $child;
+            }
 
             $childrenLevel2 = $child->getChildren();
-            if (!is_array($childrenLevel2) || !count($childrenLevel2))
+            if (!count($childrenLevel2)) {
                 continue;
+            }
 
             $childResult = $child->searchByFilter($filter);
-            if (count($childResult))
+            if (count($childResult)) {
                 $result = array_merge($result, $childResult);
+            }
         }
 
         return $result;
@@ -603,67 +654,32 @@ abstract class Input
      * @throws Main\ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function searchOneByName($name, $presetId = null, $siteId = null)
+    public function searchOneByName($name, $presetId = null, $siteId = null): ?Input
     {
         $name = trim($name);
-        if (!strlen($name))
+        if (!strlen($name)) {
             throw new Main\ArgumentNullException('name');
+        }
 
-        $filter= array(
-            'name'      => $name,
-            'siteId'    => is_null($siteId) ? $this->getSiteId() : $siteId,
-            'presetId'  => is_null($presetId) ? $this->getPresetId() : $presetId
-        );
+        $filter = [
+            'name'     => $name,
+            'siteId'   => $siteId ?? $this->getSiteId(),
+            'presetId' => $presetId ?? $this->getPresetId()
+        ];
 
         // allows to make search in tabcontrol also
         $searchResult = static::searchByFilter($filter);
 
-        if (count($searchResult) == 1)
+        if (count($searchResult) == 1) {
             return reset($searchResult);
+        }
 
-        if (!count($searchResult))
+        if (!count($searchResult)) {
             return null;
+        }
 
         throw new Main\ArgumentOutOfRangeException('name');
     }
-
-    /**
-     * @param $value
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @internal
-     */
-    protected function beforeSaveRequest(&$value)
-    {
-        return true;
-    }
-
-    /**
-     * @param $value
-     * @return mixed
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @internal
-     */
-    protected function beforeGetValue(&$value)
-    {
-        return true;
-    }
-
-    /**
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @internal
-     */
-    protected function beforeLoadValue()
-    {
-        return true;
-    }
-
-    /**
-     * @param $value
-     * @author Pavel Shulaev (https://rover-it.me)
-     * @internal
-     */
-    protected function afterLoadValue(&$value) {}
 
     /**
      * @param $value
@@ -671,7 +687,47 @@ abstract class Input
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-    protected function beforeSaveValue(&$value)
+    protected function beforeSaveRequest(&$value): bool
+    {
+        return true;
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeGetValue(&$value): bool
+    {
+        return true;
+    }
+
+    /**
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeLoadValue(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @param $value
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function afterLoadValue(&$value)
+    {
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     * @author Pavel Shulaev (https://rover-it.me)
+     * @internal
+     */
+    protected function beforeSaveValue(&$value): bool
     {
         return true;
     }

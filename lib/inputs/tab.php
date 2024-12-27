@@ -13,6 +13,7 @@ namespace Rover\Fadmin\Inputs;
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\NotSupportedException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Options;
 
 /**
@@ -23,44 +24,41 @@ use Rover\Fadmin\Options;
  */
 class Tab extends \Rover\Fadmin\Tab
 {
-    /** @var array|mixed  */
-    protected $inputsConfig = array();
-
-    /** @var bool */
-    protected $isPreset = false;
+    protected array $inputsConfig;
+    protected bool  $isPreset;
 
     /**
      * Tab constructor.
      *
-     * @param array      $params
-     * @param Options    $options
+     * @param array $params
+     * @param Options $options
      * @param Input|null $parent
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      */
     public function __construct(array $params, Options $options, Input $parent = null)
     {
         parent::__construct($params, $options, $parent);
 
-        $this->isPreset = isset($params['preset'])
-            ? (bool)$params['preset']
-            : false;
+        $this->isPreset = isset($params['preset']) && $params['preset'];
 
-        if (isset($params['inputs']) && count($params['inputs']))
+        if (isset($params['inputs']) && count($params['inputs'])) {
             $this->inputsConfig = $params['inputs'];
+        }
 
-        if (isset($params['description']))
+        if (isset($params['description'])) {
             $this->setDefault($params['description']);
+        }
     }
 
     /**
      * @param bool $reload
      * @return Input[]
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getInputs($reload = false)
+    public function getInputs(bool $reload = false): array
     {
         return $this->getChildren($reload);
     }
@@ -68,41 +66,44 @@ class Tab extends \Rover\Fadmin\Tab
     /**
      * @param bool $reload
      * @return Input[]
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getChildren($reload = false)
+    public function getChildren(bool $reload = false): array
     {
-        if (is_null($this->children) || $reload)
+        if (!isset($this->children) || $reload) {
             $this->loadInputs();
+        }
 
         // @TODO: after get tab inputs event
         return $this->children;
     }
 
     /**
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function loadInputs()
+    public function loadInputs(): void
     {
-        $this->children = array();
+        $this->children = [];
         $inputsCnt      = count($this->inputsConfig);
 
-        for ($i = 0; $i < $inputsCnt; ++$i){
+        for ($i = 0; $i < $inputsCnt; ++$i) {
             $inputParams = $this->inputsConfig[$i];
-            if (!isset($inputParams['siteId']))
+            if (!isset($inputParams['siteId'])) {
                 $inputParams['siteId'] = $this->getSiteId();
+            }
 
-            if (!isset($inputParams['presetId']))
+            if (!isset($inputParams['presetId'])) {
                 $inputParams['presetId'] = $this->getPresetId();
+            }
 
             $this->children[] = self::build($inputParams, $this->optionsEngine, $this);
         }
     }
 
     /**
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function __clone()
@@ -117,50 +118,51 @@ class Tab extends \Rover\Fadmin\Tab
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated
      */
-    public function setInputs(array $inputs)
+    public function setInputs(array $inputs): void
     {
         $this->children = $inputs;
     }
 
     /**
      * @param bool $reload
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function clear($reload = false)
+    public function clear(bool $reload = false): void
     {
-        $inputs     = $this->getInputs($reload);
-        $inputsCnt  = count($inputs);
+        $inputs    = $this->getInputs($reload);
+        $inputsCnt = count($inputs);
 
         for ($i = 0; $i < $inputsCnt; ++$i) {
-            /** @var Input $input */
             $input = $inputs[$i];
             $input->clear();
         }
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setValueFromRequest()
+    public function setValueFromRequest(): bool
     {
         if (!$this->optionsEngine->event
             ->handle(Options\Event::BEFORE_ADD_VALUES_TO_TAB_FROM_REQUEST,
-                array('tab' => $this))
-            ->isSuccess())
-            return;
+                ['tab' => $this])
+            ->isSuccess()) {
+            return false;
+        }
 
-        $inputs     = $this->getInputs();
-        $inputsCnt  = count($inputs);
+        $inputs    = $this->getInputs();
+        $inputsCnt = count($inputs);
 
         for ($i = 0; $i < $inputsCnt; ++$i) {
-            /** @var Input $input */
             $input = $inputs[$i];
             $input->setValueFromRequest();
         }
+
+        return true;
     }
 
     /**
@@ -168,7 +170,7 @@ class Tab extends \Rover\Fadmin\Tab
      * @author Pavel Shulaev (http://rover-it.me)
      * @deprecated
      */
-    public function getDescription()
+    public function getDescription():string
     {
         return $this->getDefault();
     }
@@ -179,7 +181,7 @@ class Tab extends \Rover\Fadmin\Tab
      * @author Pavel Shulaev (https://rover-it.me)
      * @deprecated
      */
-    public function setDescription($description = '')
+    public function setDescription(string $description = ''): static
     {
         return $this->setDefault($description);
     }
@@ -188,9 +190,9 @@ class Tab extends \Rover\Fadmin\Tab
      * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function isPreset()
+    public function isPreset(): bool
     {
-        return (bool)$this->isPreset;
+        return $this->isPreset;
     }
 
     /**
@@ -198,13 +200,15 @@ class Tab extends \Rover\Fadmin\Tab
      * @return Input
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function addInput(Input $input)
+    public function addInput(Input $input): Input
     {
-        if ($this->isPreset())
+        if ($this->isPreset()) {
             $input->setPresetId($this->getPresetId());
+        }
 
-        if ($this->getSiteId())
+        if ($this->getSiteId()) {
             $input->setSiteId($this->getSiteId());
+        }
 
         $this->children[] = $input;
 
@@ -214,38 +218,41 @@ class Tab extends \Rover\Fadmin\Tab
 
     /**
      * @param array $input
-     * @return array|mixed
-     * @throws \Bitrix\Main\SystemException
+     * @return Input
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function addInputArray(array $input)
+    public function addInputArray(array $input): Input
     {
-        if ($this->isPreset())
+        if ($this->isPreset()) {
             $input['presetId'] = $this->getPresetId();
+        }
 
-        if ($this->getSiteId())
+        if ($this->getSiteId()) {
             $input['siteId'] = $this->getSiteId();
+        }
 
-        $input = self::build($input, $this->optionsEngine, $this);
+        $input            = self::build($input, $this->optionsEngine, $this);
         $this->children[] = $input;
 
         return $input;
     }
 
     /**
-     * @param      $inputName
+     * @param string $inputName
      * @param bool $reload
      * @return array|null|string
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getInputValue($inputName, $reload = false)
+    public function getInputValue(string $inputName, bool $reload = false)
     {
         $input = $this->searchOneByName($inputName);
 
-        if ($input instanceof Input)
+        if ($input instanceof Input) {
             return $input->getValue($reload);
+        }
 
         return null;
     }
@@ -255,15 +262,16 @@ class Tab extends \Rover\Fadmin\Tab
      * @param $value
      * @return bool
      * @throws ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setInputValue($name, $value)
+    public function setInputValue($name, $value): bool
     {
         $input = $this->searchOneByName($name);
 
-        if (!$input instanceof Input)
+        if (!$input instanceof Input) {
             return false;
+        }
 
         $input->setValue($value);
 
@@ -271,24 +279,29 @@ class Tab extends \Rover\Fadmin\Tab
     }
 
     /**
-     * @throws \Bitrix\Main\SystemException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function sort()
+    public function sort(): void
     {
         $inputs = $this->getInputs();
-        if (!count($inputs))
+        if (!count($inputs)) {
             return;
+        }
 
-        usort($inputs, function(Input $i1, Input $i2)
-        {
+        usort($inputs, function (Input $i1, Input $i2) {
             // sort on subtabs
-            if (method_exists($i1, 'sort'))
+            if (method_exists($i1, 'sort')) {
                 $i1->sort();
+            }
 
-            if($i1->getSort() < $i2->getSort()) return -1;
-            elseif($i1->getSort() > $i2->getSort()) return 1;
-            else return 0;
+            if ($i1->getSort() < $i2->getSort()) {
+                return -1;
+            } elseif ($i1->getSort() > $i2->getSort()) {
+                return 1;
+            } else {
+                return 0;
+            }
         });
 
         $this->children = $inputs;
@@ -298,16 +311,18 @@ class Tab extends \Rover\Fadmin\Tab
      * @param bool $reload
      * @return null
      * @throws ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getPreset($reload = false)
+    public function getPreset(bool $reload = false)
     {
-        if (!$this->isPreset())
+        if (!$this->isPreset()) {
             throw new ArgumentOutOfRangeException('tab');
+        }
 
-        if (!$this->getPresetId())
+        if (!$this->getPresetId()) {
             throw new ArgumentNullException('presetId');
+        }
 
         return $this->optionsEngine->getPreset()->getById(
             $this->getPresetId(), $this->siteId, $reload);
@@ -320,12 +335,13 @@ class Tab extends \Rover\Fadmin\Tab
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getPresetName($reload = false)
+    public function getPresetName(bool $reload = false): ?string
     {
         $preset = $this->getPreset($reload);
 
-        if (is_array($preset) && isset($preset['name']))
+        if (is_array($preset) && isset($preset['name'])) {
             return $preset['name'];
+        }
 
         return null;
     }
@@ -337,14 +353,16 @@ class Tab extends \Rover\Fadmin\Tab
      * @throws NotSupportedException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setPresetName($name)
+    public function setPresetName($name): void
     {
-        if (!$this->isPreset())
+        if (!$this->isPreset()) {
             throw new NotSupportedException();
+        }
 
         $name = trim($name);
-        if (!strlen($name))
+        if (!strlen($name)) {
             throw new ArgumentNullException('name');
+        }
 
         $this->optionsEngine->getPreset()->updateName(
             $this->getPresetId(),
@@ -359,7 +377,7 @@ class Tab extends \Rover\Fadmin\Tab
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-    public function beforeSaveValue(&$value)
+    public function beforeSaveValue(&$value): bool
     {
         return false;
     }
@@ -368,7 +386,7 @@ class Tab extends \Rover\Fadmin\Tab
      * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function beforeLoadValue()
+    public function beforeLoadValue(): bool
     {
         return false;
     }

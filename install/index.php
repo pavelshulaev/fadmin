@@ -1,8 +1,10 @@
 <?php
+
+use Bitrix\Main\IO\FileNotFoundException;
 use Bitrix\Main\ModuleManager;
 use Bitrix\Main\Application;
 use Bitrix\Main\Localization\Loc;
-use \Bitrix\Main\IO\Directory;
+use Bitrix\Main\IO\Directory;
 
 Loc::loadMessages(__FILE__);
 
@@ -13,7 +15,7 @@ Loc::loadMessages(__FILE__);
  */
 class rover_fadmin extends CModule
 {
-    var $MODULE_ID	= "rover.fadmin";
+    var $MODULE_ID           = "rover.fadmin";
     var $MODULE_VERSION;
     var $MODULE_VERSION_DATE;
     var $MODULE_NAME;
@@ -28,27 +30,29 @@ class rover_fadmin extends CModule
     function __construct()
     {
         global $fadminErrors;
-        
-		$arModuleVersion    = array();
-        $fadminErrors       = array();
+
+        $arModuleVersion = [];
+        $fadminErrors    = [];
 
         require(__DIR__ . "/version.php");
 
-		if (is_array($arModuleVersion) && array_key_exists("VERSION", $arModuleVersion)) {
-			$this->MODULE_VERSION		= $arModuleVersion["VERSION"];
-			$this->MODULE_VERSION_DATE	= $arModuleVersion["VERSION_DATE"];
+        if (is_array($arModuleVersion) && array_key_exists("VERSION", $arModuleVersion)) {
+            $this->MODULE_VERSION      = $arModuleVersion["VERSION"];
+            $this->MODULE_VERSION_DATE = $arModuleVersion["VERSION_DATE"];
         } else {
             $fadminErrors[] = Loc::getMessage('rover_fa__version_info_error');
-		}
+        }
 
-        $this->MODULE_NAME			= Loc::getMessage("rover_fa__name");
-        $this->MODULE_DESCRIPTION	= Loc::getMessage("rover_fa__descr");
-        $this->PARTNER_NAME         = GetMessage("rover_fa__partner_name");
-        $this->PARTNER_URI          = GetMessage("rover_fa__partner_uri");
-	}
+        $this->MODULE_NAME        = Loc::getMessage("rover_fa__name");
+        $this->MODULE_DESCRIPTION = Loc::getMessage("rover_fa__descr");
+        $this->PARTNER_NAME       = GetMessage("rover_fa__partner_name");
+        $this->PARTNER_URI        = GetMessage("rover_fa__partner_uri");
+    }
+
+
 
     /**
-     * @throws \Bitrix\Main\IO\FileNotFoundException
+     * @throws FileNotFoundException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     public function DoInstall()
@@ -56,9 +60,10 @@ class rover_fadmin extends CModule
         global $APPLICATION;
         $rights = $APPLICATION->GetGroupRight($this->MODULE_ID);
 
-        if ($rights == "W")
+        if ($rights == "W") {
             $this->ProcessInstall();
-	}
+        }
+    }
 
     /**
      * @author Pavel Shulaev (http://rover-it.me)
@@ -68,8 +73,9 @@ class rover_fadmin extends CModule
         global $APPLICATION;
         $rights = $APPLICATION->GetGroupRight($this->MODULE_ID);
 
-        if ($rights == "W")
+        if ($rights == "W") {
             $this->ProcessUninstall();
+        }
     }
 
     /**
@@ -78,43 +84,45 @@ class rover_fadmin extends CModule
      */
     public function GetModuleRightsList()
     {
-        return array(
-            "reference_id" => array("D", "R", "W"),
-            "reference" => array(
+        return [
+            "reference_id" => ["D", "R", "W"],
+            "reference"    => [
                 Loc::getMessage('rover_fa__reference_deny'),
                 Loc::getMessage('rover_fa__reference_read'),
                 Loc::getMessage('rover_fa__reference_write')
-            )
-        );
+            ]
+        ];
     }
 
     /**
-     * @throws \Bitrix\Main\IO\FileNotFoundException
+     * @throws FileNotFoundException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	private function ProcessInstall()
+    private function ProcessInstall()
     {
         global $fadminErrors;
 
-        if (PHP_VERSION_ID < 50600)
+        if (PHP_VERSION_ID < 80100) {
             $fadminErrors[] = Loc::getMessage('rover_fa__php_version_error');
+        }
 
         $this->copyFiles();
 
         global $APPLICATION, $fadminErrors;
 
-        if (empty($fadminErrors))
+        if (empty($fadminErrors)) {
             ModuleManager::registerModule($this->MODULE_ID);
+        }
 
-	    $APPLICATION->IncludeAdminFile(Loc::getMessage("rover_fa__install_title"),
+        $APPLICATION->IncludeAdminFile(Loc::getMessage("rover_fa__install_title"),
             dirname(__FILE__) . "/message.php");
     }
 
-	/**
-	 * @author Pavel Shulaev (http://rover-it.me)
-	 */
-	private function ProcessUninstall()
-	{
+    /**
+     * @author Pavel Shulaev (http://rover-it.me)
+     */
+    private function ProcessUninstall()
+    {
         $this->removeFiles();
         //if (empty($fadminErrors))
         // uninstall anywhere
@@ -124,12 +132,12 @@ class rover_fadmin extends CModule
 
         $APPLICATION->IncludeAdminFile(Loc::getMessage("rover_fa__uninstall_title"),
             dirname(__FILE__) . "/unMessage.php");
-	}
+    }
 
     /**
      * @param $fromDir
      * @param $toDir
-     * @throws \Bitrix\Main\IO\FileNotFoundException
+     * @throws FileNotFoundException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     private function copyDir($fromDir, $toDir)
@@ -138,26 +146,25 @@ class rover_fadmin extends CModule
 
         $dir = $this->checkDir($toDir);
 
-        if (!is_writable($dir->getPhysicalPath())){
-            $fadminErrors[] = Loc::getMessage('rover_fa__ERROR_PERMISSIONS', array('#path#' => $dir->getPhysicalPath()));
+        if (!is_writable($dir->getPhysicalPath())) {
+            $fadminErrors[] = Loc::getMessage('rover_fa__ERROR_PERMISSIONS', ['#path#' => $dir->getPhysicalPath()]);
             return;
         }
 
-        $fromDir = getLocalPath("modules/". $this->MODULE_ID . $fromDir);
+        $fromDir = getLocalPath("modules/" . $this->MODULE_ID . $fromDir);
 
-        if (!\CopyDirFiles(
+        if (!CopyDirFiles(
             Application::getDocumentRoot() . $fromDir,
             Application::getDocumentRoot() . $toDir,
-            TRUE,
-            TRUE))
-        {
+            true,
+            true)) {
             $fadminErrors[] = Loc::getMessage('rover_fa__ERROR_COPY_FILES',
-                array('#pathFrom#' => $fromDir, '#toPath#' => $toDir));
+                ['#pathFrom#' => $fromDir, '#toPath#' => $toDir]);
         }
     }
 
     /**
-     * @throws \Bitrix\Main\IO\FileNotFoundException
+     * @throws FileNotFoundException
      * @author Pavel Shulaev (https://rover-it.me)
      */
     private function copyFiles()
@@ -171,8 +178,8 @@ class rover_fadmin extends CModule
      */
     private function removeFiles()
     {
-       $this->deleteDir('/bitrix/js/' . $this->MODULE_ID . '/');
-       $this->deleteDir('/bitrix/css/' . $this->MODULE_ID . '/');
+        $this->deleteDir('/bitrix/js/' . $this->MODULE_ID . '/');
+        $this->deleteDir('/bitrix/css/' . $this->MODULE_ID . '/');
     }
 
     /**
@@ -183,10 +190,10 @@ class rover_fadmin extends CModule
     {
         global $fadminErrors;
 
-        $dirName = str_replace(array('//', '///'), '/', Application::getDocumentRoot() . '/' . $dirName);
+        $dirName = str_replace(['//', '///'], '/', Application::getDocumentRoot() . '/' . $dirName);
 
-        if (!is_writable($dirName)){
-            $fadminErrors[] = Loc::getMessage('rover_fa__ERROR_PERMISSIONS', array('#path#' => $dirName));
+        if (!is_writable($dirName)) {
+            $fadminErrors[] = Loc::getMessage('rover_fa__ERROR_PERMISSIONS', ['#path#' => $dirName]);
             return;
         }
 
@@ -196,14 +203,14 @@ class rover_fadmin extends CModule
     /**
      * @param $path
      * @return Directory
-     * @throws \Bitrix\Main\IO\FileNotFoundException
+     * @throws FileNotFoundException
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    private function checkDir($path)
+    private function checkDir($path): Directory
     {
-        $path   = Application::getDocumentRoot() . $path;
+        $path = Application::getDocumentRoot() . $path;
 
-        $dir    = Directory::isDirectoryExists($path)
+        $dir = Directory::isDirectoryExists($path)
             ? new Directory($path)
             : Directory::createDirectory($path);
 

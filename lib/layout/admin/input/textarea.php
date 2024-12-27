@@ -10,7 +10,10 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\Loader;
+use Bitrix\Main\LoaderException;
 use Rover\Fadmin\Layout\Admin\Input;
 
 /**
@@ -22,11 +25,11 @@ use Rover\Fadmin\Layout\Admin\Input;
 class Textarea extends Input
 {
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return void
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         $this->showRowStart();
         $this->showLabelCell('width="50%" style="vertical-align: top; padding-top: 7px;" class="adm-detail-valign-top"');
@@ -35,13 +38,13 @@ class Textarea extends Input
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\LoaderException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws LoaderException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         if (!$this->input instanceof \Rover\Fadmin\Inputs\Textarea)
             return;
@@ -118,11 +121,11 @@ class Textarea extends Input
     }
 
     /**
-     * @param bool $br
-     * @throws \Bitrix\Main\LoaderException
+     * @param bool $addBr
+     * @throws LoaderException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showHelp($br = true)
+    public function showHelp(bool $addBr = true): void
     {
         $br = !($this->input->isHtmlEditor() && Loader::includeModule("fileman"));
 

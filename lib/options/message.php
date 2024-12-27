@@ -18,61 +18,63 @@ namespace Rover\Fadmin\Options;
  */
 class Message
 {
-    const TYPE__OK      = 'OK';
-    const TYPE__ERROR   = 'ERROR';
+    const TYPE__OK    = 'OK';
+    const TYPE__ERROR = 'ERROR';
 
-	/**
-	 * message storage
-	 * @var array
-	 */
-	protected $messages = array();
+    /**
+     * message storage
+     * @var array
+     */
+    protected array $messages = [];
 
     /**
      * @param        $message
      * @param string $type
-     * @param bool   $html
+     * @param bool $html
      * @author Pavel Shulaev (http://rover-it.me)
      */
-	public function add($message, $type = self::TYPE__OK, $html = true)
-	{
-	    if (is_array($message))
-	        $message = implode("\n", $message);
+    public function add($message, string $type = self::TYPE__OK, bool $html = true): void
+    {
+        if (is_array($message)) {
+            $message = implode("\n", $message);
+        }
 
-	    if (!$html)
-	        $message = htmlspecialcharsbx($message);
+        if (!$html) {
+            $message = htmlspecialcharsbx($message);
+        }
 
-		$this->messages[] = array(
-			'MESSAGE'   => trim($message),
-            'HTML'      => (bool)$html,
-			'TYPE'      => htmlspecialcharsbx($type),
-        );
-	}
+        $this->messages[] = [
+            'MESSAGE' => trim($message),
+            'HTML'    => $html,
+            'TYPE'    => htmlspecialcharsbx($type),
+        ];
+    }
 
     /**
      * @param      $message
      * @param bool $html
      * @author Pavel Shulaev (http://rover-it.me)
      */
-	public function addOk($message, $html = false)
-	{
-		$this->add($message, self::TYPE__OK, $html);
-	}
+    public function addOk($message, bool $html = false): void
+    {
+        $this->add($message, self::TYPE__OK, $html);
+    }
 
     /**
      * @param      $message
      * @param bool $html
      * @author Pavel Shulaev (http://rover-it.me)
      */
-	public function addError($message, $html = false)
-	{
-		$this->add($message, self::TYPE__ERROR, $html);
-	}
+    public function addError($message, bool $html = false): void
+    {
+        $this->add($message, self::TYPE__ERROR, $html);
+    }
 
     /**
      * @return array
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function get()
+    public function get(): array
     {
         return $this->messages;
     }
@@ -80,7 +82,7 @@ class Message
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function clear()
+    public function clear(): void
     {
         $this->messages = [];
     }
@@ -88,16 +90,16 @@ class Message
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showAdmin()
+    public function showAdmin(): void
     {
-        $messages       = $this->get();
-        $messagesCnt    = count($messages);
+        $messages    = $this->get();
+        $messagesCnt = count($messages);
 
-        if (!$messagesCnt)
+        if (!$messagesCnt) {
             return;
+        }
 
-        for ($i = 0; $i < $messagesCnt; ++$i)
-        {
+        for ($i = 0; $i < $messagesCnt; ++$i) {
             $message = new \CAdminMessage($messages[$i]);
             echo $message->Show();
         }

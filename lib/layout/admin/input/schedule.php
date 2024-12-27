@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\Page\Asset;
 use Rover\Fadmin\Layout\Admin\Input;
 use Bitrix\Main\Localization\Loc;
 
@@ -23,21 +25,21 @@ Loc::loadMessages(__FILE__);
  */
 class Schedule extends Input
 {
-    /** @var bool */
-    protected static $assetsAdded = false;
+    protected static bool $assetsAdded = false;
 
     /**
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    protected function addAssets()
+    protected function addAssets(): void
     {
-        \CJSCore::Init(array("jquery"));
+        \CJSCore::Init(["jquery"]);
 
-        $asset = \Bitrix\Main\Page\Asset::getInstance();
+        $asset = Asset::getInstance();
 
         //add css
-        if (self::$assetsAdded)
+        if (self::$assetsAdded) {
             return;
+        }
 
         echo $asset->insertCss('/bitrix/css/rover.fadmin/vendor/jqwidgets/jqx.base.css');
 
@@ -69,27 +71,27 @@ class Schedule extends Input
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @return void
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
-        if (!$this->input instanceof \Rover\Fadmin\Inputs\Schedule)
+        if (!$this->input instanceof \Rover\Fadmin\Inputs\Schedule) {
             return;
+        }
 
         $this->addAssets();
 
         $valueId = $this->input->getFieldId();
 
         ?><input type="hidden"
-                 id="<?=$valueId?>"
-                 value='<?=json_encode($this->input->getInputValue())?>'
-                 name="<?=$this->input->getFieldName()?>">
-        <div id="scheduler-<?=$valueId?>"></div>
+                 id="<?= $valueId ?>"
+                 value='<?= json_encode($this->input->getInputValue()) ?>'
+                 name="<?= $this->input->getFieldName() ?>">
+        <div id="scheduler-<?= $valueId ?>"></div>
         <style>
-            .jqx-scheduler-all-day-cell span{
+            .jqx-scheduler-all-day-cell span {
                 display: none;
             }
         </style>
@@ -100,12 +102,12 @@ class Schedule extends Input
 
                         $num = 1;
 
-                        foreach ($this->input->getValue() as $period):	?>{
+                        foreach ($this->input->getValue() as $period):    ?>{
                         id: "<?=$valueId?>-<?=$num?>",
                         subject: "<?=$this->input->getPeriodLabel()?>",
                         calendar: "1",
-                        start: new Date(<?=$period['start']->format('Y, ' . $period['jqwStartMonth'] .', d, H, i, s')?>),
-                        end: new Date(<?=$period['end']->format('Y, ' . $period['jqwEndMonth'] .', d, H, i, s')?>)
+                        start: new Date(<?=$period['start']->format('Y, ' . $period['jqwStartMonth'] . ', d, H, i, s')?>),
+                        end: new Date(<?=$period['end']->format('Y, ' . $period['jqwEndMonth'] . ', d, H, i, s')?>)
                     },
                     <?php
 
@@ -119,49 +121,49 @@ class Schedule extends Input
                     {
                         dataType: "array",
                         dataFields: [
-                            { name: 'id', type: 'string' },
-                            { name: 'subject', type: 'string' },
-                            { name: 'calendar', type: 'string' },
-                            { name: 'start', type: 'date' },
-                            { name: 'end', type: 'date' }
+                            {name: 'id', type: 'string'},
+                            {name: 'subject', type: 'string'},
+                            {name: 'calendar', type: 'string'},
+                            {name: 'start', type: 'date'},
+                            {name: 'end', type: 'date'}
                         ],
                         id: 'id',
                         localData: appointments
                     };
-                var adapter     = new $.jqx.dataAdapter(source),
-                    $scheduler  = $("#scheduler-<?=$valueId?>"),
-                    $export     = $('#<?=$valueId?>');
+                var adapter = new $.jqx.dataAdapter(source),
+                    $scheduler = $("#scheduler-<?=$valueId?>"),
+                    $export = $('#<?=$valueId?>');
 
                 $scheduler.jqxScheduler({
                     //date: new $.jqx.date(),
-                    date            : new $.jqx.date('todayDate'),
-                    width           : <?=$this->input->getWidth()?>,
-                    height          : <?=$this->input->getHeight()?>,
-                    rowsHeight      : 15,
-                    columnsHeight   : 30,
-                    source          : adapter,
-                    view            : 'weekView',
-                    enableHover     : false,
-                    exportSettings  : {
-                        serverURL       : null,
-                        characterSet    : null,
-                        fileName        : null,
+                    date: new $.jqx.date('todayDate'),
+                    width: <?=$this->input->getWidth()?>,
+                    height: <?=$this->input->getHeight()?>,
+                    rowsHeight: 15,
+                    columnsHeight: 30,
+                    source: adapter,
+                    view: 'weekView',
+                    enableHover: false,
+                    exportSettings: {
+                        serverURL: null,
+                        characterSet: null,
+                        fileName: null,
                         dateTimeFormatString: "S",
                         resourcesInMultipleICSFiles: true
                     },
-                    showToolbar     : false,
+                    showToolbar: false,
                     resources:
                         {
-                            dataField   : "calendar",
-                            source      :  adapter
+                            dataField: "calendar",
+                            source: adapter
                         },
                     appointmentDataFields:
                         {
-                            from        : "start",
-                            to          : "end",
-                            id          : "id",
-                            subject     : "subject",
-                            resourceId  : "calendar"
+                            from: "start",
+                            to: "end",
+                            id: "id",
+                            subject: "subject",
+                            resourceId: "calendar"
                         },
                     localization: {
                         firstDay: 1,
@@ -180,16 +182,16 @@ class Schedule extends Input
                             // shortest day names
                             //namesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
                         },
-                        editDialogFromString    : "<?=Loc::getMessage('rover-fa__schedule-start')?>",
-                        editDialogToString      : "<?=Loc::getMessage('rover-fa__schedule-end')?>",
-                        editDialogAllDayString  : "<?=Loc::getMessage('rover-fa__schedule-all-day')?>",
-                        editDialogTitleString   : "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
+                        editDialogFromString: "<?=Loc::getMessage('rover-fa__schedule-start')?>",
+                        editDialogToString: "<?=Loc::getMessage('rover-fa__schedule-end')?>",
+                        editDialogAllDayString: "<?=Loc::getMessage('rover-fa__schedule-all-day')?>",
+                        editDialogTitleString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
                         contextMenuEditAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-edit-period')?>",
                         editDialogCreateTitleString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
                         contextMenuCreateAppointmentString: "<?=Loc::getMessage('rover-fa__schedule-create-period')?>",
-                        editDialogSaveString    : "<?=Loc::getMessage('rover-fa__schedule-save')?>",
-                        editDialogDeleteString  : "<?=Loc::getMessage('rover-fa__schedule-delete')?>",
-                        editDialogCancelString  : "<?=Loc::getMessage('rover-fa__schedule-cancel')?>",
+                        editDialogSaveString: "<?=Loc::getMessage('rover-fa__schedule-save')?>",
+                        editDialogDeleteString: "<?=Loc::getMessage('rover-fa__schedule-delete')?>",
+                        editDialogCancelString: "<?=Loc::getMessage('rover-fa__schedule-cancel')?>",
                     },
                     editDialogOpen: function (dialog, fields, editAppointment) {
                         fields.locationContainer.hide();
@@ -227,18 +229,16 @@ class Schedule extends Input
                         ? 100
                         : 200;
 
-                    setTimeout(function(){
+                    setTimeout(function () {
                         exportPeriods();
                     }, timeout);
                 });
 
-                function exportPeriods()
-                {
+                function exportPeriods() {
                     var schedule = JSON.parse($scheduler.jqxScheduler('exportData', 'json')),
                         propNum, period, result = [];
 
-                    for (propNum in schedule)
-                    {
+                    for (propNum in schedule) {
                         period = schedule[propNum];
 
                         delete period.id;

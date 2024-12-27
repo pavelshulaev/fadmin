@@ -23,7 +23,7 @@ class Custom extends Input
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         $this->showRowStart();
         ?><td colspan="2"><?=$this->input->getLabel()?></td><?php
@@ -34,5 +34,6 @@ class Custom extends Input
      * for capability
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput(){}
+    public function showInput(): void
+    {}
 }

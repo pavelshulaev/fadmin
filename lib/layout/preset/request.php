@@ -10,7 +10,9 @@
 
 namespace Rover\Fadmin\Layout\Preset;
 
+use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Layout\Request as RequestAbstract;
 use Rover\Fadmin\Options;
 use Rover\Fadmin\Inputs\Tab;
@@ -23,22 +25,19 @@ use Rover\Fadmin\Inputs\Tab;
  */
 class Request extends RequestAbstract
 {
-    const INPUT__APPLY      = 'apply';
-    const INPUT__SAVE       = 'save';
-    const INPUT__FORM_ID    = 'form_id';
+    const INPUT__APPLY   = 'apply';
+    const INPUT__SAVE    = 'save';
+    const INPUT__FORM_ID = 'form_id';
 
-    /**
-     * @var string
-     */
-    protected $curPage;
+    protected string $curPage;
 
     /**
      * @return string
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function getCurPage()
+    protected function getCurPage(): string
     {
-        if (is_null($this->curPage)){
+        if (!isset($this->curPage)) {
             global $APPLICATION;
             $this->curPage = $APPLICATION->GetCurPage();
         }
@@ -50,10 +49,9 @@ class Request extends RequestAbstract
      * Request constructor.
      *
      * @param Options $options
-     * @param array   $params
-     * @throws \Bitrix\Main\SystemException
+     * @param array $params
      */
-    public function __construct(Options $options, array $params = array())
+    public function __construct(Options $options, array $params = [])
     {
         parent::__construct($options, $params);
 
@@ -71,38 +69,41 @@ class Request extends RequestAbstract
     }
 
     /**
-     * @return bool|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\SystemException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function removePreset()
+    public function removePreset(): void
     {
-        try{
-            if (parent::removePreset() && strlen($this->params['back_url']))
+        try {
+            if (parent::removePreset() && strlen($this->params['back_url'])) {
                 $this->redirect($this->params['back_url']);
+            }
         } catch (\Exception $e) {
             $this->options->handleException($e);
         }
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\SystemException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setValues()
+    public function setValues(): void
     {
         if ((!$this->request->get(self::INPUT__APPLY)
                 && !$this->request->get(self::INPUT__SAVE))
-            || !$this->request->get(self::INPUT__FORM_ID))
+            || !$this->request->get(self::INPUT__FORM_ID)) {
             return;
+        }
 
         try {
             $tab = $this->options->getTabControl()->getTabByPresetId($this->params['preset_id']);
-            if (!$tab instanceof Tab)
+            if (!$tab instanceof Tab) {
                 throw new ArgumentOutOfRangeException('preset_id');
+            }
 
             $tab->setValueFromRequest();
 

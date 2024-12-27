@@ -20,14 +20,9 @@ use Rover\Fadmin\Options;
  */
 abstract class Form
 {
-    /** @var Options */
-    protected $options;
-
-    /** @var array */
-    protected $params;
-
-    /** @var Request */
-    protected $request;
+    protected Options $options;
+    protected array $params;
+    protected Request $request;
 
     /**
      * Form constructor.
@@ -46,7 +41,7 @@ abstract class Form
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setRequest(Request $request)
+    public function setRequest(Request $request): Form
     {
         $this->request = $request;
 
@@ -71,10 +66,8 @@ abstract class Form
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function includeGroupRightsTab()
+    public static function includeGroupRightsTab(): void
     {
-        global $APPLICATION, $REQUEST_METHOD;
-
         $RIGHTS     = $_REQUEST['RIGHTS'];
         $SITES      = $_REQUEST['SITES'];
         $GROUPS     = $_REQUEST['GROUPS'];
@@ -82,6 +75,7 @@ abstract class Form
         $Update     = $_REQUEST['Update'] ?:$Apply;
         $module_id  = $_REQUEST['mid'];
 
+        global $APPLICATION, $REQUEST_METHOD;
         include($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/admin/group_rights.php");
     }
 }

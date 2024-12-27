@@ -20,7 +20,7 @@ class Addpreset extends Submit
     /**
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         $this->adminInput->draw();
     }
@@ -28,7 +28,7 @@ class Addpreset extends Submit
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         $this->adminInput->showInput();
     }

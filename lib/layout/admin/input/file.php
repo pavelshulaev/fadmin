@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Rover\Fadmin\Layout\Admin\Input;
 
 /**
@@ -21,26 +23,27 @@ use Rover\Fadmin\Layout\Admin\Input;
 class File extends Input
 {
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
-        if (!$this->input instanceof \Rover\Fadmin\Inputs\File)
+        if (!$this->input instanceof \Rover\Fadmin\Inputs\File) {
             return;
+        }
 
-        $valueName  = $this->input->getFieldName();
-        $isImage    = $this->input->isImage();
-        $value      = intval($this->input->getValue());
+        $valueName = $this->input->getFieldName();
+        $isImage   = $this->input->isImage();
+        $value     = intval($this->input->getValue());
 
         if ($value):
-
             $file = \CFile::GetFileArray($value);
 
-            if ($this->input->isImage())
+            if ($this->input->isImage()) {
                 echo \CFile::ShowImage($value, 200, 200, "border=0", "", true) . '<br>';
+            }
 
             echo '<code>' . $file['ORIGINAL_NAME'] . '</code><br>';
 

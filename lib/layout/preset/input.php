@@ -7,10 +7,13 @@
  *
  * @author Pavel Shulaev (https://rover-it.me)
  */
+
 namespace Rover\Fadmin\Layout\Preset;
 
+use Bitrix\Main\ArgumentNullException;
 use Rover\Fadmin\Layout\Input as InputAbstract;
 use Rover\Fadmin\Inputs\Input as InputEngine;
+
 /**
  * Class Admin
  *
@@ -19,11 +22,8 @@ use Rover\Fadmin\Inputs\Input as InputEngine;
  */
 abstract class Input extends InputAbstract
 {
-    /** @var string */
-    public static $type = 'Preset';
-
-    /** @var InputAbstract */
-    protected $adminInput;
+    public static string    $type = 'Preset';
+    protected InputAbstract $adminInput;
 
     /**
      * Input constructor.
@@ -34,17 +34,18 @@ abstract class Input extends InputAbstract
     {
         parent::__construct($input);
 
-        $className          = get_called_class();
-        $inputClassName     = str_replace('\\' . self::$type . '\\', '\\' . \Rover\Fadmin\Layout\Admin\Input::$type . '\\', $className);
-        $this->adminInput   = new $inputClassName($input);
+        $className        = get_called_class();
+        $inputClassName   =
+            str_replace('\\' . self::$type . '\\', '\\' . \Rover\Fadmin\Layout\Admin\Input::$type . '\\', $className);
+        $this->adminInput = new $inputClassName($input);
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return void
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         $this->showLabel();
         $this->showPreInput();
@@ -55,38 +56,38 @@ abstract class Input extends InputAbstract
 
     /**
      * @param bool $empty
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showLabel($empty = false)
+    public function showLabel(bool $empty = false): void
     {
-       if (!$empty) : ?>
-            <label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:</label>
+        if (!$empty) : ?>
+            <label for="<?= $this->input->getFieldId() ?>"><?= $this->input->getLabel() ?>:</label>
         <?php endif;
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showMultiLabel()
+    public function showMultiLabel(): void
     {
         ?>
-            <label for="<?=$this->input->getFieldId()?>"><?=$this->input->getLabel()?>:<br>
-                <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
-            </label>
+        <label for="<?= $this->input->getFieldId() ?>"><?= $this->input->getLabel() ?>:<br>
+            <img src="/bitrix/images/main/mouse.gif" width="44" height="21" border="0" alt="">
+        </label>
         <?php
     }
 
     /**
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function showHelp()
+    public function showHelp(): void
     {
         $help = trim($this->input->getHelp());
 
         if (strlen($help)):
-            ?><br><small style="color: #777;"><?=$help?></small><?php
+            ?><br><small style="color: #777;"><?= $help ?></small><?php
         endif;
     }
 
@@ -94,18 +95,22 @@ abstract class Input extends InputAbstract
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showPreInput()
+    public function showPreInput(): void
     {
         $preInput = $this->input->getPreInput();
-        if (strlen($preInput)) echo $preInput;
+        if (strlen($preInput)) {
+            echo $preInput;
+        }
     }
 
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showPostInput()
+    public function showPostInput(): void
     {
         $postInput = $this->input->getPostInput();
-        if (strlen($postInput)) echo $postInput;
+        if (strlen($postInput)) {
+            echo $postInput;
+        }
     }
 }

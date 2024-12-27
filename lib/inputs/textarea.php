@@ -10,8 +10,12 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Inputs\Params\Placeholder;
 use Rover\Fadmin\Options;
+
 /**
  * Class Textarea
  *
@@ -22,52 +26,50 @@ class Textarea extends Input
 {
     use Placeholder;
 
-	/** @var int */
-	protected $rows = 3;
+    protected int  $rows         = 3;
+    protected int  $cols         = 50;
+    protected bool $htmlEditor   = false;
+    protected bool $htmlEditorBB = false;
 
-	/** @var int */
-	protected $cols = 50;
-
-	/** @var bool */
-	protected $htmlEditor = false;
-
-	/** @var bool */
-	protected $htmlEditorBB = false;
-
-	/**
+    /**
      * Textarea constructor.
      *
-     * @param array      $params
-     * @param Options    $options
+     * @param array $params
+     * @param Options $options
      * @param Input|null $parent
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      */
-	public function __construct(array $params, Options $options, Input $parent = null)
-	{
-		parent::__construct($params, $options, $parent);
+    public function __construct(array $params, Options $options, Input $parent = null)
+    {
+        parent::__construct($params, $options, $parent);
 
-		if (isset($params['rows']))
-		    $this->setRows($params['rows']);
+        if (isset($params['rows'])) {
+            $this->setRows($params['rows']);
+        }
 
-		if (isset($params['cols']))
-		    $this->setCols($params['cols']);
+        if (isset($params['cols'])) {
+            $this->setCols($params['cols']);
+        }
 
-		if (isset($params['htmlEditor']))
-		    $this->setHtmlEditor($params['htmlEditor']);
+        if (isset($params['htmlEditor'])) {
+            $this->setHtmlEditor($params['htmlEditor']);
+        }
 
-		if (isset($params['htmlEditorBB']))
-		    $this->setHtmlEditorBB($params['htmlEditorBB']);
+        if (isset($params['htmlEditorBB'])) {
+            $this->setHtmlEditorBB($params['htmlEditorBB']);
+        }
 
-        if (isset($params['placeholder']))
+        if (isset($params['placeholder'])) {
             $this->setPlaceholder($params['placeholder']);
-	}
+        }
+    }
 
     /**
      * @return int
      */
-    public function getRows()
+    public function getRows(): int
     {
         return $this->rows;
     }
@@ -77,7 +79,7 @@ class Textarea extends Input
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setRows($rows)
+    public function setRows($rows): static
     {
         $this->rows = htmlspecialcharsbx($rows);
 
@@ -87,7 +89,7 @@ class Textarea extends Input
     /**
      * @return int
      */
-    public function getCols()
+    public function getCols(): int
     {
         return $this->cols;
     }
@@ -97,7 +99,7 @@ class Textarea extends Input
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setCols($cols)
+    public function setCols($cols): static
     {
         $this->cols = htmlspecialcharsbx($cols);
 
@@ -107,7 +109,7 @@ class Textarea extends Input
     /**
      * @return bool
      */
-    public function isHtmlEditor()
+    public function isHtmlEditor(): bool
     {
         return $this->htmlEditor;
     }
@@ -117,7 +119,7 @@ class Textarea extends Input
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setHtmlEditor($htmlEditor)
+    public function setHtmlEditor($htmlEditor): static
     {
         $this->htmlEditor = (boolean)$htmlEditor;
 
@@ -127,7 +129,7 @@ class Textarea extends Input
     /**
      * @return bool
      */
-    public function isHtmlEditorBB()
+    public function isHtmlEditorBB(): bool
     {
         return $this->htmlEditorBB;
     }
@@ -137,7 +139,7 @@ class Textarea extends Input
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setHtmlEditorBB($htmlEditorBB)
+    public function setHtmlEditorBB($htmlEditorBB): static
     {
         $this->htmlEditorBB = (boolean)$htmlEditorBB;
 

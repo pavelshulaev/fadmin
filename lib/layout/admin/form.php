@@ -10,10 +10,12 @@
 
 namespace Rover\Fadmin\Layout\Admin;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Layout\Admin\Input\TabControl;
-use \Rover\Fadmin\Layout\Form as FromAbstract;
+use Rover\Fadmin\Layout\Form as FromAbstract;
 use Bitrix\Main\Localization\Loc;
-use \Rover\Fadmin\Options;
+use Rover\Fadmin\Options;
 
 Loc::loadMessages(__FILE__);
 
@@ -25,51 +27,50 @@ Loc::loadMessages(__FILE__);
  */
 class Form extends FromAbstract
 {
-    /** @var TabControl */
-    protected $tabControlLayout;
+    protected TabControl $tabControlLayout;
 
     /**
      * Form constructor.
      *
      * @param Options $options
-     * @param array   $params
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\SystemException
+     * @param array $params
+     * @throws ArgumentNullException
+     * @throws SystemException
      */
-    public function __construct(Options $options, array $params = array())
+    public function __construct(Options $options, array $params = [])
     {
         parent::__construct($options, $params);
 
         $this->tabControlLayout = Input::build($this->options->getTabControl());
 
-        if (empty($this->params['top_buttons']) || !is_array($this->params['top_buttons']))
-            $this->params['top_buttons'] = array();
+        if (empty($this->params['top_buttons']) || !is_array($this->params['top_buttons'])) {
+            $this->params['top_buttons'] = [];
+        }
     }
 
     /**
-     * @return Request|\Rover\Fadmin\Layout\Request
-     * @throws \Bitrix\Main\SystemException
+     * @return Request
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getRequest()
+    public function getRequest(): Request
     {
-        if (is_null($this->request)) {
+        if (!isset($this->request)) {
             global $Update, $Apply, $RestoreDefaults, $REQUEST_METHOD;
 
-            $params = array(
-                'active_tab'        => $this->tabControlLayout->getBxTabControl()->ActiveTabParam(),
-                'request_method'    => $REQUEST_METHOD,
-                'update'            => $Update,
-                'apply'             => $Apply,
-                'restore_defaults'  => $RestoreDefaults
-            );
+            $params = [
+                'active_tab'       => $this->tabControlLayout->getBxTabControl()->ActiveTabParam(),
+                'request_method'   => $REQUEST_METHOD,
+                'update'           => $Update,
+                'apply'            => $Apply,
+                'restore_defaults' => $RestoreDefaults
+            ];
 
             $this->request = new Request($this->options, $params);
         }
 
         return $this->request;
     }
-
 
 
     /**
@@ -86,29 +87,33 @@ class Form extends FromAbstract
      *  ]
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function showButtons()
+    protected function showButtons(): void
     {
-        if (!count($this->params['top_buttons']))
+        if (!count($this->params['top_buttons'])) {
             return;
+        }
 
         $context = new \CAdminContextMenu($this->params['top_buttons']);
         $context->Show();
     }
 
     /**
+     * @return void
+     * @throws ArgumentNullException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function draw()
+    protected function draw(): void
     {
         $this->tabControlLayout->draw();
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\SystemException
+     * @return void
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function show()
+    public function show(): void
     {
         $this->getRequest()->process();
         $this->options->message->showAdmin();

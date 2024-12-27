@@ -21,38 +21,38 @@ use Rover\Fadmin\Options;
  */
 class Settings
 {
-	const BOOL_CHECKBOX = 'bool_checkbox';
-	const LOG_ERRORS    = 'log_errors';
-    const GROUP_RIGHTS  = 'group_rights';
-    const USE_SORT      = 'use_sort';
-    const PRESET_CLASS  = 'preset_class';
-    const SHOW_ADMIN_PRESETS  = 'show_admin_presets';
+    const BOOL_CHECKBOX      = 'bool_checkbox';
+    const LOG_ERRORS         = 'log_errors';
+    const GROUP_RIGHTS       = 'group_rights';
+    const USE_SORT           = 'use_sort';
+    const PRESET_CLASS       = 'preset_class';
+    const SHOW_ADMIN_PRESETS = 'show_admin_presets';
 
-	/**
-	 * default settings
-	 * @var array
-	 */
-	protected $defaults = array(
-		self::BOOL_CHECKBOX     => false,
-		self::LOG_ERRORS        => false,
-		self::GROUP_RIGHTS      => false,
-		self::USE_SORT          => false,
-		self::PRESET_CLASS      => '\\Rover\\Fadmin\\Preset',
-		self::SHOW_ADMIN_PRESETS=> true,
-    );
+    /**
+     * default settings
+     * @var array
+     */
+    protected array $defaults = [
+        self::BOOL_CHECKBOX      => false,
+        self::LOG_ERRORS         => false,
+        self::GROUP_RIGHTS       => false,
+        self::USE_SORT           => false,
+        self::PRESET_CLASS       => '\\Rover\\Fadmin\\Preset',
+        self::SHOW_ADMIN_PRESETS => true,
+    ];
 
     /**
      * @var Options
      */
-	public $options;
+    public Options $options;
 
-	/**
-	 * @param Options $options
-	 */
-	public function __construct(Options $options)
-	{
-		$this->options  = $options;
-	}
+    /**
+     * @param Options $options
+     */
+    public function __construct(Options $options)
+    {
+        $this->options = $options;
+    }
 
     /**
      * @param $key
@@ -60,35 +60,32 @@ class Settings
      * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getDefault($key)
+    public function getDefault($key): mixed
     {
         $key = trim($key);
-        if (!strlen($key))
+        if (!strlen($key)) {
             throw new ArgumentNullException('key');
+        }
 
         return array_key_exists($key, $this->defaults)
             ? $this->defaults[$key] : null;
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	protected function init()
+    protected function init(): void
     {
-        if ($this->options->cache->checkContainer('settings'))
+        if ($this->options->cache->checkContainer('settings')) {
             return;
+        }
 
-        $config     = $this->options->getConfigCache();
-        $settings   = isset($config['settings'])
-                ? $config['settings']
-                : array();
+        $config   = $this->options->getConfigCache();
+        $settings = $config['settings'] ?? [];
 
-        foreach ($this->defaults as $key => $defValue)
-        {
-            $value = isset($settings[$key])
-                ? $settings[$key]
-                : $defValue;
+        foreach ($this->defaults as $key => $defValue) {
+            $value = $settings[$key] ?? $defValue;
 
             $this->options->cache->set($key, $value, 'settings');
         }
@@ -97,75 +94,76 @@ class Settings
     /**
      * @param $key
      * @return mixed|null
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getFromStorage($key)
+    public function getFromStorage($key): mixed
     {
         $this->init();
 
-        if ($this->options->cache->check($key, 'settings'))
+        if ($this->options->cache->check($key, 'settings')) {
             return $this->options->cache->get($key, 'settings');
+        }
 
         return null;
     }
 
     /**
-     * @return mixed|null
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return bool
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getBoolCheckbox()
-	{
-		return $this->getFromStorage(self::BOOL_CHECKBOX);
-	}
+    public function getBoolCheckbox(): bool
+    {
+        return $this->getFromStorage(self::BOOL_CHECKBOX);
+    }
 
     /**
-     * @return mixed|null
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return bool
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getLogErrors()
-	{
+    public function getLogErrors(): bool
+    {
         return $this->getFromStorage(self::LOG_ERRORS);
-	}
+    }
 
     /**
-     * @return mixed|null
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return bool
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getGroupRights()
+    public function getGroupRights(): bool
     {
         return $this->getFromStorage(self::GROUP_RIGHTS);
     }
 
     /**
-     * @return mixed|null
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return bool
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-	public function getUseSort()
+    public function getUseSort(): bool
     {
         return $this->getFromStorage(self::USE_SORT);
     }
 
     /**
-     * @return mixed|null
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return string
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getPresetClass()
+    public function getPresetClass(): string
     {
         return $this->getFromStorage(self::PRESET_CLASS);
     }
 
     /**
-     * @return mixed|null
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return bool
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getShowAdminPresets()
+    public function getShowAdminPresets(): bool
     {
         return $this->getFromStorage(self::SHOW_ADMIN_PRESETS);
     }

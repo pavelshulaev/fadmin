@@ -23,27 +23,28 @@ use Rover\Fadmin\Layout\Admin\Input;
 class Radio extends Input
 {
     /**
-     * @return mixed|void
+     * @return void
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
-        if (!$this->input instanceof \Rover\Fadmin\Inputs\Radio)
+        if (!$this->input instanceof \Rover\Fadmin\Inputs\Radio) {
             return;
+        }
 
         $value = $this->input->getValue();
 
         foreach ($this->input->getOptions() as $optionValue => $optionName):
 
             ?><label><input
-                id="<?=$this->input->getFieldId()?>_<?=$optionValue?>"
-                type="<?=$this->getType()?>"
-                value="<?=$optionValue?>"
-                name="<?=$this->input->getFieldName()?>"
-                <?=$value == $optionValue ? ' checked="checked" ' : ''
-                ?>> <?=$optionName?></label><br><?php
+                id="<?= $this->input->getFieldId() ?>_<?= $optionValue ?>"
+                type="<?= $this->getType() ?>"
+                value="<?= $optionValue ?>"
+                name="<?= $this->input->getFieldName() ?>"
+            <?= $value == $optionValue ? ' checked="checked" ' : ''
+            ?>> <?= $optionName ?></label><br><?php
 
         endforeach;
     }

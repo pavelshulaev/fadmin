@@ -21,10 +21,10 @@ use Rover\Fadmin\Layout\Preset\Input;
 class SubTabControl extends Input
 {
     /**
-     * @return mixed|void
+     * @return void
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
         //$this->showInput();
         $this->adminInput->showInput();
@@ -33,7 +33,7 @@ class SubTabControl extends Input
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         ?><style>#bx-admin-prefix .adm-detail-subtabs-block{white-space: normal}</style><?php
         $this->adminInput->showInput();

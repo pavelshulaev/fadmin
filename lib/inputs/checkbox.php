@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\ArgumentNullException;
+
 /**
  * Class Checkbox
  *
@@ -20,40 +22,43 @@ class Checkbox extends Input
 {
     /**
      * @param $value
-     * @return bool|mixed
+     * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-	protected function beforeSaveRequest(&$value)
-	{
-		if ($value !== "Y") $value = "N";
+    protected function beforeSaveRequest(&$value): bool
+    {
+        if ($value !== "Y") {
+            $value = "N";
+        }
 
-		return true;
-	}
+        return true;
+    }
 
     /**
      * @param $value
-     * @return bool|void
+     * @return void
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-	public function afterLoadValue(&$value)
-	{
+    public function afterLoadValue(&$value): void
+    {
         $value = $value == 'Y' ? 'Y' : 'N';
-	}
+    }
 
     /**
      * @param $value
-     * @return bool|mixed
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return bool
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-	protected function beforeGetValue(&$value)
-	{
-		if ($this->optionsEngine->settings->getBoolCheckbox())
+    protected function beforeGetValue(&$value): bool
+    {
+        if ($this->optionsEngine->settings->getBoolCheckbox()) {
             $value = $value == 'Y';
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

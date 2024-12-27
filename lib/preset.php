@@ -12,7 +12,8 @@ namespace Rover\Fadmin;
 
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
-use Bitrix\Main\SystemException;;
+use Bitrix\Main\SystemException;
+
 /**
  * Class Preset
  *
@@ -21,17 +22,10 @@ use Bitrix\Main\SystemException;;
  */
 class Preset
 {
-    /** @var integer */
-    protected $id;
-
-    /** @var string */
-    protected $name;
-
-    /** @var Options */
-    protected $options;
-
-    /** @var array */
-    protected static $instances = array();
+    protected int          $id;
+    protected string       $name;
+    protected Options      $options;
+    protected static array $instances = [];
 
     /**
      * Preset constructor.
@@ -44,35 +38,39 @@ class Preset
     private function __construct($id, Options $options)
     {
         $id = intval($id);
-        if (!$id)
+        if (!$id) {
             throw new ArgumentNullException('id');
+        }
 
         $preset = $options->getPreset()->getById($id);
-        if (!$preset)
+        if (!$preset) {
             throw new ArgumentOutOfRangeException('id');
+        }
 
-        $this->id       = $id;
-        $this->name     = $preset['name'];
-        $this->options  = $options;
+        $this->id      = $id;
+        $this->name    = $preset['name'];
+        $this->options = $options;
     }
 
     /**
      * @param         $id
      * @param Options $options
-     * @param bool    $reload
+     * @param bool $reload
      * @return mixed
      * @throws ArgumentNullException
      * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public static function getInstance($id, Options $options, $reload = false)
+    public static function getInstance($id, Options $options, bool $reload = false): static
     {
         $id = intval($id);
-        if (!$id)
+        if (!$id) {
             throw new ArgumentNullException('id');
+        }
 
-        if (!isset(self::$instances[$id]) || $reload)
+        if (!isset(self::$instances[$id]) || $reload) {
             self::$instances[$id] = new static($id, $options);
+        }
 
         return self::$instances[$id];
     }
@@ -86,20 +84,23 @@ class Preset
      */
     public function __call($name, $arguments)
     {
-        if (0 !== strpos($name, 'get'))
+        if (!str_starts_with($name, 'get')) {
             throw new SystemException('unacceptable method name');
+        }
 
-        $name   = substr($name, 3);
+        $name = substr($name, 3);
 
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $name, $matches);
-        $ret    = $matches[0];
-        foreach ($ret as &$match)
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
             $match = strtoupper($match);
+        }
 
         $constName = 'Options::OPTION__PRESET_' . implode('_', $ret);
 
-        if (!defined($constName))
+        if (!defined($constName)) {
             throw new SystemException('preset option "' . $constName . '" not found');
+        }
 
         return $this->options->getPresetValue(constant($constName), $arguments[0], $arguments[1], $arguments[2]);
     }
@@ -107,7 +108,7 @@ class Preset
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -115,15 +116,15 @@ class Preset
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return \Rover\Fadmin\Options
+     * @return Options
      */
-    public function getOptions()
+    public function getOptions(): Options
     {
         return $this->options;
     }

@@ -10,7 +10,10 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\Loader;
+use Bitrix\Main\LoaderException;
 use Rover\Fadmin\Layout\Admin\Input;
 
 /**
@@ -22,25 +25,24 @@ use Rover\Fadmin\Layout\Admin\Input;
 class Iblock extends Input
 {
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\LoaderException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws LoaderException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         if (!Loader::includeModule('iblock')){
             ShowError('Iblock module not found');
             return;
         }
 
-        $additionsHtml  = '';
-        $additionsHtml  .= $this->input->isRequired() ? ' required="required" ': '';
+        $additionsHtml  = $this->input->isRequired() ? ' required="required" ' : '';
         $additionsHtml  .= $this->input->isDisabled() ? ' disabled="disabled" ': '';
 
         if ($this->input->isMultiple())
-            echo $this->getIBlockDropDownListMultiple(false, '', '', $additionsHtml);
+            echo $this->getIBlockDropDownListMultiple([], '', '', $additionsHtml);
         else
             echo GetIBlockDropDownList(
                 $this->input->getValue(),
@@ -50,17 +52,17 @@ class Iblock extends Input
     }
 
     /**
-     * @param bool   $arFilter
+     * @param array   $arFilter
      * @param string $onChangeType
      * @param string $onChangeIBlock
      * @param string $strAddType
      * @param string $strAddIBlock
      * @return string
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    protected function getIBlockDropDownListMultiple($arFilter = false, $onChangeType = '', $onChangeIBlock = '', $strAddType = '', $strAddIBlock = '')
+    protected function getIBlockDropDownListMultiple(array $arFilter = [], string $onChangeType = '', string $onChangeIBlock = '', string $strAddType = '', string $strAddIBlock = ''): string
     {
         $html = '';
 
@@ -68,8 +70,6 @@ class Iblock extends Input
         static $arTypes     = array();
         static $arIBlocks   = array();
 
-        if(!is_array($arFilter))
-            $arFilter = array();
         if (!array_key_exists('MIN_PERMISSION',$arFilter) || trim($arFilter['MIN_PERMISSION']) == '')
             $arFilter["MIN_PERMISSION"] = "W";
         $filterId = md5(serialize($arFilter));
@@ -100,15 +100,15 @@ class Iblock extends Input
 			<script type="text/javascript">
 			function OnType_'.$filterId.'_Changed(typeSelect, iblockSelectID)
 			{
-				var arIBlocks = '.\CUtil::PhpToJSObject($arIBlocks[$filterId]).';
-				var iblockSelect = BX(iblockSelectID);
+				let arIBlocks = '.\CUtil::PhpToJSObject($arIBlocks[$filterId]).';
+				let iblockSelect = BX(iblockSelectID);
 				if(!!iblockSelect)
 				{
-					for(var i=iblockSelect.length-1; i >= 0; i--)
+					for(let i=iblockSelect.length-1; i >= 0; i--)
 						iblockSelect.remove(i);
-					for(var j in arIBlocks[typeSelect.value])
+					for(let j in arIBlocks[typeSelect.value])
 					{
-						var newOption = new Option(arIBlocks[typeSelect.value][j], j, false, false);
+						let newOption = new Option(arIBlocks[typeSelect.value][j], j, false, false);
 						iblockSelect.options.add(newOption);
 					}
 				}

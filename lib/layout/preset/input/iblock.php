@@ -23,7 +23,7 @@ class Iblock extends Input
     /**
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         $this->adminInput->showInput();
     }

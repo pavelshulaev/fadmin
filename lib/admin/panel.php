@@ -11,6 +11,8 @@
 namespace Rover\Fadmin\Admin;
 
 
+use Rover\Fadmin\Layout\Admin\Form;
+
 /**
  * Class Panel
  *
@@ -18,4 +20,4 @@ namespace Rover\Fadmin\Admin;
  * @author  Pavel Shulaev (http://rover-it.me)
  * @deprecated
  */
-class Panel extends \Rover\Fadmin\Layout\Admin\Form{}
+class Panel extends Form{}

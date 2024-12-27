@@ -17,26 +17,25 @@ namespace Rover\Fadmin\Inputs\Params;
  */
 trait MaxLength
 {
-    /** @var int */
-    protected $maxLength;
+    protected int $maxLength;
 
     /**
      * @return int
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getMaxLength()
+    public function getMaxLength(): int
     {
         return $this->maxLength;
     }
 
     /**
-     * @param $maxLength
+     * @param int $maxLength
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setMaxLength($maxLength)
+    public function setMaxLength(int $maxLength): static
     {
-        $this->maxLength = intval($maxLength);
+        $this->maxLength = $maxLength;
 
         return $this;
     }

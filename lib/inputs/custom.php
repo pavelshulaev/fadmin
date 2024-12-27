@@ -24,8 +24,8 @@ class Custom extends Input
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-	public function beforeSaveValue(&$value)
-	{
+	public function beforeSaveValue(&$value): bool
+    {
 		return false;
 	}
 
@@ -33,7 +33,7 @@ class Custom extends Input
      * @return bool
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function beforeLoadValue()
+    public function beforeLoadValue(): bool
     {
         return false;
     }

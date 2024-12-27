@@ -10,6 +10,8 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Rover\Fadmin\Layout\Admin\Input;
 
 /**
@@ -22,52 +24,53 @@ class Selectbox extends Input
 {
     /**
      * @param bool $empty
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showLabel($empty = false)
+    public function showLabel(bool $empty = false): void
     {
-        if ($this->input->isMultiple())
+        if ($this->input->isMultiple()) {
             parent::showMultiLabel();
-        else
+        } else {
             parent::showLabel($empty);
+        }
     }
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @return void
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
-        if (!$this->input instanceof \Rover\Fadmin\Inputs\Selectbox)
+        if (!$this->input instanceof \Rover\Fadmin\Inputs\Selectbox) {
             return;
+        }
 
-        $value      = $this->input->getValue();
-        $valueId    = $this->input->getFieldId();
-        $valueName  = $this->input->getFieldName();
-        $multiple   = $this->input->isMultiple();
+        $value     = $this->input->getValue();
+        $valueId   = $this->input->getFieldId();
+        $valueName = $this->input->getFieldName();
+        $multiple  = $this->input->isMultiple();
 
         ?><select
-        <?=$this->input->isDisabled() ? ' disabled="disabled" ': '';?>
-        <?=$this->input->isRequired() ? ' required="required" ': '';?>
-        name="<?=$valueName . ($multiple ? '[]' : '')?>"
-        id="<?=$valueId?>"
-        size="<?=$this->input->getSize()?>"
-        <?=$multiple ? ' multiple="multiple" ' : ''?>>
+        <?= $this->input->isDisabled() ? ' disabled="disabled" ' : ''; ?>
+        <?= $this->input->isRequired() ? ' required="required" ' : ''; ?>
+        name="<?= $valueName . ($multiple ? '[]' : '') ?>"
+        id="<?= $valueId ?>"
+        size="<?= $this->input->getSize() ?>"
+        <?= $multiple ? ' multiple="multiple" ' : '' ?>>
         <?php
 
-        foreach($this->input->getOptions() as $v => $k){
+        foreach ($this->input->getOptions() as $v => $k) {
             if ($multiple) {
-                $selected = is_array($value) && in_array($v, $value)
-                    ? true
-                    : false;
+                $selected = is_array($value) && in_array($v, $value);
             } else {
-                $selected = $value==$v ? true : false;
+                $selected = $value == $v;
             }
 
-            ?><option value="<?=$v?>"<?=$selected ? " selected=\"selected\" ": ''?>><?=$k?></option><?php
+            ?>
+            <option value="<?= $v ?>"<?= $selected ? " selected=\"selected\" " : '' ?>><?= $k ?></option><?php
         }
         ?>
         </select>

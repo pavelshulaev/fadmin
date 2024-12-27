@@ -23,7 +23,7 @@ class Label extends Input
     /**
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
         echo $this->input->getLabel();
     }

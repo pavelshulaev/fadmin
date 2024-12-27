@@ -17,15 +17,14 @@ namespace Rover\Fadmin\Inputs\Params;
  */
 trait Placeholder
 {
-    /** @var string */
-    protected $placeholder;
+    protected string $placeholder;
 
     /**
      * @return string
      */
-    public function getPlaceholder()
+    public function getPlaceholder(): string
     {
-        return $this->placeholder;
+        return $this->placeholder ?? '';
     }
 
     /**
@@ -33,7 +32,7 @@ trait Placeholder
      * @return $this
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function setPlaceholder($placeholder)
+    public function setPlaceholder($placeholder): static
     {
         $this->placeholder = trim($placeholder);
 

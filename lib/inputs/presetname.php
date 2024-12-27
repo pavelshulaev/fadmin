@@ -10,7 +10,10 @@
 
 namespace Rover\Fadmin\Inputs;
 
+use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\SystemException;
 use Rover\Fadmin\Options;
 
 Loc::loadMessages(__FILE__);
@@ -26,61 +29,66 @@ class PresetName extends Text
     /**
      * PresetName constructor.
      *
-     * @param array      $params
-     * @param Options    $options
+     * @param array $params
+     * @param Options $options
      * @param Input|null $parent
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      */
-	public function __construct(array $params, Options $options, Input $parent = null)
-	{
-		parent::__construct($params, $options, $parent);
+    public function __construct(array $params, Options $options, Input $parent = null)
+    {
+        parent::__construct($params, $options, $parent);
 
-		if (!$this->isPreset())
-			return;
+        if (!$this->isPreset()) {
+            return;
+        }
 
-		$presetId = $this->getPresetId();
+        $presetId = $this->getPresetId();
 
-		if (!$presetId)
-			return;
+        if (!$presetId) {
+            return;
+        }
 
-		$value = $this->getValue();
+        $value = $this->getValue();
 
-		if (empty($value) || ($value == $this->getDefault()))
-			$this->setValue($this->optionsEngine
-				->getPreset()->getNameById($presetId, $this->getSiteId()));
-	}
+        if (empty($value) || ($value == $this->getDefault())) {
+            $this->setValue($this->optionsEngine
+                ->getPreset()->getNameById($presetId, $this->getSiteId()));
+        }
+    }
 
     /**
      * @param $value
-     * @return bool|mixed
-     * @throws \Bitrix\Main\ArgumentNullException
-     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @return bool
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @author Pavel Shulaev (https://rover-it.me)
      * @internal
      */
-	public function beforeSaveRequest(&$value)
-	{
-		if (!$this->isPreset())
-			return true;
+    public function beforeSaveRequest(&$value): bool
+    {
+        if (!$this->isPreset()) {
+            return true;
+        }
 
-		$presetId = $this->getPresetId();
+        $presetId = $this->getPresetId();
 
-		if (!$presetId)
-			return true;
+        if (!$presetId) {
+            return true;
+        }
 
-		if (empty($value)){
-			$this->optionsEngine->message->addError(
-				Loc::getMessage('rover-fa__presetname-no-name',
-                    array('#last-preset-name#' => $this->getValue())));
+        if (empty($value)) {
+            $this->optionsEngine->message->addError(
+                Loc::getMessage('rover-fa__presetname-no-name',
+                    ['#last-preset-name#' => $this->getValue()]));
 
-			return false;
-		}
+            return false;
+        }
 
-		$this->optionsEngine->getPreset()->updateName($presetId, $value,
-			$this->getSiteId());
+        $this->optionsEngine->getPreset()->updateName($presetId, $value,
+            $this->getSiteId());
 
-		return true;
-	}
+        return true;
+    }
 }

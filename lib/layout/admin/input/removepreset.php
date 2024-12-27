@@ -10,8 +10,9 @@
 
 namespace Rover\Fadmin\Layout\Admin\Input;
 
+use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\Localization\Loc;
-use \Rover\Fadmin\Inputs\Removepreset as RemovePresetInput;
+use Rover\Fadmin\Inputs\Removepreset as RemovePresetInput;
 
 Loc::loadMessages(__FILE__);
 
@@ -24,19 +25,21 @@ Loc::loadMessages(__FILE__);
 class Removepreset extends Submit
 {
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return void
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function draw()
+    public function draw(): void
     {
-        if (!$this->input instanceof RemovePresetInput)
+        if (!$this->input instanceof RemovePresetInput) {
             return;
+        }
 
         $presetId = $this->input->getTab()->getPresetId();
 
-        if (!$presetId)
+        if (!$presetId) {
             return;
+        }
 
         $this->showRowStart();
         $this->showCells();
@@ -44,35 +47,39 @@ class Removepreset extends Submit
     }
 
     /**
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showCells()
+    public function showCells(): void
     {
-        $this->showLabelCell('width="50%" class="adm-detail-content-cell-l" style="vertical-align: top; padding-top: 7px;"', true);
+        $this->showLabelCell('width="50%" class="adm-detail-content-cell-l" style="vertical-align: top; padding-top: 7px;"',
+            true);
         $this->showInputCell('width="50%" class="adm-detail-content-cell-r"');
     }
 
 
     /**
-     * @return mixed|void
-     * @throws \Bitrix\Main\ArgumentNullException
+     * @return void
+     * @throws ArgumentNullException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function showInput()
+    public function showInput(): void
     {
-        if (!$this->input instanceof RemovePresetInput)
+        if (!$this->input instanceof RemovePresetInput) {
             return;
+        }
 
         $presetId = $this->input->getPresetId();
 
-        if (!$presetId)
+        if (!$presetId) {
             return;
+        }
 
         $popup = $this->input->getPopup();
 
-        if (($popup !== false) && !strlen($popup))
+        if (($popup !== false) && !strlen($popup)) {
             $popup = Loc::getMessage('rover-fa__REMOVEPRESET_CONFIRM');
+        }
 
         $this->customInputName  = RemovePresetInput::getType();
         $this->customInputValue = $this->input->getSiteId() . RemovePresetInput::SEPARATOR . $presetId;
