@@ -39,7 +39,7 @@ class Submit extends Input
     {
         parent::__construct($params, $options, $parent);
 
-        if (isset($params['popup'])) {
+        if (isset($params['popup']) && (bool)$params['popup']) {
             $this->popup = $params['popup'];
         }
     }

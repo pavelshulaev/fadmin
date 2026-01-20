@@ -260,13 +260,15 @@ abstract class Options
 
     /**
      * @param        $inputName
-     * @param string $siteId
+     * @param string|null $siteId
      * @param bool $reload
      * @return mixed
-     * @throws Main\SystemException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     * @throws SystemException
      * @author Pavel Shulaev (https://rover-it.me)
      */
-    public function getNormalValue($inputName, string $siteId = '', bool $reload = false): mixed
+    public function getNormalValue($inputName, string $siteId = null, bool $reload = null): mixed
     {
         return $this->getValue($inputName, '', $siteId, $reload);
     }
@@ -282,7 +284,7 @@ abstract class Options
      * @throws SystemException
      * @author Pavel Shulaev (http://rover-it.me)
      */
-    public function getValue(string $inputName, string $presetId = null, string $siteId = null, bool $reload = false): mixed
+    public function getValue(string $inputName, string $presetId = null, string $siteId = null, bool $reload = null): mixed
     {
         $inputName = trim($inputName);
         if (empty($inputName)) {

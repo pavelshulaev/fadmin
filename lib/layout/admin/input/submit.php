@@ -33,7 +33,7 @@ class Submit extends Input
      */
     protected function confirm($valueId, $popup): void
     {
-        if ($popup === false) {
+        if (empty($popup)) {
             return;
         }
         ?>

@@ -82,11 +82,11 @@ class Number extends Text
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getMin(): int
+    public function getMin(): ?int
     {
-        return $this->min;
+        return $this->min ?? null;
     }
 
     /**
@@ -104,9 +104,9 @@ class Number extends Text
     /**
      * @return int
      */
-    public function getMax(): int
+    public function getMax(): ?int
     {
-        return $this->max;
+        return $this->max ?? null;
     }
 
     /**
