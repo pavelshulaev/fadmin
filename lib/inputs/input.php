@@ -337,10 +337,10 @@ abstract class Input
 
         if ($this->multiple) {
             if (!is_array($this->value)) {
-                $this->value = unserialize($this->value);
+                $this->value = unserialize($this->value, ['allowed_classes' => false]);
             }
 
-            if (empty($this->value)) {
+            if (empty($this->value) || !is_array($this->value)) {
                 $this->value = [];
             }
         }
@@ -450,7 +450,11 @@ abstract class Input
             return false;
         }
 
-        if ($this->multiple && is_array($value)) {
+        if ($this->multiple) {
+            if (!is_array($value)) {
+                return false;
+            }
+
             $value = serialize($value);
         }
 

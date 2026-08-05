@@ -18,6 +18,6 @@ if (!$fadminErrors) {
 
 ?>
 <form action="<?= $APPLICATION->GetCurPage() ?>">
-    <input type="hidden" name="lang" value="<? echo LANG ?>">
-    <input type="submit" name="" value="<? echo Loc::getMessage("MOD_BACK") ?>">
+    <input type="hidden" name="lang" value="<?php echo LANG ?>">
+    <input type="submit" name="" value="<?php echo Loc::getMessage("MOD_BACK") ?>">
     <form>

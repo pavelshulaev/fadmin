@@ -6,6 +6,7 @@
 * [Сообщения](./doc/messages.md)
 * [Требования](./doc/requirements.md)
 * [Api](./doc/api.md)
+* [Changelog](./CHANGELOG.md)
 
 «Конструктор административной части» — это решение, позволяющее быстро и гибко настраивать и запускать административную часть для любых пользовательских модулей Битрикс. Отрисовку административной части и работу с опциями пользовательского модуля решение берет на себя. 
 
@@ -25,6 +26,23 @@
 По всем вопросам вы можете связаться со мной по email: rover.webdev@gmail.com, либо через форму на сайте https://rover-it.me.
 
 ## Пожертвования
-Если решение оказалось вам полезным, вы можете оставить пожертование
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2STAMDSM7E3BG)
+> Если решение оказалось вам полезным, вы можете поддержать его разработку, а также другие бесплатные решения автора!
+
+<a href="https://yoomoney.ru/to/4100119592335831" target="_blank">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://rover-it.me/marketplace/icon-donate-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://rover-it.me/marketplace/icon-donate-light.svg">
+    <img src="https://rover-it.me/marketplace/icon-donate-light.svg" width="18" alt="Donate">
+  </picture>
+  Сделать пожертвование способ 1
+</a>
+&nbsp;
+<a href="https://pay.cloudtips.ru/p/dc96a2b8" target="_blank">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://rover-it.me/marketplace/icon-donate-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://rover-it.me/marketplace/icon-donate-light.svg">
+    <img src="https://rover-it.me/marketplace/icon-donate-light.svg" width="18" alt="Donate">
+  </picture>
+  Сделать пожертвование способ 2
+</a>

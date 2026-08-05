@@ -208,11 +208,11 @@ class InputFactory
     }
 
     /**
-     * @param        $name
+     * @param $name
      * @param string $default
      * @param bool $disabled
-     * @param null $label
-     * @param null $help
+     * @param $label
+     * @param $help
      * @param string $siteId
      * @return array
      * @throws ArgumentNullException

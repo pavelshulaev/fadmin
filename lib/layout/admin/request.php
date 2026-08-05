@@ -15,9 +15,9 @@ use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\SystemException;
 use Rover\Fadmin\Inputs\Addpreset;
+use Rover\Fadmin\Inputs\Tab;
 use Rover\Fadmin\Layout\Request as RequestAbstract;
 use Rover\Fadmin\Options;
-use Rover\Fadmin\Inputs\Tab;
 
 /**
  * Class Request
@@ -97,7 +97,14 @@ class Request extends RequestAbstract
         $request = Application::getInstance()->getContext()->getRequest();
 
         if (strlen($this->update) && strlen($request["back_url_settings"])) {
-            parent::redirect($request["back_url_settings"]);
+            $backUrl        = $request["back_url_settings"];
+            $isLocalBackUrl = $backUrl[0] === '/'
+                && !str_starts_with($backUrl, '//')
+                && !preg_match('#^[a-z][a-z0-9+.\-]*:#i', $backUrl);
+
+            if ($isLocalBackUrl) {
+                parent::redirect($backUrl);
+            }
         }
 
         $activeTab = $activeTab
@@ -122,6 +129,10 @@ class Request extends RequestAbstract
      */
     protected function addPreset()
     {
+        if (!check_bitrix_sessid()) {
+            return null;
+        }
+
         [$siteId, $value] = explode(Addpreset::SEPARATOR,
             $this->request->get(Addpreset::getType()));
 
@@ -143,6 +154,10 @@ class Request extends RequestAbstract
      */
     protected function removePreset(): void
     {
+        if (!check_bitrix_sessid()) {
+            return;
+        }
+
         try {
             if (parent::removePreset()) {
                 $this->redirect();

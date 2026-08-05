@@ -100,7 +100,7 @@ abstract class Input extends InputAbstract
      */
     protected function getValue(): string
     {
-        return ' value="' . $this->input->getValue() . '" ';
+        return ' value="' . htmlspecialcharsbx((string)$this->input->getValue()) . '" ';
     }
 
     /**

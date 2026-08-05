@@ -37,6 +37,17 @@ use Rover\Fadmin\Options\Settings;
 /**
  * Class TestOptions
  *
+ * Магические геттеры опций (генерируются \Rover\Fadmin\Options::__call() из констант OPTION__*).
+ * Аннотации ниже нужны только для автодополнения и статического анализа в IDE, на рантайм не влияют.
+ * @see \Rover\Fadmin\Options::__call()
+ *
+ * @method mixed getTextarea(string $siteId = '', bool $reload = false) значение опции OPTION__TEXTAREA
+ * @method mixed getPresetTextarea(string $presetId, string $siteId = '', bool $reload = false) значение опции OPTION__TEXTAREA в рамках пресета
+ *
+ * OPTION__PRESET_COLOR не имеет магического геттера: имя константы начинается с "PRESET_",
+ * поэтому оно конфликтует с префиксом "Preset", по которому __call() определяет пресетный вызов.
+ * Для таких констант нужен явный метод-обёртка — см. getS1PresetColor() ниже.
+ *
  * @package Rover\Fadmin
  * @author  Pavel Shulaev (http://rover-it.me)
  */

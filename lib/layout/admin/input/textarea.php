@@ -115,8 +115,8 @@ class Textarea extends Input
             id="<?=$this->input->getFieldId()?>"
             rows="<?=$this->input->getRows()?>"
             cols="<?=$this->input->getCols()?>"
-            <?=strlen($this->input->getPlaceholder()) ? " placeholder='{$this->input->getPlaceholder()}' " : ''?>
-            name="<?=$this->input->getFieldName()?>"><?=$this->input->getValue()?></textarea><?php
+            <?=strlen($this->input->getPlaceholder()) ? " placeholder='" . htmlspecialcharsbx($this->input->getPlaceholder()) . "' " : ''?>
+            name="<?=$this->input->getFieldName()?>"><?=htmlspecialcharsbx((string)$this->input->getValue())?></textarea><?php
         }
     }
 

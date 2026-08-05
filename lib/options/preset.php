@@ -42,7 +42,7 @@ class Preset
 
         if (!isset($this->presets[$siteId]) || $reload) {
             $presets = unserialize(Option::get($this->options->getModuleId(),
-                self::OPTION_ID, '', $siteId));
+                self::OPTION_ID, '', $siteId), ['allowed_classes' => false]);
 
             if (empty($presets)) {
                 $presets = [];

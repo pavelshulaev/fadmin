@@ -39,7 +39,7 @@ class Text extends Input
             <?=$this->getCommonAttributes()?>
             size="<?=$this->input->getSize()?>"
             maxlength="<?=$this->input->getMaxLength()?>"
-            <?=strlen($this->input->getPlaceholder()) ? " placeholder='{$this->input->getPlaceholder()}' " : ''?>
+            <?=strlen($this->input->getPlaceholder()) ? " placeholder='" . htmlspecialcharsbx($this->input->getPlaceholder()) . "' " : ''?>
             ><?php
     }
 }

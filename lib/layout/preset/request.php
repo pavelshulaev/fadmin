@@ -76,6 +76,10 @@ class Request extends RequestAbstract
      */
     public function removePreset(): void
     {
+        if (!check_bitrix_sessid()) {
+            return;
+        }
+
         try {
             if (parent::removePreset() && strlen($this->params['back_url'])) {
                 $this->redirect($this->params['back_url']);
@@ -95,7 +99,8 @@ class Request extends RequestAbstract
     {
         if ((!$this->request->get(self::INPUT__APPLY)
                 && !$this->request->get(self::INPUT__SAVE))
-            || !$this->request->get(self::INPUT__FORM_ID)) {
+            || !$this->request->get(self::INPUT__FORM_ID)
+            || !check_bitrix_sessid()) {
             return;
         }
 

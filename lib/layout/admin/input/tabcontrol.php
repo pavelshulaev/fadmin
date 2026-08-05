@@ -223,6 +223,11 @@ class Tabcontrol extends Input
 
         $backUrl = $request->get('back_url_settings');
 
+        $isLocalBackUrl = strlen($backUrl) > 0
+            && $backUrl[0] === '/'
+            && !str_starts_with($backUrl, '//')
+            && !preg_match('#^[a-z][a-z0-9+.\-]*:#i', $backUrl);
+
         $this->bxTabControl->Buttons();
         ?><input
         type="submit"
@@ -235,7 +240,7 @@ class Tabcontrol extends Input
                 name="Apply"
                 value="<?= Loc::getMessage("MAIN_OPT_APPLY") ?>"
                 title="<?= Loc::getMessage("MAIN_OPT_APPLY_TITLE") ?>">
-        <?php if (strlen($backUrl) > 0): ?>
+        <?php if ($isLocalBackUrl): ?>
         <input
                 type="button"
                 name="Cancel"

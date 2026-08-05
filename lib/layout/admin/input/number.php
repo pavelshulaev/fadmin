@@ -46,7 +46,7 @@ class Number extends Text
             <?=is_numeric($this->input->getMaxLength()) ? " maxlength='{$this->input->getMaxLength()}' " : ''?>
             <?=is_numeric($this->input->getMax()) ? " max='{$this->input->getMax()}' " : ''?>
             <?=is_numeric($this->input->getMin()) ? " min='{$this->input->getMin()}' " : ''?>
-            <?=strlen($this->input->getPlaceholder()) ? " placeholder='{$this->input->getPlaceholder()}' " : ''?>
+            <?=strlen($this->input->getPlaceholder()) ? " placeholder='" . htmlspecialcharsbx($this->input->getPlaceholder()) . "' " : ''?>
             ><?php
     }
 
